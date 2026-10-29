@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>XenoSmart KI-Assistenten</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="XenoSmart richtet KI-Assistenten für Barbershops, Hausverwaltungen und lokale Betriebe ein: WhatsApp-Bot, Terminbuchung, E-Mail-Antworten.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: split hero (Versprechen links, laufender Kunden-Chat rechts), dann Branchen, Pakete, Ablauf, FAQ, Kontaktband */
+:root{
+  --paper:#F2F4EF; --surface:#FFFFFF; --ink:#13231F; --muted:#56655F; --line:#D5DDD6;
+  --jade:#1E6B58; --jade-soft:#DCEBE4; --amber:#C98A1C; --amber-soft:#F7E9CC;
+  --bubble-in:#FFFFFF; --bubble-out:#D9F0E4; --chat-bg:#E7ECE6;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0F1A17; --surface:#16231F; --ink:#E6EEE9; --muted:#9AAEA6; --line:#2A3B35;
+  --jade:#4FBF9C; --jade-soft:#1C3A31; --amber:#E7B252; --amber-soft:#3A2E16;
+  --bubble-in:#1E2D28; --bubble-out:#1D4A3C; --chat-bg:#121F1B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0F1A17; --surface:#16231F; --ink:#E6EEE9; --muted:#9AAEA6; --line:#2A3B35;
+  --jade:#4FBF9C; --jade-soft:#1C3A31; --amber:#E7B252; --amber-soft:#3A2E16;
+  --bubble-in:#1E2D28; --bubble-out:#1D4A3C; --chat-bg:#121F1B; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.08;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.2rem,5.4vw,3.9rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:700;letter-spacing:-.015em}
+h3{font-size:1.25rem;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--jade)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:6px}
+
+/* Header */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
+.logo{font-family:var(--f-display);font-weight:800;font-size:1.3rem;letter-spacing:-.02em;text-decoration:none}
+.logo span{color:var(--jade)}
+.bar-right{display:flex;align-items:center;gap:10px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{font:600 .8rem var(--f-mono);background:none;border:0;color:var(--muted);padding:6px 11px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+.btn{display:inline-flex;align-items:center;gap:9px;font:600 1rem var(--f-body);text-decoration:none;border-radius:999px;padding:13px 22px;border:0;cursor:pointer;transition:transform .15s ease, background .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-wa{background:var(--jade);color:#fff}
+.btn-wa:hover{background:color-mix(in srgb,var(--jade) 85%,#000)}
+:root[data-theme="dark"] .btn-wa{color:#0F1A17}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn-wa{color:#0F1A17}}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn-sm{padding:8px 14px;font-size:.9rem}
+.wa-ico{width:20px;height:20px;flex:none}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding-block:64px 72px}
+.hero-copy{display:flex;flex-direction:column;gap:22px;min-width:0}
+.hero-copy .lead{font-size:1.15rem;color:var(--muted);max-width:52ch}
+.hero-copy .lead strong{color:var(--ink);font-weight:600}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.proof{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.92rem;color:var(--muted)}
+.proof span::before{content:"✓ ";color:var(--jade);font-weight:700}
+
+/* Chat demo */
+.phone{background:var(--chat-bg);border:1px solid var(--line);border-radius:26px;padding:0 0 16px;max-width:400px;width:100%;justify-self:center;box-shadow:0 30px 60px -30px rgba(19,35,31,.45);overflow:hidden}
+.phone-top{display:flex;align-items:center;gap:10px;background:var(--surface);padding:14px 16px;border-bottom:1px solid var(--line)}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--amber-soft);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;color:var(--amber)}
+.phone-top b{display:block;font-size:.95rem}
+.phone-top small{color:var(--jade);font-size:.78rem}
+.chat{display:flex;flex-direction:column;gap:8px;padding:16px 14px 4px}
+.msg{max-width:84%;padding:9px 12px 18px;border-radius:12px;font-size:.92rem;line-height:1.45;position:relative}
+.msg time{position:absolute;right:9px;bottom:3px;font:500 .66rem var(--f-mono);color:var(--muted)}
+.in{background:var(--bubble-in);align-self:flex-start;border-top-left-radius:3px}
+.out{background:var(--bubble-out);align-self:flex-end;border-top-right-radius:3px}
+.bot-tag{display:inline-block;font:500 .64rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--jade);margin-bottom:2px}
+.slots{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.slots i{font-style:normal;font:500 .78rem var(--f-mono);border:1px solid var(--jade);color:var(--jade);border-radius:6px;padding:2px 7px}
+.slots i.pick{background:var(--jade);color:var(--surface)}
+.chat-note{text-align:center;font:500 .72rem var(--f-mono);color:var(--muted);padding:10px 14px 0}
+@media (prefers-reduced-motion: no-preference){
+  .chat .msg{animation:rise .5s ease both}
+  .chat .msg:nth-child(2){animation-delay:.15s}.chat .msg:nth-child(3){animation-delay:.3s}
+  .chat .msg:nth-child(4){animation-delay:.45s}.chat .msg:nth-child(5){animation-delay:.6s}
+}
+@keyframes rise{from{transform:translateY(6px)}to{transform:none}}
+
+/* Sections */
+section.block{padding-block:72px;border-top:1px solid var(--line)}
+.sec-head{display:flex;flex-direction:column;gap:12px;max-width:60ch;margin-bottom:36px}
+.sec-head p{color:var(--muted);font-size:1.05rem}
+
+.who{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.who article{display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:2px solid var(--ink);min-width:0}
+.who .problem{color:var(--muted);font-size:.95rem}
+.who .fix{font-size:.95rem}
+.who .fix b{color:var(--jade)}
+
+/* Pakete */
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px 24px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.plan.featured{border:2px solid var(--jade);position:relative}
+.badge{position:absolute;top:-13px;left:24px;background:var(--amber);color:#1b1404;font:600 .72rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
+.plan .for{color:var(--muted);font-size:.93rem;min-height:2.9em}
+.price{display:flex;flex-direction:column;gap:2px;font-variant-numeric:tabular-nums}
+.price .once{font-family:var(--f-display);font-size:2.4rem;font-weight:800;letter-spacing:-.02em;line-height:1}
+.price .once small{font-family:var(--f-body);font-size:.9rem;font-weight:500;color:var(--muted);letter-spacing:0}
+.price .monthly{font-family:var(--f-mono);font-size:.95rem;color:var(--jade)}
+.plan ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;font-size:.95rem;flex:1}
+.plan li{padding-left:24px;position:relative}
+.plan li::before{content:"";position:absolute;left:2px;top:.55em;width:11px;height:6px;border-left:2px solid var(--jade);border-bottom:2px solid var(--jade);transform:rotate(-45deg)}
+.plan .btn{justify-content:center}
+.fine{margin-top:18px;color:var(--muted);font-size:.85rem}
+
+/* Ablauf */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;counter-reset:s}
+.steps li{list-style:none;display:flex;flex-direction:column;gap:8px;min-width:0}
+.steps li::before{counter-increment:s;content:counter(s);font-family:var(--f-display);font-weight:800;font-size:2.6rem;line-height:1;color:var(--amber)}
+.steps ol{margin:0;padding:0}
+.steps p{color:var(--muted)}
+
+/* FAQ */
+.faq{display:flex;flex-direction:column;max-width:760px}
+.faq details{border-bottom:1px solid var(--line);padding-block:16px}
+.faq summary{cursor:pointer;font-weight:600;font-size:1.05rem;list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::after{content:"+";font-family:var(--f-mono);color:var(--jade)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{margin-top:10px;color:var(--muted);max-width:65ch}
+
+/* Kontakt */
+.contact{background:var(--ink);color:var(--paper)}
+.contact .wrap{padding-block:64px;display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center}
+.contact h2{color:var(--paper)}
+.contact p{color:color-mix(in srgb,var(--paper) 75%,transparent);margin-top:12px;max-width:50ch}
+.contact-box{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.num{display:flex;align-items:center;gap:10px;font:500 1.15rem var(--f-mono);font-variant-numeric:tabular-nums}
+.copy{font:600 .78rem var(--f-mono);background:transparent;color:var(--paper);border:1px solid color-mix(in srgb,var(--paper) 45%,transparent);border-radius:6px;padding:4px 9px;cursor:pointer}
+.contact .btn-wa{background:var(--amber);color:#1b1404}
+footer{padding-block:24px;color:var(--muted);font-size:.85rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;padding-block:40px 56px;gap:36px}
+  .who{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .plans{grid-template-columns:1fr}
+  .plan .for{min-height:0}
+  .contact .wrap{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .who,.steps{grid-template-columns:1fr}
+  .bar .btn-wa .lbl{display:none}
+  section.block{padding-block:52px}
+}
+[lang-tr],[lang-en]{display:none}
+html[lang="en"] [lang-de]{display:none}
+html[lang="en"] [lang-en]{display:revert}
+html[lang="tr"] [lang-de]{display:none}
+html[lang="tr"] [lang-tr]{display:revert}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></symbol>
+</svg>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top">Xeno<span>Smart</span></a>
+    <div class="bar-right">
+      <div class="lang" role="group" aria-label="Sprache / Dil / Language">
+        <button id="lang-de" type="button" aria-pressed="true" data-lang="de">DE</button>
+        <button id="lang-tr" type="button" aria-pressed="false" data-lang="tr">TR</button>
+        <button id="lang-en" type="button" aria-pressed="false" data-lang="en">EN</button>
+      </div>
+      <a class="btn btn-wa btn-sm wa-link" href="https://wa.me/491789223636" target="_blank" rel="noopener">
+        <svg class="wa-ico"><use href="#wa"/></svg><span class="lbl">WhatsApp</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div class="hero-copy">
+      <span class="eyebrow" lang-de>KI-Assistenten für lokale Betriebe</span>
+      <span class="eyebrow" lang-tr>Yerel işletmeler için yapay zekâ asistanları</span><span class="eyebrow" lang-en>AI assistants for local businesses</span>
+      <h1 lang-de>Ihr Telefon klingelt weniger. Ihr Kalender ist trotzdem voll.</h1>
+      <h1 lang-tr>Telefonunuz daha az çalar. Takviminiz yine de dolu.</h1><h1 lang-en>Your phone rings less. Your calendar is still full.</h1>
+      <p class="lead" lang-de>Wir richten Ihnen einen KI-Assistenten ein, der <strong>WhatsApp-Nachrichten beantwortet, Termine bucht und E-Mails vorsortiert</strong>, rund um die Uhr. Sie kümmern sich um Ihre Kunden, der Assistent um die Fragen.</p>
+      <p class="lead" lang-tr>Size <strong>WhatsApp mesajlarını yanıtlayan, randevu alan ve e-postaları düzenleyen</strong> bir yapay zekâ asistanı kuruyoruz. 7/24 çalışır. Siz müşterilerinizle ilgilenin, sorularla asistan ilgilensin.</p><p class="lead" lang-en>We set up an AI assistant that <strong>answers WhatsApp messages, books appointments and sorts your emails</strong>, around the clock. You take care of your customers, the assistant takes care of the questions.</p>
+      <div class="cta-row">
+        <a class="btn btn-wa wa-link" href="https://wa.me/491789223636" target="_blank" rel="noopener">
+          <svg class="wa-ico"><use href="#wa"/></svg>
+          <span lang-de>Kostenlos beraten lassen</span><span lang-tr>Ücretsiz danışmanlık alın</span><span lang-en>Get a free consultation</span>
+        </a>
+        <a class="btn btn-ghost" href="#pakete"><span lang-de>Pakete ansehen</span><span lang-tr>Paketleri görün</span><span lang-en>See packages</span></a>
+      </div>
+      <div class="proof" lang-de><span>Deutsch, Türkisch &amp; Englisch</span><span>DSGVO mit AV-Vertrag</span><span>Persönlicher Ansprechpartner</span></div>
+      <div class="proof" lang-tr><span>Almanca, Türkçe &amp; İngilizce</span><span>KVKK/DSGVO uyumlu</span><span>Kişisel destek</span></div><div class="proof" lang-en><span>German, Turkish &amp; English</span><span>GDPR with DPA</span><span>Personal contact</span></div>
+    </div>
+
+    <div class="phone" aria-label="Beispiel-Chat eines Barbershop-Assistenten">
+      <div class="phone-top">
+        <div class="avatar">B</div>
+        <div><b>Barber Lounge Würselen</b><small lang-de>KI-Assistent · online</small><small lang-tr>Yapay zekâ asistanı · çevrimiçi</small><small lang-en>AI assistant · online</small></div>
+      </div>
+      <div class="chat">
+        <div class="msg out" lang-de>Hi, habt ihr Samstag noch was frei? Haare + Bart<time>21:47</time></div>
+        <div class="msg out" lang-tr>Selam, cumartesi boş yer var mı? Saç + sakal<time>21:47</time></div><div class="msg out" lang-en>Hi, any slots left on Saturday? Haircut + beard<time>21:47</time></div>
+        <div class="msg in" lang-de><span class="bot-tag">Assistent</span><br>Klar! Haarschnitt + Bart dauert ca. 45 Min. und kostet 35 €. Samstag ist noch frei:<div class="slots"><i>10:15</i><i class="pick">11:30</i><i>14:00</i></div><time>21:47</time></div>
+        <div class="msg in" lang-tr><span class="bot-tag">Asistan</span><br>Tabii! Saç + sakal yaklaşık 45 dk, 35 €. Cumartesi müsait saatler:<div class="slots"><i>10:15</i><i class="pick">11:30</i><i>14:00</i></div><time>21:47</time></div><div class="msg in" lang-en><span class="bot-tag">Assistant</span><br>Sure! Haircut + beard takes about 45 min and costs €35. Free on Saturday:<div class="slots"><i>10:15</i><i class="pick">11:30</i><i>14:00</i></div><time>21:47</time></div>
+        <div class="msg out">11:30 👍<time>21:48</time></div>
+        <div class="msg in" lang-de><span class="bot-tag">Assistent</span><br>Gebucht: Sa., 11:30 Uhr bei Murat. Du bekommst am Freitag eine Erinnerung.<time>21:48</time></div>
+        <div class="msg in" lang-tr><span class="bot-tag">Asistan</span><br>Randevunuz alındı: Cumartesi 11:30, Murat. Cuma günü hatırlatma gelecek.<time>21:48</time></div><div class="msg in" lang-en><span class="bot-tag">Assistant</span><br>Booked: Sat, 11:30 with Murat. You'll get a reminder on Friday.<time>21:48</time></div>
+      </div>
+      <p class="chat-note" lang-de>Beispiel · der Laden war um diese Uhrzeit längst zu</p>
+      <p class="chat-note" lang-tr>Örnek · dükkân bu saatte çoktan kapanmıştı</p><p class="chat-note" lang-en>Example · the shop had closed hours earlier</p>
+    </div>
+  </div>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" lang-de>Für wen</span><span class="eyebrow" lang-tr>Kimler için</span><span class="eyebrow" lang-en>Who it's for</span>
+        <h2 lang-de>Für Betriebe, die mehr Anfragen bekommen, als sie beantworten können</h2>
+        <h2 lang-tr>Yanıtlayabileceğinden fazla soru alan işletmeler için</h2><h2 lang-en>For businesses that get more requests than they can answer</h2>
+      </div>
+      <div class="who">
+        <article>
+          <h3 lang-de>Barbershops &amp; Friseure</h3><h3 lang-tr>Berber &amp; kuaförler</h3><h3 lang-en>Barbershops &amp; hair salons</h3>
+          <p class="problem" lang-de>Den ganzen Tag Terminanfragen per WhatsApp, während Sie schneiden.</p>
+          <p class="problem" lang-tr>Siz tıraş ederken gün boyu WhatsApp'tan randevu talepleri.</p><p class="problem" lang-en>Appointment requests on WhatsApp all day while you're cutting hair.</p>
+          <p class="fix" lang-de><b>Assistent</b> bucht Termine und schickt Erinnerungen.</p>
+          <p class="fix" lang-tr><b>Asistan</b> randevu alır ve hatırlatma gönderir.</p><p class="fix" lang-en><b>Assistant</b> books appointments and sends reminders.</p>
+        </article>
+        <article>
+          <h3 lang-de>Hausverwaltungen &amp; Vermieter</h3><h3 lang-tr>Mülk yönetimi &amp; ev sahipleri</h3><h3 lang-en>Property managers &amp; landlords</h3>
+          <p class="problem" lang-de>Schadensmeldungen, Rückfragen zur Nebenkostenabrechnung, Besichtigungen.</p>
+          <p class="problem" lang-tr>Arıza bildirimleri, yan gider soruları, ev gösterimleri.</p><p class="problem" lang-en>Repair reports, utility bill questions, viewings.</p>
+          <p class="fix" lang-de><b>Assistent</b> nimmt Meldungen mit Foto auf und sortiert sie vor.</p>
+          <p class="fix" lang-tr><b>Asistan</b> bildirimleri fotoğrafla kaydeder ve sıralar.</p><p class="fix" lang-en><b>Assistant</b> records reports with photos and sorts them.</p>
+        </article>
+        <article>
+          <h3 lang-de>Handwerk</h3><h3 lang-tr>Zanaatkârlar</h3><h3 lang-en>Trades</h3>
+          <p class="problem" lang-de>Anrufe auf der Baustelle verpasst, Anfragen gehen verloren.</p>
+          <p class="problem" lang-tr>Şantiyede kaçırılan aramalar, kaybolan talepler.</p><p class="problem" lang-en>Missed calls on the job site, lost requests.</p>
+          <p class="fix" lang-de><b>Assistent</b> fragt Auftrag, Adresse und Fotos ab.</p>
+          <p class="fix" lang-tr><b>Asistan</b> iş, adres ve fotoğrafları toplar.</p><p class="fix" lang-en><b>Assistant</b> collects the job, address and photos.</p>
+        </article>
+        <article>
+          <h3 lang-de>Gastronomie &amp; Praxen</h3><h3 lang-tr>Restoran &amp; muayenehaneler</h3><h3 lang-en>Restaurants &amp; medical practices</h3>
+          <p class="problem" lang-de>Immer dieselben Fragen zu Öffnungszeiten, Reservierungen, Rezepten.</p>
+          <p class="problem" lang-tr>Hep aynı sorular: çalışma saatleri, rezervasyon, reçete.</p><p class="problem" lang-en>The same questions every day: opening hours, bookings, prescriptions.</p>
+          <p class="fix" lang-de><b>Assistent</b> antwortet sofort und nimmt Reservierungen an.</p>
+          <p class="fix" lang-tr><b>Asistan</b> anında yanıtlar ve rezervasyon alır.</p><p class="fix" lang-en><b>Assistant</b> answers instantly and takes reservations.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="pakete">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" lang-de>Pakete</span><span class="eyebrow" lang-tr>Paketler</span><span class="eyebrow" lang-en>Packages</span>
+        <h2 lang-de>Einmal einrichten, jeden Monat entlastet</h2>
+        <h2 lang-tr>Bir kez kurulum, her ay rahatlama</h2><h2 lang-en>Set up once, relieved every month</h2>
+        <p lang-de>Die Einrichtung zahlen Sie einmal. Die Monatsgebühr deckt Betreuung, Updates und Anpassungen ab.</p>
+        <p lang-tr>Kurulum ücreti bir kez ödenir. Aylık ücret destek, güncelleme ve düzenlemeleri kapsar.</p><p lang-en>You pay the setup once. The monthly fee covers support, updates and changes.</p>
+      </div>
+      <div class="plans">
+        <article class="plan">
+          <div><h3>Start</h3></div>
+          <p class="for" lang-de>Für Betriebe, die vor allem Fragen schneller beantworten wollen.</p>
+          <p class="for" lang-tr>Öncelikle soruları hızlı yanıtlamak isteyen işletmeler için.</p><p class="for" lang-en>For businesses that mainly want to answer questions faster.</p>
+          <div class="price"><span class="once">490 € <small lang-de>einmalig</small><small lang-tr>bir kez</small><small lang-en>one-time</small></span><span class="monthly" lang-de>+ 49 € / Monat</span><span class="monthly" lang-tr>+ 49 € / ay</span><span class="monthly" lang-en>+ €49 / month</span></div>
+          <ul lang-de><li>Chatbot für WhatsApp oder Ihre Website</li><li>Antworten zu Öffnungszeiten, Preisen, Leistungen</li><li>Auf Deutsch, Türkisch und Englisch</li><li>Weiterleitung an Sie bei Sonderfällen</li></ul>
+          <ul lang-tr><li>WhatsApp veya web siteniz için sohbet botu</li><li>Çalışma saatleri, fiyatlar, hizmetler hakkında yanıtlar</li><li>Almanca, Türkçe ve İngilizce</li><li>Özel durumlarda size yönlendirme</li></ul><ul lang-en><li>Chatbot for WhatsApp or your website</li><li>Answers about opening hours, prices and services</li><li>In German, Turkish and English</li><li>Hands special cases over to you</li></ul>
+          <a class="btn btn-ghost wa-link" data-plan="Start" href="https://wa.me/491789223636" target="_blank" rel="noopener"><span lang-de>Start anfragen</span><span lang-tr>Start'ı sorun</span><span lang-en>Ask about Start</span></a>
+        </article>
+        <article class="plan featured">
+          <span class="badge" lang-de>Am häufigsten gewählt</span><span class="badge" lang-tr>En çok tercih edilen</span><span class="badge" lang-en>Most popular</span>
+          <div><h3>Business</h3></div>
+          <p class="for" lang-de>Für Betriebe mit vielen Terminen und viel E-Mail-Verkehr.</p>
+          <p class="for" lang-tr>Çok randevusu ve yoğun e-postası olan işletmeler için.</p><p class="for" lang-en>For businesses with many appointments and lots of email.</p>
+          <div class="price"><span class="once">990 € <small lang-de>einmalig</small><small lang-tr>bir kez</small><small lang-en>one-time</small></span><span class="monthly" lang-de>+ 99 € / Monat</span><span class="monthly" lang-tr>+ 99 € / ay</span><span class="monthly" lang-en>+ €99 / month</span></div>
+          <ul lang-de><li>Alles aus Start</li><li>Automatische Terminbuchung mit Kalender</li><li>Erinnerungen an Ihre Kunden</li><li>E-Mails werden vorsortiert und beantwortet</li></ul>
+          <ul lang-tr><li>Start paketindeki her şey</li><li>Takvimle otomatik randevu</li><li>Müşterilerinize hatırlatmalar</li><li>E-postalar sıralanır ve yanıtlanır</li></ul><ul lang-en><li>Everything in Start</li><li>Automatic booking with calendar</li><li>Reminders for your customers</li><li>Emails sorted and answered</li></ul>
+          <a class="btn btn-wa wa-link" data-plan="Business" href="https://wa.me/491789223636" target="_blank" rel="noopener"><svg class="wa-ico"><use href="#wa"/></svg><span lang-de>Business anfragen</span><span lang-tr>Business'ı sorun</span><span lang-en>Ask about Business</span></a>
+        </article>
+        <article class="plan">
+          <div><h3>Premium</h3></div>
+          <p class="for" lang-de>Ein eigener Assistent, der Ihr Büro mitorganisiert.</p>
+          <p class="for" lang-tr>Ofisinizi birlikte organize eden size özel bir asistan.</p><p class="for" lang-en>Your own assistant that helps run your office.</p>
+          <div class="price"><span class="once"><small lang-de>ab</small><small lang-tr>başlangıç</small><small lang-en>from</small> 1.900 €</span><span class="monthly" lang-de>+ 199 € / Monat</span><span class="monthly" lang-tr>+ 199 € / ay</span><span class="monthly" lang-en>+ €199 / month</span></div>
+          <ul lang-de><li>Alles aus Business</li><li>Eigener KI-Assistent mit Stimme</li><li>Angebunden an E-Mail, Kalender und Dokumente</li><li>Individuell auf Ihre Abläufe eingerichtet</li></ul>
+          <ul lang-tr><li>Business paketindeki her şey</li><li>Sesli, size özel yapay zekâ asistanı</li><li>E-posta, takvim ve belgelere bağlı</li><li>İş süreçlerinize göre özel kurulum</li></ul><ul lang-en><li>Everything in Business</li><li>Your own AI assistant with a voice</li><li>Connected to email, calendar and documents</li><li>Set up around how you work</li></ul>
+          <a class="btn btn-ghost wa-link" data-plan="Premium" href="https://wa.me/491789223636" target="_blank" rel="noopener"><span lang-de>Premium anfragen</span><span lang-tr>Premium'u sorun</span><span lang-en>Ask about Premium</span></a>
+        </article>
+      </div>
+      <p class="fine" lang-de>Alle Preise zzgl. MwSt.</p>
+      <p class="fine" lang-tr>Tüm fiyatlara KDV hariçtir.</p><p class="fine" lang-en>All prices plus VAT.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" lang-de>So läuft es ab</span><span class="eyebrow" lang-tr>Nasıl işler</span><span class="eyebrow" lang-en>How it works</span>
+        <h2 lang-de>In drei Schritten zu Ihrem Assistenten</h2>
+        <h2 lang-tr>Üç adımda asistanınız hazır</h2><h2 lang-en>Your assistant in three steps</h2>
+      </div>
+      <div class="steps"><ol style="display:contents">
+        <li><h3 lang-de>Kurzes Gespräch</h3><h3 lang-tr>Kısa görüşme</h3><h3 lang-en>Short call</h3><p lang-de>Wir klären per WhatsApp oder vor Ort, welche Fragen und Termine bei Ihnen anfallen.</p><p lang-tr>WhatsApp'tan veya yerinde, hangi soruların ve randevuların geldiğini konuşuruz.</p><p lang-en>On WhatsApp or in person, we go through the questions and appointments you get.</p></li>
+        <li><h3 lang-de>Einrichtung</h3><h3 lang-tr>Kurulum</h3><h3 lang-en>Setup</h3><p lang-de>Wir richten den Assistenten mit Ihren Preisen, Zeiten und Ihrem Ton ein. Sie testen ihn vorab.</p><p lang-tr>Asistanı fiyatlarınız, saatleriniz ve üslubunuzla kurarız. Önceden test edersiniz.</p><p lang-en>We set up the assistant with your prices, hours and tone. You test it first.</p></li>
+        <li><h3 lang-de>Live &amp; betreut</h3><h3 lang-tr>Yayında &amp; destekli</h3><h3 lang-en>Live &amp; supported</h3><p lang-de>Der Assistent geht online. Änderungen und Updates übernehmen wir für Sie.</p><p lang-tr>Asistan yayına girer. Değişiklik ve güncellemeleri biz yaparız.</p><p lang-en>The assistant goes live. We handle changes and updates for you.</p></li>
+      </ol></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow" lang-de>Häufige Fragen</span><span class="eyebrow" lang-tr>Sık sorulanlar</span><span class="eyebrow" lang-en>FAQ</span>
+        <h2 lang-de>Was Kunden uns vorher fragen</h2><h2 lang-tr>Müşterilerin önceden sorduğu</h2><h2 lang-en>What customers ask us first</h2>
+      </div>
+      <div class="faq">
+        <details><summary><span lang-de>Muss ich mich mit Technik auskennen?</span><span lang-tr>Teknik bilgi gerekiyor mu?</span><span lang-en>Do I need to know anything about tech?</span></summary>
+          <p lang-de>Nein. Wir richten alles ein. Sie sagen uns nur, was der Assistent wissen soll.</p><p lang-tr>Hayır. Her şeyi biz kurarız. Siz sadece asistanın neyi bilmesi gerektiğini söylersiniz.</p><p lang-en>No. We set everything up. You just tell us what the assistant should know.</p></details>
+        <details><summary><span lang-de>Was passiert, wenn der Assistent eine Frage nicht beantworten kann?</span><span lang-tr>Asistan bir soruyu yanıtlayamazsa ne olur?</span><span lang-en>What if the assistant can't answer a question?</span></summary>
+          <p lang-de>Dann leitet er die Nachricht an Sie weiter und sagt dem Kunden, dass Sie sich melden.</p><p lang-tr>Mesajı size iletir ve müşteriye sizin döneceğinizi söyler.</p><p lang-en>It forwards the message to you and tells the customer you'll get back to them.</p></details>
+        <details><summary><span lang-de>Ist das datenschutzkonform?</span><span lang-tr>Veri koruma açısından uygun mu?</span><span lang-en>Is it GDPR-compliant?</span></summary>
+          <p lang-de>Ja. Sie erhalten von uns einen Auftragsverarbeitungsvertrag (AV-Vertrag) nach DSGVO.</p><p lang-tr>Evet. DSGVO kapsamında bir veri işleme sözleşmesi (AV-Vertrag) alırsınız.</p><p lang-en>Yes. You get a data processing agreement (DPA) under the GDPR.</p></details>
+        <details><summary><span lang-de>Funktioniert das auch auf Türkisch?</span><span lang-tr>Türkçe de çalışıyor mu?</span><span lang-en>Does it work in other languages?</span></summary>
+          <p lang-de>Ja. Der Assistent antwortet in der Sprache, in der Ihr Kunde schreibt, zum Beispiel Deutsch, Türkisch oder Englisch.</p><p lang-tr>Evet. Asistan müşterinizin yazdığı dilde yanıt verir: Almanca, Türkçe veya İngilizce.</p><p lang-en>Yes. The assistant replies in the customer's language, for example German, Turkish or English.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section class="contact">
+  <div class="wrap">
+    <div>
+      <h2 lang-de>Schreiben Sie uns, wir zeigen Ihnen den Assistenten live.</h2>
+      <h2 lang-tr>Bize yazın, asistanı size canlı gösterelim.</h2><h2 lang-en>Message us and we'll show you the assistant live.</h2>
+      <p lang-de>Ein kurzes Gespräch genügt, um zu sehen, ob sich das für Ihren Betrieb lohnt. Unverbindlich und kostenlos.</p>
+      <p lang-tr>İşletmeniz için faydalı olup olmadığını görmek için kısa bir görüşme yeterli. Ücretsiz ve bağlayıcı değil.</p><p lang-en>A short chat is enough to see whether it pays off for your business. Free and no obligation.</p>
+    </div>
+    <div class="contact-box">
+      <a class="btn btn-wa wa-link" href="https://wa.me/491789223636" target="_blank" rel="noopener"><svg class="wa-ico"><use href="#wa"/></svg><span lang-de>Auf WhatsApp schreiben</span><span lang-tr>WhatsApp'tan yazın</span><span lang-en>Message us on WhatsApp</span></a>
+      <div class="num"><span id="phone">+49 178 922 36 36</span><button class="copy" id="copy-btn" type="button"><span lang-de>Kopieren</span><span lang-tr>Kopyala</span><span lang-en>Copy</span></button></div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>© 2026 XenoSmart · xenosmart.de</span><span lang-de>Würselen · Aachen · Köln</span><span lang-tr>Würselen · Aachen · Köln</span><span lang-en>Würselen · Aachen · Cologne</span></div></footer>
+
+<script>
+(function(){
+  var NUM="491789223636";
+  var msgs={
+    de:{base:"Hallo XenoSmart, ich interessiere mich für einen KI-Assistenten für meinen Betrieb.",plan:"Hallo XenoSmart, ich interessiere mich für das Paket {p}."},
+    en:{base:"Hello XenoSmart, I'm interested in an AI assistant for my business.",plan:"Hello XenoSmart, I'm interested in the {p} package."},
+    tr:{base:"Merhaba XenoSmart, işletmem için bir yapay zekâ asistanı ile ilgileniyorum.",plan:"Merhaba XenoSmart, {p} paketi ile ilgileniyorum."}
+  };
+  function setLang(l){
+    document.documentElement.lang=l;
+    document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.lang===l))});
+    document.querySelectorAll(".wa-link").forEach(function(a){
+      var t=a.dataset.plan?msgs[l].plan.replace("{p}",a.dataset.plan):msgs[l].base;
+      a.href="https://wa.me/"+NUM+"?text="+encodeURIComponent(t);
+    });
+    try{localStorage.setItem("xs-lang",l)}catch(e){}
+  }
+  document.querySelectorAll(".lang button").forEach(function(b){b.addEventListener("click",function(){setLang(b.dataset.lang)})});
+  var start="de";try{start=localStorage.getItem("xs-lang")||"de"}catch(e){}
+  setLang(start);
+  var cb=document.getElementById("copy-btn");
+  cb.addEventListener("click",function(){
+    var txt=document.getElementById("phone").textContent;
+    function done(){var s=cb.querySelectorAll("span");s[0].textContent="Kopiert";s[1].textContent="Kopyalandı";if(s[2])s[2].textContent="Copied"}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,sel)}else{sel()}
+    function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById("phone"));var w=getSelection();w.removeAllRanges();w.addRange(r)}
+  });
+})();
+</script>
+</body>
+</html>
