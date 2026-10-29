@@ -6,9 +6,7 @@
 <title>XenoSmart KI-Assistenten</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="XenoSmart richtet KI-Assistenten für Barbershops, Hausverwaltungen und lokale Betriebe ein: WhatsApp-Bot, Terminbuchung, E-Mail-Antworten.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* Layout: split hero (Versprechen links, laufender Kunden-Chat rechts), dann Branchen, Pakete, Ablauf, FAQ, Kontaktband */
 :root{
@@ -307,8 +305,8 @@ html[lang="tr"] [lang-tr]{display:revert}
           <a class="btn btn-ghost wa-link" data-plan="Premium" href="https://wa.me/491789223636" target="_blank" rel="noopener"><span lang-de>Premium anfragen</span><span lang-tr>Premium'u sorun</span><span lang-en>Ask about Premium</span></a>
         </article>
       </div>
-      <p class="fine" lang-de>Alle Preise zzgl. MwSt.</p>
-      <p class="fine" lang-tr>Tüm fiyatlara KDV hariçtir.</p><p class="fine" lang-en>All prices plus VAT.</p>
+      <p class="fine" lang-de>Gemäß § 19 UStG wird keine Umsatzsteuer berechnet (Kleinunternehmer).</p>
+      <p class="fine" lang-tr>§ 19 UStG uyarınca KDV uygulanmaz (küçük işletme).</p><p class="fine" lang-en>No VAT is charged under § 19 UStG (small business).</p>
     </div>
   </section>
 
@@ -358,11 +356,12 @@ html[lang="tr"] [lang-tr]{display:revert}
     <div class="contact-box">
       <a class="btn btn-wa wa-link" href="https://wa.me/491789223636" target="_blank" rel="noopener"><svg class="wa-ico"><use href="#wa"/></svg><span lang-de>Auf WhatsApp schreiben</span><span lang-tr>WhatsApp'tan yazın</span><span lang-en>Message us on WhatsApp</span></a>
       <div class="num"><span id="phone">+49 178 922 36 36</span><button class="copy" id="copy-btn" type="button"><span lang-de>Kopieren</span><span lang-tr>Kopyala</span><span lang-en>Copy</span></button></div>
+      <a href="mailto:info@xenosmart.de" style="color:var(--paper);font:500 1.05rem var(--f-mono)">info@xenosmart.de</a>
     </div>
   </div>
 </section>
 
-<footer><div class="wrap"><span>© 2026 XenoSmart · xenosmart.de</span><span lang-de>Würselen · Aachen · Köln</span><span lang-tr>Würselen · Aachen · Köln</span><span lang-en>Würselen · Aachen · Cologne</span></div></footer>
+<footer><div class="wrap"><span>© 2026 XenoSmart · xenosmart.de</span><span><a href="impressum.html">Impressum</a> · <a href="datenschutz.html"><span lang-de>Datenschutz</span><span lang-tr>Gizlilik</span><span lang-en>Privacy</span></a></span><span lang-de>Würselen · Aachen · Köln</span><span lang-tr>Würselen · Aachen · Köln</span><span lang-en>Würselen · Aachen · Cologne</span></div></footer>
 
 <script>
 (function(){
@@ -379,10 +378,10 @@ html[lang="tr"] [lang-tr]{display:revert}
       var t=a.dataset.plan?msgs[l].plan.replace("{p}",a.dataset.plan):msgs[l].base;
       a.href="https://wa.me/"+NUM+"?text="+encodeURIComponent(t);
     });
-    try{localStorage.setItem("xs-lang",l)}catch(e){}
+    
   }
   document.querySelectorAll(".lang button").forEach(function(b){b.addEventListener("click",function(){setLang(b.dataset.lang)})});
-  var start="de";try{start=localStorage.getItem("xs-lang")||"de"}catch(e){}
+  var start="de";
   setLang(start);
   var cb=document.getElementById("copy-btn");
   cb.addEventListener("click",function(){
