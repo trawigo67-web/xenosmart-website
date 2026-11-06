@@ -392,7 +392,7 @@
   }
   function menu(){
     phase='menu'; document.documentElement.lang=LANG; hud(); helperBtn();
-    show(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><div style="font-weight:900;font-size:13px;letter-spacing:2px;color:#a6ff4d;text-shadow:0 0 10px rgba(166,255,77,.6);margin-bottom:2px">🦎 BUKO GAMES</div><h1>${t('title')}</h1><p>${t('intro')}</p><p class="small">${t('rules')}</p><p class="small" style="color:#ffd23f;font-weight:800">${t('stats',SAVE.wins,SAVE.games)}</p><div class="small" style="opacity:.85;font-weight:800">🦎 Buko Games</div>
+    show(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><div style="font-weight:900;font-size:13px;letter-spacing:2px;color:#a6ff4d;text-shadow:0 0 10px rgba(166,255,77,.6);margin-bottom:2px">🦎 BUKO GAMES</div><h1>${t('title')}</h1><p>${t('intro')}</p><p class="small">${t('rules')}</p><p class="small" style="color:#ffd23f;font-weight:800">${t('stats',SAVE.wins,SAVE.games)}</p><div class="small" style="opacity:.85;font-weight:800">🦎 Buko Games</div><div class="small" style="opacity:.75;font-size:11px">🎵 Music: Created in collaboration with ElevenLabs</div>
       <button class="pb tg" style="font-size:13px;height:auto;padding:8px 12px">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>`,
       [{l:t('quick'),go:()=>newGame(5)},{l:t('normal'),ghost:true,go:()=>newGame(9)}]);
   }

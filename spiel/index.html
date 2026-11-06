@@ -386,7 +386,7 @@
       ? `<div class="small" style="color:#7dff6a;font-weight:800;font-size:13px;margin-top:12px">${t('shareReady')}</div>`
       : `<a class="lnk shr" style="background:linear-gradient(90deg,#25d366,#38e1ff);color:#0b0d1a;display:block;margin-top:12px" href="https://wa.me/?text=${encodeURIComponent(t('shareText'))}" target="_blank" rel="noopener">${t('share')}</a>`;
     const helperBtn = shareBox + `<div class="row" style="margin-top:12px"><button class="tg ${SAVE.helper?'on':''}" data-t="helper">${t('helper')}: ${SAVE.helper?t('on'):t('off')}</button></div>`;
-    return helperBtn + musicHtml() + extra + `<div class="themes">${Object.entries(THEMES).map(([k,t])=>`<div class="th ${SAVE.theme===k?'sel':''} ${ts<t.need?'lock':''}" data-k="${k}"><i style="background:linear-gradient(135deg,${t.a},${t.b})"></i>${ts<t.need?'🔒'+t.need+'★':I18N[SAVE.lang].th[k]}</div>`).join('')}</div><div class="small">${STARS_TXT(ts)}</div><div class="small" style="margin-top:12px;opacity:.85;font-weight:800;letter-spacing:.5px">🦎 Buko Games</div>`;
+    return helperBtn + musicHtml() + extra + `<div class="themes">${Object.entries(THEMES).map(([k,t])=>`<div class="th ${SAVE.theme===k?'sel':''} ${ts<t.need?'lock':''}" data-k="${k}"><i style="background:linear-gradient(135deg,${t.a},${t.b})"></i>${ts<t.need?'🔒'+t.need+'★':I18N[SAVE.lang].th[k]}</div>`).join('')}</div><div class="small">${STARS_TXT(ts)}</div><div class="small" style="margin-top:12px;opacity:.85;font-weight:800;letter-spacing:.5px">🦎 Buko Games</div><div class="small" style="opacity:.75;font-size:11px">🎵 Music: Created in collaboration with ElevenLabs</div>`;
   }
   function musicHtml(){
     return `<div class="music"><div style="font-weight:800;font-size:14px">${t('music')}</div>
