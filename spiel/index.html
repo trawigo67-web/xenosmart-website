@@ -123,7 +123,7 @@
   };
 
   // ================= KAYIT =================
-  let SAVE = {lvl:0, stars:[], hi:0, theme:'neon', music:true, sfx:true};
+  let SAVE = {lvl:0, stars:[], hi:0, theme:'neon', music:true, sfx:true, helper:true};
   try{ Object.assign(SAVE, JSON.parse(localStorage.getItem('disfirlat2')||'{}')); }catch(e){}
   const persist = () => { try{ localStorage.setItem('disfirlat2', JSON.stringify(SAVE)); }catch(e){} };
   const totalStars = () => SAVE.stars.reduce((s,v)=>s+(v||0),0);
@@ -147,7 +147,7 @@
      intro:'Boş yuva <b>alta</b> gelince dokun.<br>Tam ortaya denk getir: <b>PERFECT!</b><br>5 PERFECT üst üste = 🔥 FEVER<br>Bonus yuvaları: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Günlük bonus: +${d} puan (seri: ${st}. gün)`,
      music:'🎵 Müzik', gm:'Oyun müziği', sfx:'Efekt sesi', on:'Açık', off:'Kapalı', musicNote:'Kendi müziğin için: uygulamada şarkıyı başlat, oyuna geri dön, müzik arkada çalar (oyun müziğini kapat). YouTube / YT Music için Premium gerekir, Spotify ücretsiz de çalışır.',
      ios:"📱 iPhone'da uygulama gibi: Safari'de <b>Paylaş ⬆️</b> → <b>Ana Ekrana Ekle</b><br>Ses için telefonun sessiz modu kapalı olmalı.", apk:'📱 Android uygulamasını indir (APK)', stars:n=>`Toplam yıldız: ${n} ★`,
-     th:{neon:'Neon',gold:'Altın',ice:'Buz',lava:'Lav'}, slow:'YAVAŞ', roundDone:(r,b)=>`Tur ${r} tamam! +${b}`, plusLife:'+1 can ❤️', block:'🧱 Neon Blok oyna (yeni!)' },
+     th:{neon:'Neon',gold:'Altın',ice:'Buz',lava:'Lav'}, slow:'YAVAŞ', roundDone:(r,b)=>`Tur ${r} tamam! +${b}`, plusLife:'+1 can ❤️', block:'🧱 Neon Blok oyna (yeni!)', helper:'🎯 Zamanlama yardımcısı', now:'ŞİMDİ!' },
    de:{ loc:'de-DE', lvl:(l,t)=>`Level ${l}/${t}`, round:r=>`∞ Runde ${r}`, gear:'Zahnrad', tooth:'Zahn', flip:'Richtung wechselt', wobble:'Tempo schwankt', bossHint:'Boss: stoppt & sperrt Lücken', tapHint:'Tippe, wenn eine leere Lücke unten ist',
      gem1:'💎 x2 PUNKTE 10 s', gem2:'💎 10 Sekunden doppelte Punkte!', clock:'⏱️ ZEITLUPE bereit', heart:'❤️ +1 LEBEN', shield1:'🛡️ SCHILD', shield2:'🛡️ Der nächste Fehler zählt nicht', shieldSaved:'🛡️ Der Schild hat dich gerettet!',
      perfectGear:'✨ PERFEKTES ZAHNRAD +1000', nextGear:'Super! Nächstes Zahnrad +300', locked:'Gesperrte Lücke!', full:'Lücke schon voll!', wrong:'Falscher Moment!', lifeLost:' −1 Leben', speed:p=>`⚡ TEMPO-BONUS +${p}`, fever:'🔥 FEVER-MODUS! x2', combo:'KOMBO',
@@ -162,7 +162,7 @@
      intro:'Tippe, wenn eine leere Lücke <b>unten</b> ist.<br>Genau in die Mitte: <b>PERFECT!</b><br>5× PERFECT hintereinander = 🔥 FEVER<br>Bonus-Lücken: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Tagesbonus: +${d} Punkte (Serie: Tag ${st})`,
      music:'🎵 Musik', gm:'Spielmusik', sfx:'Effekte', on:'An', off:'Aus', musicNote:'Eigene Musik: Song in der App starten, zurück ins Spiel – die Musik läuft im Hintergrund weiter (Spielmusik ausschalten). YouTube / YT Music brauchen Premium, Spotify geht auch kostenlos.',
      ios:'📱 Auf dem iPhone wie eine App: in Safari <b>Teilen ⬆️</b> → <b>Zum Home-Bildschirm</b><br>Für Ton den Stumm-Schalter ausschalten.', apk:'📱 Android-App herunterladen (APK)', stars:n=>`Sterne gesamt: ${n} ★`,
-     th:{neon:'Neon',gold:'Gold',ice:'Eis',lava:'Lava'}, slow:'LANGSAM', roundDone:(r,b)=>`Runde ${r} geschafft! +${b}`, plusLife:'+1 Leben ❤️', block:'🧱 Neon Block spielen (neu!)' },
+     th:{neon:'Neon',gold:'Gold',ice:'Eis',lava:'Lava'}, slow:'LANGSAM', roundDone:(r,b)=>`Runde ${r} geschafft! +${b}`, plusLife:'+1 Leben ❤️', block:'🧱 Neon Block spielen (neu!)', helper:'🎯 Timing-Hilfe', now:'JETZT!' },
    en:{ loc:'en-US', lvl:(l,t)=>`Level ${l}/${t}`, round:r=>`∞ Round ${r}`, gear:'Gear', tooth:'Tooth', flip:'direction flips', wobble:'speed varies', bossHint:'boss: stops & locks slots', tapHint:'Tap when an empty slot is at the bottom',
      gem1:'💎 x2 POINTS 10 s', gem2:'💎 Double points for 10 seconds!', clock:'⏱️ SLOW-MO refilled', heart:'❤️ +1 LIFE', shield1:'🛡️ SHIELD', shield2:'🛡️ Your next miss is forgiven', shieldSaved:'🛡️ The shield saved you!',
      perfectGear:'✨ FLAWLESS GEAR +1000', nextGear:'Great! Next gear +300', locked:'Locked slot!', full:'Slot taken!', wrong:'Wrong timing!', lifeLost:' −1 life', speed:p=>`⚡ SPEED BONUS +${p}`, fever:'🔥 FEVER MODE! x2', combo:'COMBO',
@@ -177,7 +177,7 @@
      intro:'Tap when an empty slot is at the <b>bottom</b>.<br>Hit dead center: <b>PERFECT!</b><br>5 PERFECTs in a row = 🔥 FEVER<br>Bonus slots: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Daily bonus: +${d} points (streak: day ${st})`,
      music:'🎵 Music', gm:'Game music', sfx:'Sound FX', on:'On', off:'Off', musicNote:'Your own music: start a song in the app, come back to the game – it keeps playing in the background (turn game music off). YouTube / YT Music need Premium, Spotify works free.',
      ios:'📱 Use it like an app on iPhone: in Safari tap <b>Share ⬆️</b> → <b>Add to Home Screen</b><br>Turn off silent mode for sound.', apk:'📱 Download Android app (APK)', stars:n=>`Total stars: ${n} ★`,
-     th:{neon:'Neon',gold:'Gold',ice:'Ice',lava:'Lava'}, slow:'SLOW', roundDone:(r,b)=>`Round ${r} complete! +${b}`, plusLife:'+1 life ❤️', block:'🧱 Play Neon Block (new!)' },
+     th:{neon:'Neon',gold:'Gold',ice:'Ice',lava:'Lava'}, slow:'SLOW', roundDone:(r,b)=>`Round ${r} complete! +${b}`, plusLife:'+1 life ❤️', block:'🧱 Play Neon Block (new!)', helper:'🎯 Timing helper', now:'NOW!' },
   };
   const FLAGS = {tr:'🇹🇷', de:'🇩🇪', en:'🇬🇧'};
   if (!SAVE.lang){ const nl=(navigator.language||'tr').slice(0,2); SAVE.lang = I18N[nl] ? nl : (nl==='de'?'de':'en'); if(!I18N[SAVE.lang]) SAVE.lang='tr'; }
@@ -321,8 +321,8 @@
     box.querySelectorAll('.lg').forEach(el => el.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); SAVE.lang=el.dataset.l; persist(); document.documentElement.lang=SAVE.lang; menu(); }));
     box.querySelectorAll('.tg').forEach(el => el.addEventListener('pointerdown', e => {
       e.preventDefault(); e.stopPropagation(); unlockAudio(); const k=el.dataset.t;
-      if (k==='music') setMusic(!SAVE.music); else { SAVE.sfx=!SAVE.sfx; persist(); }
-      el.classList.toggle('on', SAVE[k]); el.textContent = (k==='music'?t('gm'):t('sfx')) + ': ' + (SAVE[k]?t('on'):t('off'));
+      if (k==='music') setMusic(!SAVE.music); else { SAVE[k]=!SAVE[k]; persist(); }
+      el.classList.toggle('on', SAVE[k]); el.textContent = (k==='music'?t('gm'):k==='helper'?t('helper'):t('sfx')) + ': ' + (SAVE[k]?t('on'):t('off'));
     }));
     box.querySelectorAll('.lnk').forEach(el => el.addEventListener('pointerdown', e => e.stopPropagation()));
     box.querySelectorAll('.th').forEach(el => el.addEventListener('pointerdown', e => {
@@ -342,7 +342,8 @@
       : `<a class="lnk" style="background:#3ddc84;color:#0b0d1a;display:block" href="https://xenosmart.de/spiel/DisFirlat.apk" download>${t('apk')}</a>`;
     const extra = web ? `<div class="music">${getApp}
       <div class="small"><a href="https://xenosmart.de/" style="color:#8a90b8">XenoSmart</a> · <a href="https://xenosmart.de/impressum.html" style="color:#8a90b8">Impressum</a> · <a href="https://xenosmart.de/datenschutz.html" style="color:#8a90b8">Datenschutz</a></div></div>` : '';
-    return musicHtml() + extra + `<div class="themes">${Object.entries(THEMES).map(([k,t])=>`<div class="th ${SAVE.theme===k?'sel':''} ${ts<t.need?'lock':''}" data-k="${k}"><i style="background:linear-gradient(135deg,${t.a},${t.b})"></i>${ts<t.need?'🔒'+t.need+'★':I18N[SAVE.lang].th[k]}</div>`).join('')}</div><div class="small">${STARS_TXT(ts)}</div>`;
+    const helperBtn = `<div class="row" style="margin-top:12px"><button class="tg ${SAVE.helper?'on':''}" data-t="helper">${t('helper')}: ${SAVE.helper?t('on'):t('off')}</button></div>`;
+    return helperBtn + musicHtml() + extra + `<div class="themes">${Object.entries(THEMES).map(([k,t])=>`<div class="th ${SAVE.theme===k?'sel':''} ${ts<t.need?'lock':''}" data-k="${k}"><i style="background:linear-gradient(135deg,${t.a},${t.b})"></i>${ts<t.need?'🔒'+t.need+'★':I18N[SAVE.lang].th[k]}</div>`).join('')}</div><div class="small">${STARS_TXT(ts)}</div>`;
   }
   function musicHtml(){
     return `<div class="music"><div style="font-weight:800;font-size:14px">${t('music')}</div>
@@ -485,11 +486,49 @@
   function zap(g){ for (const j of [g-1,g+1]) if (j>=0 && j<K) arcs.push({a:g,b:j,life:0.3}); }
 
   // ================= İSABET =================
+  function tolOf(g){ const step=Math.PI*2/N[g]; let tol=Math.min(step*0.42, L.win*omegaOf(g)/2); if (fever>0) tol*=1.25; return tol; }
+  // ---------- ZAMANLAMA YARDIMCISI ----------
+  let helperIn=false;
+  function drawHelper(){
+    if (!SAVE.helper || (state!=='play' && state!=='fail')) return;
+    const g=active, r=R[g], n=N[g], step=Math.PI*2/n, tol=tolOf(g), base=Math.PI/2;
+    // en yakın boş (kilitsiz) yuva ve hedefe uzaklığı
+    let best=9, ready=false;
+    const sgn = Math.sign(dir*(g%2? -1:1)) || 1;
+    for (let i=0;i<n;i++){
+      if (filled[g][i]) continue;
+      if (boss.lock && boss.lock.g===g && boss.lock.i===i && time<boss.lock.until) continue;
+      const d=norm(rots[g]+i*step-base);
+      if (Math.abs(d)<=tol) ready=true;
+      const ahead = ((-d*sgn)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);   // dönme yönünde kalan açı
+      if (ahead<best) best=ahead;
+    }
+    const rIn=r-2, rOut=r+th*1.15;
+    ctx.save(); ctx.translate(cx[g],cy[g]);
+    // isabet bölgesi (yeşil) ve PERFECT bölgesi (altın)
+    ctx.globalAlpha = ready ? 0.75 : 0.4;
+    ctx.fillStyle = ready ? '#5dff8a' : 'rgba(255,255,255,.6)';
+    ctx.beginPath(); ctx.arc(0,0,rOut,base-tol,base+tol); ctx.arc(0,0,rIn,base+tol,base-tol,true); ctx.closePath(); ctx.fill();
+    ctx.globalAlpha = ready ? 0.95 : 0.55; ctx.fillStyle='#ffd23f';
+    const pt=tol*0.38; ctx.beginPath(); ctx.arc(0,0,rOut+th*0.25,base-pt,base+pt); ctx.arc(0,0,rOut,base+pt,base-pt,true); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    // hazır olma halkası: yuva yaklaştıkça dolar
+    const lx=cx[g], ly=launcherY(g)+th*0.9, rr=th*1.6;
+    const prog = Math.max(0, Math.min(1, 1 - (best-tol)/(step*1.2)));
+    ctx.save(); ctx.lineWidth=4; ctx.lineCap='round';
+    ctx.strokeStyle='rgba(255,255,255,.18)'; ctx.beginPath(); ctx.arc(lx,ly,rr,0,Math.PI*2); ctx.stroke();
+    ctx.strokeStyle = ready ? '#5dff8a' : T.a; ctx.shadowColor=ctx.strokeStyle; ctx.shadowBlur= ready?18:8;
+    ctx.beginPath(); ctx.arc(lx,ly,rr,-Math.PI/2,-Math.PI/2+Math.PI*2*(ready?1:prog)); ctx.stroke();
+    if (ready){ ctx.font=`900 ${Math.max(13,th*0.75)}px 'Bricolage Grotesque',sans-serif`; ctx.textAlign='center'; ctx.fillStyle='#5dff8a'; ctx.fillText(t('now'), lx, ly+rr+th*1.1); }
+    ctx.restore();
+    if (ready && !helperIn) tone(1760,0.05,'sine',0.035);
+    helperIn = ready;
+  }
   function land(){
     const g=flying.g, n=N[g], step=Math.PI*2/n;
     let bi=0, bd=9;
     for(let i=0;i<n;i++){ const d=Math.abs(norm(rots[g]+i*step-Math.PI/2)); if(d<bd){bd=d; bi=i;} }
-    let tol=Math.min(step*0.42, L.win*omegaOf(g)/2); if (fever>0) tol*=1.25;
+    const tol=tolOf(g);
     const hitY=cy[g]+R[g]+th/2;
     const locked = boss.lock && boss.lock.g===g && boss.lock.i===bi && time<boss.lock.until;
     if (bd<=tol && !filled[g][bi] && !locked){
@@ -819,7 +858,7 @@
       ctx.save();
       if (shake>0) ctx.translate((Math.random()-.5)*12*shake/.4,(Math.random()-.5)*12*shake/.4);
       for (let j=K-1;j>=0;j--) drawGear(j);
-      drawArcs(); drawLauncher();
+      drawArcs(); drawHelper(); drawLauncher();
       if (flying){
         const g=flying.g;
         if (!flying.miss){
