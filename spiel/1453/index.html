@@ -98,6 +98,7 @@ h2{font-size:3.7cqw;font-weight:normal;color:var(--red);-webkit-text-stroke:.1cq
       <div class="tag" id="hCharge">CEPHANE <span id="chBar" style="display:inline-block;width:7cqw;height:1.1cqw;border:.2cqw solid #1a1008;vertical-align:middle;background:#fff6dc;position:relative"><span id="chFill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#f2b632,#c0392b)"></span></span></div>
     </div>
     <div class="hbtns">
+      <a class="ibtn homeLink" title="Ana menü (Buko Games)" style="text-decoration:none">🏠</a>
       <button class="ibtn" id="bHelp" title="Nişan yardımı (H)">🎯 YARDIM</button>
       <button class="ibtn" id="bMute" title="Müzik / Ses">♫ MARŞ</button>
       <button class="ibtn" id="bRetry" title="Yeniden">↻</button>
@@ -123,7 +124,7 @@ h2{font-size:3.7cqw;font-weight:normal;color:var(--red);-webkit-text-stroke:.1cq
       <button class="btn" id="bPlay">OYNA</button>
       <button class="btn gold" id="bLevels">SEVİYELER</button>
       <div class="help">Ekrana bas · geri çek · nişan al · bırak!<br>Klavye: ↑↓ açı · ←→ güç · BOŞLUK ateş · H yardım · M müzik</div>
-      <a class="brand" href="../" style="text-decoration:none">🦎 BUKO GAMES</a>
+      <a class="brand homeLink" style="text-decoration:none">🦎 BUKO GAMES</a>
     </div>
   </div>
 
@@ -133,6 +134,7 @@ h2{font-size:3.7cqw;font-weight:normal;color:var(--red);-webkit-text-stroke:.1cq
       <div class="orn">6 NİSAN — 29 MAYIS 1453</div>
       <div id="lvgrid"></div>
       <button class="btn gold" id="bBack">GERİ</button>
+      <a class="btn green homeLink" style="text-decoration:none;display:inline-block">🏠 ANA MENÜ</a>
     </div>
   </div>
 
@@ -166,6 +168,7 @@ h2{font-size:3.7cqw;font-weight:normal;color:var(--red);-webkit-text-stroke:.1cq
     <div class="panel">
       <h2>GÜLLE BİTTİ!</h2>
       <div class="desc" style="text-align:center">Surlar hâlâ ayakta. Topçular yeniden dolduruyor…</div>
+      <a class="btn green homeLink" style="text-decoration:none;display:inline-block">🏠</a>
       <button class="btn gold" id="bLMenu">SEVİYELER</button>
       <button class="btn" id="bLRetry">TEKRAR DENE</button>
     </div>
@@ -178,6 +181,7 @@ h2{font-size:3.7cqw;font-weight:normal;color:var(--red);-webkit-text-stroke:.1cq
       <div class="desc" style="max-width:54cqw">21 yaşındaki Sultan II. Mehmed, 53 günlük kuşatmanın ardından şehre girdi ve bu zaferle “Fatih” unvanını aldı. Bir çağ kapandı, yeni bir çağ açıldı.</div>
       <div class="small" id="fScore"></div>
       <button class="btn gold" id="bFMenu">SEVİYELER</button>
+      <a class="btn green homeLink" style="text-decoration:none;display:inline-block">🏠 ANA MENÜ</a>
     </div>
   </div>
   <div id="loading">YÜKLENİYOR…</div>
@@ -1200,6 +1204,7 @@ $('bBrake').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefa
 ['pointerup','pointerleave','pointercancel'].forEach(ev=>$('bBrake').addEventListener(ev,()=>bonusBrake(false)));
 $('bGrease').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();bonusGrease();});
 
+const HOME=/xenosmart\./.test(location.hostname)?'../':'https://xenosmart.de/spiel/';document.querySelectorAll('.homeLink').forEach(a=>{a.href=HOME;a.addEventListener('pointerdown',e=>e.stopPropagation());});
 function boot(){if(typeof Matter==='undefined'){$('loading').textContent='Fizik motoru yüklenemedi. Sayfayı yenile.';return;}
   $('loading').remove();resize();
   lvl=LEVELS[LEVELS.length-1];initWorld();lvl.build(L);BG=getBG(lvl);computeAimView();cam={...aimView};lvl=null;

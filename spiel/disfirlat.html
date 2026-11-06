@@ -19,7 +19,7 @@
   :root{--a:#38e1ff;--b:#ff4fd8;--glass:rgba(255,255,255,.16);--sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom)}
   html,body{margin:0;height:100%;background:#145a5a;color:#eef;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
   canvas{display:block;width:100vw;height:100vh;height:100dvh}
-  #top{position:fixed;top:calc(12px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;pointer-events:none}
+  #top{position:fixed;top:calc(12px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;pointer-events:none;z-index:6}
   .pill{background:var(--glass);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px;font-weight:600;font-size:14px;white-space:nowrap}
   .sw{pointer-events:auto;font:inherit;color:#fff;cursor:pointer;padding:6px 10px}
   #score{font-weight:900;font-size:16px;min-width:64px;text-align:center}
@@ -92,7 +92,7 @@
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="top"><div class="lft"><button class="pill sw ib" id="sw" title="Games">🎮</button><button class="pill ib" id="mus" title="Music">🎵</button><button class="pill ib" id="vol" title="Volume">🔈</button></div><div class="pill" id="lvl">Seviye 1</div><div class="pill" id="score">0</div><div class="pill" id="hearts"></div></div>
+<div id="top"><div class="lft"><a class="pill ib" id="home" href="index.html" title="Ana menü" style="text-decoration:none" onclick="try{persist()}catch(_){}">🏠</a><button class="pill sw ib" id="sw" title="Games">🎮</button><button class="pill ib" id="mus" title="Music">🎵</button><button class="pill ib" id="vol" title="Volume">🔈</button></div><div class="pill" id="lvl">Seviye 1</div><div class="pill" id="score">0</div><div class="pill" id="hearts"></div></div>
 <div id="sub"></div>
 <div id="combo"></div>
 <div id="dots"></div>
@@ -100,7 +100,7 @@
 <button id="slow"><b>⏱</b>YAVAŞ</button>
 <div id="toast"></div>
 <div id="card"><div class="box" id="box"></div></div>
-<div id="picker"><div class="pk"><div style="font-weight:900;letter-spacing:2px;color:#a6ff4d;padding:2px 6px 4px">🦎 BUKO GAMES</div><a href="index.html">🏠 Buko Games</a><a href="disfirlat.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
+<div id="picker"><div class="pk"><div style="font-weight:900;letter-spacing:2px;color:#a6ff4d;padding:2px 6px 4px">🦎 BUKO GAMES</div><a href="index.html">🏠 Buko Games</a><a href="disfirlat.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a><a href="1453/" onclick="if(location.protocol==='file:')this.href='https://xenosmart.de/spiel/1453/'">🏰 1453 Surları Yık</a></div></div>
 <script>
 (() => {
   // ================= AYARLAR =================
