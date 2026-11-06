@@ -80,6 +80,11 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
 .stars span{display:inline-block;color:var(--gold);-webkit-text-stroke:calc(.2*var(--u)) var(--ink);margin:0 calc(.4*var(--u));animation:pop .5s backwards}
 .stars span:nth-child(2){animation-delay:.25s}.stars span:nth-child(3){animation-delay:.5s}
 .stars .off{color:#c4b08c}
+.overlay.fin{align-items:flex-end;padding-bottom:calc(3*var(--u));background:linear-gradient(0deg,rgba(26,16,8,.6),rgba(26,16,8,0) 45%)}
+.overlay.fin .panel{padding:calc(1*var(--u)) calc(2.6*var(--u));max-width:calc(62*var(--u))}
+.overlay.fin .desc{font-size:calc(1.25*var(--u));margin:calc(.4*var(--u)) 0}
+.overlay.fin h2{font-size:calc(3.4*var(--u))!important}
+.overlay.fin .btn{font-size:calc(2*var(--u));margin:calc(.3*var(--u))}
 .brand{position:absolute;right:calc(1.6*var(--u));bottom:calc(1.1*var(--u));font-size:calc(1.25*var(--u));letter-spacing:calc(.2*var(--u));color:var(--red)}
 .small{font-size:calc(1.5*var(--u));letter-spacing:calc(.06*var(--u))}
 .help{font-family:Georgia,serif;font-size:calc(1.25*var(--u));margin-top:calc(.6*var(--u));opacity:.85}
@@ -182,8 +187,8 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
   <div class="overlay hidden" id="scFinal" style="background:rgba(26,16,8,.15)">
     <div class="panel">
       <div class="cap">29 Mayıs 1453</div>
-      <h2 style="font-size:calc(4.8*var(--u))">İSTANBUL FETHEDİLDİ!</h2>
-      <div class="desc" style="max-width:calc(54*var(--u))">21 yaşındaki Sultan II. Mehmed, 53 günlük kuşatmanın ardından şehre girdi ve bu zaferle “Fatih” unvanını aldı. Bir çağ kapandı, yeni bir çağ açıldı.</div>
+      <h2 style="font-size:calc(4.2*var(--u))">İSTANBUL FETHEDİLDİ!</h2>
+      <div class="desc" style="max-width:calc(60*var(--u));text-align:center">21 yaşındaki Sultan II. Mehmed, 53 günlük kuşatmanın ardından şehre girdi ve bu zaferle “Fatih” unvanını aldı. Bir çağ kapandı, yeni bir çağ açıldı.</div>
       <div class="small" id="fScore"></div>
       <button class="btn gold" id="bFMenu">SEVİYELER</button>
       <a class="btn green homeLink" style="text-decoration:none;display:inline-block">🏠 ANA MENÜ</a>
@@ -390,7 +395,8 @@ function initAudio(){try{if(!AC){AC=new(window.AudioContext||window.webkitAudioC
     const dl=AC.createDelay();dl.delayTime.value=.18;const fb=AC.createGain();fb.gain.value=.28;const lp=AC.createBiquadFilter();lp.frequency.value=1800;
     musBus.connect(dl);dl.connect(lp);lp.connect(fb);fb.connect(dl);lp.connect(comp);}
   if(AC.state==='suspended')AC.resume();applySound();}catch(e){AC=null;}}
-function applySound(){if(!AC)return;master.gain.value=soundMode===2?0:.5;musBus.gain.value=soundMode===0&&!bonusActive?.3:0;if(soundMode===0)startMusic();
+function musicAllowed(){return soundMode===0||(soundMode===1&&state==='finale');}
+function applySound(){if(!AC)return;master.gain.value=soundMode===2?0:.5;musBus.gain.value=musicAllowed()&&!bonusActive?(state==='finale'?.42:.3):0;if(musicAllowed())startMusic();
   $('bMute').textContent=['♫ MARŞ','SES','SESSİZ'][soundMode];}
 function noise(dur,f0,f1,vol,type='lowpass',dl=0,bus=sfxBus){if(!AC)return;const t=AC.currentTime+dl,s=AC.createBufferSource();s.buffer=NB;s.loopStart=Math.random();const f=AC.createBiquadFilter();f.type=type;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(Math.max(30,f1),t+dur);const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(g);g.connect(bus);s.start(t,Math.random());s.stop(t+dur+.05);}
 function tone(f0,f1,dur,vol,type='sine',dl=0,bus=sfxBus,at=.01){if(!AC)return;const t=AC.currentTime+dl,o=AC.createOscillator();o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+dur);const g=AC.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+at);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g);g.connect(bus);o.start(t);o.stop(t+dur+.05);}
@@ -412,7 +418,15 @@ const MEL=[ // [nota, 8'lik süre]
  ['D4',1],['Eb4',1],['F4s',2],['G4',1],['A4',1],['Bb4',2], ['A4',1],['G4',1],['F4s',2],['G4',4],
  ['D5',2],['C5',1],['Bb4',1],['A4',2],['Bb4',2], ['C5',1],['Bb4',1],['A4',1],['G4',1],['A4',4],
  ['G4',1],['F4s',1],['G4',1],['A4',1],['Bb4',2],['A4',2], ['G4',1],['F4s',1],['Eb4',2],['D4',4]];
-const MELSTEPS=MEL.reduce((a,n)=>a+n[1],0);const melMap=[];{let s=0;for(const n of MEL){melMap[s]=n;s+=n[1];}}
+// Fetih marşı (özgün): daha hızlı, coşkulu
+const HZ2={G3:196,A3:220,B3:246.94,C4:261.63,D4:293.66,E4:329.63,F4s:369.99,G4:392,A4:440,B4:493.88,C5:523.25,D5:587.33,E5:659.25,G5:783.99};
+const FMEL=[['D5',2],['D5',1],['D5',1],['G5',2],['D5',2], ['E5',1],['D5',1],['C5',1],['B4',1],['A4',2],['D5',2],
+ ['G4',1],['A4',1],['B4',1],['C5',1],['D5',2],['E5',2], ['D5',1],['C5',1],['B4',1],['A4',1],['G4',4],
+ ['B4',2],['B4',1],['C5',1],['D5',2],['G5',2], ['E5',1],['D5',1],['E5',1],['G5',1],['D5',4],
+ ['C5',1],['B4',1],['A4',1],['B4',1],['C5',2],['A4',2], ['B4',1],['A4',1],['F4s',1],['A4',1],['G4',4]];
+function mkMap(m){const mp=[];let s=0;for(const n of m){mp[s]=n;s+=n[1];}return{map:mp,steps:s};}
+const SONGS={march:{...mkMap(MEL),hz:HZ,bpm:104,vol:.11},fetih:{...mkMap(FMEL),hz:HZ2,bpm:126,vol:.12}};let song='march';
+const MELSTEPS=SONGS.march.steps,melMap=SONGS.march.map;
 function zurna(f,t,dur,vol){const o=AC.createOscillator(),o2=AC.createOscillator();o.type='sawtooth';o2.type='square';o.frequency.value=f;o2.frequency.value=f*1.004;
   const vib=AC.createOscillator(),vg=AC.createGain();vib.frequency.value=5.5;vg.gain.value=f*.012;vib.connect(vg);vg.connect(o.frequency);vg.connect(o2.frequency);
   o.frequency.setValueAtTime(f*.97,t);o.frequency.linearRampToValueAtTime(f,t+.04);
@@ -425,9 +439,10 @@ function drum(t,f,vol,dur=.35,bus){bus=bus||musBus;const o=AC.createOscillator()
 function tek(t,vol){const s=AC.createBufferSource();s.buffer=NB;const fl=AC.createBiquadFilter();fl.type='bandpass';fl.frequency.value=2400;fl.Q.value=2;const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+.07);s.connect(fl);fl.connect(g);g.connect(musBus);s.start(t,Math.random());s.stop(t+.1);}
 function zil(t,vol){const s=AC.createBufferSource();s.buffer=NB;const fl=AC.createBiquadFilter();fl.type='highpass';fl.frequency.value=6000;const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+.6);s.connect(fl);fl.connect(g);g.connect(musBus);s.start(t,Math.random());s.stop(t+.65);}
 function startMusic(){if(musTimer||!AC)return;musNext=AC.currentTime+.1;musStep=0;
-  musTimer=setInterval(()=>{if(soundMode!==0)return;const e=60/104/2; // 104 BPM, 8'likler
-    while(musNext<AC.currentTime+.25){const s=musStep%MELSTEPS,t=musNext,beat=s%8;
-      const n=melMap[s];if(n){zurna(HZ[n[0]],t,n[1]*e*.95,.11);if(musStep>=MELSTEPS)zurna(HZ[n[0]]/2,t,n[1]*e*.95,.05);}
+  musTimer=setInterval(()=>{if(!musicAllowed()){musNext=AC.currentTime+.1;return;}const SG=SONGS[song],e=60/SG.bpm/2;const fet=song==='fetih';
+    while(musNext<AC.currentTime+.25){const s=musStep%SG.steps,t=musNext,beat=s%8;
+      const n=SG.map[s];if(n){zurna(SG.hz[n[0]],t,n[1]*e*.95,SG.vol);if(musStep>=SG.steps||fet)zurna(SG.hz[n[0]]/2,t,n[1]*e*.95,fet?.06:.05);}
+      if(fet){if(beat%2===0)drum(t,beat===0?38:48,beat===0?1:.7,.5);if(s%32>=28)tek(t,.35);zil(t,beat%4===0?.2:.06);}
       if(beat===0)drum(t,46,.9,.6);if(beat===4)drum(t,52,.7,.45); // davul "düm"
       if(beat===3||beat===6||beat===7)tek(t,.28); // davul "tek"
       if(beat%2===1)tek(t,.12); // nakkare
@@ -784,7 +799,7 @@ function physics(dt){physAcc+=dt*timeScale;let n=0;while(physAcc>=1/120&&n<6){ph
   let mx=0;for(const b of bodies)if(!b.isSleeping){const s=Math.hypot(b.velocity.x,b.velocity.y);if(s>mx)mx=s;}
   if(mx<.3&&!balls.length)stillT+=dt;else stillT=0;}
 
-function update(dt){time+=dt;if(bonusActive){bonusUpdate(dt);updateParts(dt);return;}recoil=Math.max(0,recoil-dt*2.5);shake=Math.max(0,shake-dt*36);flashA=Math.max(0,flashA-dt*2.5);loadAnim=Math.max(0,loadAnim-dt);
+function update(dt){time+=dt;if(state==='finale'){finUpdate(dt);return;}if(bonusActive){bonusUpdate(dt);updateParts(dt);return;}recoil=Math.max(0,recoil-dt*2.5);shake=Math.max(0,shake-dt*36);flashA=Math.max(0,flashA-dt*2.5);loadAnim=Math.max(0,loadAnim-dt);
   if(slowT>0){slowT-=dt;timeScale=slowT>0?.35:1;}
   if(engine&&(state==='play'||state==='win'||state==='lose'||state==='menu'||state==='intro'||state==='finale')){physics(dt);fireUpdate(dt);}
   for(const b of bodies)if(b.gd.hitT>0)b.gd.hitT-=dt;
@@ -824,7 +839,7 @@ function updateCam(dt){let tx,ty,tz;
 function w2s(x,y){return[(x-cam.x)*cam.z+VW/2,(y-cam.y)*cam.z+VH/2];}
 
 /* ------------------------------ ÇİZİM ------------------------------ */
-let S=1,BG=null;const ART={bg:new Image(),night:new Image(),pt:new Image(),ok:false,nok:false,pok:false};ART.bg.onload=()=>{ART.ok=true;};ART.night.onload=()=>{ART.nok=true;};ART.pt.onload=()=>{ART.pok=true;if(lvl)drawPortrait();};ART.bg.src='art/bg.jpg';ART.night.src='art/night.jpg';ART.pt.src='art/portrait.jpg';
+let S=1,BG=null;const ART={bg:new Image(),night:new Image(),pt:new Image(),fin:new Image(),ok:false,nok:false,pok:false,fok:false};ART.fin.onload=()=>{ART.fok=true;};ART.fin.src='art/finale.jpg';ART.bg.onload=()=>{ART.ok=true;};ART.night.onload=()=>{ART.nok=true;};ART.pt.onload=()=>{ART.pok=true;if(lvl)drawPortrait();};ART.bg.src='art/bg.jpg';ART.night.src='art/night.jpg';ART.pt.src='art/portrait.jpg';
 const usePaint=()=>BG&&(BG.night?ART.nok:ART.ok);const paintImg=()=>BG.night?ART.night:ART.bg;
 function resize(){const r=cv.getBoundingClientRect();if(!r.width||!r.height)return;const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.height*dpr);VW=clamp(Math.round(VH*r.width/r.height),1100,1760);S=cv.height/VH;if(engine&&bodies.length&&!bonusActive){computeAimView();}}
 addEventListener('orientationchange',()=>setTimeout(resize,250));
@@ -858,7 +873,7 @@ function drawAimHelp(){const sp=simPath(),pts=sp.pts,z=cam.z;
   ctx.strokeStyle='rgba(26,16,8,.5)';ctx.lineWidth=2;ctx.setLineDash([6,6]);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(BL+50,0);ctx.stroke();ctx.setLineDash([]);
   const lx=Math.cos(aim.a/2)*(BL+58),ly=Math.sin(aim.a/2)*(BL+58);ctx.font='22px Bangers, Impact';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=5;ctx.strokeStyle=INK;ctx.strokeText(deg+'°',lx,ly);ctx.fillStyle='#ffd93b';ctx.fillText(deg+'°',lx,ly);ctx.restore();}
 let aimLabel=null;
-function draw(){ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);if(bonusActive){bonusDraw();return;}if(!BG)return;
+function draw(){ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);if(state==='finale'){drawFinale();return;}if(bonusActive){bonusDraw();return;}if(!BG)return;
   ctx.setTransform(S,0,0,S,0,0);
   if(usePaint()){const sc=Math.max(VW/1280,1)*1.14,w=1280*sc,h=720*sc,ox=(VW-w)/2-(cam.x-aimView.x)*.07,oy=(VH-h)*.42-(cam.y-aimView.y)*.1*cam.z;ctx.drawImage(paintImg(),clamp(ox,VW-w,0),clamp(oy,VH-h,0),w,h);
     if(!BG.night){ctx.strokeStyle=INK;ctx.lineWidth=2;for(let i=0;i<5;i++){const bx=((time*40+i*230)%1600)-160,by=200+i*22+Math.sin(time*2+i)*8,f=Math.sin(time*9+i)*5;ctx.beginPath();ctx.moveTo(bx-8,by-f);ctx.quadraticCurveTo(bx-3,by-4,bx,by);ctx.quadraticCurveTo(bx+3,by-4,bx+8,by-f);ctx.stroke();}}}
@@ -1010,7 +1025,7 @@ function drawPortrait(){const p=$('portrait'),g=p.getContext('2d');g.setTransfor
   drawTent(g,60,330,.9,night,'r');drawTent(g,300,320,.7,night,'w');drawTug(g,30,330,1);
   drawSultan(g,175,560,5.2,false,0);
   g.strokeStyle=INK;g.lineWidth=8;g.strokeRect(0,0,340,420);}
-function startLevel(i){initAudio();lvlIdx=i;lvl=LEVELS[i];nightMode=!!lvl.night;bonusActive=false;$('bonusCtl').classList.add('hidden');if(lvl.bonus){startBonus();return;}applySound();initWorld();lvl.build(L);
+function startLevel(i){endFinale();initAudio();lvlIdx=i;lvl=LEVELS[i];nightMode=!!lvl.night;bonusActive=false;$('bonusCtl').classList.add('hidden');if(lvl.bonus){startBonus();return;}applySound();initWorld();lvl.build(L);
   if(lvl.cracked)for(const b of bodies)if(b.gd.kind==='blk'&&(b.gd.mat==='s'||b.gd.mat==='T')){b.gd.max=Math.ceil(b.gd.max*.45);b.gd.hp=b.gd.max;b.gd.crack=mkCrack(b.gd.w,b.gd.h,1);}
   ammo={...lvl.ammo};sel='n';if(!ammo[sel])autoSel();if(i===5)sel='b';if(i===6)sel='f';if(i===7)sel='s';
   wind=lvl.wind||0;charge=0;cartT=0;decals=[];lastPath=[];recPath=null;parts=[];pops=[];bubbles=[];score=0;shotFired=false;endTimer=0;hint=true;stillT=1;lastShot=-99;grace=time+.6;slowT=0;timeScale=1;
@@ -1023,11 +1038,44 @@ function beginPlay(){if(lvl.bonus){beginBonus();return;}state='play';show(null);
 function winLevel(){if(state!=='play')return;state='win';const rem=totalAmmo();const stars=rem>=2?3:rem===1?2:1;score+=rem*500;
   save.stars[lvlIdx]=Math.max(save.stars[lvlIdx]||0,stars);save.unlocked=Math.max(save.unlocked,Math.min(LEVELS.length,lvlIdx+2));persist();
   fanfare();bubbles=[];for(let i=0;i<5;i++)setTimeout(()=>addP({k:'rocket',x:rnd(aimView.x-200,structMax),y:GROUND-20,vx:rnd(-50,50),vy:rnd(-700,-520),life:rnd(.8,1.1),t:0}),i*160);buzz([40,60,40]);bubble(pick(['MAŞALLAH!','AFERİN!','HELAL OLSUN!']),62,HILLY-130,3);
-  setTimeout(()=>{if(lvlIdx===LEVELS.length-1){state='finale';finalT=0;$('fScore').textContent='SON PUAN: '+score;show('scFinal');return;}
+  setTimeout(()=>{if(lvlIdx===LEVELS.length-1){startFinale();return;}
     $('wTitle').textContent=pick(['SUR YIKILDI!','ZAFER!','HARİKA ATIŞ!']);
     $('wStars').innerHTML=[0,1,2].map(i=>`<span class="${i<stars?'':'off'}">★</span>`).join('');$('wScore').textContent=`PUAN: ${score}  ·  KALAN GÜLLE: ${rem}`;show('scWin');},800);}
+let FP=[];
+function startFinale(){state='finale';finalT=0;FP=[];$('fScore').textContent='SON PUAN: '+score;show('scFinal');$('scFinal').classList.add('fin');
+  song='fetih';musStep=0;if(AC)musNext=AC.currentTime+.05;applySound();buzz([80,60,80,60,200]);}
+function endFinale(){if(song!=='march'){song='march';musStep=0;}$('scFinal').classList.remove('fin');if(state==='finale')state='levels';applySound();}
+function finUpdate(dt){finalT+=dt;
+  if(Math.random()<dt*(finalT<4?4:2.2))FP.push({k:'rk',x:rnd(VW*.1,VW*.9),y:VH+10,vx:rnd(-40,40),vy:rnd(-820,-600),t:0,life:rnd(.85,1.2),col:pick(['#ffd93b','#ff5a3c','#ffffff','#7fe0ff','#ff8ad8','#7dff9a'])});
+  if(FP.length<900)for(let i=0;i<3;i++)FP.push({k:Math.random()<.5?'cf':'pt',x:rnd(-50,VW+50),y:-20,vx:rnd(-30,30),vy:rnd(60,140),t:0,life:9,rot:rnd(0,6),vr:rnd(-5,5),s:rnd(5,10),col:pick(['#c0392b','#ffffff','#f2b632','#c0392b'])});
+  if(Math.random()<dt*.6)FP.push({k:'dv',x:-40,y:rnd(80,260),vx:rnd(90,150),vy:rnd(-15,5),t:0,life:14});
+  for(let i=FP.length-1;i>=0;i--){const p=FP[i];
+    if(p.k==='rk'&&p.t+dt>=p.life){for(let j=0;j<80;j++){const a=j/80*6.28,v=rnd(120,360);FP.push({k:'fw',x:p.x,y:p.y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,t:0,life:rnd(1.1,1.8),col:p.col});}FP.push({k:'fl',x:p.x,y:p.y,t:0,life:.25});if(AC&&soundMode<2){noise(.6,1400,80,.3);noise(.9,6000,2000,.05,'highpass',.1);}}
+    p.t+=dt;if(p.t>p.life||p.y>VH+60){FP.splice(i,1);continue;}
+    if(p.k==='rk'){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=170*dt;}
+    else if(p.k==='fw'){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=120*dt;p.vx*=.985;p.vy*=.985;}
+    else if(p.k==='cf'||p.k==='pt'){p.x+=p.vx*dt+Math.sin(p.t*2+p.rot)*.8;p.y+=p.vy*dt;p.rot+=p.vr*dt;}
+    else if(p.k==='dv'){p.x+=p.vx*dt;p.y+=p.vy*dt+Math.sin(p.t*3)*.4;if(p.x>VW+60)p.t=p.life+1;}}}
+function drawFinale(){ctx.setTransform(S,0,0,S,0,0);const T=finalT;
+  if(ART.fok){const z=1.06+Math.min(T,30)*.004,k=Math.max(VW/1280,1)*z,w=1280*k,h=720*k;ctx.drawImage(ART.fin,(VW-w)*.3,0,w,h);}
+  else{const g=ctx.createLinearGradient(0,0,0,VH);g.addColorStop(0,'#f29a55');g.addColorStop(1,'#fde3a8');ctx.fillStyle=g;ctx.fillRect(0,0,VW,VH);}
+  ctx.save();ctx.globalCompositeOperation='lighter';ctx.translate(VW*.62,VH*.28);ctx.rotate(T*.05);for(let i=0;i<16;i++){ctx.rotate(Math.PI/8);if(i%2)continue;ctx.fillStyle=`rgba(255,220,140,${.05+Math.sin(T*1.3+i)*.025})`;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(1500,-90);ctx.lineTo(1500,90);ctx.closePath();ctx.fill();}ctx.restore();
+  for(const p of FP){const a=Math.max(0,1-p.t/p.life);
+    if(p.k==='rk'){ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(p.x,p.y,3.5,0,7);ctx.fill();ctx.fillStyle='rgba(255,200,120,.5)';ctx.fillRect(p.x-1,p.y,2,18);}
+    else if(p.k==='fw'){ctx.globalCompositeOperation='lighter';ctx.fillStyle=p.col;ctx.globalAlpha=a;ctx.beginPath();ctx.arc(p.x,p.y,2.8,0,7);ctx.fill();ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';}
+    else if(p.k==='fl'){ctx.globalCompositeOperation='lighter';const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,140);g.addColorStop(0,`rgba(255,250,220,${a*.7})`);g.addColorStop(1,'rgba(255,200,120,0)');ctx.fillStyle=g;ctx.fillRect(p.x-140,p.y-140,280,280);ctx.globalCompositeOperation='source-over';}
+    else if(p.k==='cf'){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.col;ctx.fillRect(-p.s/2,-p.s/4,p.s,Math.max(1,p.s/2*Math.abs(Math.cos(p.t*6))));ctx.restore();}
+    else if(p.k==='pt'){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.col==='#ffffff'?'#ffd1dc':'#d9304a';ctx.beginPath();ctx.ellipse(0,0,p.s*.6,p.s*.35,0,0,7);ctx.fill();ctx.restore();}
+    else if(p.k==='dv'){ctx.save();ctx.translate(p.x,p.y);const f=Math.sin(p.t*10)*7;ctx.fillStyle='#fff';ctx.strokeStyle=INK;ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,0,12,6,0,0,7);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(-2,-2);ctx.quadraticCurveTo(-8,-14-f,-16,-10-f);ctx.quadraticCurveTo(-8,-6,-2,-2);ctx.fill();ctx.stroke();ctx.beginPath();ctx.arc(11,-3,4,0,7);ctx.fill();ctx.stroke();ctx.restore();}}
+  const ty=VH*.1,ap=Math.min(1,T/1.2);ctx.save();ctx.globalAlpha=ap;ctx.translate(VW*.68,ty);const sc=(.8+ap*.2+Math.sin(T*2)*.015)*.78;ctx.scale(sc,sc);
+  ctx.fillStyle='#b3261e';ctx.strokeStyle=INK;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-340,-42);ctx.lineTo(340,-42);ctx.lineTo(305,0);ctx.lineTo(340,42);ctx.lineTo(-340,42);ctx.lineTo(-305,0);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.strokeStyle='#f2b632';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-320,-32);ctx.lineTo(320,-32);ctx.moveTo(-320,32);ctx.lineTo(320,32);ctx.stroke();
+  ctx.font='54px Bangers, Impact';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=8;ctx.strokeStyle=INK;ctx.strokeText('FETİH MÜBAREK OLSUN!',0,3);ctx.fillStyle='#ffd93b';ctx.fillText('FETİH MÜBAREK OLSUN!',0,3);ctx.restore();
+  if(BG)ctx.drawImage(BG.vig,0,0,VW,VH);
+  ctx.strokeStyle=INK;ctx.lineWidth=14;ctx.strokeRect(0,0,VW,VH);ctx.strokeStyle='#f2b632';ctx.lineWidth=3;ctx.strokeRect(10,10,VW-20,VH-20);}
+
 function loseLevel(){if(state!=='play')return;state='lose';setTimeout(()=>show('scLose'),400);}
-function toMenuLevels(){bonusActive=false;$('bonusCtl').classList.add('hidden');state='levels';buildLevels();show('scLevels');}
+function toMenuLevels(){endFinale();bonusActive=false;$('bonusCtl').classList.add('hidden');state='levels';buildLevels();show('scLevels');}
 
 function goFull(){try{const d=document.documentElement;if(matchMedia('(pointer:coarse)').matches&&!document.fullscreenElement&&d.requestFullscreen){d.requestFullscreen({navigationUI:'hide'}).then(()=>{try{screen.orientation.lock('landscape').catch(()=>{});}catch(e){}setTimeout(resize,300);}).catch(()=>{});}}catch(e){}}
 function buzz(ms){try{if(navigator.vibrate)navigator.vibrate(ms);}catch(e){}}
