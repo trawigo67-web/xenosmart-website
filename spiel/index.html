@@ -8,6 +8,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0b0d1a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -17,7 +18,7 @@
 <style>
   :root{--a:#38e1ff;--b:#ff4fd8;--glass:rgba(255,255,255,.16);--sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom)}
   html,body{margin:0;height:100%;background:#2a1b7a;color:#eef;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
-  canvas{display:block;width:100vw;height:100vh}
+  canvas{display:block;width:100vw;height:100vh;height:100dvh}
   #top{position:fixed;top:calc(12px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;pointer-events:none}
   .pill{background:var(--glass);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px;font-weight:600;font-size:14px;white-space:nowrap}
   .sw{pointer-events:auto;font:inherit;color:#fff;cursor:pointer;padding:6px 10px}
@@ -213,32 +214,50 @@
     const botUI = (device==='tablet'?120:device==='landscape'?70:96) + safeB;
     const AW = W*(device==='landscape'?0.80:0.92), AH = Math.max(120, H-topUI-botUI);
     const t1=1.8;
-    const angles = K<=1 ? [0] : K===2 ? [0,0.35,0.6] : [0.42,0.3,0.55,0.7,0.2];
+    const pats=[];
+    if (K<=1) pats.push([0]);
+    else {
+      const hz = K===2 ? [0,0.35,0.6,0.85] : [0.42,0.3,0.55,0.7,0.2];
+      for (const ang of hz) pats.push(Array.from({length:K},(_,j)=> j===0?0 : (K===2?ang:(j%2?ang:-ang))));
+      for (const dl of [0.45,0.6,0.75,0.9]) pats.push(Array.from({length:K},(_,j)=> j===0?0 : Math.PI/2+(j%2?-dl:dl)));
+    }
+    const BASES=[Math.PI/2, Math.PI, 0, -Math.PI/2];
     let best=null;
-    for (const ang of angles){
-      const px=[0], py=[0], ph=[0];
-      for (let j=1;j<K;j++){ const a=(K===2?ang:(j%2?ang:-ang)), d=N[j-1]+N[j]+t1*1.05; ph[j]=a; px[j]=px[j-1]+Math.cos(a)*d; py[j]=py[j-1]+Math.sin(a)*d; }
-      // fırlatıcı yolu diğer çarklara çarpmasın
-      let ok=true;
-      for (let j=0;j<K && ok;j++) for (let k=0;k<K;k++){ if(k===j) continue;
-        const rx0=px[j]-t1*1.3, rx1=px[j]+t1*1.3, ry0=py[j]+N[j], ry1=py[j]+N[j]+t1*5;
-        const qx=Math.max(rx0,Math.min(px[k],rx1)), qy=Math.max(ry0,Math.min(py[k],ry1));
-        if (Math.hypot(px[k]-qx,py[k]-qy) < N[k]+t1*0.9){ ok=false; break; } }
+    for (const ph of pats){
+      const px=[0], py=[0];
+      for (let j=1;j<K;j++){ const d=N[j-1]+N[j]+t1*1.05; px[j]=px[j-1]+Math.cos(ph[j])*d; py[j]=py[j-1]+Math.sin(ph[j])*d; }
+      // her çark için fırlatıcı yönü: tercihen alttan, olmazsa yandan/üstten
+      const lb=[]; let ok=true;
+      for (let j=0;j<K && ok;j++){
+        let found=null;
+        for (const bb of BASES){
+          const ux=Math.cos(bb), uy=Math.sin(bb); let clear=true;
+          for (let k=0;k<K && clear;k++){ if(k===j) continue;
+            for (let q=0;q<=6;q++){ const dd=N[j]+t1*5*q/6, sx=px[j]+ux*dd, sy=py[j]+uy*dd;
+              if (Math.hypot(px[k]-sx,py[k]-sy) < N[k]+t1*2.2){ clear=false; break; } } }
+          if (clear){ found=bb; break; }
+        }
+        if (found===null) ok=false; else lb[j]=found;
+      }
       if (!ok) continue;
       let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
-      for (let j=0;j<K;j++){ const e=N[j]+t1; x0=Math.min(x0,px[j]-e); x1=Math.max(x1,px[j]+e); y0=Math.min(y0,py[j]-e); y1=Math.max(y1,Math.max(py[j]+e, py[j]+N[j]+t1*5)); }
-      const uu=Math.min(AW/(x1-x0), AH/(y1-y0));
-      if (!best || uu>best.u) best={u:uu,px,py,ph,x0,x1,y0,y1};
+      for (let j=0;j<K;j++){ const e=N[j]+t1; x0=Math.min(x0,px[j]-e); x1=Math.max(x1,px[j]+e); y0=Math.min(y0,py[j]-e); y1=Math.max(y1,py[j]+e);
+        const lx=px[j]+Math.cos(lb[j])*(N[j]+t1*5.5), ly=py[j]+Math.sin(lb[j])*(N[j]+t1*5.5); x0=Math.min(x0,lx-t1*1.5); x1=Math.max(x1,lx+t1*1.5); y0=Math.min(y0,ly-t1*1.5); y1=Math.max(y1,ly+t1*1.5); }
+      const downs = lb.filter(v=>v===Math.PI/2).length;
+      const uu=Math.min(AW/(x1-x0), AH/(y1-y0)) * (1 + downs*0.04);   // alttan fırlatmayı hafif tercih et
+      if (!best || uu>best.score) best={score:uu,u:Math.min(AW/(x1-x0), AH/(y1-y0)),px,py,ph,lb,x0,x1,y0,y1};
     }
     // çark çok büyümesin (tek çarkta)
     const maxR = short*(device==='tablet'?0.26:0.3);
-    u = Math.min(best.u, maxR/N[0]); th=t1*u; phi=best.ph;
+    u = Math.min(best.u, maxR/N[0]); th=t1*u; phi=best.ph; LB=best.lb;
     const ox=W/2-(best.x0+best.x1)/2*u, oy=topUI+AH/2-(best.y0+best.y1)/2*u;
     R=N.map(n=>n*u); cx=best.px.map(x=>ox+x*u); cy=best.py.map(y=>oy+y*u);
     stars=Array.from({length:Math.round(W*H/9000)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.3,p:Math.random()*6}));
     bokeh=Array.from({length:device==='tablet'?18:12},(_,i)=>({x:Math.random(),y:Math.random(),r:0.04+Math.random()*0.09,s:0.2+Math.random()*0.5,p:Math.random()*6,c:i%4}));
   }
-  let bokeh=[];
+  let bokeh=[], LB=[];
+  const LU = g => [Math.cos(LB[g]||Math.PI/2), Math.sin(LB[g]||Math.PI/2)];
+  const LP = (g,ext) => { const [ux,uy]=LU(g); return [cx[g]+ux*(R[g]+th*ext), cy[g]+uy*(R[g]+th*ext)]; };
   function computeRots(){
     rots[0]=rot0;
     for (let j=1;j<K;j++){ const sj=Math.PI*2/N[j]; rots[j]=phi[j]+Math.PI-sj/2-(rots[j-1]-phi[j])*N[j-1]/N[j]; }
@@ -492,7 +511,7 @@
   let helperIn=false;
   function drawHelper(){
     if (!SAVE.helper || (state!=='play' && state!=='fail')) return;
-    const g=active, r=R[g], n=N[g], step=Math.PI*2/n, tol=tolOf(g), base=Math.PI/2;
+    const g=active, r=R[g], n=N[g], step=Math.PI*2/n, tol=tolOf(g), base=LB[g];
     // en yakın boş (kilitsiz) yuva ve hedefe uzaklığı
     let best=9, ready=false;
     const sgn = Math.sign(dir*(g%2? -1:1)) || 1;
@@ -514,13 +533,13 @@
     const pt=tol*0.38; ctx.beginPath(); ctx.arc(0,0,rOut+th*0.25,base-pt,base+pt); ctx.arc(0,0,rOut,base+pt,base-pt,true); ctx.closePath(); ctx.fill();
     ctx.restore();
     // hazır olma halkası: yuva yaklaştıkça dolar
-    const lx=cx[g], ly=launcherY(g)+th*0.9, rr=th*1.6;
+    const [lx,ly]=LP(g,3.7), rr=th*1.6, [hux,huy]=LU(g);
     const prog = Math.max(0, Math.min(1, 1 - (best-tol)/(step*1.2)));
     ctx.save(); ctx.lineWidth=4; ctx.lineCap='round';
     ctx.strokeStyle='rgba(255,255,255,.18)'; ctx.beginPath(); ctx.arc(lx,ly,rr,0,Math.PI*2); ctx.stroke();
     ctx.strokeStyle = ready ? '#5dff8a' : T.a; ctx.shadowColor=ctx.strokeStyle; ctx.shadowBlur= ready?18:8;
     ctx.beginPath(); ctx.arc(lx,ly,rr,-Math.PI/2,-Math.PI/2+Math.PI*2*(ready?1:prog)); ctx.stroke();
-    if (ready){ ctx.font=`900 ${Math.max(13,th*0.75)}px 'Bricolage Grotesque',sans-serif`; ctx.textAlign='center'; ctx.fillStyle='#5dff8a'; ctx.fillText(t('now'), lx, ly+rr+th*1.1); }
+    if (ready){ ctx.font=`900 ${Math.max(13,th*0.75)}px 'Bricolage Grotesque',sans-serif`; ctx.textAlign='center'; ctx.fillStyle='#5dff8a'; ctx.fillText(t('now'), Math.max(th*2.2, Math.min(W-th*2.2, lx)), ly+rr+th*1.1); }
     ctx.restore();
     if (ready && !helperIn) tone(1760,0.05,'sine',0.035);
     helperIn = ready;
@@ -528,9 +547,9 @@
   function land(){
     const g=flying.g, n=N[g], step=Math.PI*2/n;
     let bi=0, bd=9;
-    for(let i=0;i<n;i++){ const d=Math.abs(norm(rots[g]+i*step-Math.PI/2)); if(d<bd){bd=d; bi=i;} }
+    for(let i=0;i<n;i++){ const d=Math.abs(norm(rots[g]+i*step-LB[g])); if(d<bd){bd=d; bi=i;} }
     const tol=tolOf(g);
-    const hitY=cy[g]+R[g]+th/2;
+    const [hitX,hitY]=LP(g,0.5), [ux,uy]=LU(g);
     const locked = boss.lock && boss.lock.g===g && boss.lock.i===bi && time<boss.lock.until;
     if (bd<=tol && !filled[g][bi] && !locked){
       const perfect = bd <= tol*0.38;
@@ -540,13 +559,13 @@
       score += pts;
       if (perfect){
         lvStats.perf++; perfStreak++;
-        floatText(cx[g], hitY-th*2.2, 'PERFECT!', T.b, 22); burst(cx[g],hitY,'#ffffff',10,160);
+        floatText(hitX, hitY-th*2.2, 'PERFECT!', T.b, 22); burst(hitX,hitY,'#ffffff',10,160);
         sfx.perfect(combo); buzz(20); zap(g);
         if (perfStreak>=5 && fever<=0){ fever=5; perfStreak=0; sfx.fever(); showToast(t('fever'), '#ffb703', 1400); buzz([30,30,30]); }
       } else { perfStreak=0; sfx.click(combo); buzz(10); }
-      floatText(cx[g]+th*2.2, hitY-th*0.8, '+'+pts, '#ffffff', 15);
-      burst(cx[g],hitY,filled[g][bi],14);
-      if (bonusSlots[g] && bonusSlots[g][bi]){ applyBonus(bonusSlots[g][bi], cx[g], hitY); bonusSlots[g][bi]=null; }
+      floatText(hitX+th*2.2, hitY-th*0.8, '+'+pts, '#ffffff', 15);
+      burst(hitX,hitY,filled[g][bi],14);
+      if (bonusSlots[g] && bonusSlots[g][bi]){ applyBonus(bonusSlots[g][bi], hitX, hitY); bonusSlots[g][bi]=null; }
       if (filled[g].every(Boolean) && gearPerfect[g]){ score+=1000; floatText(cx[g], cy[g], t('perfectGear'), '#fff1b8', 20); burst(cx[g],cy[g],'#fff1b8',40,320); }
       if (filled[g].every(Boolean)){
         if (g<K-1){ active=g+1; score+=300; showToast(t('nextGear'), '#7dff6a', 1100); sfx.gear(); burst(cx[g],cy[g],'#7dff6a',30); boss.lock=null; }
@@ -554,14 +573,14 @@
       }
       updateHud();
     } else {
-      flying.miss=true; flying.mx=cx[g]; flying.my=hitY+th*0.3; flying.vx=(Math.random()-.5)*260; flying.vy=-280; flying.spin=0;
+      flying.miss=true; flying.mx=hitX+ux*th*0.3; flying.my=hitY+uy*th*0.3; flying.vx=ux*220+(Math.random()-.5)*200; flying.vy=uy*220-200; flying.spin=0;
       if (shield){
-        shield=false; flying.miss=true; flying.mx=cx[g]; flying.my=hitY+th*0.3; flying.vx=(Math.random()-.5)*260; flying.vy=-280; flying.spin=0;
-        combo=0; perfStreak=0; burst(cx[g],hitY,'#7dff6a',24); showToast(t('shieldSaved'), '#7dff6a', 1000); sfx.miss(); updateHud();
+        shield=false; flying.miss=true; flying.mx=hitX+ux*th*0.3; flying.my=hitY+uy*th*0.3; flying.vx=ux*220+(Math.random()-.5)*200; flying.vy=uy*220-200; flying.spin=0;
+        combo=0; perfStreak=0; burst(hitX,hitY,'#7dff6a',24); showToast(t('shieldSaved'), '#7dff6a', 1000); sfx.miss(); updateHud();
         setTimeout(()=>{ flying=null; }, 600); return;
       }
       state='fail'; shake=0.4; lives--; lvStats.lost++; combo=0; perfStreak=0;
-      burst(cx[g],hitY,'#ff4d6d',22); sfx.miss(); buzz([70,40,70]); updateHud();
+      burst(hitX,hitY,'#ff4d6d',22); sfx.miss(); buzz([70,40,70]); updateHud();
       const why = locked ? t('locked') : (filled[g][bi] && bd<=tol) ? t('full') : t('wrong');
       if (lives>0){ showToast(why+t('lifeLost'), '#ff6b8a', 1100); setTimeout(()=>retryGear(g), 1000); }
       else setTimeout(gameOver, 900);
@@ -750,19 +769,20 @@
   }
   function hexA(hex){ const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},`; }
 
-  function drawLooseTooth(x,y,spin,color){ ctx.save(); ctx.translate(x,y); ctx.rotate(Math.PI/2+spin); toothShape(-th/2,toothW()); fillTooth(color,-th/2,true); ctx.restore(); }
-  const launcherY = g => cy[g]+R[g]+th*2.8;
+  function drawLooseTooth(x,y,spin,color,b){ ctx.save(); ctx.translate(x,y); ctx.rotate((b===undefined?Math.PI/2:b)+spin); toothShape(-th/2,toothW()); fillTooth(color,-th/2,true); ctx.restore(); }
 
   function drawLauncher(){
     if (state!=='play' && state!=='fail') return;
-    const g=active, x=cx[g], y=launcherY(g), s=th;
-    const ty=cy[g]+R[g]+th*1.35, pulse=0.5+0.5*Math.sin(time*6);
+    const g=active, s=th, [lx0,ly0]=LP(g,2.8);
+    ctx.save(); ctx.translate(lx0,ly0); ctx.rotate(LB[g]-Math.PI/2);
+    const x=0, y=0, ty=-th*1.45, pulse=0.5+0.5*Math.sin(time*6);
     ctx.save(); ctx.shadowColor=T.b; ctx.shadowBlur=10+pulse*8; ctx.fillStyle=T.b;
     ctx.beginPath(); ctx.moveTo(x,ty-5); ctx.lineTo(x-6,ty+5); ctx.lineTo(x+6,ty+5); ctx.closePath(); ctx.fill(); ctx.restore();
     ctx.save(); ctx.shadowColor=T.a; ctx.shadowBlur=12; ctx.strokeStyle=T.a; ctx.lineWidth=3; ctx.lineCap='round';
     ctx.beginPath(); ctx.moveTo(x-s*1.1,y-s*0.2); ctx.lineTo(x-s*1.1,y+s*1.5); ctx.quadraticCurveTo(x-s*1.1,y+s*1.9,x-s*0.7,y+s*1.9);
     ctx.lineTo(x+s*0.7,y+s*1.9); ctx.quadraticCurveTo(x+s*1.1,y+s*1.9,x+s*1.1,y+s*1.5); ctx.lineTo(x+s*1.1,y-s*0.2); ctx.stroke(); ctx.restore();
     if (!flying && state==='play') drawLooseTooth(x, y+s*0.9, 0, nextColor());
+    ctx.restore();
   }
 
   function drawBg(){
@@ -863,11 +883,11 @@
       if (flying){
         const g=flying.g;
         if (!flying.miss){
-          const y0=launcherY(g)+th*0.9, y1=cy[g]+R[g]+th/2, k=Math.min(1,flying.t/FLY);
+          const [x0,y0]=LP(g,3.7), [x1,y1]=LP(g,0.5), k=Math.min(1,flying.t/FLY), xk=x0+(x1-x0)*k, yk=y0+(y1-y0)*k;
           ctx.save(); ctx.globalAlpha=.35; ctx.strokeStyle=flying.color; ctx.lineWidth=toothW()*0.5; ctx.lineCap='round';
-          ctx.beginPath(); ctx.moveTo(cx[g],y0); ctx.lineTo(cx[g],y0+(y1-y0)*k); ctx.stroke(); ctx.restore();
-          drawLooseTooth(cx[g], y0+(y1-y0)*k, 0, flying.color);
-        } else drawLooseTooth(flying.mx, flying.my, flying.spin, flying.color);
+          ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(xk,yk); ctx.stroke(); ctx.restore();
+          drawLooseTooth(xk, yk, 0, flying.color, LB[g]);
+        } else drawLooseTooth(flying.mx, flying.my, flying.spin, flying.color, LB[flying.g]);
       }
       for (const p of particles){ ctx.globalAlpha=Math.max(0,p.life); ctx.fillStyle=p.color; ctx.shadowColor=p.color; ctx.shadowBlur=8;
         ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }

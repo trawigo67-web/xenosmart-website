@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../fonts/fonts.css">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#2a1b7a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -15,7 +16,7 @@
 <style>
   :root{--a:#38e1ff;--b:#ff4fd8;--glass:rgba(255,255,255,.16)}
   html,body{margin:0;height:100%;background:#2a1b7a;color:#fff;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
-  canvas{display:block;width:100vw;height:100vh}
+  canvas{display:block;width:100vw;height:100vh;height:100dvh}
   #top{position:fixed;top:calc(10px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;pointer-events:none}
   .pill{background:var(--glass);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px;white-space:nowrap}
   .sw{pointer-events:auto;font:inherit;color:#fff;cursor:pointer;padding:6px 10px}
@@ -23,6 +24,11 @@
   #score{font-weight:900;font-size:16px;min-width:70px;text-align:center}
   #combo{position:fixed;top:calc(50px + env(safe-area-inset-top));left:0;right:0;text-align:center;font-weight:900;color:var(--b);text-shadow:0 0 12px var(--b);pointer-events:none;height:18px}
   #ctrl{position:fixed;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:10px;padding:0 10px}
+  .grp{display:flex;gap:10px}
+  body[data-device=landscape] #ctrl{top:0;bottom:0;left:calc(10px + env(safe-area-inset-left));right:calc(10px + env(safe-area-inset-right));justify-content:space-between;align-items:center;pointer-events:none}
+  body[data-device=landscape] .grp{flex-direction:column;pointer-events:auto}
+  body[data-device=landscape] .gm{position:fixed;right:calc(90px + env(safe-area-inset-right));bottom:14px}
+  body[data-device=landscape] .gl{flex-direction:column-reverse}
   .cb{width:62px;height:62px;border-radius:18px;border:1px solid rgba(255,255,255,.3);background:linear-gradient(160deg,rgba(255,255,255,.25),rgba(255,255,255,.06));color:#fff;font-size:26px;font-weight:900;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 4px 18px rgba(0,0,0,.25);touch-action:none}
   .cb:active{transform:scale(.93);box-shadow:0 0 18px var(--a)}
   .cb.drop{width:92px;background:linear-gradient(90deg,var(--a),var(--b));color:#1a1050}
@@ -52,11 +58,9 @@
 <div id="top"><button class="pill sw" id="sw" title="Diş Fırlat">⚙️⇄</button><div class="pill" id="lvl"></div><div class="pill" id="score">0</div><div class="pill" id="lines"></div></div>
 <div id="combo"></div>
 <div id="ctrl">
-  <button class="cb" data-a="left">◀</button>
-  <button class="cb" data-a="rot">⟳</button>
-  <button class="cb drop" data-a="drop">⬇</button>
-  <button class="cb" data-a="hold">⇄</button>
-  <button class="cb" data-a="right">▶</button>
+  <div class="grp gl"><button class="cb" data-a="left">◀</button><button class="cb" data-a="rot">⟳</button></div>
+  <div class="grp gm"><button class="cb drop" data-a="drop">⬇</button></div>
+  <div class="grp gr"><button class="cb" data-a="hold">⇄</button><button class="cb" data-a="right">▶</button></div>
 </div>
 <div id="toast"></div>
 <div id="card"><div class="box" id="box"></div></div>
@@ -64,17 +68,17 @@
 (() => {
   // ---------- kayıt (Diş Fırlat ile ortak dil ayarı) ----------
   let SHARED = {}; try{ SHARED = JSON.parse(localStorage.getItem('disfirlat2')||'{}'); }catch(e){}
-  let SAVE = {hi:0, music:true, sfx:true}; try{ Object.assign(SAVE, JSON.parse(localStorage.getItem('neonblok')||'{}')); }catch(e){}
+  let SAVE = {hi:0, music:true, sfx:true, best:1}; try{ Object.assign(SAVE, JSON.parse(localStorage.getItem('neonblok')||'{}')); }catch(e){}
   const persist = () => { try{ localStorage.setItem('neonblok', JSON.stringify(SAVE)); SHARED.lang=LANG; localStorage.setItem('disfirlat2', JSON.stringify(SHARED)); }catch(e){} };
   let LANG = SHARED.lang || ((navigator.language||'tr').slice(0,2)); if (!['tr','de','en'].includes(LANG)) LANG='en';
 
   const I18N = {
     tr:{loc:'tr-TR', lvl:l=>`Seviye ${l}`, lines:n=>`${n} satır`, title:'Neon Blok', intro:'Blokları diz, dolu satırları patlat!<br>◀ ▶ kaydır · ⟳ çevir · ⬇ düşür · ⇄ sakla<br>Ekranda: kaydır = hareket, dokun = çevir, aşağı fırlat = düşür', start:'▶ Başla', back:'⚙️ Diş Fırlat\'a dön', hi:h=>`Rekor: ${h}`,
-        over:'Oyun Bitti', overText:(s,l,rec)=>`Skor <b>${s}</b> · ${l} satır<br>${rec?'🏆 YENİ REKOR!':''}`, again:'Tekrar Oyna', single:'GÜZEL!', double:'SÜPER!', triple:'HARİKA!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ TERTEMİZ +3000', levelUp:l=>`⬆️ SEVİYE ${l}`, fever:'🔥 FEVER x2', music:'Müzik', on:'Açık', off:'Kapalı'},
+        over:'Oyun Bitti', overText:(s,l,rec)=>`Skor <b>${s}</b> · ${l} satır<br>${rec?'🏆 YENİ REKOR!':''}`, again:'Tekrar Oyna', single:'GÜZEL!', double:'SÜPER!', triple:'HARİKA!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ TERTEMİZ +3000', levelUp:l=>`⬆️ SEVİYE ${l}`, fever:'🔥 FEVER x2', music:'Müzik', on:'Açık', off:'Kapalı', lifeLost:'💥 −1 can · devam!', toNext:n=>`sonraki seviyeye ${n} satır`, best:l=>`En iyi seviye: ${l}/15`},
     de:{loc:'de-DE', lvl:l=>`Level ${l}`, lines:n=>`${n} Reihen`, title:'Neon Block', intro:'Staple die Blöcke, sprenge volle Reihen!<br>◀ ▶ schieben · ⟳ drehen · ⬇ fallen · ⇄ halten<br>Auf dem Feld: wischen = bewegen, tippen = drehen, nach unten wischen = fallen', start:'▶ Start', back:'⚙️ Zurück zu Diş Fırlat', hi:h=>`Rekord: ${h}`,
-        over:'Spiel vorbei', overText:(s,l,rec)=>`Punkte <b>${s}</b> · ${l} Reihen<br>${rec?'🏆 NEUER REKORD!':''}`, again:'Nochmal', single:'GUT!', double:'SUPER!', triple:'KLASSE!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ ALLES LEER +3000', levelUp:l=>`⬆️ LEVEL ${l}`, fever:'🔥 FEVER x2', music:'Musik', on:'An', off:'Aus'},
+        over:'Spiel vorbei', overText:(s,l,rec)=>`Punkte <b>${s}</b> · ${l} Reihen<br>${rec?'🏆 NEUER REKORD!':''}`, again:'Nochmal', single:'GUT!', double:'SUPER!', triple:'KLASSE!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ ALLES LEER +3000', levelUp:l=>`⬆️ LEVEL ${l}`, fever:'🔥 FEVER x2', music:'Musik', on:'An', off:'Aus', lifeLost:'💥 −1 Leben · weiter!', toNext:n=>`noch ${n} Reihen bis zum nächsten Level`, best:l=>`Bestes Level: ${l}/15`},
     en:{loc:'en-US', lvl:l=>`Level ${l}`, lines:n=>`${n} lines`, title:'Neon Block', intro:'Stack the blocks, blast full rows!<br>◀ ▶ move · ⟳ rotate · ⬇ drop · ⇄ hold<br>On the board: swipe = move, tap = rotate, flick down = drop', start:'▶ Play', back:'⚙️ Back to Diş Fırlat', hi:h=>`Record: ${h}`,
-        over:'Game Over', overText:(s,l,rec)=>`Score <b>${s}</b> · ${l} lines<br>${rec?'🏆 NEW RECORD!':''}`, again:'Play again', single:'NICE!', double:'GREAT!', triple:'AWESOME!', tetra:'💥 MEGA x4!', combo:n=>`COMBO x${n}`, clear:'✨ ALL CLEAR +3000', levelUp:l=>`⬆️ LEVEL ${l}`, fever:'🔥 FEVER x2', music:'Music', on:'On', off:'Off'},
+        over:'Game Over', overText:(s,l,rec)=>`Score <b>${s}</b> · ${l} lines<br>${rec?'🏆 NEW RECORD!':''}`, again:'Play again', single:'NICE!', double:'GREAT!', triple:'AWESOME!', tetra:'💥 MEGA x4!', combo:n=>`COMBO x${n}`, clear:'✨ ALL CLEAR +3000', levelUp:l=>`⬆️ LEVEL ${l}`, fever:'🔥 FEVER x2', music:'Music', on:'On', off:'Off', lifeLost:'💥 −1 life · keep going!', toNext:n=>`${n} lines to next level`, best:l=>`Best level: ${l}/15`},
   };
   const FLAGS={tr:'🇹🇷',de:'🇩🇪',en:'🇬🇧'};
   const t=(k,...a)=>{ const v=(I18N[LANG]||I18N.tr)[k]; return typeof v==='function'?v(...a):v; };
@@ -99,7 +103,7 @@
   const cv=document.getElementById('c'), ctx=cv.getContext('2d'), $=id=>document.getElementById(id);
   const card=$('card'), box=$('box'), toast=$('toast');
   let W,H,dpr,cell,bx,by,device='phone', side;
-  let grid, cur, queue, hold, holdUsed, score, lines, level, combo, fever, state='menu', dropT, lockT, time=0, lastT, shake=0;
+  let lives=3, grid, cur, queue, hold, holdUsed, score, lines, level, combo, fever, state='menu', dropT, lockT, time=0, lastT, shake=0;
   let particles=[], floaters=[], flashRows=[], flashT=0, stars=[], bokeh=[];
   let clearing=null, sweep=null, trails=[], lockFlash=[], lockFlashT=0, demo=[], scoreShown=0;
   const LEVEL_BG=[['#4b2fb8','#2a1b7a','#160f45'],['#1f6fd1','#173f8f','#0c1f50'],['#d14b8f','#6a2a8f','#2a1456'],['#11a37f','#13607a','#0a2a45'],['#e0702a','#a0304f','#3d1250'],['#6a3cff','#2b2b9f','#0e1150']];
@@ -114,7 +118,7 @@
     cell = Math.floor(Math.min(availH/ROWS, availW/COLS));
     bx = device==='phone' ? Math.round(W*0.04) + Math.max(0,(W*0.74-cell*COLS)/2) : Math.round((W-cell*COLS)/2);
     by = top + Math.round((availH-cell*ROWS)/2);
-    document.getElementById('ctrl').style.display = device==='landscape' ? 'none' : 'flex';
+    
     stars=Array.from({length:Math.round(W*H/9000)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.3,p:Math.random()*6}));
     bokeh=Array.from({length:12},(_,i)=>({x:Math.random(),y:Math.random(),r:0.04+Math.random()*0.09,s:0.2+Math.random()*0.5,p:Math.random()*6,c:i%4}));
   }
@@ -122,20 +126,21 @@
   function newGame(){
     grid=Array.from({length:ROWS},()=>Array(COLS).fill(null));
     queue=[nextKey(),nextKey(),nextKey()]; hold=null; holdUsed=false;
-    score=0; scoreShown=0; document.getElementById('score').textContent='0'; lines=0; level=1; combo=-1; fever=0; clearing=null; trails=[]; demo=[]; spawn(); state='play'; hud(); countdown();
+    score=0; scoreShown=0; lives=MAX_LIVES; document.getElementById('score').textContent='0'; lines=0; level=1; combo=-1; fever=0; clearing=null; trails=[]; demo=[]; spawn(); state='play'; hud(); countdown();
   }
   function spawn(){
     const k=queue.shift(); queue.push(nextKey());
     cur={k, m:SHAPES[k].m.map(r=>r.slice()), x:Math.floor((COLS-SHAPES[k].m[0].length)/2), y:-1};
     if (k==='I') cur.y=-1; dropT=0; lockT=0; holdUsed=false;
-    if (collide(cur.m,cur.x,cur.y+1) && collide(cur.m,cur.x,cur.y)) gameOver();
+    if (collide(cur.m,cur.x,cur.y+1) && collide(cur.m,cur.x,cur.y)) loseLife();
   }
   function collide(m,x,y){
     for(let r=0;r<m.length;r++) for(let c=0;c<m[r].length;c++) if(m[r][c]){
       const gx=x+c, gy=y+r; if(gx<0||gx>=COLS||gy>=ROWS) return true; if(gy>=0 && grid[gy][gx]) return true; }
     return false;
   }
-  const speed = () => Math.max(0.06, 0.8*Math.pow(0.85, level-1));
+  const MAXL=15, LINES_PER=8, MAX_LIVES=3;
+  const speed = () => 1.0 - (Math.min(level,MAXL)-1)*0.05;   // 1.0 sn → 0.30 sn (Seviye 15)
 
   function move(dx){ if(state!=='play') return; if(!collide(cur.m,cur.x+dx,cur.y)){ cur.x+=dx; lockT=0; sfx.move(); } }
   function rot(){ if(state!=='play') return; const m=rotate(cur.m);
@@ -148,7 +153,7 @@
   function lock(){
     let top=false;
     cur.m.forEach((r,ri)=>r.forEach((v,ci)=>{ if(v){ const gy=cur.y+ri; if(gy<0) top=true; else grid[gy][cur.x+ci]=SHAPES[cur.k].c; } }));
-    if (top){ gameOver(); return; }
+    if (top){ loseLife(); return; }
     lockFlash = []; cur.m.forEach((r,ri)=>r.forEach((v,ci)=>{ if(v) lockFlash.push([cur.x+ci,cur.y+ri]); })); lockFlashT=0.22;
     const full=[]; grid.forEach((r,i)=>{ if(r.every(Boolean)) full.push(i); });
     if (full.length){ clearing={rows:full, t:0}; state='clearing'; cur=null;
@@ -170,7 +175,7 @@
       for (let i=full.length-1;i>=0;i--) grid.splice(full[i],1);
       for (let i=0;i<full.length;i++) grid.unshift(Array(COLS).fill(null));
       if (grid.every(r=>r.every(v=>!v))){ score+=3000; floatText(bx+cell*COLS/2, by+cell*8, t('clear'), '#fff1b8', 24); }
-      const nl = Math.floor(lines/10)+1; if (nl>level){ level=nl; showToast(t('levelUp',level),'#7dff6a',1200); sfx.level(); }
+      const nl = Math.min(MAXL, Math.floor(lines/LINES_PER)+1); if (nl>level){ level=nl; if (level>SAVE.best) { SAVE.best=level; persist(); } showToast(t('levelUp',level),'#7dff6a',1200); sfx.level(); burst(bx+cell*COLS/2,by+cell*10,'#7dff6a',40); }
     }
     hud(); spawn();
   }
@@ -181,6 +186,15 @@
       else { showToast('GO!', '#7dff6a', 700); tone(1047,0.25,'triangle',0.07); state='play'; } };
     step();
   }
+  function loseLife(){
+    lives--; shake=0.5; sfx.over(); buzz([70,40,70]); hud();
+    if (lives<=0){ gameOver(); return; }
+    // üst yarıyı temizle, oyun aynı seviyeden devam etsin
+    for (let r=0;r<ROWS/2;r++) for (let c=0;c<COLS;c++) if (grid[r][c]){ burst(bx+c*cell+cell/2, by+r*cell+cell/2, grid[r][c], 2); grid[r][c]=null; }
+    for (let r=ROWS/2;r<ROWS/2+3;r++) for (let c=0;c<COLS;c++) if (grid[r][c]){ burst(bx+c*cell+cell/2, by+r*cell+cell/2, grid[r][c], 2); grid[r][c]=null; }
+    showToast(t('lifeLost'),'#ff6b8a',1200);
+    cur=null; state='count'; setTimeout(()=>{ spawn(); state='play'; }, 900);
+  }
   function gameOver(){
     state='over'; sfx.over(); buzz([80,40,80]);
     const rec=score>SAVE.hi; if(rec){ SAVE.hi=score; persist(); }
@@ -189,8 +203,11 @@
   const goBack=()=>{ location.href='index.html'; };
 
   function hud(){
-    $('lvl').textContent=t('lvl',level);  $('lines').textContent=t('lines',lines);
-    $('combo').textContent=[fever>0?t('fever'):'', combo>0?t('combo',combo+1):''].filter(Boolean).join('  ');
+    
+    $('lvl').textContent=t('lvl',`${level}/${MAXL}`);
+    $('lines').innerHTML=Array.from({length:MAX_LIVES},(_,i)=>`<span style="${i<lives?'':'filter:grayscale(1);opacity:.3'}">❤️</span>`).join('');
+    const toNext = level<MAXL ? t('toNext', LINES_PER - (lines % LINES_PER)) : t('lines',lines);
+    $('combo').textContent=[fever>0?t('fever'):'', combo>0?t('combo',combo+1):'', toNext].filter(Boolean).join('  ·  ');
   }
   function showToast(text,color,ms=1000){ toast.textContent=text; toast.style.color=color; toast.classList.add('show'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>toast.classList.remove('show'),ms); }
   function showCard(html,buttons){
@@ -202,7 +219,7 @@
   }
   function menu(){
     state='menu'; document.documentElement.lang=LANG;
-    showCard(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><h1>${t('title')}</h1><p>${t('intro')}</p><p style="color:#ffd23f;font-weight:800">${t('hi',fmt(SAVE.hi))}</p><button class="tg ${SAVE.music?'on':''}">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>`,
+    showCard(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><h1>${t('title')}</h1><p>${t('intro')}</p><p style="color:#ffd23f;font-weight:800">${t('hi',fmt(SAVE.hi))} · ${t('best',SAVE.best||1)}</p><button class="tg ${SAVE.music?'on':''}">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>`,
       [{label:t('start'),go:newGame},{label:t('back'),ghost:true,go:goBack}]);
   }
 
@@ -339,7 +356,7 @@
     if (state==='play'){
       dropT+=dt;
       if (dropT>=speed()){ dropT=0; if(!collide(cur.m,cur.x,cur.y+1)) cur.y++; }
-      if (collide(cur.m,cur.x,cur.y+1)){ lockT+=dt; if (lockT>0.5) lock(); }
+      if (collide(cur.m,cur.x,cur.y+1)){ lockT+=dt; if (lockT>0.6) lock(); }
       if (fever>0){ fever-=dt; if(fever<=0) hud(); }
     }
     if (flashT>0) flashT-=dt; if (shake>0) shake-=dt; if (lockFlashT>0) lockFlashT-=dt;
