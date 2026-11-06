@@ -39,6 +39,13 @@
   .card .s1{position:absolute;left:5px;top:calc(var(--cw)*.32);font-size:calc(var(--cw)*.24);line-height:1}
   .card .big{position:absolute;right:4px;bottom:2px;font-size:calc(var(--cw)*.55);line-height:1}
   .card.red{color:#ff2d75} .card.blk{color:#3a2bb0}
+  .card.sS{color:#1e1a5a} .card.sH{color:#ff2d55} .card.sD{color:#ff8a00} .card.sC{color:#0f9d58}
+  .card.hint{box-shadow:0 0 0 3px #ffd23f,0 0 22px #ffd23f !important}
+  .card.hint .r::after{content:' 💡';font-size:calc(var(--cw)*.2)}
+  #help{position:fixed;left:50%;transform:translateX(-50%);z-index:5;font-weight:800;font-size:13px;text-align:center;width:min(92vw,420px);box-sizing:border-box;pointer-events:none;padding:6px 12px;border-radius:14px;background:rgba(10,40,50,.7);border:1px solid rgba(166,255,77,.5);color:#eaffd6;opacity:0;transition:opacity .25s}
+  #help.show{opacity:1}
+  #hbtn{position:fixed;z-index:5;right:10px;font:inherit;font-weight:800;font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff}
+  #hbtn.on{border-color:#ffd23f;box-shadow:0 0 10px #ffd23f}
   .card:not(.back)::before{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.75) 45%,rgba(166,255,77,.35) 50%,rgba(46,230,200,.35) 55%,transparent 70%);background-size:250% 100%;animation:sheen 4.5s ease-in-out infinite;mix-blend-mode:screen;pointer-events:none}
   @keyframes sheen{0%,60%{background-position:150% 0}100%{background-position:-60% 0}}
   .card:not(.back){border:1.5px solid rgba(255,255,255,.9);box-shadow:0 6px 16px rgba(0,0,0,.35),inset 0 0 0 1px rgba(46,230,200,.35)}
@@ -91,6 +98,8 @@
 <div class="seat s2" id="seat2"><div class="bubble"></div><div class="av">🐼</div><div class="nm"></div><div class="st"></div></div>
 <div class="seat s3" id="seat3"><div class="bubble"></div><div class="av">🐯</div><div class="nm"></div><div class="st"></div></div>
 <div id="panel"></div>
+<div id="help"></div>
+<button id="hbtn"></button>
 <div id="toast"></div>
 <div id="card2" class="hide"><div class="box" id="box"></div></div>
 <div id="picker"><div class="pk"><div style="font-weight:900;letter-spacing:2px;color:#a6ff4d;padding:2px 6px 4px">🦎 BUKO GAMES</div><a href="index.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
@@ -98,22 +107,22 @@
 (() => {
   // ---------- kayıt & dil ----------
   let SHARED={}; try{ SHARED=JSON.parse(localStorage.getItem('disfirlat2')||'{}'); }catch(e){}
-  let SAVE={wins:0, games:0, music:true}; try{ Object.assign(SAVE, JSON.parse(localStorage.getItem('neonbatak')||'{}')); }catch(e){}
+  let SAVE={wins:0, games:0, music:true, helper:true}; try{ Object.assign(SAVE, JSON.parse(localStorage.getItem('neonbatak')||'{}')); }catch(e){}
   let LANG=SHARED.lang||((navigator.language||'tr').slice(0,2)); if(!['tr','de','en'].includes(LANG)) LANG='en';
   const persist=()=>{ try{ localStorage.setItem('neonbatak',JSON.stringify(SAVE)); SHARED.lang=LANG; localStorage.setItem('disfirlat2',JSON.stringify(SHARED)); }catch(e){} };
   const I18N={
-    tr:{title:'Neon Batak', intro:'İhaleli batak – 3 bilgisayar rakibe karşı.<br>En yüksek ihaleyi veren kozu seçer ve ilk kartı atar.<br>Renge uymak ve yükseltmek zorunlu; rengin yoksa koz atmalısın.', quick:'⚡ Hızlı oyun (5 el)', normal:'🃏 Normal oyun (9 el)', back:'⚙️ Diş Fırlat', names:['Sen','Ayşe','Mehmet','Zeynep'],
+    tr:{title:'Neon Batak', intro:'İhaleli batak – 3 bilgisayar rakibe karşı.<br>En yüksek ihaleyi veren kozu seçer ve ilk kartı atar.<br>Renge uymak ve yükseltmek zorunlu; rengin yoksa koz atmalısın.', quick:'⚡ Hızlı oyun (5 el)', normal:'🃏 Normal oyun (9 el)', back:'⚙️ Diş Fırlat', names:['Sen','Vexa','Orbo','Lunara'],
         hand:(a,b)=>`El ${a}/${b}`, bidTitle:(c)=>`İhale ver (şu an: ${c||'—'})`, pass:'Pas', passSay:'Pas', trumpTitle:'Kozu seç', bidInfo:(n,b)=>`${n} · ihale ${b}`, trump:'Koz', yourTurn:'Sıra sende', tricks:(t,b)=>b?`${t}/${b}`:`${t}`,
         made:'İhale tuttu!', failed:'İhale battı!', batak:'BATTI (0 el)', next:'Sonraki el →', handRes:'El sonucu', total:'Toplam', player:'Oyuncu', got:'Aldı', pts:'Puan', winner:n=>`🏆 Kazanan: ${n}`, youWin:'🎉 Tebrikler, kazandın!', again:'Tekrar oyna', menu:'Menü',
-        rules:'Puanlama: İhaleyi tutturan aldığı el kadar puan alır, tutturamayan ihale kadar puan kaybeder. Diğerleri aldıkları el kadar puan alır; hiç el alamayan ihale kadar kaybeder.', stats:(w,g)=>`Galibiyet: ${w} / ${g} oyun`, forced:n=>`Herkes pas – ${n} 5 ile mecbur`, broken:'Koz kırıldı! 💥', music:'Müzik', on:'Açık', off:'Kapalı'},
-    de:{title:'Neon Batak', intro:'Batak mit Ansage – gegen 3 Computergegner.<br>Wer am höchsten bietet, wählt Trumpf und spielt aus.<br>Farbe bedienen und überstechen ist Pflicht; ohne Farbe musst du trumpfen.', quick:'⚡ Schnelles Spiel (5 Hände)', normal:'🃏 Normales Spiel (9 Hände)', back:'⚙️ Diş Fırlat', names:['Du','Anna','Max','Lea'],
+        rules:'Puanlama: İhaleyi tutturan aldığı el kadar puan alır, tutturamayan ihale kadar puan kaybeder. Diğerleri aldıkları el kadar puan alır; hiç el alamayan ihale kadar kaybeder.', stats:(w,g)=>`Galibiyet: ${w} / ${g} oyun`, forced:n=>`Herkes pas – ${n} 5 ile mecbur`, broken:'Koz kırıldı! 💥', music:'Müzik', on:'Açık', off:'Kapalı', helper:'Yardımcı', hintTxt:'Önerilen kart sarı parlıyor', trumpLeft:(s,n)=>`rakiplerde ${n} ${s} koz kaldı`, rNoLeadTrump:'Koz henüz kırılmadı – koz ile başlayamazsın', rFree:'İstediğin kartla başlayabilirsin', rBeat:s=>`${s} atmalı ve masadaki en büyük ${s}'yi geçmelisin`, rFollow:s=>`${s} atmak zorundasın`, rTrump:s=>`Bu renk sende yok – koz (${s}) atmalısın`, rAny:'Ne renk ne koz var – istediğini atabilirsin', sugBid:(v,s)=>`Önerim: ${v} ihale, koz ${s}`, sugPass:'Önerim: pas geç (elin zayıf)', sugTrump:(s,n)=>`Önerim: ${s} (elinde ${n} tane)`},
+    de:{title:'Neon Batak', intro:'Batak mit Ansage – gegen 3 Computergegner.<br>Wer am höchsten bietet, wählt Trumpf und spielt aus.<br>Farbe bedienen und überstechen ist Pflicht; ohne Farbe musst du trumpfen.', quick:'⚡ Schnelles Spiel (5 Hände)', normal:'🃏 Normales Spiel (9 Hände)', back:'⚙️ Diş Fırlat', names:['Du','Vexa','Orbo','Lunara'],
         hand:(a,b)=>`Hand ${a}/${b}`, bidTitle:(c)=>`Gebot abgeben (aktuell: ${c||'—'})`, pass:'Passe', passSay:'Passe', trumpTitle:'Trumpf wählen', bidInfo:(n,b)=>`${n} · Gebot ${b}`, trump:'Trumpf', yourTurn:'Du bist dran', tricks:(t,b)=>b?`${t}/${b}`:`${t}`,
         made:'Gebot erfüllt!', failed:'Gebot verfehlt!', batak:'NULL STICHE', next:'Nächste Hand →', handRes:'Ergebnis der Hand', total:'Gesamt', player:'Spieler', got:'Stiche', pts:'Punkte', winner:n=>`🏆 Gewinner: ${n}`, youWin:'🎉 Glückwunsch, du hast gewonnen!', again:'Nochmal', menu:'Menü',
-        rules:'Wertung: Wer sein Gebot schafft, bekommt so viele Punkte wie Stiche; sonst verliert er das Gebot. Die anderen bekommen ihre Stiche; wer keinen Stich hat, verliert die Höhe des Gebots.', stats:(w,g)=>`Siege: ${w} / ${g} Spiele`, forced:n=>`Alle passen – ${n} muss 5 spielen`, broken:'Trumpf gebrochen! 💥', music:'Musik', on:'An', off:'Aus'},
-    en:{title:'Neon Batak', intro:'Bidding Batak – against 3 computer players.<br>The highest bidder picks trump and leads.<br>You must follow suit and beat the trick; if void, you must trump.', quick:'⚡ Quick game (5 hands)', normal:'🃏 Normal game (9 hands)', back:'⚙️ Diş Fırlat', names:['You','Amy','Leo','Zoe'],
+        rules:'Wertung: Wer sein Gebot schafft, bekommt so viele Punkte wie Stiche; sonst verliert er das Gebot. Die anderen bekommen ihre Stiche; wer keinen Stich hat, verliert die Höhe des Gebots.', stats:(w,g)=>`Siege: ${w} / ${g} Spiele`, forced:n=>`Alle passen – ${n} muss 5 spielen`, broken:'Trumpf gebrochen! 💥', music:'Musik', on:'An', off:'Aus', helper:'Helfer', hintTxt:'Empfohlene Karte leuchtet gelb', trumpLeft:(s,n)=>`Gegner haben noch ${n} ${s} Trümpfe`, rNoLeadTrump:'Trumpf ist noch nicht gebrochen – nicht mit Trumpf ausspielen', rFree:'Du darfst jede Karte ausspielen', rBeat:s=>`Du musst ${s} spielen und die höchste ${s} übertreffen`, rFollow:s=>`Du musst ${s} bedienen`, rTrump:s=>`Diese Farbe hast du nicht – du musst Trumpf (${s}) spielen`, rAny:'Weder Farbe noch Trumpf – spiel, was du willst', sugBid:(v,s)=>`Tipp: Gebot ${v}, Trumpf ${s}`, sugPass:'Tipp: passen (schwaches Blatt)', sugTrump:(s,n)=>`Tipp: ${s} (du hast ${n})`},
+    en:{title:'Neon Batak', intro:'Bidding Batak – against 3 computer players.<br>The highest bidder picks trump and leads.<br>You must follow suit and beat the trick; if void, you must trump.', quick:'⚡ Quick game (5 hands)', normal:'🃏 Normal game (9 hands)', back:'⚙️ Diş Fırlat', names:['You','Vexa','Orbo','Lunara'],
         hand:(a,b)=>`Hand ${a}/${b}`, bidTitle:(c)=>`Place a bid (current: ${c||'—'})`, pass:'Pass', passSay:'Pass', trumpTitle:'Choose trump', bidInfo:(n,b)=>`${n} · bid ${b}`, trump:'Trump', yourTurn:'Your turn', tricks:(t,b)=>b?`${t}/${b}`:`${t}`,
         made:'Bid made!', failed:'Bid failed!', batak:'ZERO TRICKS', next:'Next hand →', handRes:'Hand result', total:'Total', player:'Player', got:'Tricks', pts:'Points', winner:n=>`🏆 Winner: ${n}`, youWin:'🎉 Congratulations, you won!', again:'Play again', menu:'Menu',
-        rules:'Scoring: the bidder scores their tricks if the bid is made, otherwise loses the bid. Others score their tricks; anyone with no tricks loses the bid amount.', stats:(w,g)=>`Wins: ${w} / ${g} games`, forced:n=>`Everyone passed – ${n} must play 5`, broken:'Trump broken! 💥', music:'Music', on:'On', off:'Off'},
+        rules:'Scoring: the bidder scores their tricks if the bid is made, otherwise loses the bid. Others score their tricks; anyone with no tricks loses the bid amount.', stats:(w,g)=>`Wins: ${w} / ${g} games`, forced:n=>`Everyone passed – ${n} must play 5`, broken:'Trump broken! 💥', music:'Music', on:'On', off:'Off', helper:'Helper', hintTxt:'Suggested card glows yellow', trumpLeft:(s,n)=>`opponents hold ${n} ${s} trumps`, rNoLeadTrump:'Trump not broken yet – you can\'t lead trump', rFree:'You can lead any card', rBeat:s=>`You must play ${s} and beat the highest ${s}`, rFollow:s=>`You must follow ${s}`, rTrump:s=>`You have none of that suit – you must trump (${s})`, rAny:'No suit and no trump – play anything', sugBid:(v,s)=>`Tip: bid ${v}, trump ${s}`, sugPass:'Tip: pass (weak hand)', sugTrump:(s,n)=>`Tip: ${s} (you hold ${n})`},
   };
   const FLAGS={tr:'🇹🇷',de:'🇩🇪',en:'🇬🇧'};
   const QUIPS={tr:{1:['Risk alıyorum! 🔥','Bu el benim!','Hadi bakalım!'],2:['Hesapladım 😎','Planım tıkır tıkır','Sabır…'],3:['Temkinli gidiyorum','Oh be! 😅','Güzel hamle!']},
@@ -217,7 +226,7 @@
   function trickXY(p){ const cx=W/2, cy=H*0.47, d=CW*0.75;
     return [[cx-CW/2, cy-CH/2+d*0.8],[cx-CW/2-d*1.1, cy-CH/2],[cx-CW/2, cy-CH/2-d*0.8],[cx-CW/2+d*1.1, cy-CH/2]][p]; }
   function makeCard(c){
-    const el=document.createElement('div'); el.className='card '+(RED[c.s]?'red':'blk');
+    const el=document.createElement('div'); el.className='card s'+c.s+' '+(RED[c.s]?'red':'blk');
     el.innerHTML=`<div class="r">${rname(c.r)}</div><div class="s1">${SYM[c.s]}</div><div class="big">${SYM[c.s]}</div>`;
     el.addEventListener('pointerdown',e=>{ e.preventDefault(); onMyCard(c); });
     document.body.appendChild(el); cardEls[c.id]=el; return el;
@@ -225,16 +234,37 @@
   function layoutHand(){
     const h=hands[0], n=h.length; if(!n) return;
     const maxW=Math.min(W-16, device==='tablet'? CW*n*0.75 : W-16);
-    const step=Math.min(CW*0.9, (maxW-CW)/Math.max(1,n-1)); const x0=W/2-((n-1)*step+CW)/2;
+    const groups = new Set(h.map(c=>c.s)).size, gap = Math.min(CW*0.28, W*0.03);
+    const step=Math.min(CW*0.9, (maxW-CW-gap*(groups-1))/Math.max(1,n-1));
+    const xs=[]; let xx=0; h.forEach((c,i)=>{ if (i>0 && c.s!==h[i-1].s) xx+=gap; xs.push(xx); xx+=step; });
+    const x0=W/2-(xs[n-1]+CW)/2;
     const L = (phase==='play' && turn===0) ? legal(0).map(c=>c.id) : null;
+    const hintId = (L && SAVE.helper) ? botPlay(0).id : null;
     h.forEach((c,i)=>{ const el=cardEls[c.id]; el.classList.add('mine'); el.classList.remove('back');
       const lift = L && L.includes(c.id) ? -CH*0.12 : 0;
       const rot=(i-(n-1)/2)*(device==='tablet'?1.6:2.4);
-      el.style.left=(x0+i*step)+'px'; el.style.top=(H-CH-14+Math.abs(i-(n-1)/2)*1.6+lift)+'px'; el.style.transform=`rotate(${rot}deg)`; el.style.zIndex=10+i;
+      el.style.left=(x0+xs[i])+'px'; el.style.top=(H-CH-14+Math.abs(i-(n-1)/2)*1.6+lift)+'px'; el.style.transform=`rotate(${rot}deg)`; el.style.zIndex=10+i;
       el.classList.toggle('ok', !!(L && L.includes(c.id))); el.classList.toggle('no', !!(L && !L.includes(c.id)));
-      el.classList.toggle('trump', !!trump && c.s===trump);
+      el.classList.toggle('trump', !!trump && c.s===trump); el.classList.toggle('hint', c.id===hintId);
     });
+    helpText();
   }
+  function ruleReason(){
+    const h=hands[0]; if (!trick.length) return (!trumpBroken && h.some(c=>c.s!==trump) && h.some(c=>c.s===trump)) ? t('rNoLeadTrump') : t('rFree');
+    const lead=trick[0].c.s;
+    if (h.some(c=>c.s===lead)){ const trumped = lead!==trump && trick.some(x=>x.c.s===trump);
+      const hi=Math.max(...trick.filter(x=>x.c.s===lead).map(x=>x.c.r));
+      return (!trumped && h.some(c=>c.s===lead && c.r>hi)) ? t('rBeat',SYM[lead]) : t('rFollow',SYM[lead]); }
+    if (h.some(c=>c.s===trump)) return t('rTrump',SYM[trump]);
+    return t('rAny');
+  }
+  function helpText(){
+    const el=$('help'); if (!SAVE.helper || phase!=='play' || turn!==0){ el.classList.remove('show'); return; }
+    const leftT = 13*0 + [1,2,3].reduce((a,p)=>a+hands[p].filter(c=>c.s===trump).length,0);
+    el.innerHTML = `${ruleReason()}<br><span style="color:#ffd23f">💡 ${t('hintTxt')}</span> · ${t('trumpLeft',SYM[trump],leftT)}`;
+    el.style.top=(H-CH*1.75-82)+'px'; el.classList.add('show');
+  }
+  function helperBtn(){ const b=$('hbtn'); b.textContent=`💡 ${t('helper')}: ${SAVE.helper?t('on'):t('off')}`; b.classList.toggle('on',SAVE.helper); b.style.top='calc(56px + env(safe-area-inset-top))'; }
   function layoutBots(){
     for (const p of [1,2,3]) hands[p].forEach((c,i)=>{ const el=cardEls[c.id]; el.classList.add('back');
       const [sx,sy]=seatXY(p); el.style.left=(sx-CW/2)+'px'; el.style.top=(sy-CH/2)+'px'; el.style.transform='scale(.35)'; el.style.opacity='0'; el.style.zIndex=3; });
@@ -275,8 +305,9 @@
   }
   function showBidPanel(){
     const pn=$('panel'); pn.style.display='flex'; pn.style.top=(H*0.47-60)+'px';
-    let html=`<div class="tt">${t('bidTitle',bid)}</div><button class="pb" data-v="0">${t('pass')}</button>`;
-    for (let v=Math.max(5,bid+1); v<=13; v++) html+=`<button class="pb main" data-v="${v}">${v}</button>`;
+    const ts=bestSuit(hands[0]), est=Math.floor(estimate(hands[0],ts)), sug = est>=5 && est>bid ? est : 0;
+    let html=`<div class="tt">${t('bidTitle',bid)}</div>`+(SAVE.helper?`<div class="tt" style="font-size:13px;color:#ffd23f">💡 ${sug?t('sugBid',sug,SYM[ts]):t('sugPass')}</div>`:'')+`<button class="pb" data-v="0" ${SAVE.helper&&!sug?'style="box-shadow:0 0 0 3px #ffd23f"':''}>${t('pass')}</button>`;
+    for (let v=Math.max(5,bid+1); v<=13; v++) html+=`<button class="pb main" data-v="${v}" ${SAVE.helper&&v===sug?'style="box-shadow:0 0 0 3px #ffd23f,0 0 14px #ffd23f"':''}>${v}</button>`;
     pn.innerHTML=html;
     pn.querySelectorAll('.pb').forEach(b=>b.addEventListener('pointerdown',e=>{ e.preventDefault(); unlockAudio(); const v=+b.dataset.v; pn.style.display='none';
       if (v){ bid=v; bidder=0; say(0,String(v)); sfx.bid(); } else { passed[0]=true; say(0,t('passSay')); }
@@ -286,7 +317,7 @@
     phase='trump'; hud();
     if (bidder===0){
       const pn=$('panel'); pn.style.display='flex'; pn.style.top=(H*0.47-70)+'px';
-      pn.innerHTML=`<div class="tt">${t('trumpTitle')}</div>`+SUITS.map(s=>`<button class="pb suit" data-s="${s}" style="color:${RED[s]?'#ff2d75':'#3a2bb0'}">${SYM[s]}</button>`).join('');
+      const bs=bestSuit(hands[0]); pn.innerHTML=`<div class="tt">${t('trumpTitle')}</div>`+(SAVE.helper?`<div class="tt" style="font-size:13px;color:#ffd23f">💡 ${t('sugTrump',SYM[bs],hands[0].filter(c=>c.s===bs).length)}</div>`:'')+SUITS.map(s=>`<button class="pb suit" data-s="${s}" style="color:${({S:'#1e1a5a',H:'#ff2d55',D:'#ff8a00',C:'#0f9d58'})[s]};${SAVE.helper&&s===bs?'box-shadow:0 0 0 3px #ffd23f,0 0 16px #ffd23f':''}">${SYM[s]}</button>`).join('');
       pn.querySelectorAll('.pb').forEach(b=>b.addEventListener('pointerdown',e=>{ e.preventDefault(); pn.style.display='none'; setTrump(b.dataset.s); }));
     } else setTimeout(()=>setTrump(bestSuit(hands[bidder])), 700);
   }
@@ -300,7 +331,7 @@
   }
   function onMyCard(c){
     if (phase!=='play' || turn!==0) return;
-    if (!legal(0).some(x=>x.id===c.id)){ const el=cardEls[c.id]; el.animate([{transform:el.style.transform+' translateX(-5px)'},{transform:el.style.transform+' translateX(5px)'},{transform:el.style.transform}],{duration:200}); sfx.no(); return; }
+    if (!legal(0).some(x=>x.id===c.id)){ const el=cardEls[c.id]; el.animate([{transform:el.style.transform+' translateX(-5px)'},{transform:el.style.transform+' translateX(5px)'},{transform:el.style.transform}],{duration:200}); sfx.no(); const hp=$('help'); hp.innerHTML='⛔ '+ruleReason(); hp.style.top=(H-CH*1.75-82)+'px'; hp.classList.add('show'); return; }
     unlockAudio(); playCard(0,c);
   }
   function playCard(p,c){
@@ -360,11 +391,12 @@
     bx.querySelectorAll('.tg').forEach(el=>el.addEventListener('pointerdown',e=>{ e.preventDefault(); unlockAudio(); SAVE.music=!SAVE.music; persist(); SAVE.music?musicStart():musicStop(); menu(); }));
   }
   function menu(){
-    phase='menu'; document.documentElement.lang=LANG; hud();
+    phase='menu'; document.documentElement.lang=LANG; hud(); helperBtn();
     show(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><div style="font-weight:900;font-size:13px;letter-spacing:2px;color:#a6ff4d;text-shadow:0 0 10px rgba(166,255,77,.6);margin-bottom:2px">🦎 BUKO GAMES</div><h1>${t('title')}</h1><p>${t('intro')}</p><p class="small">${t('rules')}</p><p class="small" style="color:#ffd23f;font-weight:800">${t('stats',SAVE.wins,SAVE.games)}</p><div class="small" style="opacity:.85;font-weight:800">🦎 Buko Games</div>
       <button class="pb tg" style="font-size:13px;height:auto;padding:8px 12px">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>`,
       [{l:t('quick'),go:()=>newGame(5)},{l:t('normal'),ghost:true,go:()=>newGame(9)}]);
   }
+  $('hbtn').addEventListener('pointerdown',e=>{ e.preventDefault(); SAVE.helper=!SAVE.helper; persist(); helperBtn(); if(hands) layoutHand(); });
   $('sw').addEventListener('pointerdown',e=>{ e.preventDefault(); $('picker').style.display='flex'; });
   $('picker').addEventListener('pointerdown',e=>{ if(e.target.id==='picker') $('picker').style.display='none'; });
 
@@ -439,7 +471,7 @@
   addEventListener('resize',resize);
   addEventListener('keydown',e=>{ if(!$('card2').classList.contains('hide') && (e.code==='Enter'||e.code==='Space')){ e.preventDefault(); $('box').querySelector('.btn')?.dispatchEvent(new Event('pointerdown')); } });
   document.documentElement.style.setProperty('--sat','env(safe-area-inset-top)');
-  resize(); menu(); requestAnimationFrame(frame);
+  resize(); helperBtn(); menu(); requestAnimationFrame(frame);
 })();
 </script>
 </body>
