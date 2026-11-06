@@ -93,6 +93,8 @@
   .ib.muted{background:rgba(255,80,100,.35)!important;border-color:#ff6b8a!important;opacity:1}
   body[data-device=tablet] .ib{height:44px;min-width:48px;font-size:22px}
   @media (max-width:400px){ #top{left:6px;right:6px;gap:4px} #top .pill{font-size:12px;padding:5px 7px} #top .ib{min-width:32px;height:30px;padding:0 6px;font-size:15px} #score{min-width:44px!important;font-size:14px!important} #hearts span,#lines span{font-size:13px!important;margin:0} }
+  @media (max-width:480px){ #top{left:calc(6px + env(safe-area-inset-left))!important;right:calc(6px + env(safe-area-inset-right))!important;gap:4px!important} #top .lft{gap:4px!important} #top .ib{min-width:30px!important;height:32px!important;padding:0 6px!important;font-size:15px!important} #top .pill{font-size:13px;padding:5px 8px} }
+  @media (orientation:landscape) and (max-height:500px){ #top{top:calc(6px + env(safe-area-inset-top))!important;left:calc(8px + env(safe-area-inset-left))!important;right:calc(8px + env(safe-area-inset-right))!important} }
 </style>
 </head>
 <body>
@@ -430,7 +432,7 @@
     made:()=>[784,988,1175,1568].forEach((f,i)=>tone(f,0.2,'triangle',0.06,i*0.08)), fail:()=>[392,330,262].forEach((f,i)=>tone(f,0.25,'sawtooth',0.04,i*0.12)), no:()=>tone(150,0.12,'square',0.04) };
 
   // ---- müzik ses seviyesi: 1 düşük · 2 orta · 3 yüksek ----
-  const VOLS=[0,0.14,0.30,0.55], VICON=['','🔈','🔉','🔊'];
+  const VOLS=[0,0.10,0.22,0.42], VICON=['','🔈','🔉','🔊'];
   const VOLG=()=>VOLS[SAVE.vol||1];
   function volIcon(){ const b=document.getElementById('vol'); if(!b) return; b.textContent= MUTED ? '🔇' : VICON[SAVE.vol||1]; b.classList.toggle('off',!SAVE.music && !MUTED); b.classList.toggle('muted', MUTED); const mb=document.getElementById('mus'); if (mb) mb.classList.toggle('off', MUTED || !SAVE.music); }
   function applyVol(){ try{ if (musGain && ac && SAVE.music) musGain.gain.setTargetAtTime(VOLG(), ac.currentTime, 0.15); }catch(e){} }
