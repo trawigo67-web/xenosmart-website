@@ -20,6 +20,7 @@
   canvas{display:block;width:100vw;height:100vh}
   #top{position:fixed;top:calc(12px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;pointer-events:none}
   .pill{background:var(--glass);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px;font-weight:600;font-size:14px;white-space:nowrap}
+  .sw{pointer-events:auto;font:inherit;color:#fff;cursor:pointer;padding:6px 10px}
   #score{font-weight:900;font-size:16px;min-width:64px;text-align:center}
   #hearts span{font-size:16px;margin:0 1px;display:inline-block;transition:.3s}
   #hearts .off{filter:grayscale(1);opacity:.25;transform:scale(.8)}
@@ -84,7 +85,7 @@
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="top"><div class="pill" id="lvl">Seviye 1</div><div class="pill" id="score">0</div><div class="pill" id="hearts"></div></div>
+<div id="top"><button class="pill sw" id="sw" title="Neon Blok">🧱⇄</button><div class="pill" id="lvl">Seviye 1</div><div class="pill" id="score">0</div><div class="pill" id="hearts"></div></div>
 <div id="sub"></div>
 <div id="combo"></div>
 <div id="dots"></div>
@@ -454,6 +455,7 @@
   }
   const nextColor = () => T.pal[(filled[active].filter(Boolean).length + active) % T.pal.length];
   cv.addEventListener('pointerdown', tap);
+  document.getElementById('sw').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); persist(); location.href='blok.html'; });
   musBtn.classList.toggle('off', !SAVE.music);
   musBtn.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); setMusic(!SAVE.music); });
   slowBtn.addEventListener('pointerdown', e => {
