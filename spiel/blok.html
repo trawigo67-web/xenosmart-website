@@ -77,7 +77,7 @@
 </div>
 <div id="toast"></div>
 <div id="card"><div class="box" id="box"></div></div>
-<div id="picker"><div class="pk"><div style="font-weight:900;letter-spacing:2px;color:#a6ff4d;padding:2px 6px 4px">🦎 BUKO GAMES</div><a href="index.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
+<div id="picker"><div class="pk"><div style="font-weight:900;letter-spacing:2px;color:#a6ff4d;padding:2px 6px 4px">🦎 BUKO GAMES</div><a href="index.html">🏠 Buko Games</a><a href="disfirlat.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
 <script>
 (() => {
   // ---------- kayıt (Diş Fırlat ile ortak dil ayarı) ----------
@@ -236,7 +236,7 @@
     const rec=score>SAVE.hi; if(rec){ SAVE.hi=score; persist(); }
     setTimeout(()=>showCard(`<h1>${t('over')}</h1><p>${t('overText',fmt(score),lines,rec)}</p>`,[{label:t('again'),go:()=>newGame()},{label:t('back'),ghost:true,go:goBack}]),500);
   }
-  const goBack=()=>{ location.href='index.html'; };
+  const goBack=()=>{ location.href='disfirlat.html'; };
 
   function hud(){
     

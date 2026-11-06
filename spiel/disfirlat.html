@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Diş Fırlat · Buko Games</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0d1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Buko Games">
+<meta name="description" content="Diş Fırlat – dönen çarklara dişi doğru anda fırlat. 15 seviye, boss çarkları, sonsuz mod. Ücretsiz oyna.">
+<style>
+  :root{--a:#38e1ff;--b:#ff4fd8;--glass:rgba(255,255,255,.16);--sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom)}
+  html,body{margin:0;height:100%;background:#145a5a;color:#eef;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  canvas{display:block;width:100vw;height:100vh;height:100dvh}
+  #top{position:fixed;top:calc(12px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;pointer-events:none}
+  .pill{background:var(--glass);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px;font-weight:600;font-size:14px;white-space:nowrap}
+  .sw{pointer-events:auto;font:inherit;color:#fff;cursor:pointer;padding:6px 10px}
+  #score{font-weight:900;font-size:16px;min-width:64px;text-align:center}
+  #hearts span{font-size:16px;margin:0 1px;display:inline-block;transition:.3s}
+  #hearts .off{filter:grayscale(1);opacity:.25;transform:scale(.8)}
+  #sub{position:fixed;top:calc(56px + env(safe-area-inset-top));left:0;right:0;text-align:center;font-weight:800;font-size:19px;pointer-events:none;text-shadow:0 0 18px var(--a)}
+  #combo{position:fixed;top:calc(84px + env(safe-area-inset-top));left:0;right:0;text-align:center;font-weight:900;font-size:15px;color:var(--b);pointer-events:none;height:18px;text-shadow:0 0 12px var(--b)}
+  #dots{position:fixed;top:calc(106px + env(safe-area-inset-top));left:0;right:0;display:flex;justify-content:center;gap:5px;pointer-events:none}
+  #dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.15)}
+  #dots i.done{background:var(--a);box-shadow:0 0 6px var(--a)}
+  #dots i.cur{background:var(--b);box-shadow:0 0 10px var(--b);transform:scale(1.35)}
+  #dots i.boss{outline:1.5px solid #ff4d6d;outline-offset:1px}
+  #hint{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom));left:0;right:90px;text-align:center;color:rgba(255,255,255,.75);font-size:13px;pointer-events:none;padding-left:90px}
+  #slow{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:64px;height:64px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.25),rgba(255,255,255,.05));color:#fff;font:inherit;font-weight:800;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 0 18px rgba(56,225,255,.25)}
+  #slow b{font-size:22px;line-height:1}
+  #slow.used{opacity:.25;filter:grayscale(1)}
+  #slow.on{box-shadow:0 0 28px var(--a);border-color:var(--a)}
+  #toast{position:fixed;left:50%;top:21%;transform:translate(-50%,-50%) scale(.9);font-size:22px;font-weight:900;opacity:0;transition:.25s;pointer-events:none;white-space:nowrap;text-shadow:0 0 20px currentColor}
+  #toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  #card{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,10,60,.35);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);transition:opacity .3s;z-index:5}
+  #card.hide{opacity:0;pointer-events:none}
+  .box{background:linear-gradient(160deg,rgba(22,92,92,.86),rgba(12,40,60,.84));border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:24px;padding:24px 24px 20px;text-align:center;width:min(330px,86vw);max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .box h1{margin:0 0 4px;font-size:32px;font-weight:900;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .box p{margin:6px 0 14px;color:#b9bee0;font-size:15px;line-height:1.45}
+  .stars{font-size:38px;letter-spacing:4px;margin:4px 0 2px}
+  .stars .off{filter:grayscale(1);opacity:.25}
+  .btns{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+  .btn{font:inherit;font-weight:800;font-size:17px;color:#0b0d1a;border:0;border-radius:999px;padding:12px 20px;background:linear-gradient(90deg,var(--a),var(--b));box-shadow:0 0 22px rgba(255,79,216,.35);cursor:pointer}
+  .btn.ghost{background:rgba(255,255,255,.08);color:#eef;box-shadow:none;border:1px solid rgba(255,255,255,.18)}
+  .themes{display:flex;gap:8px;justify-content:center;margin-top:14px}
+  .th{width:52px;padding:6px 0 4px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);font-size:10px;color:#ccd;cursor:pointer}
+  .th i{display:block;width:22px;height:22px;border-radius:50%;margin:0 auto 3px}
+  .th.sel{border-color:var(--a);box-shadow:0 0 12px var(--a)}
+  .th.lock{opacity:.4}
+  .music{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1)}
+  .music .row{display:flex;gap:6px;justify-content:center;margin:6px 0}
+  .tg{flex:1;font:inherit;font-size:12px;font-weight:700;padding:8px 4px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#ccd}
+  .tg.on{border-color:var(--a);color:#fff;box-shadow:0 0 10px var(--a)}
+  .lnk{flex:1;display:block;text-decoration:none;font-size:12px;font-weight:800;padding:8px 4px;border-radius:12px;color:#fff}
+  body[data-device=tablet] .pill{font-size:19px;padding:9px 18px}
+  body[data-device=tablet] #score{font-size:22px;min-width:100px}
+  body[data-device=tablet] #hearts span{font-size:22px}
+  body[data-device=tablet] #sub{font-size:28px;top:calc(76px + env(safe-area-inset-top))}
+  body[data-device=tablet] #combo{font-size:20px;top:calc(114px + env(safe-area-inset-top))}
+  body[data-device=tablet] #dots{top:calc(142px + env(safe-area-inset-top));gap:8px}
+  body[data-device=tablet] #dots i{width:10px;height:10px}
+  body[data-device=tablet] #slow{width:84px;height:84px;font-size:13px} body[data-device=tablet] #slow b{font-size:30px}
+  body[data-device=tablet] #hint{font-size:16px}
+  body[data-device=tablet] .box{width:min(460px,80vw);padding:32px}
+  body[data-device=tablet] .box h1{font-size:44px} body[data-device=tablet] .box p{font-size:18px}
+  body[data-device=tablet] .btn{font-size:20px;padding:15px 24px}
+  body[data-device=landscape] #sub{font-size:16px;top:calc(48px + env(safe-area-inset-top))}
+  body[data-device=landscape] #combo{top:calc(68px + env(safe-area-inset-top))}
+  body[data-device=landscape] #dots{top:calc(84px + env(safe-area-inset-top))}
+  body[data-device=landscape] .box{max-height:92vh}
+  .langs{display:flex;justify-content:center;gap:10px;margin:-6px 0 8px}
+  .lg{font-size:26px;line-height:1;padding:6px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);cursor:pointer;opacity:.6}
+  .lg.sel{opacity:1;border-color:var(--a);box-shadow:0 0 12px var(--a)}
+  .small{font-size:12px;color:#8a90b8;margin-top:8px}
+  #picker{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;justify-content:flex-start;background:rgba(0,0,0,.25)}
+  #picker .pk{margin:calc(52px + env(safe-area-inset-top)) 0 0 10px;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:16px;background:linear-gradient(160deg,rgba(22,92,92,.94),rgba(12,40,60,.92));border:1px solid rgba(255,255,255,.35)}
+  #picker a{color:#fff;text-decoration:none;font-weight:800;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.1);font-family:inherit}
+  #top .lft{display:flex;gap:6px;align-items:center}
+  .ib{pointer-events:auto;cursor:pointer;font-family:inherit;color:#fff;min-width:36px;height:34px;padding:0 9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+  .ib.off{opacity:.45}
+  .ib.muted{background:rgba(255,80,100,.35)!important;border-color:#ff6b8a!important;opacity:1}
+  body[data-device=tablet] .ib{height:44px;min-width:48px;font-size:22px}
+  @media (max-width:400px){ #top{left:6px;right:6px;gap:4px} #top .pill{font-size:12px;padding:5px 7px} #top .ib{min-width:32px;height:30px;padding:0 6px;font-size:15px} #score{min-width:44px!important;font-size:14px!important} #hearts span,#lines span{font-size:13px!important;margin:0} }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="top"><div class="lft"><button class="pill sw ib" id="sw" title="Games">🎮</button><button class="pill ib" id="mus" title="Music">🎵</button><button class="pill ib" id="vol" title="Volume">🔈</button></div><div class="pill" id="lvl">Seviye 1</div><div class="pill" id="score">0</div><div class="pill" id="hearts"></div></div>
+<div id="sub"></div>
+<div id="combo"></div>
+<div id="dots"></div>
+<div id="hint"></div>
+<button id="slow"><b>⏱</b>YAVAŞ</button>
+<div id="toast"></div>
+<div id="card"><div class="box" id="box"></div></div>
+<div id="picker"><div class="pk"><div style="font-weight:900;letter-spacing:2px;color:#a6ff4d;padding:2px 6px 4px">🦎 BUKO GAMES</div><a href="index.html">🏠 Buko Games</a><a href="disfirlat.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
+<script>
+(() => {
+  // ================= AYARLAR =================
+  const LEVELS = [
+    {n:[6],         w:1.00, win:0.34},
+    {n:[6,4],       w:1.10, win:0.32},
+    {n:[6,5],       w:1.20, win:0.30},
+    {n:[6,5,4],     w:1.15, win:0.30},
+    {n:[7,5,4],     w:1.25, win:0.28, boss:true},
+    {n:[7,6,5],     w:1.30, win:0.27},
+    {n:[8,6,4],     w:1.35, win:0.26, flip:true},
+    {n:[7,6,5,4],   w:1.30, win:0.25},
+    {n:[8,6,5,4],   w:1.40, win:0.24, wobble:true},
+    {n:[8,7,5,4],   w:1.45, win:0.23, flip:true, boss:true},
+    {n:[9,7,6,5],   w:1.50, win:0.22, flip:true},
+    {n:[9,8,6,5],   w:1.55, win:0.21, wobble:true},
+    {n:[10,8,6,5],  w:1.60, win:0.20, flip:true, wobble:true},
+    {n:[10,8,7,5],  w:1.65, win:0.19, flip:true, wobble:true},
+    {n:[11,9,7,5],  w:1.70, win:0.18, flip:true, wobble:true, boss:true},
+  ];
+  const TOTAL = LEVELS.length, MAX_LIVES = 3, FLY = 0.12;
+  const THEMES = {
+    cham: {name:'Bukalemun', need:0, cham:true, a:'#2ee6c8', b:'#a6ff4d', bg:['#1f8a6a','#145a5a','#0a2a35'], blobs:['#5dff8a','#2ee6c8','#ffd23f','#ff8c42'], body:['#86d6c6','#3f8a8e','#73c0b8'], idle:['#62a8a2','#2f6670','#559896'], pal:['#a6ff4d','#2ee6c8','#ffd23f','#ff8c42','#ff4fd8','#38e1ff']},
+    neon: {name:'Neon',  need:0,  a:'#38e1ff', b:'#ff4fd8', bg:['#4b2fb8','#2a1b7a','#160f45'], blobs:['#ff4fd8','#38e1ff','#7b5cff','#ffb347'], body:['#8a93d6','#4b4f9a','#7a83c8'], idle:['#6c72b4','#3c3f80','#5d63a6'], pal:['#38e1ff','#ff4fd8','#7dff6a','#ffc23d','#9b6bff','#ff6b6b']},
+    gold: {name:'Altın', need:10, a:'#ffd166', b:'#ff8c42', bg:['#7a4a12','#4a2a0a','#2a1606'], blobs:['#ffd166','#ff8c42','#ff5e7e','#fff1b8'], body:['#d8a868','#8a5e2c','#c49456'], idle:['#a8804e','#6a4a26','#946e42'], pal:['#ffd166','#ff8c42','#fff1b8','#e8a33a','#ffb36b','#f7e08a']},
+    ice:  {name:'Buz',   need:25, a:'#9be7ff', b:'#c3b5ff', bg:['#2a6fb0','#174a80','#0c2a50'], blobs:['#9be7ff','#c3b5ff','#e8fbff','#6fd3ff'], body:['#b4d6f2','#5f8cb8','#9cc2e6'], idle:['#88aed0','#4a7098','#7aa0c4'], pal:['#9be7ff','#c3b5ff','#e8fbff','#6fd3ff','#a9c8ff','#d9f0ff']},
+    lava: {name:'Lav',   need:40, a:'#ff6b35', b:'#ffd23f', bg:['#8a220c','#561406','#2e0a03'], blobs:['#ff6b35','#ffd23f','#ff3d2e','#ff9f1c'], body:['#c46a4e','#7a3422','#b05a40'], idle:['#9a5038','#5e2818','#86442e'], pal:['#ff6b35','#ffd23f','#ff3d2e','#ff9f1c','#ffe066','#ff5e7e']},
+  };
+
+  // ================= KAYIT =================
+  let SAVE = {vol:1, lvl:0, stars:[], hi:0, theme:'cham', music:true, sfx:true, helper:true};
+  try{ Object.assign(SAVE, JSON.parse(localStorage.getItem('disfirlat2')||'{}')); }catch(e){}
+  const persist = () => { try{ localStorage.setItem('disfirlat2', JSON.stringify(SAVE)); }catch(e){} };
+  const totalStars = () => SAVE.stars.reduce((s,v)=>s+(v||0),0);
+  if (!SAVE.chamV){ SAVE.theme='cham'; SAVE.chamV=1; }
+  let T = THEMES[SAVE.theme] || THEMES.cham;
+  function applyTheme(){ document.documentElement.style.setProperty('--a', T.a); document.documentElement.style.setProperty('--b', T.b); }
+  applyTheme();
+
+  // ---- 🦎 Buko Games: renk değiştiren palet ----
+  const CHAM_H=[150,175,95,32,320,150];
+  function chamHue(tm,off=0){ const pos=((tm*0.018+off)%5+5)%5, i=Math.floor(pos), f=pos-i; const a=CHAM_H[i], b=CHAM_H[i+1]; const d=((b-a+540)%360)-180; return (a+d*f+360)%360; }
+  function hsl2hex(h,s,l){ s/=100; l/=100; const k=n=>(n+h/30)%12, a=s*Math.min(l,1-l), f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));
+    return '#'+[f(0),f(8),f(4)].map(x=>Math.round(x*255).toString(16).padStart(2,'0')).join(''); }
+  const chamBg=(tm,off)=>{ const h=chamHue(tm,off); return [hsl2hex(h,68,34),hsl2hex((h+28)%360,70,20),hsl2hex((h+55)%360,70,10)]; };
+  const chamBl=(tm,off)=>{ const h=chamHue(tm,off); return [hsl2hex(h,90,58),hsl2hex((h+45)%360,90,60),hsl2hex((h+320)%360,90,60),hsl2hex((h+150)%360,90,64)]; };
+
+  // ================= DİL / SPRACHE / LANGUAGE =================
+  const I18N = {
+   tr:{ loc:'tr-TR', lvl:(l,t)=>`Seviye ${l}/${t}`, round:r=>`∞ Tur ${r}`, gear:'Çark', tooth:'Diş', flip:'yön değişir', wobble:'hız dalgalanır', bossHint:'boss: durur, yuva kilitler', tapHint:'Boş yuva alttayken dokun',
+     gem1:'💎 x2 PUAN 10 sn', gem2:'💎 10 saniye çift puan!', clock:'⏱️ YAVAŞ dolu', heart:'❤️ +1 CAN', shield1:'🛡️ KALKAN', shield2:'🛡️ Bir sonraki hata affedilir', shieldSaved:'🛡️ Kalkan korudu!',
+     perfectGear:'✨ KUSURSUZ ÇARK +1000', nextGear:'Süper! Sıradaki çark +300', locked:'Kilitli yuva!', full:'Dolu yuva!', wrong:'Yanlış zaman!', lifeLost:' −1 can', speed:p=>`⚡ HIZ BONUSU +${p}`, fever:'🔥 FEVER MODU! x2', combo:'KOMBO',
+     endTitle:'Sonsuz Mod Bitti', endText:(r,s,rec,h)=>`Tur <b>${r}</b> · Skor <b>${s}</b><br>${rec?'🏆 YENİ REKOR!':'Rekor: '+h}`, again:'Tekrar Sonsuz', menu:'Menü',
+     outTitle:'Canın bitti', outText:l=>`Merak etme, <b>Seviye ${l}</b>'den devam ediyorsun.<br>3 can yeniden doldu.`, retry:'Tekrar Dene', tip3:"3 ⭐ için: can kaybetme + atışların %40'ı PERFECT olsun",
+     champTitle:'Şampiyon! 🏆', champText:s=>`15 seviyenin hepsi bitti!<br>Skor: <b>${s}</b><br><b>Sonsuz Mod</b> açıldı!`, endless:'∞ Sonsuz Mod',
+     nBoss:'👹 Sıradaki: <b>BOSS seviyesi!</b>', nGears:n=>`Yeni: <b>${n} çark</b>`, nFlip:'Çarklar <b>yön değiştirecek</b>', nWob:'<b>Hız dalgalanacak</b>', nHarder:'Sıradaki biraz daha zor.',
+     lvlDone:l=>`Seviye ${l} tamam!`, lvlScore:(b,s)=>`+${b} bonus · Skor <b>${s}</b>`, spinBtn:'🎡 Şans Çarkını Çevir!', skipTo:l=>`Çevirmeden Seviye ${l} →`, replay:'Tekrar oyna (yıldız için)', toLevel:l=>`Seviye ${l} →`,
+     wheelTitle:'Şans Çarkı', wheelText:'Çarka dokun, şansını dene!', spin:'ÇEVİR!', won:p=>`🎁 Kazandın: ${p}`,
+     prize:{'+500':'500 puan','🛡️':'Kalkan: bir hata affedilir','+1000':'1000 puan','x2':'Sonraki seviyede 15 sn çift puan','+250':'250 puan','+2000':'2000 puan 🎉','🔥':'Sonraki seviye FEVER ile başlar','+750':'750 puan'},
+     cont:l=>`▶ Devam (Seviye ${l})`, start:'▶ Başla', from1:"Seviye 1'den başla", endlessRec:h=>`∞ Sonsuz Mod · Rekor ${h}`, endlessLock:'🔒 Sonsuz Mod (15. seviyeden sonra)',
+     intro:'Boş yuva <b>alta</b> gelince dokun.<br>Tam ortaya denk getir: <b>PERFECT!</b><br>5 PERFECT üst üste = 🔥 FEVER<br>Bonus yuvaları: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Günlük bonus: +${d} puan (seri: ${st}. gün)`,
+     music:'🎵 Müzik', gm:'Oyun müziği', sfx:'Efekt sesi', on:'Açık', off:'Kapalı', musicNote:'Kendi müziğin için: uygulamada şarkıyı başlat, oyuna geri dön, müzik arkada çalar (oyun müziğini kapat). YouTube / YT Music için Premium gerekir, Spotify ücretsiz de çalışır.',
+     ios:"📱 iPhone'da uygulama gibi: Safari'de <b>Paylaş ⬆️</b> → <b>Ana Ekrana Ekle</b><br>Ses için telefonun sessiz modu kapalı olmalı.", apk:'📱 Android uygulamasını indir (APK)', stars:n=>`Toplam yıldız: ${n} ★`,
+     th:{cham:'Bukalemun',neon:'Neon',gold:'Altın',ice:'Buz',lava:'Lav'}, slow:'YAVAŞ', roundDone:(r,b)=>`Tur ${r} tamam! +${b}`, plusLife:'+1 can ❤️', block:'🧱 Neon Blok oyna (yeni!)', helper:'🎯 Zamanlama yardımcısı', now:'ŞİMDİ!', batak:'🃏 Neon Batak oyna (yeni!)', keys:'⌨️ Boşluk / W / ↑ = fırlat · S = yavaş · M = müzik · B = Neon Blok', share:'📤 Arkadaşına gönder → 🛡️ bedava kalkan', shareDone:'🛡️ Kalkan hazır! Sonraki oyunda seni korur', shareReady:'🛡️ Bedava kalkanın hazır (yarın yeniden paylaşabilirsin)', shareText:'Buko Games’i dene! 🦎🎮 Diş Fırlat, Neon Blok & Neon Batak – ücretsiz: https://xenosmart.de/spiel/' },
+   de:{ loc:'de-DE', lvl:(l,t)=>`Level ${l}/${t}`, round:r=>`∞ Runde ${r}`, gear:'Zahnrad', tooth:'Zahn', flip:'Richtung wechselt', wobble:'Tempo schwankt', bossHint:'Boss: stoppt & sperrt Lücken', tapHint:'Tippe, wenn eine leere Lücke unten ist',
+     gem1:'💎 x2 PUNKTE 10 s', gem2:'💎 10 Sekunden doppelte Punkte!', clock:'⏱️ ZEITLUPE bereit', heart:'❤️ +1 LEBEN', shield1:'🛡️ SCHILD', shield2:'🛡️ Der nächste Fehler zählt nicht', shieldSaved:'🛡️ Der Schild hat dich gerettet!',
+     perfectGear:'✨ PERFEKTES ZAHNRAD +1000', nextGear:'Super! Nächstes Zahnrad +300', locked:'Gesperrte Lücke!', full:'Lücke schon voll!', wrong:'Falscher Moment!', lifeLost:' −1 Leben', speed:p=>`⚡ TEMPO-BONUS +${p}`, fever:'🔥 FEVER-MODUS! x2', combo:'KOMBO',
+     endTitle:'Endlos-Modus vorbei', endText:(r,s,rec,h)=>`Runde <b>${r}</b> · Punkte <b>${s}</b><br>${rec?'🏆 NEUER REKORD!':'Rekord: '+h}`, again:'Nochmal Endlos', menu:'Menü',
+     outTitle:'Keine Leben mehr', outText:l=>`Keine Sorge, du machst bei <b>Level ${l}</b> weiter.<br>3 Leben sind wieder voll.`, retry:'Nochmal versuchen', tip3:'Für 3 ⭐: kein Leben verlieren + 40 % der Würfe PERFECT',
+     champTitle:'Champion! 🏆', champText:s=>`Alle 15 Level geschafft!<br>Punkte: <b>${s}</b><br><b>Endlos-Modus</b> freigeschaltet!`, endless:'∞ Endlos-Modus',
+     nBoss:'👹 Als Nächstes: <b>BOSS-Level!</b>', nGears:n=>`Neu: <b>${n} Zahnräder</b>`, nFlip:'Zahnräder <b>wechseln die Richtung</b>', nWob:'<b>Das Tempo schwankt</b>', nHarder:'Das nächste Level wird etwas schwerer.',
+     lvlDone:l=>`Level ${l} geschafft!`, lvlScore:(b,s)=>`+${b} Bonus · Punkte <b>${s}</b>`, spinBtn:'🎡 Glücksrad drehen!', skipTo:l=>`Ohne Drehen zu Level ${l} →`, replay:'Nochmal spielen (für Sterne)', toLevel:l=>`Level ${l} →`,
+     wheelTitle:'Glücksrad', wheelText:'Tippe aufs Rad und versuch dein Glück!', spin:'DREHEN!', won:p=>`🎁 Gewonnen: ${p}`,
+     prize:{'+500':'500 Punkte','🛡️':'Schild: ein Fehler wird verziehen','+1000':'1000 Punkte','x2':'15 s doppelte Punkte im nächsten Level','+250':'250 Punkte','+2000':'2000 Punkte 🎉','🔥':'Nächstes Level startet mit FEVER','+750':'750 Punkte'},
+     cont:l=>`▶ Weiter (Level ${l})`, start:'▶ Start', from1:'Bei Level 1 beginnen', endlessRec:h=>`∞ Endlos-Modus · Rekord ${h}`, endlessLock:'🔒 Endlos-Modus (nach Level 15)',
+     intro:'Tippe, wenn eine leere Lücke <b>unten</b> ist.<br>Genau in die Mitte: <b>PERFECT!</b><br>5× PERFECT hintereinander = 🔥 FEVER<br>Bonus-Lücken: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Tagesbonus: +${d} Punkte (Serie: Tag ${st})`,
+     music:'🎵 Musik', gm:'Spielmusik', sfx:'Effekte', on:'An', off:'Aus', musicNote:'Eigene Musik: Song in der App starten, zurück ins Spiel – die Musik läuft im Hintergrund weiter (Spielmusik ausschalten). YouTube / YT Music brauchen Premium, Spotify geht auch kostenlos.',
+     ios:'📱 Auf dem iPhone wie eine App: in Safari <b>Teilen ⬆️</b> → <b>Zum Home-Bildschirm</b><br>Für Ton den Stumm-Schalter ausschalten.', apk:'📱 Android-App herunterladen (APK)', stars:n=>`Sterne gesamt: ${n} ★`,
+     th:{cham:'Chamäleon',neon:'Neon',gold:'Gold',ice:'Eis',lava:'Lava'}, slow:'LANGSAM', roundDone:(r,b)=>`Runde ${r} geschafft! +${b}`, plusLife:'+1 Leben ❤️', block:'🧱 Neon Block spielen (neu!)', helper:'🎯 Timing-Hilfe', now:'JETZT!', batak:'🃏 Neon Batak spielen (neu!)', keys:'⌨️ Leertaste / W / ↑ = werfen · S = Zeitlupe · M = Musik · B = Neon Block', share:'📤 An Freunde senden → 🛡️ Gratis-Schild', shareDone:'🛡️ Schild bereit! Schützt dich im nächsten Spiel', shareReady:'🛡️ Dein Gratis-Schild ist bereit (morgen wieder teilen)', shareText:'Probier Buko Games! 🦎🎮 Diş Fırlat, Neon Block & Neon Batak – kostenlos: https://xenosmart.de/spiel/' },
+   en:{ loc:'en-US', lvl:(l,t)=>`Level ${l}/${t}`, round:r=>`∞ Round ${r}`, gear:'Gear', tooth:'Tooth', flip:'direction flips', wobble:'speed varies', bossHint:'boss: stops & locks slots', tapHint:'Tap when an empty slot is at the bottom',
+     gem1:'💎 x2 POINTS 10 s', gem2:'💎 Double points for 10 seconds!', clock:'⏱️ SLOW-MO refilled', heart:'❤️ +1 LIFE', shield1:'🛡️ SHIELD', shield2:'🛡️ Your next miss is forgiven', shieldSaved:'🛡️ The shield saved you!',
+     perfectGear:'✨ FLAWLESS GEAR +1000', nextGear:'Great! Next gear +300', locked:'Locked slot!', full:'Slot taken!', wrong:'Wrong timing!', lifeLost:' −1 life', speed:p=>`⚡ SPEED BONUS +${p}`, fever:'🔥 FEVER MODE! x2', combo:'COMBO',
+     endTitle:'Endless Mode over', endText:(r,s,rec,h)=>`Round <b>${r}</b> · Score <b>${s}</b><br>${rec?'🏆 NEW RECORD!':'Record: '+h}`, again:'Endless again', menu:'Menu',
+     outTitle:'Out of lives', outText:l=>`Don't worry, you continue at <b>Level ${l}</b>.<br>Your 3 lives are refilled.`, retry:'Try again', tip3:'For 3 ⭐: lose no lives + 40% of shots PERFECT',
+     champTitle:'Champion! 🏆', champText:s=>`All 15 levels done!<br>Score: <b>${s}</b><br><b>Endless Mode</b> unlocked!`, endless:'∞ Endless Mode',
+     nBoss:'👹 Next: <b>BOSS level!</b>', nGears:n=>`New: <b>${n} gears</b>`, nFlip:'Gears will <b>change direction</b>', nWob:'<b>Speed will vary</b>', nHarder:'The next one is a bit harder.',
+     lvlDone:l=>`Level ${l} complete!`, lvlScore:(b,s)=>`+${b} bonus · Score <b>${s}</b>`, spinBtn:'🎡 Spin the lucky wheel!', skipTo:l=>`Skip to Level ${l} →`, replay:'Replay (for stars)', toLevel:l=>`Level ${l} →`,
+     wheelTitle:'Lucky Wheel', wheelText:'Tap the wheel and try your luck!', spin:'SPIN!', won:p=>`🎁 You won: ${p}`,
+     prize:{'+500':'500 points','🛡️':'Shield: one miss forgiven','+1000':'1000 points','x2':'15 s double points next level','+250':'250 points','+2000':'2000 points 🎉','🔥':'Next level starts in FEVER','+750':'750 points'},
+     cont:l=>`▶ Continue (Level ${l})`, start:'▶ Play', from1:'Start from Level 1', endlessRec:h=>`∞ Endless Mode · Record ${h}`, endlessLock:'🔒 Endless Mode (after level 15)',
+     intro:'Tap when an empty slot is at the <b>bottom</b>.<br>Hit dead center: <b>PERFECT!</b><br>5 PERFECTs in a row = 🔥 FEVER<br>Bonus slots: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Daily bonus: +${d} points (streak: day ${st})`,
+     music:'🎵 Music', gm:'Game music', sfx:'Sound FX', on:'On', off:'Off', musicNote:'Your own music: start a song in the app, come back to the game – it keeps playing in the background (turn game music off). YouTube / YT Music need Premium, Spotify works free.',
+     ios:'📱 Use it like an app on iPhone: in Safari tap <b>Share ⬆️</b> → <b>Add to Home Screen</b><br>Turn off silent mode for sound.', apk:'📱 Download Android app (APK)', stars:n=>`Total stars: ${n} ★`,
+     th:{cham:'Chameleon',neon:'Neon',gold:'Gold',ice:'Ice',lava:'Lava'}, slow:'SLOW', roundDone:(r,b)=>`Round ${r} complete! +${b}`, plusLife:'+1 life ❤️', block:'🧱 Play Neon Block (new!)', helper:'🎯 Timing helper', now:'NOW!', batak:'🃏 Play Neon Batak (new!)', keys:'⌨️ Space / W / ↑ = shoot · S = slow-mo · M = music · B = Neon Block', share:'📤 Send to a friend → 🛡️ free shield', shareDone:'🛡️ Shield ready! It protects you next game', shareReady:'🛡️ Your free shield is ready (share again tomorrow)', shareText:'Try Buko Games! 🦎🎮 Diş Fırlat, Neon Block & Neon Batak – free: https://xenosmart.de/spiel/' },
+  };
+  const FLAGS = {tr:'🇹🇷', de:'🇩🇪', en:'🇬🇧'};
+  if (!SAVE.lang){ const nl=(navigator.language||'tr').slice(0,2); SAVE.lang = I18N[nl] ? nl : (nl==='de'?'de':'en'); if(!I18N[SAVE.lang]) SAVE.lang='tr'; }
+  const t = (k, ...a) => { const d=I18N[SAVE.lang]||I18N.tr; const v = d[k] ?? I18N.tr[k]; return typeof v==='function' ? v(...a) : v; };
+  const fmt = n => n.toLocaleString(t('loc'));
+  function langHtml(){ return `<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${SAVE.lang===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div>`; }
+
+  // ================= DOM =================
+  const cv=document.getElementById('c'), ctx=cv.getContext('2d'), $=id=>document.getElementById(id);
+  const lvlEl=$('lvl'), scoreEl=$('score'), heartsEl=$('hearts'), subEl=$('sub'), comboEl=$('combo'), dotsEl=$('dots'), hint=$('hint'), toast=$('toast'), card=$('card'), box=$('box'), slowBtn=$('slow'), musBtn=$('mus');
+
+  // ================= DURUM =================
+  let W,H,dpr,u,th, N=[], K=0, L=null, R=[], cx=[], cy=[], phi=[], rots=[], rot0=0;
+  let level=0, endless=false, round=0, lives=MAX_LIVES, filled=[], active=0, flying=null, state='menu';
+  let score=0, combo=0, perfStreak=0, fever=0, slowT=0, slowUsed=false;
+  let bonusSlots=[], doubleT=0, shield=false, levelStart=0, gearPerfect=[], pendingDouble=0;
+  let lvStats={lost:0, hits:0, perf:0};
+  let shake=0, time=0, dir=1, flipAt=0, particles=[], floaters=[], arcs=[], lastT, stars=[];
+  let boss={next:0, warn:0, pause:0, lockAt:0, lock:null}, heartAt=0;
+
+  // ================= YERLEŞİM =================
+  let device='phone';
+  function layout(){
+    dpr=Math.min(2.5, window.devicePixelRatio||1); W=innerWidth; H=innerHeight;
+    cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    const short=Math.min(W,H);
+    device = short>=700 ? 'tablet' : (W>H ? 'landscape' : 'phone');
+    document.body.dataset.device = device;
+    const cs=getComputedStyle(document.documentElement);
+    const safeT=parseFloat(cs.getPropertyValue('--sat'))||0, safeB=parseFloat(cs.getPropertyValue('--sab'))||0;
+    // oyun alanı: üst göstergeler ile alt düğmeler arası
+    const topUI = (device==='tablet'?150:device==='landscape'?92:128) + safeT;
+    const botUI = (device==='tablet'?120:device==='landscape'?70:96) + safeB;
+    const AW = W*(device==='landscape'?0.80:0.92), AH = Math.max(120, H-topUI-botUI);
+    const t1=1.8;
+    const pats=[];
+    if (K<=1) pats.push([0]);
+    else {
+      const hz = K===2 ? [0,0.35,0.6,0.85] : [0.42,0.3,0.55,0.7,0.2];
+      for (const ang of hz) pats.push(Array.from({length:K},(_,j)=> j===0?0 : (K===2?ang:(j%2?ang:-ang))));
+      for (const dl of [0.45,0.6,0.75,0.9]) pats.push(Array.from({length:K},(_,j)=> j===0?0 : Math.PI/2+(j%2?-dl:dl)));
+    }
+    const BASES=[Math.PI/2, Math.PI, 0, -Math.PI/2];
+    let best=null;
+    for (const ph of pats){
+      const px=[0], py=[0];
+      for (let j=1;j<K;j++){ const d=N[j-1]+N[j]+t1*1.05; px[j]=px[j-1]+Math.cos(ph[j])*d; py[j]=py[j-1]+Math.sin(ph[j])*d; }
+      // her çark için fırlatıcı yönü: tercihen alttan, olmazsa yandan/üstten
+      const lb=[]; let ok=true;
+      for (let j=0;j<K && ok;j++){
+        let found=null;
+        for (const bb of BASES){
+          const ux=Math.cos(bb), uy=Math.sin(bb); let clear=true;
+          for (let k=0;k<K && clear;k++){ if(k===j) continue;
+            for (let q=0;q<=6;q++){ const dd=N[j]+t1*5*q/6, sx=px[j]+ux*dd, sy=py[j]+uy*dd;
+              if (Math.hypot(px[k]-sx,py[k]-sy) < N[k]+t1*2.2){ clear=false; break; } } }
+          if (clear){ found=bb; break; }
+        }
+        if (found===null) ok=false; else lb[j]=found;
+      }
+      if (!ok) continue;
+      let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
+      for (let j=0;j<K;j++){ const e=N[j]+t1; x0=Math.min(x0,px[j]-e); x1=Math.max(x1,px[j]+e); y0=Math.min(y0,py[j]-e); y1=Math.max(y1,py[j]+e);
+        const lx=px[j]+Math.cos(lb[j])*(N[j]+t1*5.5), ly=py[j]+Math.sin(lb[j])*(N[j]+t1*5.5); x0=Math.min(x0,lx-t1*1.5); x1=Math.max(x1,lx+t1*1.5); y0=Math.min(y0,ly-t1*1.5); y1=Math.max(y1,ly+t1*1.5); }
+      const downs = lb.filter(v=>v===Math.PI/2).length;
+      const uu=Math.min(AW/(x1-x0), AH/(y1-y0)) * (1 + downs*0.04);   // alttan fırlatmayı hafif tercih et
+      if (!best || uu>best.score) best={score:uu,u:Math.min(AW/(x1-x0), AH/(y1-y0)),px,py,ph,lb,x0,x1,y0,y1};
+    }
+    // çark çok büyümesin (tek çarkta)
+    const maxR = short*(device==='tablet'?0.26:0.3);
+    u = Math.min(best.u, maxR/N[0]); th=t1*u; phi=best.ph; LB=best.lb;
+    const ox=W/2-(best.x0+best.x1)/2*u, oy=topUI+AH/2-(best.y0+best.y1)/2*u;
+    R=N.map(n=>n*u); cx=best.px.map(x=>ox+x*u); cy=best.py.map(y=>oy+y*u);
+    stars=Array.from({length:Math.round(W*H/9000)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.3,p:Math.random()*6}));
+    bokeh=Array.from({length:device==='tablet'?18:12},(_,i)=>({x:Math.random(),y:Math.random(),r:0.04+Math.random()*0.09,s:0.2+Math.random()*0.5,p:Math.random()*6,c:i%4}));
+  }
+  let bokeh=[], LB=[];
+  const LU = g => [Math.cos(LB[g]||Math.PI/2), Math.sin(LB[g]||Math.PI/2)];
+  const LP = (g,ext) => { const [ux,uy]=LU(g); return [cx[g]+ux*(R[g]+th*ext), cy[g]+uy*(R[g]+th*ext)]; };
+  function computeRots(){
+    rots[0]=rot0;
+    for (let j=1;j<K;j++){ const sj=Math.PI*2/N[j]; rots[j]=phi[j]+Math.PI-sj/2-(rots[j-1]-phi[j])*N[j-1]/N[j]; }
+  }
+  const omegaOf = j => L.w*N[0]/N[j];
+
+  function endlessLevel(r){
+    const k = 2 + (r % 3), n = [];
+    let top = Math.min(12, 7 + Math.floor(r/2) + Math.floor(Math.random()*2));
+    for (let j=0;j<k;j++){ n.push(Math.max(4, top)); top -= 1 + Math.floor(Math.random()*2); }
+    return {n, w:Math.min(2.4, 1.5 + r*0.05), win:Math.max(0.13, 0.22 - r*0.004), flip:r>0, wobble:r>2, boss:(r+1)%5===0};
+  }
+
+  function startLevel(i){
+    shards=[]; exploded=[];
+    if (endless){ round=i; L=endlessLevel(i); } else { level=i; L=LEVELS[i]; }
+    N=L.n; K=N.length; rot0=0; filled=N.map(n=>Array(n).fill(null));
+    active=0; flying=null; dir=1; flipAt=time+2+Math.random()*2;
+    slowUsed=false; slowT=0; lvStats={lost:0,hits:0,perf:0}; makeBonusSlots();
+    if (pendingDouble){ doubleT=pendingDouble; pendingDouble=0; }
+    boss={next:time+2.5, warn:0, pause:0, lockAt:time+1.5, lock:null};
+    layout(); computeRots(); updateHud();
+  }
+  const BONUS = {
+    star:   {icon:'⭐', color:'#ffd23f'},
+    gem:    {icon:'💎', color:'#38e1ff'},
+    clock:  {icon:'⏱️', color:'#9be7ff'},
+    heart:  {icon:'❤️', color:'#ff4f6d'},
+    shield: {icon:'🛡️', color:'#7dff6a'},
+  };
+  function makeBonusSlots(){
+    bonusSlots = N.map(n => Array(n).fill(null));
+    for (let g=0; g<K; g++){
+      const cnt = N[g]>=9 ? 2 : 1;
+      for (let c=0;c<cnt;c++){
+        const i = Math.floor(Math.random()*N[g]); if (bonusSlots[g][i]) continue;
+        const r = Math.random();
+        bonusSlots[g][i] = r<0.42?'star' : r<0.62?'gem' : r<0.78?'clock' : r<0.9?'shield' : (lives<MAX_LIVES?'heart':'star');
+      }
+    }
+    gearPerfect = N.map(()=>true); levelStart = time;
+  }
+  function applyBonus(type, x, y){
+    const B = BONUS[type];
+    burst(x, y, B.color, 26, 260);
+    if (type==='star'){ const pts=500*mult(); score+=pts; floatText(x, y-th*3.2, `⭐ +${pts}`, B.color, 20); }
+    if (type==='gem'){ doubleT=10; floatText(x, y-th*3.2, t('gem1'), B.color, 18); showToast(t('gem2'), B.color, 1200); }
+    if (type==='clock'){ slowUsed=false; floatText(x, y-th*3.2, t('clock'), B.color, 18); }
+    if (type==='heart'){ lives=Math.min(MAX_LIVES, lives+1); floatText(x, y-th*3.2, t('heart'), B.color, 20); }
+    if (type==='shield'){ shield=true; floatText(x, y-th*3.2, t('shield1'), B.color, 20); showToast(t('shield2'), B.color, 1200); }
+    tone(1568,0.25,'sine',0.07); tone(2093,0.3,'sine',0.05,0.08); buzz([15,30,15]);
+  }
+  function retryGear(g){ filled[g]=Array(N[g]).fill(null); gearPerfect[g]=true; flying=null; state='play'; boss.lock=null; updateHud(); }
+  function retryLevel(){ filled=N.map(n=>Array(n).fill(null)); active=0; flying=null; state='play'; boss.lock=null; makeBonusSlots(); updateHud(); }
+
+  function updateHud(){
+    lvlEl.textContent = endless ? t('round',round+1) : t('lvl',level+1,TOTAL);
+    scoreEl.textContent = fmt(score); slowBtn.innerHTML=`<b>⏱</b>${t('slow')}`;
+    heartsEl.innerHTML = Array.from({length:MAX_LIVES},(_,i)=>`<span class="${i<lives?'':'off'}">❤️</span>`).join('');
+    const n = filled[active].filter(Boolean).length;
+    subEl.textContent = `${L.boss?'👹 BOSS · ':''}${t('gear')} ${active+1}/${K} · ${t('tooth')} ${n}/${N[active]}`;
+    dotsEl.innerHTML = endless ? '' : LEVELS.map((lv,i)=>`<i class="${i<level?'done':i===level?'cur':''} ${lv.boss?'boss':''}"></i>`).join('');
+    const ex=[]; if(L.flip) ex.push(t('flip')); if(L.wobble) ex.push(t('wobble')); if(L.boss) ex.push(t('bossHint'));
+    hint.textContent = ex.length ? ex.join(' · ') : t('tapHint');
+    slowBtn.classList.toggle('used', slowUsed);
+    const m = mult();
+    comboEl.textContent = [fever>0 ? `🔥 FEVER x${m*2}` : combo>=3 ? `${t('combo')} ${combo} · x${m}` : '', doubleT>0?'💎 x2':'', shield?'🛡️':''].filter(Boolean).join('  ');
+  }
+  const mult = () => Math.min(5, 1 + Math.floor(combo/3));
+
+  function showToast(text, color, ms=1000){
+    toast.textContent=text; toast.style.color=color; toast.classList.add('show');
+    clearTimeout(showToast.t); showToast.t=setTimeout(()=>toast.classList.remove('show'), ms);
+  }
+  // kart: html + düğmeler [{label, ghost, go}]
+  function showCard(html, buttons, withThemes){
+    box.innerHTML = html + `<div class="btns">${buttons.map((b,i)=>`<button class="btn ${b.ghost?'ghost':''}" data-i="${i}">${b.label}</button>`).join('')}</div>` + (withThemes ? themesHtml() : '');
+    card.classList.remove('hide');
+    box.querySelectorAll('.btn').forEach(el => el.addEventListener('pointerdown', e => {
+      e.preventDefault(); e.stopPropagation(); unlockAudio(); card.classList.add('hide'); buttons[+el.dataset.i].go();
+    }));
+    box.querySelectorAll('.lg').forEach(el => el.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); SAVE.lang=el.dataset.l; persist(); document.documentElement.lang=SAVE.lang; menu(); }));
+    box.querySelectorAll('.tg').forEach(el => el.addEventListener('pointerdown', e => {
+      e.preventDefault(); e.stopPropagation(); unlockAudio(); const k=el.dataset.t;
+      if (k==='music') setMusic(!SAVE.music); else { SAVE[k]=!SAVE[k]; persist(); }
+      el.classList.toggle('on', SAVE[k]); el.textContent = (k==='music'?t('gm'):k==='helper'?t('helper'):t('sfx')) + ': ' + (SAVE[k]?t('on'):t('off'));
+    }));
+    box.querySelectorAll('.lnk').forEach(el => el.addEventListener('pointerdown', e => e.stopPropagation()));
+    box.querySelectorAll('.shr').forEach(el => el.addEventListener('click', e => {
+      if (navigator.share && !/wv\)/.test(navigator.userAgent)){ e.preventDefault(); navigator.share({text:t('shareText')}).catch(()=>{}); }
+      SAVE.shareDay=new Date().toISOString().slice(0,10); SAVE.bonusShield=true; persist();
+      setTimeout(()=>{ showToast(t('shareDone'),'#7dff6a',2200); if (state==='menu') menu(); }, 400);
+    }));
+    box.querySelectorAll('.th').forEach(el => el.addEventListener('pointerdown', e => {
+      e.preventDefault(); e.stopPropagation(); const k=el.dataset.k, t=THEMES[k];
+      if (totalStars() < t.need){ el.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:200}); return; }
+      SAVE.theme=k; T=t; applyTheme(); persist(); box.querySelectorAll('.th').forEach(x=>x.classList.toggle('sel', x.dataset.k===k));
+    }));
+  }
+  const STARS_TXT = n => t('stars', n);
+  function themesHtml(){
+    const ts=totalStars();
+    const web = location.protocol.startsWith('http');
+    const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+    const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+    const getApp = ios
+      ? (standalone ? '' : `<div class="small" style="color:#dfe3ff;font-size:13px">${t('ios')}</div>`)
+      : `<a class="lnk" style="background:#3ddc84;color:#0b0d1a;display:block" href="https://xenosmart.de/spiel/BukoGames.apk" download>${t('apk')}</a>`;
+    const extra = web ? `<div class="music">${getApp}
+      <div class="small"><a href="https://xenosmart.de/" style="color:#8a90b8">XenoSmart</a> · <a href="https://xenosmart.de/impressum.html" style="color:#8a90b8">Impressum</a> · <a href="https://xenosmart.de/datenschutz.html" style="color:#8a90b8">Datenschutz</a></div></div>` : '';
+    const today=new Date().toISOString().slice(0,10);
+    const shareBox = SAVE.shareDay===today
+      ? `<div class="small" style="color:#7dff6a;font-weight:800;font-size:13px;margin-top:12px">${t('shareReady')}</div>`
+      : `<a class="lnk shr" style="background:linear-gradient(90deg,#25d366,#38e1ff);color:#0b0d1a;display:block;margin-top:12px" href="https://wa.me/?text=${encodeURIComponent(t('shareText'))}" target="_blank" rel="noopener">${t('share')}</a>`;
+    const helperBtn = shareBox + `<div class="row" style="margin-top:12px"><button class="tg ${SAVE.helper?'on':''}" data-t="helper">${t('helper')}: ${SAVE.helper?t('on'):t('off')}</button></div>`;
+    return helperBtn + musicHtml() + extra + `<div class="themes">${Object.entries(THEMES).map(([k,t])=>`<div class="th ${SAVE.theme===k?'sel':''} ${ts<t.need?'lock':''}" data-k="${k}"><i style="background:linear-gradient(135deg,${t.a},${t.b})"></i>${ts<t.need?'🔒'+t.need+'★':I18N[SAVE.lang].th[k]}</div>`).join('')}</div><div class="small">${STARS_TXT(ts)}</div><div class="small" style="margin-top:12px;opacity:.85;font-weight:800;letter-spacing:.5px">🦎 Buko Games</div><div class="small" style="opacity:.75;font-size:11px">🎵 Music: Created in collaboration with ElevenLabs</div>`;
+  }
+  function musicHtml(){
+    return `<div class="music"><div style="font-weight:800;font-size:14px">${t('music')}</div>
+      <div class="row"><button class="tg ${SAVE.music?'on':''}" data-t="music">${t('gm')}: ${SAVE.music?t('on'):t('off')}</button><button class="tg ${SAVE.sfx?'on':''}" data-t="sfx">${t('sfx')}: ${SAVE.sfx?t('on'):t('off')}</button></div>
+      <div class="row"><a class="lnk" style="background:#ff0033" href="https://music.youtube.com" target="_blank" rel="noopener">YT Music</a><a class="lnk" style="background:#1db954" href="https://open.spotify.com" target="_blank" rel="noopener">Spotify</a><a class="lnk" style="background:#c4302b" href="https://www.youtube.com" target="_blank" rel="noopener">YouTube</a></div>
+      <div class="small" style="margin-top:2px">${t('musicNote')}</div></div>`;
+  }
+  const starsHtml = n => `<div class="stars">${[0,1,2].map(i=>`<span class="${i<n?'':'off'}">⭐</span>`).join('')}</div>`;
+
+  // ================= SES =================
+  // Telefonda Spotify / YouTube Music arkada çalarken oyun sesleri onu durdurmasın, karışsın
+  try{ if (navigator.audioSession) navigator.audioSession.type = 'ambient'; }catch(e){}
+  let ac, musGain, musTimer=null, musNext=0, musStep=0;
+
+  // ---- 🔇 tam sessiz (tüm oyunlarda ortak) ----
+  let MUTED=false; try{ MUTED=localStorage.getItem('bukoMute')==='1'; }catch(e){}
+  const MUTE_TXT={tr:'🔇 Tüm sesler kapalı',de:'🔇 Alle Töne aus',en:'🔇 All sound off'};
+  function setMute(m){ MUTED=m; try{ localStorage.setItem('bukoMute', m?'1':'0'); }catch(e){}
+    try{ if (ac){ if (m) ac.suspend&&ac.suspend(); else { ac.resume&&ac.resume(); if (SAVE.music) musicStart(); } } }catch(e){} }
+  function unlockAudio(){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); if (MUTED){ ac.suspend&&ac.suspend(); return; } ac.resume&&ac.resume(); if (SAVE.music && !musTimer) musicStart(); }catch(e){} }
+  // ---- dahili sakin "lo-fi" müzik: Am – F – C – G, 84 BPM ----
+  const CHORDS=[[220,261.6,329.6],[174.6,220,261.6],[130.8,164.8,196],[196,246.9,293.7]];
+  const MEL=[659.3,523.3,587.3,523.3,440,523.3,392,440];
+  function mNote(f,t0,d,type,v,dest){ const o=ac.createOscillator(), g=ac.createGain(), lp=ac.createBiquadFilter();
+    o.type=type; o.frequency.value=f; lp.type='lowpass'; lp.frequency.value=1400;
+    g.gain.setValueAtTime(0.0001,t0); g.gain.linearRampToValueAtTime(v,t0+Math.min(0.08,d/3)); g.gain.exponentialRampToValueAtTime(0.0001,t0+d);
+    o.connect(lp).connect(g).connect(dest); o.start(t0); o.stop(t0+d+0.05); }
+  function mKick(t0){ const o=ac.createOscillator(), g=ac.createGain(); o.frequency.setValueAtTime(110,t0); o.frequency.exponentialRampToValueAtTime(40,t0+0.15);
+    g.gain.setValueAtTime(0.5,t0); g.gain.exponentialRampToValueAtTime(0.0001,t0+0.25); o.connect(g).connect(musGain); o.start(t0); o.stop(t0+0.3); }
+  function mHat(t0){ const len=Math.floor(ac.sampleRate*0.04), b=ac.createBuffer(1,len,ac.sampleRate), ch=b.getChannelData(0);
+    for(let i=0;i<len;i++) ch[i]=(Math.random()*2-1)*(1-i/len); const s=ac.createBufferSource(), f=ac.createBiquadFilter(), g=ac.createGain();
+    f.type='highpass'; f.frequency.value=7000; g.gain.value=0.12; s.buffer=b; s.connect(f).connect(g).connect(musGain); s.start(t0); }
+  // ---- ElevenLabs ile üretilmiş özel müzik (yoksa sentez müziğe düşer) ----
+  const MUSIC_URL = 'music-gears.mp3';
+  let musicBuf=null, musicTried=false, musicSrc=null, musFilter=null, musMode='';
+  function loadMusic(cb){
+    musicTried=true;
+    try{
+      const x=new XMLHttpRequest(); x.open('GET', MUSIC_URL); x.responseType='arraybuffer';
+      x.onload=()=>{ if ((x.status===200||x.status===0) && x.response && x.response.byteLength>1000)
+          ac.decodeAudioData(x.response, b=>{ musicBuf=b; cb(true); }, ()=>cb(false)); else cb(false); };
+      x.onerror=()=>cb(false); x.send();
+    }catch(e){ cb(false); }
+  }
+  function playBuf(){
+    if (!musGain){ musGain=ac.createGain(); musGain.gain.value=0.0001; mkAnalyser(); }
+    if (!musFilter){ musFilter=ac.createBiquadFilter(); musFilter.type='lowpass'; musFilter.frequency.value=18000; musFilter.connect(musGain); }
+    musicSrc=ac.createBufferSource(); musicSrc.buffer=musicBuf; musicSrc.loop=true; musicSrc.connect(musFilter); musicSrc.start();
+    musGain.gain.setTargetAtTime(VOLG(), ac.currentTime, 0.4); musTimer='buf';
+  }
+  function musicAdapt(){
+    if (!musFilter || !ac) return;
+    const mode = slowT>0 ? 'slow' : fever>0 ? 'fever' : 'normal';
+    if (mode===musMode) return; musMode=mode;
+    musFilter.frequency.setTargetAtTime(mode==='slow'?600:18000, ac.currentTime, 0.15);
+    musGain.gain.setTargetAtTime(mode==='fever'?VOLG()*1.3:VOLG(), ac.currentTime, 0.2);
+    if (musicSrc) musicSrc.playbackRate.setTargetAtTime(mode==='slow'?0.85:1, ac.currentTime, 0.2);
+  }
+
+  // ---- müzik ses seviyesi: 1 düşük · 2 orta · 3 yüksek ----
+  const VOLS=[0,0.14,0.30,0.55], VICON=['','🔈','🔉','🔊'];
+  const VOLG=()=>VOLS[SAVE.vol||1];
+  function volIcon(){ const b=document.getElementById('vol'); if(!b) return; b.textContent= MUTED ? '🔇' : VICON[SAVE.vol||1]; b.classList.toggle('off',!SAVE.music && !MUTED); b.classList.toggle('muted', MUTED); const mb=document.getElementById('mus'); if (mb) mb.classList.toggle('off', MUTED || !SAVE.music); }
+  function applyVol(){ try{ if (musGain && ac && SAVE.music) musGain.gain.setTargetAtTime(VOLG(), ac.currentTime, 0.15); }catch(e){} }
+  let analyser=null, freq=null, beat=0, waves=[];
+  function mkAnalyser(){ analyser=ac.createAnalyser(); analyser.fftSize=128; analyser.smoothingTimeConstant=0.75; musGain.connect(analyser); analyser.connect(ac.destination); freq=new Uint8Array(analyser.frequencyBinCount); }
+  function musicStart(){
+    if (!ac || musTimer) return;
+    if (musicBuf){ playBuf(); return; }
+    if (!musicTried){ musTimer='loading'; loadMusic(ok=>{ musTimer=null; if (!SAVE.music) return; ok ? playBuf() : musicSynth(); }); return; }
+    musicSynth();
+  }
+  function musicSynth(){
+    if (!ac || musTimer) return;
+    if (!musGain){ musGain=ac.createGain(); musGain.gain.value=VOLG()*0.6; mkAnalyser(); }
+    musGain.gain.setTargetAtTime(0.22, ac.currentTime, 0.3);
+    const beat = 60/84/2; musNext = ac.currentTime+0.1;
+    musTimer = setInterval(()=>{
+      while (musNext < ac.currentTime+0.4){
+        const st=musStep%32, bar=Math.floor(musStep/8)%4, t0=musNext;
+        if (st%8===0) CHORDS[bar].forEach(f=>mNote(f,t0,beat*8,'triangle',0.06,musGain));
+        if (st%8===0) mNote(CHORDS[bar][0]/2,t0,beat*7,'sine',0.18,musGain);
+        if (st%4===0) mKick(t0);
+        if (st%2===1) mHat(t0);
+        if (st%2===0 && Math.random()<0.45) mNote(MEL[(musStep/2+bar)%8|0], t0, beat*1.6, 'sine', 0.045, musGain);
+        musNext += beat; musStep++;
+      }
+    }, 100);
+  }
+  function musicStop(){ if (musicSrc){ try{ const s0=musicSrc; musGain.gain.setTargetAtTime(0.0001, ac.currentTime, 0.2); setTimeout(()=>{ try{s0.stop();}catch(e){} },600); }catch(e){} musicSrc=null; musTimer=null; return; } if (musTimer && musTimer!=='loading'){ clearInterval(musTimer); } musTimer=null; if (musGain && ac) musGain.gain.setTargetAtTime(0.0001, ac.currentTime, 0.2); }
+  function setMusic(on){ SAVE.music=on; persist(); on ? (unlockAudio(), musicStart()) : musicStop(); musBtn.classList.toggle('off', !on); musBtn.textContent = on?'🎵':'🔇'; volIcon(); }
+  function tone(f, d, type='sine', v=0.07, when=0){
+    try{ if(!ac || !SAVE.sfx) return; const t0=ac.currentTime+when;
+      const o=ac.createOscillator(), g=ac.createGain(); o.type=type; o.frequency.setValueAtTime(f,t0);
+      g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(v,t0+0.005); g.gain.exponentialRampToValueAtTime(0.0001,t0+d);
+      o.connect(g).connect(ac.destination); o.start(t0); o.stop(t0+d+0.02);
+    }catch(e){}
+  }
+  function noise(d, v=0.08, hp=2000){
+    try{ if(!ac || !SAVE.sfx) return; const len=Math.floor(ac.sampleRate*d), buf=ac.createBuffer(1,len,ac.sampleRate), ch=buf.getChannelData(0);
+      for(let i=0;i<len;i++) ch[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+      const s=ac.createBufferSource(), f=ac.createBiquadFilter(), g=ac.createGain(); f.type='highpass'; f.frequency.value=hp; g.gain.value=v;
+      s.buffer=buf; s.connect(f).connect(g).connect(ac.destination); s.start();
+    }catch(e){}
+  }
+  const sfx = {
+    shoot(){ tone(300,0.06,'triangle',0.05); },
+    click(c){ noise(0.05,0.12,3000); tone(660*Math.pow(1.06,Math.min(c,12)),0.08,'triangle',0.06); },
+    perfect(c){ noise(0.04,0.1,4000); const b=1320*Math.pow(1.06,Math.min(c,12)); tone(b,0.5,'sine',0.08); tone(b*1.5,0.4,'sine',0.04); },
+    miss(){ tone(140,0.35,'sawtooth',0.08); noise(0.2,0.1,300); },
+    gear(){ [880,1175,1568].forEach((f,i)=>tone(f,0.18,'triangle',0.06,i*0.07)); },
+    win(){ [784,988,1175,1568,1976].forEach((f,i)=>tone(f,0.22,'triangle',0.07,i*0.09)); },
+    heart(){ tone(70,0.12,'sine',0.18); tone(60,0.14,'sine',0.14,0.16); },
+    warn(){ tone(220,0.12,'square',0.04); },
+    fever(){ [523,659,784,1047,1319].forEach((f,i)=>tone(f,0.12,'square',0.04,i*0.05)); },
+  };
+  const buzz = p => { try{ navigator.vibrate&&navigator.vibrate(p); }catch(e){} };
+
+  // ================= GİRDİ =================
+  function tap(e){
+    e.preventDefault(); unlockAudio();
+    if (state!=='play' || flying) return;
+    flying={g:active, t:0, color:nextColor()}; sfx.shoot();
+  }
+  const nextColor = () => T.pal[(filled[active].filter(Boolean).length + active) % T.pal.length];
+  cv.addEventListener('pointerdown', tap);
+  document.getElementById('sw').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); try{persist();}catch(_){} document.getElementById('picker').style.display='flex'; });
+  document.getElementById('picker').addEventListener('pointerdown', e => { if (e.target.id==='picker') document.getElementById('picker').style.display='none'; else e.stopPropagation(); });
+  musBtn.classList.toggle('off', !SAVE.music); musBtn.textContent = SAVE.music?'🎵':'🔇';
+  volIcon();
+  document.getElementById('vol').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); unlockAudio();
+    if (MUTED){ setMute(false); SAVE.vol=1; persist(); applyVol(); showToast(VICON[1],'#ffffff',700); } else if (!SAVE.music){ setMusic(true); showToast(VICON[SAVE.vol||1],'#ffffff',600); } else if ((SAVE.vol||1)<3){ SAVE.vol=(SAVE.vol||1)+1; persist(); applyVol(); showToast(VICON[SAVE.vol],'#ffffff',600); } else { setMute(true); showToast(MUTE_TXT[SAVE.lang]||MUTE_TXT.tr,'#ff8a9a',1100); } volIcon(); musMode=''; });
+  musBtn.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); setMusic(!SAVE.music); });
+  slowBtn.addEventListener('pointerdown', e => {
+    e.preventDefault(); e.stopPropagation(); unlockAudio();
+    if (state!=='play' || slowUsed) return;
+    slowUsed=true; slowT=2.2; slowBtn.classList.add('on'); tone(400,0.6,'sine',0.06); tone(200,0.6,'sine',0.05); updateHud();
+  });
+  addEventListener('keydown', e => {
+    // fiziksel tuş konumu (e.code): QWERTY / QWERTZ / Türkçe klavyede aynı çalışır
+    const k=(e.key||'').toLocaleLowerCase('tr');
+    const shoot = ['Space','Enter','NumpadEnter','KeyW','ArrowUp','ArrowDown','KeyJ'].includes(e.code) || k==='w';
+    if (shoot){ e.preventDefault(); if (card.classList.contains('hide')) tap(e); else box.querySelector('.btn')?.dispatchEvent(new Event('pointerdown')); return; }
+    if (e.code==='KeyS' || k==='s' || e.code==='ShiftLeft') slowBtn.dispatchEvent(new Event('pointerdown'));
+    if (e.code==='KeyM' || k==='m') setMusic(!SAVE.music);
+    if (e.code==='KeyB' || k==='b'){ persist(); location.href='blok.html'; }
+  });
+
+  const norm = a => { a%=Math.PI*2; if(a<-Math.PI) a+=Math.PI*2; if(a>Math.PI) a-=Math.PI*2; return a; };
+  function speedFactor(){
+    let f = L.wobble ? 1+0.25*Math.sin(time*1.1) : 1;
+    if (slowT>0) f*=0.35;
+    if (boss.pause>0) f=0;
+    return f;
+  }
+
+  // ================= EFEKTLER =================
+  function burst(x,y,color,n=18,sp=220){
+    for(let i=0;i<n;i++){ const a=Math.random()*Math.PI*2, s=60+Math.random()*sp;
+      particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:0.6+Math.random()*0.4,color,r:1.5+Math.random()*2.5}); }
+  }
+  const floatText = (x,y,text,color,size=18) => floaters.push({x,y,text,color,size,life:1});
+  function zap(g){ for (const j of [g-1,g+1]) if (j>=0 && j<K) arcs.push({a:g,b:j,life:0.3}); }
+
+  // ================= İSABET =================
+  function tolOf(g){ const step=Math.PI*2/N[g]; let tol=Math.min(step*0.45, L.win*omegaOf(g)/2); if (fever>0) tol*=1.25; return tol; }
+  // ---------- ZAMANLAMA YARDIMCISI ----------
+  let helperIn=false;
+  function drawHelper(){
+    if (!SAVE.helper || (state!=='play' && state!=='fail')) return;
+    const g=active, r=R[g], n=N[g], step=Math.PI*2/n, tol=tolOf(g), base=LB[g];
+    // en yakın boş (kilitsiz) yuva ve hedefe uzaklığı
+    let best=9, ready=false;
+    const sgn = Math.sign(dir*(g%2? -1:1)) || 1;
+    for (let i=0;i<n;i++){
+      if (filled[g][i]) continue;
+      if (boss.lock && boss.lock.g===g && boss.lock.i===i && time<boss.lock.until) continue;
+      const d=norm(rots[g]+i*step-base);
+      if (Math.abs(d)<=tol) ready=true;
+      const ahead = ((-d*sgn)%(Math.PI*2)+Math.PI*2)%(Math.PI*2);   // dönme yönünde kalan açı
+      if (ahead<best) best=ahead;
+    }
+    const rIn=r-2, rOut=r+th*1.15;
+    ctx.save(); ctx.translate(cx[g],cy[g]);
+    // isabet bölgesi (yeşil) ve PERFECT bölgesi (altın)
+    ctx.globalAlpha = ready ? 0.75 : 0.4;
+    ctx.fillStyle = ready ? '#5dff8a' : 'rgba(255,255,255,.6)';
+    ctx.beginPath(); ctx.arc(0,0,rOut,base-tol,base+tol); ctx.arc(0,0,rIn,base+tol,base-tol,true); ctx.closePath(); ctx.fill();
+    ctx.globalAlpha = ready ? 0.95 : 0.55; ctx.fillStyle='#ffd23f';
+    const pt=tol*0.38; ctx.beginPath(); ctx.arc(0,0,rOut+th*0.25,base-pt,base+pt); ctx.arc(0,0,rOut,base+pt,base-pt,true); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    // hazır olma halkası: yuva yaklaştıkça dolar
+    const [lx,ly]=LP(g,3.7), rr=th*1.6, [hux,huy]=LU(g);
+    const prog = Math.max(0, Math.min(1, 1 - (best-tol)/(step*1.2)));
+    ctx.save(); ctx.lineWidth=4; ctx.lineCap='round';
+    ctx.strokeStyle='rgba(255,255,255,.18)'; ctx.beginPath(); ctx.arc(lx,ly,rr,0,Math.PI*2); ctx.stroke();
+    ctx.strokeStyle = ready ? '#5dff8a' : T.a; ctx.shadowColor=ctx.strokeStyle; ctx.shadowBlur= ready?18:8;
+    ctx.beginPath(); ctx.arc(lx,ly,rr,-Math.PI/2,-Math.PI/2+Math.PI*2*(ready?1:prog)); ctx.stroke();
+    if (ready){ ctx.font=`900 ${Math.max(13,th*0.75)}px 'Bricolage Grotesque',sans-serif`; ctx.textAlign='center'; ctx.fillStyle='#5dff8a'; ctx.fillText(t('now'), Math.max(th*2.2, Math.min(W-th*2.2, lx)), ly+rr+th*1.1); }
+    ctx.restore();
+    if (ready && !helperIn) tone(1760,0.05,'sine',0.035);
+    helperIn = ready;
+  }
+  function land(){
+    const g=flying.g, n=N[g], step=Math.PI*2/n;
+    let bi=0, bd=9;
+    for(let i=0;i<n;i++){ const d=Math.abs(norm(rots[g]+i*step-LB[g])); if(d<bd){bd=d; bi=i;} }
+    const tol=tolOf(g);
+    const [hitX,hitY]=LP(g,0.5), [ux,uy]=LU(g);
+    const locked = boss.lock && boss.lock.g===g && boss.lock.i===bi && time<boss.lock.until;
+    if (bd<=tol && !filled[g][bi] && !locked){
+      const perfect = bd <= tol*0.38;
+      filled[g][bi]=flying.color; flying=null; combo++; lvStats.hits++;
+      let pts = (perfect?250:100) * mult() * (fever>0?2:1) * (doubleT>0?2:1);
+      if (!perfect) gearPerfect[g]=false;
+      score += pts;
+      if (perfect){
+        lvStats.perf++; perfStreak++;
+        floatText(hitX, hitY-th*2.2, 'PERFECT!', T.b, 22); burst(hitX,hitY,'#ffffff',10,160);
+        sfx.perfect(combo); buzz(20); zap(g);
+        if (perfStreak>=5 && fever<=0){ fever=5; perfStreak=0; sfx.fever(); showToast(t('fever'), '#ffb703', 1400); buzz([30,30,30]); }
+      } else { perfStreak=0; sfx.click(combo); buzz(10); }
+      floatText(hitX+th*2.2, hitY-th*0.8, '+'+pts, '#ffffff', 15);
+      burst(hitX,hitY,filled[g][bi],14); waves.push({x:hitX,y:hitY,r:th*0.5,life:0.45,c:perfect?'#ffd23f':'#ffffff'});
+      if (bonusSlots[g] && bonusSlots[g][bi]){ applyBonus(bonusSlots[g][bi], hitX, hitY); bonusSlots[g][bi]=null; }
+      if (filled[g].every(Boolean) && gearPerfect[g]){ score+=1000; floatText(cx[g], cy[g], t('perfectGear'), '#fff1b8', 20); burst(cx[g],cy[g],'#fff1b8',40,320); }
+      if (filled[g].every(Boolean)){
+        waves.push({x:cx[g],y:cy[g],r:R[g],life:0.7,c:'#7dff6a'});
+        if (g<K-1){ active=g+1; score+=300; showToast(t('nextGear'), '#7dff6a', 1100); sfx.gear(); burst(cx[g],cy[g],'#7dff6a',30); boss.lock=null; }
+        else levelDone();
+      }
+      updateHud();
+    } else {
+      flying.miss=true; flying.mx=hitX+ux*th*0.3; flying.my=hitY+uy*th*0.3; flying.vx=ux*220+(Math.random()-.5)*200; flying.vy=uy*220-200; flying.spin=0;
+      if (shield){
+        shield=false; flying.miss=true; flying.mx=hitX+ux*th*0.3; flying.my=hitY+uy*th*0.3; flying.vx=ux*220+(Math.random()-.5)*200; flying.vy=uy*220-200; flying.spin=0;
+        combo=0; perfStreak=0; burst(hitX,hitY,'#7dff6a',24); showToast(t('shieldSaved'), '#7dff6a', 1000); sfx.miss(); updateHud();
+        setTimeout(()=>{ flying=null; }, 600); return;
+      }
+      state='fail'; shake=0.4; lives--; lvStats.lost++; combo=0; perfStreak=0;
+      burst(hitX,hitY,'#ff4d6d',22); sfx.miss(); buzz([70,40,70]); updateHud();
+      const why = locked ? t('locked') : (filled[g][bi] && bd<=tol) ? t('full') : t('wrong');
+      if (lives>0){ showToast(why+t('lifeLost'), '#ff6b8a', 1100); setTimeout(()=>retryGear(g), 1000); }
+      else setTimeout(gameOver, 900);
+    }
+  }
+
+  function gameOver(){
+    state='over';
+    if (endless){
+      const rec = score > SAVE.hi; if (rec){ SAVE.hi=score; persist(); }
+      showCard(`<h1>${t('endTitle')}</h1><p>${t('endText',round+1,fmt(score),rec,fmt(SAVE.hi))}</p>`,
+        [{label:t('again'), go:()=>startEndless()},{label:t('menu'), ghost:true, go:menu}]);
+    } else {
+      showCard(`<h1>${t('outTitle')}</h1><p>${t('outText',level+1)}</p>`,
+        [{label:t('retry'), go:()=>{ lives=MAX_LIVES; startLevel(level); state='play'; }},{label:t('menu'), ghost:true, go:menu}]);
+    }
+  }
+
+  // ---------- ÇARK PATLAMASI (hafif ama gösterişli) ----------
+  let shards=[], exploded=[];
+  const LITE = (navigator.hardwareConcurrency||4) <= 4;
+  function explodeGears(){
+    for (let g=0; g<K; g++){
+      setTimeout(()=>{
+        if (state!=='levelup') return;
+        exploded[g]=true;
+        const r=R[g], n=N[g], step=Math.PI*2/n, col=T.body, pc=T.pal[g%T.pal.length];
+        // gövde dilimleri
+        const parts = LITE ? 5 : 7, off=Math.random()*Math.PI;
+        for (let k=0;k<parts;k++){
+          const a0=off+k*Math.PI*2/parts, a1=a0+Math.PI*2/parts, mid=(a0+a1)/2, sp=(180+Math.random()*220)*(r/80);
+          shards.push({t:'w', x:cx[g], y:cy[g], vx:Math.cos(mid)*sp, vy:Math.sin(mid)*sp-160, rot:0, vr:(Math.random()-.5)*6, a0, a1, r, c:col[k%2?0:2], e:pc, life:1.25});
+        }
+        // dişler
+        for (let i=0;i<n;i++){
+          const a=rots[g]+i*step, sp=260+Math.random()*260;
+          shards.push({t:'d', x:cx[g]+Math.cos(a)*(r+th*0.5), y:cy[g]+Math.sin(a)*(r+th*0.5), vx:Math.cos(a)*sp, vy:Math.sin(a)*sp-200, rot:a, vr:(Math.random()-.5)*10, c:filled[g][i]||pc, life:1.4});
+        }
+        waves.push({x:cx[g],y:cy[g],r:r*0.4,life:0.6,c:'#ffffff'}); waves.push({x:cx[g],y:cy[g],r:r*0.2,life:0.8,c:pc});
+        burst(cx[g],cy[g],pc, LITE?14:24, 320); burst(cx[g],cy[g],'#ffffff', LITE?6:10, 200);
+        flashT=0.18; shake=Math.max(shake,0.3);
+        noise(0.35,0.16,200); tone(90,0.4,'sine',0.16); tone(55,0.5,'sine',0.12,0.05); tone(1568+g*220,0.25,'triangle',0.05,0.08);
+        buzz(35);
+      }, 150+g*170);
+    }
+  }
+  function updateShards(dt){
+    for (const p of shards){ p.life-=dt; p.vy+=900*dt; p.vx*=0.985; p.x+=p.vx*dt; p.y+=p.vy*dt; p.rot+=p.vr*dt; }
+    shards=shards.filter(p=>p.life>0 && p.y<H+200);
+    if (flashT>0) flashT-=dt;
+  }
+  function drawShards(){
+    for (const p of shards){
+      const a=Math.min(1,p.life*1.4);
+      ctx.save(); ctx.globalAlpha=a; ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      if (p.t==='w'){
+        const gr=ctx.createLinearGradient(-p.r,-p.r,p.r,p.r); gr.addColorStop(0,p.c); gr.addColorStop(1,shade(p.c,-0.3));
+        ctx.fillStyle=gr; ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,p.r,p.a0,p.a1); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle=p.e; ctx.lineWidth=2.5; ctx.stroke();      // parlayan kırık kenar
+      } else { toothShape(-th/2, toothW()); fillTooth(p.c, -th/2, false); }
+      ctx.restore();
+    }
+    if (flashT>0){ ctx.fillStyle=`rgba(255,255,255,${flashT*1.6})`; ctx.fillRect(0,0,W,H); }
+  }
+  let flashT=0;
+  function levelDone(){
+    state='levelup'; sfx.win(); buzz([20,40,20,40,60]);
+    explodeGears();
+    const totalTeeth = N.reduce((a,b)=>a+b,0), secs = time-levelStart;
+    const speed = Math.max(0, Math.round((totalTeeth*1.6 - secs)*80));
+    if (speed>0) floatText(W/2, H*0.3, t('speed',speed), '#ffd23f', 22);
+    const bonus = lives*500 + (L.boss?1500:0) + speed; score+=bonus;
+    if (endless){
+      updateHud();
+      showToast(t('roundDone',round+1,bonus), '#7dff6a', 1200);
+      setTimeout(()=>{ if (round%3===2 && lives<MAX_LIVES){ lives++; showToast(t('plusLife'),'#ff6b8a',900); } startLevel(round+1); state='play'; }, 1700);
+      return;
+    }
+    const pr = lvStats.perf/Math.max(1,lvStats.hits);
+    const st = lvStats.lost===0 && pr>=0.4 ? 3 : lvStats.lost<=1 ? 2 : 1;
+    SAVE.stars[level]=Math.max(SAVE.stars[level]||0, st);
+    if (level+1>SAVE.lvl) SAVE.lvl=Math.min(TOTAL-1, level+1);
+    if (level===TOTAL-1) SAVE.done=true;
+    persist(); updateHud();
+    setTimeout(()=>{
+      const tip = st<3 ? `<div class="small">${t('tip3')}</div>` : '';
+      if (level===TOTAL-1){
+        showCard(`<h1>${t('champTitle')}</h1>${starsHtml(st)}<p>${t('champText',fmt(score))}</p>${tip}`,
+          [{label:t('endless'), go:startEndless},{label:t('menu'), ghost:true, go:menu}]);
+      } else {
+        const nx=LEVELS[level+1], notes=[];
+        if (nx.boss) notes.push(t('nBoss'));
+        if (nx.n.length>K) notes.push(t('nGears',nx.n.length));
+        if (nx.flip && !L.flip) notes.push(t('nFlip'));
+        if (nx.wobble && !L.wobble) notes.push(t('nWob'));
+        lives=MAX_LIVES;
+        showCard(`<h1>${t('lvlDone',level+1)}</h1>${starsHtml(st)}<p>${t('lvlScore',bonus,fmt(score))}<br>${notes.join('<br>')||t('nHarder')}</p>${tip}`,
+          [{label:t('spinBtn'), go:()=>luckyWheel(()=>{ startLevel(level+1); state='play'; })},
+           {label:t('skipTo',level+2), ghost:true, go:()=>{ startLevel(level+1); state='play'; }},{label:t('replay'), ghost:true, go:()=>{ startLevel(level); state='play'; }}]);
+      }
+    }, 1500);
+  }
+
+  // ---------- ŞANS ÇARKI ----------
+  const PRIZES = [
+    {t:'+500',  c:'#38e1ff', f:()=>{ score+=500; }},
+    {t:'🛡️',    c:'#7dff6a', f:()=>{ shield=true; }},
+    {t:'+1000', c:'#ff4fd8', f:()=>{ score+=1000; }},
+    {t:'x2',    c:'#ffd23f', f:()=>{ pendingDouble=15; }},
+    {t:'+250',  c:'#9b6bff', f:()=>{ score+=250; }},
+    {t:'+2000', c:'#ff8c42', f:()=>{ score+=2000; }},
+    {t:'🔥',    c:'#ff6b6b', f:()=>{ fever=6; }},
+    {t:'+750',  c:'#6fd3ff', f:()=>{ score+=750; }},
+  ];
+  const PRIZE_TXT = {'+500':'500 puan','🛡️':'Kalkan: bir hata affedilir','+1000':'1000 puan','x2':'Sonraki seviyede 15 sn çift puan','+250':'250 puan','+2000':'2000 puan 🎉','🔥':'Sonraki seviye FEVER ile başlar','+750':'750 puan'};
+  function luckyWheel(after){
+    const n=PRIZES.length, seg=360/n;
+    const grad = PRIZES.map((p,i)=>`${p.c} ${i*seg}deg ${(i+1)*seg}deg`).join(',');
+    const labels = PRIZES.map((p,i)=>`<div style="position:absolute;left:50%;top:50%;transform:rotate(${i*seg+seg/2}deg) translateY(-92px) rotate(${-(i*seg+seg/2)}deg) translate(-50%,-50%);font-weight:900;font-size:17px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)">${p.t}</div>`).join('');
+    box.innerHTML = `<h1>${t('wheelTitle')}</h1><p>${t('wheelText')}</p>
+      <div style="position:relative;width:250px;height:250px;margin:6px auto 14px">
+        <div style="position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:24px solid #fff;z-index:2;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))"></div>
+        <div id="wheel" style="position:absolute;inset:0;border-radius:50%;background:conic-gradient(${grad});border:6px solid rgba(255,255,255,.85);box-shadow:0 0 30px var(--b),inset 0 0 20px rgba(0,0,0,.35);transition:transform 4.2s cubic-bezier(.12,.75,.18,1)">${labels}
+          <div style="position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#8a93d6);box-shadow:0 0 12px rgba(0,0,0,.4)"></div></div>
+      </div><p id="wres" style="min-height:22px;font-weight:800;color:#fff"></p><div class="btns"><button class="btn" id="wbtn">${t('spin')}</button></div>`;
+    card.classList.remove('hide');
+    const wheel=box.querySelector('#wheel'), btn=box.querySelector('#wbtn'), res=box.querySelector('#wres');
+    let spun=false;
+    const spin = e => {
+      e.preventDefault(); e.stopPropagation(); unlockAudio();
+      if (spun){ card.classList.add('hide'); after(); return; }
+      spun=true; btn.textContent='...'; btn.disabled=true;
+      const k=Math.floor(Math.random()*n), target = 360*6 + (360 - (k*seg+seg/2));
+      wheel.style.transform=`rotate(${target}deg)`;
+      let ticks=0; const tk=setInterval(()=>{ tone(900+Math.random()*300,0.03,'square',0.03); if(++ticks>40) clearInterval(tk); }, 95);
+      setTimeout(()=>{
+        PRIZES[k].f(); updateHud(); sfx.win(); buzz([30,40,30]);
+        res.innerHTML = t('won', `<span style="color:${PRIZES[k].c}">${t('prize')[PRIZES[k].t]}</span>`);
+        btn.disabled=false; btn.textContent=t('toLevel',level+2);
+      }, 4300);
+    };
+    btn.addEventListener('pointerdown', spin); wheel.addEventListener('pointerdown', e=>{ if(!spun) spin(e); });
+  }
+  // ---------- GÜNLÜK BONUS ----------
+  function dailyBonus(){
+    const today = new Date().toISOString().slice(0,10);
+    if (SAVE.lastDay === today) return 0;
+    const y = new Date(Date.now()-864e5).toISOString().slice(0,10);
+    SAVE.streak = SAVE.lastDay===y ? (SAVE.streak||0)+1 : 1; SAVE.lastDay = today;
+    SAVE.bank = (SAVE.bank||0) + 500*Math.min(SAVE.streak,7); persist();
+    return 500*Math.min(SAVE.streak,7);
+  }
+  const useBonusShield = () => { if (SAVE.bonusShield){ SAVE.bonusShield=false; persist(); setTimeout(()=>showToast('🛡️','#7dff6a',900),300); return true; } return false; };
+  const takeBank = () => { const b=SAVE.bank||0; SAVE.bank=0; persist(); return b; };
+  function startEndless(){ endless=true; lives=MAX_LIVES; score=takeBank(); shield=useBonusShield(); combo=0; fever=0; startLevel(0); state='play'; }
+  function startCampaign(i){ endless=false; lives=MAX_LIVES; combo=0; fever=0; score=takeBank(); shield=useBonusShield(); startLevel(i); state='play'; }
+  let dbShown=0;
+  function menu(){
+    const db = dailyBonus(); if (db) dbShown = db;
+    state='menu'; endless=false; startLevel(SAVE.lvl);
+    const btns=[{label: SAVE.lvl>0 ? t('cont',SAVE.lvl+1) : t('start'), go:()=>startCampaign(SAVE.lvl)}];
+    if (SAVE.lvl>0) btns.push({label:t('from1'), ghost:true, go:()=>startCampaign(0)});
+    btns.push({label: SAVE.done ? t('endlessRec',fmt(SAVE.hi)) : t('endlessLock'), ghost:true, go: SAVE.done ? startEndless : menu});
+    btns.push({label:t('block'), ghost:true, go:()=>{ location.href = 'blok.html'; }});
+    btns.push({label:t('batak'), ghost:true, go:()=>{ persist(); location.href = 'batak.html'; }});
+    showCard(`${langHtml()}<div style="font-weight:900;font-size:13px;letter-spacing:2px;color:#a6ff4d;text-shadow:0 0 10px rgba(166,255,77,.6);margin-bottom:2px">🦎 BUKO GAMES</div><h1>Diş Fırlat</h1><p>${t('intro')}</p>${matchMedia('(pointer:fine)').matches?`<p class="small" style="color:#fff">${t('keys')}</p>`:''}${dbShown?`<p style="color:#ffd23f;font-weight:800">${t('daily',dbShown,SAVE.streak)}</p>`:''}`, btns, true);
+  }
+
+  // ================= ÇİZİM =================
+  const toothW = () => Math.PI*2*u*0.42;
+  function toothShape(x0,w){ ctx.beginPath(); ctx.moveTo(x0,-w/2); ctx.lineTo(x0+th,-w*0.3); ctx.quadraticCurveTo(x0+th*1.08,0,x0+th,w*0.3); ctx.lineTo(x0,w/2); ctx.closePath(); }
+  function shade(hex,p){ const n=parseInt(hex.slice(1),16); let r=n>>16,g=(n>>8)&255,b=n&255; const t=p<0?0:255,a=Math.abs(p);
+    return `rgb(${Math.round((t-r)*a+r)},${Math.round((t-g)*a+g)},${Math.round((t-b)*a+b)})`; }
+  function fillTooth(color,x0,glow){
+    const gr=ctx.createLinearGradient(x0,0,x0+th,0); gr.addColorStop(0,shade(color,-0.35)); gr.addColorStop(0.6,color); gr.addColorStop(1,shade(color,0.4));
+    ctx.save(); if(glow){ ctx.shadowColor=color; ctx.shadowBlur=fever>0?22:14; } ctx.fillStyle=gr; ctx.fill(); ctx.restore();
+    ctx.strokeStyle='rgba(255,255,255,.35)'; ctx.lineWidth=1; ctx.stroke();
+  }
+
+  function drawGear(g){
+    if (exploded[g]) return;
+    const r=R[g], n=N[g], step=Math.PI*2/n, w=toothW();
+    const isActive = g===active && (state==='play'||state==='fail');
+    const done = filled[g].every(Boolean);
+    const isBoss = L.boss && g===0;
+    ctx.save(); ctx.translate(cx[g],cy[g]);
+    {
+      const col = isBoss ? 'rgba(255,60,90,' : hexA(isActive?T.a:T.b);
+      const warnGlow = isBoss && boss.warn>0 ? 0.5+0.5*Math.sin(time*30) : 0;
+      const halo=ctx.createRadialGradient(0,0,r*0.9,0,0,r*1.7);
+      halo.addColorStop(0,col+((isActive||isBoss?0.32:0.12)+warnGlow*0.35+beat*0.25)+')'); halo.addColorStop(1,col+'0)');
+      ctx.fillStyle=halo; ctx.beginPath(); ctx.arc(0,0,r*1.7,0,Math.PI*2); ctx.fill();
+    }
+    ctx.rotate(rots[g]);
+    for(let i=0;i<n;i++){
+      ctx.save(); ctx.rotate(i*step); toothShape(r-3,w);
+      const locked = boss.lock && boss.lock.g===g && boss.lock.i===i && time<boss.lock.until;
+      if (filled[g][i]) fillTooth(filled[g][i], r-3, isActive||done);
+      else if (locked){
+        ctx.fillStyle='rgba(255,40,70,.35)'; ctx.fill(); ctx.strokeStyle='#ff3d5e'; ctx.lineWidth=2; ctx.stroke();
+        ctx.beginPath(); const m=r-3+th/2, k=Math.min(th,w)*0.28; ctx.moveTo(m-k,-k); ctx.lineTo(m+k,k); ctx.moveTo(m-k,k); ctx.lineTo(m+k,-k);
+        ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
+      } else {
+        const bt = bonusSlots[g] && bonusSlots[g][i];
+        ctx.fillStyle = bt ? hexA(BONUS[bt].color)+(0.25+0.15*Math.sin(time*6))+')' : (isActive?'rgba(255,255,255,.18)':'rgba(255,255,255,.08)'); ctx.fill();
+        ctx.setLineDash([5,4]); ctx.lineWidth=2;
+        ctx.strokeStyle = bt ? BONUS[bt].color : isActive ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.4)'; ctx.stroke(); ctx.setLineDash([]);
+        if (bt){ const m=r-3+th*0.5; ctx.save(); ctx.translate(m,0); ctx.rotate(-(rots[g]+i*step)); ctx.font=`${Math.min(th,w)*0.62}px serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(BONUS[bt].icon,0,1); ctx.restore(); }
+      }
+      ctx.restore();
+    }
+    const pal = isActive ? T.body : T.idle;
+    const body=ctx.createLinearGradient(-r,-r,r,r); body.addColorStop(0,pal[0]); body.addColorStop(.5,pal[1]); body.addColorStop(1,pal[2]);
+    ctx.save(); ctx.shadowColor='rgba(20,0,60,.45)'; ctx.shadowBlur=24; ctx.shadowOffsetY=10;
+    ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fillStyle=body; ctx.fill(); ctx.restore();
+    const ring=ctx.createLinearGradient(-r,-r,r,r);
+    ring.addColorStop(0,'rgba(255,255,255,.55)'); ring.addColorStop(.5,'rgba(255,255,255,.05)'); ring.addColorStop(1,'rgba(255,255,255,.35)');
+    ctx.lineWidth=3+beat*3; ctx.strokeStyle= isBoss ? '#ff3d5e' : ring; ctx.beginPath(); ctx.arc(0,0,r-1.5,0,Math.PI*2); ctx.stroke();
+    ctx.lineWidth=1; ctx.strokeStyle='rgba(0,0,0,.25)'; ctx.beginPath(); ctx.arc(0,0,r*0.82,0,Math.PI*2); ctx.stroke();
+    ctx.save(); ctx.rotate(-rots[g]);   // sabit ışık parlaması
+    const sh=ctx.createLinearGradient(0,-r,0,r*0.2); sh.addColorStop(0,'rgba(255,255,255,.38)'); sh.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=sh; ctx.beginPath(); ctx.ellipse(-r*0.12,-r*0.42,r*0.72,r*0.42,-0.25,0,Math.PI*2); ctx.fill(); ctx.restore();
+    const holes = n>=8?6:n>=5?5:4;
+    for(let i=0;i<holes;i++){
+      const a=i*Math.PI*2/holes+0.4, hx=Math.cos(a)*r*0.58, hy=Math.sin(a)*r*0.58, hr=r*0.13;
+      const hg=ctx.createRadialGradient(hx-hr*.3,hy-hr*.3,hr*.2,hx,hy,hr); hg.addColorStop(0,'rgba(15,10,45,.95)'); hg.addColorStop(1,'rgba(45,35,110,.9)');
+      ctx.fillStyle=hg; ctx.beginPath(); ctx.arc(hx,hy,hr,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.12)'; ctx.lineWidth=1; ctx.stroke();
+    }
+    const hub=ctx.createRadialGradient(-r*.08,-r*.08,0,0,0,r*0.28); hub.addColorStop(0,'#e6e9ff'); hub.addColorStop(.35,'#7a80a8'); hub.addColorStop(1,'#2a2d44');
+    ctx.fillStyle=hub; ctx.beginPath(); ctx.arc(0,0,r*0.26,0,Math.PI*2); ctx.fill();
+    ctx.rotate(-rots[g]);
+    if (isBoss){ ctx.font=`${r*0.32}px serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('👹',0,r*0.02); }
+    else { ctx.fillStyle = done?'#7dff6a':isActive?T.a:'#555c88'; if(isActive||done){ ctx.shadowColor=ctx.fillStyle; ctx.shadowBlur=12; }
+      ctx.beginPath(); ctx.arc(0,0,r*0.07,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0; }
+    ctx.restore();
+  }
+  function hexA(hex){ const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},`; }
+
+  function drawLooseTooth(x,y,spin,color,b){ ctx.save(); ctx.translate(x,y); ctx.rotate((b===undefined?Math.PI/2:b)+spin); toothShape(-th/2,toothW()); fillTooth(color,-th/2,true); ctx.restore(); }
+
+  function drawLauncher(){
+    if (state!=='play' && state!=='fail') return;
+    const g=active, s=th, [lx0,ly0]=LP(g,2.8);
+    ctx.save(); ctx.translate(lx0,ly0); ctx.rotate(LB[g]-Math.PI/2);
+    const x=0, y=0, ty=-th*1.45, pulse=0.5+0.5*Math.sin(time*6);
+    ctx.save(); ctx.shadowColor=T.b; ctx.shadowBlur=10+pulse*8; ctx.fillStyle=T.b;
+    ctx.beginPath(); ctx.moveTo(x,ty-5); ctx.lineTo(x-6,ty+5); ctx.lineTo(x+6,ty+5); ctx.closePath(); ctx.fill(); ctx.restore();
+    ctx.save(); ctx.shadowColor=T.a; ctx.shadowBlur=12; ctx.strokeStyle=T.a; ctx.lineWidth=3; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(x-s*1.1,y-s*0.2); ctx.lineTo(x-s*1.1,y+s*1.5); ctx.quadraticCurveTo(x-s*1.1,y+s*1.9,x-s*0.7,y+s*1.9);
+    ctx.lineTo(x+s*0.7,y+s*1.9); ctx.quadraticCurveTo(x+s*1.1,y+s*1.9,x+s*1.1,y+s*1.5); ctx.lineTo(x+s*1.1,y-s*0.2); ctx.stroke(); ctx.restore();
+    if (!flying && state==='play') drawLooseTooth(x, y+s*0.9, 0, nextColor());
+    ctx.restore();
+  }
+
+  function drawBg(){
+    const g0 = fever>0 ? ['#ff7a18','#b8326a','#4a1450'] : (T.cham ? chamBg(time) : T.bg);
+    const lg=ctx.createLinearGradient(0,0,W*0.4,H);
+    lg.addColorStop(0,g0[0]); lg.addColorStop(.55,g0[1]); lg.addColorStop(1,g0[2]); ctx.fillStyle=lg; ctx.fillRect(0,0,W,H);
+    // aurora lekeleri
+    const bl = fever>0 ? ['#ffd23f','#ff4f8b','#ff9f1c','#ffffff'] : (T.cham ? chamBl(time) : T.blobs);
+    const M=Math.max(W,H);
+    ctx.globalCompositeOperation='lighter';
+    for (let i=0;i<4;i++){
+      const x=W*(0.5+0.42*Math.sin(time*0.13+i*1.7)), y=H*(0.45+0.38*Math.cos(time*0.11+i*2.3)), r=M*(0.45+0.1*Math.sin(time*0.2+i));
+      const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,hexA(bl[i])+'0.32)'); g.addColorStop(1,hexA(bl[i])+'0)');
+      ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    }
+    // ışık bulanıkları (bokeh)
+    for (const b of bokeh){
+      const x=((b.x + Math.sin(time*0.05*b.s+b.p)*0.05)%1)*W, y=(((b.y - time*0.012*b.s)%1)+1)%1*H, r=b.r*Math.min(W,H);
+      const g=ctx.createRadialGradient(x,y,0,x,y,r); const c=bl[b.c];
+      g.addColorStop(0,hexA(c)+'0.22)'); g.addColorStop(0.7,hexA(c)+'0.08)'); g.addColorStop(1,hexA(c)+'0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    }
+    // yıldız tozları
+    for (const s of stars){ ctx.globalAlpha=0.35+0.55*Math.sin(time*1.6+s.p)**2; ctx.fillStyle='#ffffff';
+      const yy = fever>0 ? ((s.y - time*80*s.r)%H+H)%H : s.y;
+      ctx.beginPath(); ctx.arc(s.x, yy, s.r, 0, Math.PI*2); ctx.fill(); }
+    ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
+    // ince perspektif ızgara (alt kısımda)
+    ctx.save(); ctx.globalAlpha=0.12; ctx.strokeStyle='#ffffff'; ctx.lineWidth=1;
+    const hy=H*0.78; for (let i=0;i<8;i++){ const yy=hy+(H-hy)*Math.pow(((i+(time*0.3)%1)/8),2); ctx.beginPath(); ctx.moveTo(0,yy); ctx.lineTo(W,yy); ctx.stroke(); }
+    for (let i=-8;i<=8;i++){ ctx.beginPath(); ctx.moveTo(W/2+i*W*0.04,hy); ctx.lineTo(W/2+i*W*0.25,H); ctx.stroke(); }
+    ctx.restore();
+    // ekolayzer (müziğe göre)
+    const nb = device==='tablet'?36:26, bw=W/nb;
+    for (let i=0;i<nb;i++){
+      const v = freq && SAVE.music ? freq[Math.min(freq.length-1, 1+Math.floor(i*freq.length*0.7/nb))]/255 : (0.22+0.18*Math.sin(time*3+i*0.7)*Math.sin(time*1.3+i));
+      const h=Math.max(4, v*H*0.26);
+      const g=ctx.createLinearGradient(0,H-h,0,H); g.addColorStop(0,'rgba(255,255,255,.5)'); g.addColorStop(0.3,hexA(T.pal[i%T.pal.length])+'0.4)'); g.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.fillStyle=g; ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(i*bw+bw*0.18,H-h,bw*0.64,h,bw*0.3); else ctx.rect(i*bw+bw*0.18,H-h,bw*0.64,h); ctx.fill();
+    }
+    // hız çizgileri
+    ctx.save(); ctx.globalAlpha=0.14+beat*0.25; ctx.strokeStyle='#fff'; ctx.lineWidth=1.5;
+    const sp=(80+(level||0)*12+(fever>0?260:0));
+    for (const st of stars.slice(0,22)){ const yy=((st.y+time*sp*(0.6+st.r*0.4))%(H+80))-80; ctx.beginPath(); ctx.moveTo(st.x,yy); ctx.lineTo(st.x,yy+30+st.r*40); ctx.stroke(); }
+    ctx.restore();
+  }
+  function drawVignette(){
+    if (lives===1 && (state==='play'||state==='fail')){
+      const p=0.35+0.25*Math.sin(time*7);
+      const v=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*0.35,W/2,H/2,Math.max(W,H)*0.75);
+      v.addColorStop(0,'rgba(255,0,40,0)'); v.addColorStop(1,`rgba(255,0,40,${p})`); ctx.fillStyle=v; ctx.fillRect(0,0,W,H);
+    }
+    if (fever>0){
+      const v=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*0.4,W/2,H/2,Math.max(W,H)*0.75);
+      v.addColorStop(0,'rgba(255,140,0,0)'); v.addColorStop(1,`rgba(255,140,0,${0.25+0.1*Math.sin(time*12)})`); ctx.fillStyle=v; ctx.fillRect(0,0,W,H);
+    }
+    if (slowT>0){ ctx.fillStyle='rgba(120,200,255,.08)'; ctx.fillRect(0,0,W,H); }
+  }
+  function drawArcs(){
+    for (const a of arcs){
+      const x0=cx[a.a], y0=cy[a.a], x1=cx[a.b], y1=cy[a.b];
+      ctx.save(); ctx.globalAlpha=a.life/0.3; ctx.strokeStyle='#cfefff'; ctx.shadowColor=T.a; ctx.shadowBlur=16; ctx.lineWidth=2.5;
+      ctx.beginPath(); ctx.moveTo(x0,y0);
+      for (let k=1;k<10;k++){ const t=k/10; ctx.lineTo(x0+(x1-x0)*t+(Math.random()-.5)*th*1.6, y0+(y1-y0)*t+(Math.random()-.5)*th*1.6); }
+      ctx.lineTo(x1,y1); ctx.stroke(); ctx.restore();
+    }
+  }
+
+  // ================= DÖNGÜ =================
+  function updateBoss(dt){
+    if (!L.boss || state!=='play') return;
+    if (boss.pause>0){ boss.pause-=dt; if (boss.pause<=0) boss.next=time+3.2+Math.random()*2; }
+    else if (time>boss.next-0.55 && boss.warn<=0 && time<boss.next){ boss.warn=0.55; sfx.warn(); }
+    if (boss.warn>0){ boss.warn-=dt; if (boss.warn<=0){ boss.pause=0.45; } }
+    if (time>boss.lockAt){
+      const g=active, empt=[]; for(let i=0;i<N[g];i++) if(!filled[g][i]) empt.push(i);
+      if (empt.length>1){ boss.lock={g, i:empt[Math.floor(Math.random()*empt.length)], until:time+2.2}; }
+      boss.lockAt=time+4.5+Math.random()*2;
+    }
+  }
+
+  function frame(t){
+    const dt=Math.min(0.05,(t-(lastT||t))/1000); lastT=t; time+=dt;
+    const running = state==='play'||state==='fail';
+    if (L){
+      if (running && L.flip && time>flipAt){ dir*=-1; flipAt=time+3+Math.random()*2.5; }
+      if (running) updateBoss(dt);
+      rot0 += (running ? L.w*speedFactor() : 0.5)*dir*dt; computeRots();
+    }
+    musicAdapt();
+    if (analyser && freq && SAVE.music){ analyser.getByteFrequencyData(freq); let b=0; for(let i=1;i<6;i++) b+=freq[i]; b=b/5/255; beat=Math.max(beat*0.88, Math.pow(Math.max(0,b-0.35)/0.65,1.6)); }
+    else beat=Math.max(beat*0.9, Math.pow(Math.max(0,Math.sin(time*Math.PI*2*100/60)),8)*0.5);
+    for (const w of waves){ w.r+=dt*th*30; w.life-=dt; } waves=waves.filter(w=>w.life>0);
+    updateShards(dt);
+    if (slowT>0){ slowT-=dt; if (slowT<=0) slowBtn.classList.remove('on'); }
+    if (fever>0 && running){ fever-=dt; if (fever<=0) updateHud(); }
+    if (doubleT>0 && running){ doubleT-=dt; if (doubleT<=0) updateHud(); }
+    if (lives===1 && running && time>heartAt){ sfx.heart(); heartAt=time+0.9; }
+    if (flying){
+      if (!flying.miss){ flying.t+=dt; if (flying.t>=FLY) land(); }
+      else { flying.vy+=1000*dt; flying.mx+=flying.vx*dt; flying.my+=flying.vy*dt; flying.spin+=9*dt; }
+    }
+    for (const p of particles){ p.life-=dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vx*=.96; p.vy=p.vy*.96+300*dt; }
+    particles=particles.filter(p=>p.life>0);
+    for (const f of floaters){ f.life-=dt*1.1; f.y-=40*dt; } floaters=floaters.filter(f=>f.life>0);
+    for (const a of arcs) a.life-=dt; arcs=arcs.filter(a=>a.life>0);
+    if (shake>0) shake-=dt;
+
+    drawBg();
+    if (L){
+      ctx.save();
+      if (shake>0) ctx.translate((Math.random()-.5)*12*shake/.4,(Math.random()-.5)*12*shake/.4);
+      for (let j=K-1;j>=0;j--) drawGear(j);
+      drawShards(); drawArcs(); drawHelper(); drawLauncher();
+      for (const w of waves){ ctx.save(); ctx.globalAlpha=Math.max(0,w.life*1.6); ctx.strokeStyle=w.c; ctx.lineWidth=3; ctx.shadowColor=w.c; ctx.shadowBlur=16; ctx.beginPath(); ctx.arc(w.x,w.y,w.r,0,Math.PI*2); ctx.stroke(); ctx.restore(); }
+      if (flying){
+        const g=flying.g;
+        if (!flying.miss){
+          const [x0,y0]=LP(g,3.7), [x1,y1]=LP(g,0.5), k=Math.min(1,flying.t/FLY), xk=x0+(x1-x0)*k, yk=y0+(y1-y0)*k;
+          ctx.save(); ctx.globalAlpha=.35; ctx.strokeStyle=flying.color; ctx.lineWidth=toothW()*0.5; ctx.lineCap='round';
+          ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(xk,yk); ctx.stroke(); ctx.restore();
+          drawLooseTooth(xk, yk, 0, flying.color, LB[g]);
+        } else drawLooseTooth(flying.mx, flying.my, flying.spin, flying.color, LB[flying.g]);
+      }
+      for (const p of particles){ ctx.globalAlpha=Math.max(0,p.life); ctx.fillStyle=p.color; ctx.shadowColor=p.color; ctx.shadowBlur=8;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }
+      ctx.globalAlpha=1; ctx.shadowBlur=0;
+      for (const f of floaters){ const sc=1+0.3*Math.max(0,f.life-0.8)*5;
+        ctx.globalAlpha=Math.min(1,f.life*1.5); ctx.font=`800 ${f.size*sc}px 'Bricolage Grotesque', sans-serif`; ctx.textAlign='center';
+        ctx.fillStyle=f.color; ctx.shadowColor=f.color; ctx.shadowBlur=14; ctx.fillText(f.text,f.x,f.y); }
+      ctx.globalAlpha=1; ctx.shadowBlur=0;
+      ctx.restore();
+      drawVignette();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  addEventListener('resize', ()=>{ if (L) layout(); });
+  menu();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+      <stop offset="0" stop-color="#2bb38c"/>
+      <stop offset="0.55" stop-color="#145a5a"/>
+      <stop offset="1" stop-color="#08222c"/>
+    </radialGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c8ff5a"/>
+      <stop offset="0.45" stop-color="#2ee6c8"/>
+      <stop offset="0.8" stop-color="#ffd23f"/>
+      <stop offset="1" stop-color="#ff8c42"/>
+    </linearGradient>
+    <linearGradient id="tail" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2ee6c8"/>
+      <stop offset="1" stop-color="#ff8c42"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <circle cx="256" cy="230" r="170" fill="#a6ff4d" opacity="0.08"/>
+  <!-- dal -->
+  <path d="M58 372 C 160 360, 330 362, 456 352" stroke="#7a4a24" stroke-width="22" stroke-linecap="round" fill="none"/>
+  <path d="M360 360 C 380 380, 395 398, 420 404" stroke="#7a4a24" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <circle cx="424" cy="404" r="10" fill="#5dff8a"/>
+  <g filter="url(#glow)">
+    <!-- kuyruk sarmalı -->
+    <path d="M356 300 C 420 296, 440 362, 398 392 C 356 420, 310 392, 322 356 C 332 328, 368 334, 364 356" stroke="url(#tail)" stroke-width="30" stroke-linecap="round" fill="none"/>
+    <!-- bacaklar -->
+    <path d="M200 318 L 186 358 M 312 318 L 326 356" stroke="#2ee6c8" stroke-width="20" stroke-linecap="round"/>
+    <!-- gövde -->
+    <path d="M128 286 C 142 196, 300 160, 372 246 C 398 278, 384 318, 334 322 L 170 322 C 140 322, 124 308, 128 286 Z" fill="url(#skin)"/>
+    <!-- sırt dikenleri -->
+    <path d="M176 214 l 14 -22 l 10 20 M 214 196 l 14 -24 l 12 22 M 256 190 l 14 -24 l 12 24 M 298 198 l 14 -22 l 10 22" stroke="#c8ff5a" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+    <!-- baş -->
+    <path d="M176 232 C 140 196, 92 206, 62 248 C 78 290, 128 306, 168 302 Z" fill="#a6ff4d"/>
+    <path d="M62 248 C 84 262, 120 270, 160 266" stroke="#0e3d26" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </g>
+  <!-- desen noktaları -->
+  <g fill="#ffffff" opacity="0.35">
+    <circle cx="230" cy="250" r="10"/><circle cx="276" cy="236" r="8"/><circle cx="318" cy="262" r="9"/><circle cx="250" cy="290" r="7"/><circle cx="296" cy="296" r="6"/>
+  </g>
+  <!-- göz -->
+  <circle cx="122" cy="246" r="26" fill="#ffd23f" stroke="#0e3d26" stroke-width="5"/>
+  <circle cx="128" cy="244" r="12" fill="#13231f"/>
+  <circle cx="132" cy="240" r="4" fill="#ffffff"/>
+  <!-- dil (oyun hissi) -->
+  <path d="M66 256 C 44 262, 34 276, 40 292" stroke="#ff4f8b" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <circle cx="40" cy="294" r="8" fill="#ff4f8b"/>
+</svg>
