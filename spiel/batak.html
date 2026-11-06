@@ -8,14 +8,14 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#2a1b7a">
+<meta name="theme-color" content="#145a5a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Neon Batak – ihaleli batak, 3 bilgisayar rakibe karşı. Hızlı oyun, neon grafik.">
 <style>
-  :root{--a:#38e1ff;--b:#ff4fd8;--glass:rgba(255,255,255,.16);--cw:60px;--ch:86px}
-  html,body{margin:0;height:100%;background:#2a1b7a;color:#fff;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  :root{--a:#2ee6c8;--b:#a6ff4d;--glass:rgba(255,255,255,.16);--cw:60px;--ch:86px}
+  html,body{margin:0;height:100%;background:#145a5a;color:#fff;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
   canvas{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;z-index:0}
   #top{position:fixed;top:calc(10px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;z-index:3}
   .pill{background:var(--glass);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px;white-space:nowrap;color:#fff;font-family:inherit}
@@ -32,12 +32,19 @@
   .bubble.show{opacity:1}
   .seat.s0 .bubble{top:auto;bottom:-6px;transform:translate(-50%,100%)}
   /* kartlar */
-  .card{position:fixed;width:var(--cw);height:var(--ch);border-radius:9px;z-index:4;transition:left .35s cubic-bezier(.2,.8,.2,1),top .35s cubic-bezier(.2,.8,.2,1),transform .35s,opacity .3s,box-shadow .2s;
+  .card{position:fixed;width:var(--cw);height:var(--ch);border-radius:9px;z-index:4;overflow:hidden;transition:left .42s cubic-bezier(.25,1.35,.45,1),top .42s cubic-bezier(.25,1.35,.45,1),transform .42s cubic-bezier(.25,1.3,.45,1),opacity .3s,box-shadow .2s;
     background:linear-gradient(160deg,#ffffff,#e9e6ff);box-shadow:0 4px 12px rgba(0,0,0,.35);color:#2a1b7a;font-weight:900}
   .card .r{position:absolute;left:5px;top:3px;font-size:calc(var(--cw)*.3);line-height:1}
   .card .s1{position:absolute;left:5px;top:calc(var(--cw)*.32);font-size:calc(var(--cw)*.24);line-height:1}
   .card .big{position:absolute;right:4px;bottom:2px;font-size:calc(var(--cw)*.55);line-height:1}
   .card.red{color:#ff2d75} .card.blk{color:#3a2bb0}
+  .card:not(.back)::before{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.75) 45%,rgba(166,255,77,.35) 50%,rgba(46,230,200,.35) 55%,transparent 70%);background-size:250% 100%;animation:sheen 4.5s ease-in-out infinite;mix-blend-mode:screen;pointer-events:none}
+  @keyframes sheen{0%,60%{background-position:150% 0}100%{background-position:-60% 0}}
+  .card:not(.back){border:1.5px solid rgba(255,255,255,.9);box-shadow:0 6px 16px rgba(0,0,0,.35),inset 0 0 0 1px rgba(46,230,200,.35)}
+  .card.flipin{animation:flipin .38s ease-out}
+  @keyframes flipin{0%{filter:brightness(2)}100%{filter:none}}
+  body.shake{animation:shk .28s}
+  @keyframes shk{20%{transform:translate(4px,-3px)}40%{transform:translate(-4px,2px)}60%{transform:translate(3px,3px)}80%{transform:translate(-2px,-2px)}}
   .card.back{background:repeating-linear-gradient(45deg,#7b5cff 0 6px,#ff4fd8 6px 12px);border:3px solid #fff}
   .card.back *{display:none}
   .card.mine{cursor:pointer}
@@ -45,7 +52,7 @@
   .card.mine.no{filter:brightness(.55) saturate(.6)}
   .card.trump::after{content:'';position:absolute;inset:-2px;border-radius:10px;box-shadow:0 0 14px #ffd23f;pointer-events:none}
   /* panel */
-  #panel{position:fixed;left:50%;transform:translateX(-50%);z-index:6;display:none;flex-wrap:wrap;justify-content:center;gap:6px;max-width:94vw;padding:12px;border-radius:20px;background:linear-gradient(160deg,rgba(60,40,150,.85),rgba(30,20,90,.8));border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 10px 40px rgba(0,0,0,.4)}
+  #panel{position:fixed;left:50%;transform:translateX(-50%);z-index:6;display:none;flex-wrap:wrap;justify-content:center;gap:6px;max-width:94vw;padding:12px;border-radius:20px;background:linear-gradient(160deg,rgba(22,92,92,.88),rgba(12,40,60,.86));border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 10px 40px rgba(0,0,0,.4)}
   #panel .tt{width:100%;text-align:center;font-weight:800;font-size:15px;margin-bottom:4px}
   .pb{font:inherit;font-weight:900;font-size:17px;min-width:44px;height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);color:#fff;cursor:pointer}
   .pb.main{background:linear-gradient(90deg,var(--a),var(--b));color:#1a1050;border:0}
@@ -55,7 +62,7 @@
   #trumpBadge{position:fixed;z-index:3;left:12px;top:calc(56px + env(safe-area-inset-top));font-weight:800;font-size:13px}
   #card2{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,10,60,.4);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);transition:opacity .3s;z-index:9}
   #card2.hide{opacity:0;pointer-events:none}
-  .box{background:linear-gradient(160deg,rgba(60,40,150,.85),rgba(30,20,90,.8));border:1px solid rgba(255,255,255,.35);border-radius:24px;padding:24px;text-align:center;width:min(360px,88vw);max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  .box{background:linear-gradient(160deg,rgba(22,92,92,.88),rgba(12,40,60,.86));border:1px solid rgba(255,255,255,.35);border-radius:24px;padding:24px;text-align:center;width:min(360px,88vw);max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
   .box h1{margin:0 0 4px;font-size:34px;font-weight:800;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
   .box p{margin:6px 0 12px;color:#e4e6ff;font-size:14px;line-height:1.45}
   .btns{display:flex;flex-direction:column;gap:9px;margin-top:8px}
@@ -70,7 +77,7 @@
   .plus{color:#7dff6a;font-weight:900} .minus{color:#ff6b8a;font-weight:900}
   .small{font-size:12px;color:#c9ccf0;margin-top:8px;line-height:1.4}
   #picker{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;justify-content:flex-start;background:rgba(0,0,0,.25)}
-  #picker .pk{margin:calc(52px + env(safe-area-inset-top)) 0 0 10px;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:16px;background:linear-gradient(160deg,rgba(60,40,150,.9),rgba(30,20,90,.85));border:1px solid rgba(255,255,255,.35)}
+  #picker .pk{margin:calc(52px + env(safe-area-inset-top)) 0 0 10px;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:16px;background:linear-gradient(160deg,rgba(22,92,92,.94),rgba(12,40,60,.92));border:1px solid rgba(255,255,255,.35)}
   #picker a{color:#fff;text-decoration:none;font-weight:800;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.1)}
 </style>
 </head>
@@ -108,8 +115,19 @@
         rules:'Scoring: the bidder scores their tricks if the bid is made, otherwise loses the bid. Others score their tricks; anyone with no tricks loses the bid amount.', stats:(w,g)=>`Wins: ${w} / ${g} games`, forced:n=>`Everyone passed – ${n} must play 5`, broken:'Trump broken! 💥', music:'Music', on:'On', off:'Off'},
   };
   const FLAGS={tr:'🇹🇷',de:'🇩🇪',en:'🇬🇧'};
+  const QUIPS={tr:{1:['Risk alıyorum! 🔥','Bu el benim!','Hadi bakalım!'],2:['Hesapladım 😎','Planım tıkır tıkır','Sabır…'],3:['Temkinli gidiyorum','Oh be! 😅','Güzel hamle!']},
+    de:{1:['Volles Risiko! 🔥','Der gehört mir!','Los geht\'s!'],2:['Alles berechnet 😎','Läuft nach Plan','Geduld…'],3:['Ganz vorsichtig','Puh! 😅','Schöner Zug!']},
+    en:{1:['Going all in! 🔥','This one\'s mine!','Let\'s go!'],2:['All calculated 😎','Going to plan','Patience…'],3:['Playing it safe','Phew! 😅','Nice move!']}};
+  const quip=p=>{ const a=(QUIPS[LANG]||QUIPS.tr)[p]; return a[Math.floor(Math.random()*a.length)]; };
   const t=(k,...a)=>{ const v=(I18N[LANG]||I18N.tr)[k]; return typeof v==='function'?v(...a):v; };
 
+  // ---- 🦎 Bukalemun Studios: renk değiştiren palet ----
+  const CHAM_H=[150,175,95,32,320,150];
+  function chamHue(tm,off=0){ const pos=((tm*0.018+off)%5+5)%5, i=Math.floor(pos), f=pos-i; const a=CHAM_H[i], b=CHAM_H[i+1]; const d=((b-a+540)%360)-180; return (a+d*f+360)%360; }
+  function hsl2hex(h,s,l){ s/=100; l/=100; const k=n=>(n+h/30)%12, a=s*Math.min(l,1-l), f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));
+    return '#'+[f(0),f(8),f(4)].map(x=>Math.round(x*255).toString(16).padStart(2,'0')).join(''); }
+  const chamBg=(tm,off)=>{ const h=chamHue(tm,off); return [hsl2hex(h,68,34),hsl2hex((h+28)%360,70,20),hsl2hex((h+55)%360,70,10)]; };
+  const chamBl=(tm,off)=>{ const h=chamHue(tm,off); return [hsl2hex(h,90,58),hsl2hex((h+45)%360,90,60),hsl2hex((h+320)%360,90,60),hsl2hex((h+150)%360,90,64)]; };
   // ---------- kart mantığı ----------
   const SUITS=['S','H','D','C'], SYM={S:'♠',H:'♥',D:'♦',C:'♣'}, RED={H:1,D:1};
   const RN={11:'J',12:'Q',13:'K',14:'A'}; const rname=r=>RN[r]||String(r);
@@ -239,9 +257,9 @@
     handNo++; Object.values(cardEls).forEach(el=>el.remove()); for (const k in cardEls) delete cardEls[k];
     deal(); trump=null; bid=0; bidder=null; tricks=[0,0,0,0]; trick=[]; trumpBroken=false; passed=[false,false,false,false]; bids=[0,0,0,0];
     // dağıtma animasyonu
-    [0,1,2,3].forEach(p=>hands[p].forEach(c=>{ const el=makeCard(c); el.classList.add('back'); el.style.left=(W/2-CW/2)+'px'; el.style.top=(H/2-CH/2)+'px'; el.style.transform='scale(.6)'; }));
+    let di=0; [0,1,2,3].forEach(p=>hands[p].forEach(c=>{ const el=makeCard(c); el.classList.add('back'); el.style.left=(W/2-CW/2)+'px'; el.style.top=(H*0.47-CH/2)+'px'; el.style.transform='scale(.6) rotate(-90deg)'; el.style.transitionDelay=((di++%13)*28+p*10)+'ms'; setTimeout(()=>{ el.style.transitionDelay='0ms'; }, 1400); }));
     phase='deal'; hud(); sfx.deal();
-    setTimeout(()=>{ [1,2,3].forEach(p=>hands[p].forEach(c=>{ const el=cardEls[c.id]; const [sx,sy]=seatXY(p); el.style.left=(sx-CW/2)+'px'; el.style.top=(sy-CH/2)+'px'; el.style.transform='scale(.45)'; })); layoutHand(); setTimeout(()=>layoutBots(),450); phase='bid'; turn=next(dealer); hud(); setTimeout(bidStep, 500); }, 120);
+    setTimeout(()=>{ [1,2,3].forEach(p=>hands[p].forEach(c=>{ const el=cardEls[c.id]; const [sx,sy]=seatXY(p); el.style.left=(sx-CW/2)+'px'; el.style.top=(sy-CH/2)+'px'; el.style.transform='scale(.45)'; })); layoutHand(); setTimeout(()=>layoutBots(),900); phase='bid'; turn=next(dealer); hud(); setTimeout(bidStep, 1100); }, 120);
   }
   function bidStep(){
     const active=[0,1,2,3].filter(p=>!passed[p]);
@@ -251,7 +269,7 @@
     if (bidder===turn && active.length===1) return chooseTrump();
     hud();
     if (turn===0) return showBidPanel();
-    setTimeout(()=>{ const v=botBid(turn); if (v){ bid=v; bidder=turn; say(turn,String(v)); sfx.bid(); } else { passed[turn]=true; say(turn,t('passSay')); }
+    setTimeout(()=>{ const v=botBid(turn); if (v){ bid=v; bidder=turn; say(turn, v>=8 ? `${v}! ${quip(turn)}` : String(v), 1300); sfx.bid(); } else { passed[turn]=true; say(turn,t('passSay')); }
       turn=next(turn); hud(); setTimeout(bidStep, 450); }, 700);
   }
   function showBidPanel(){
@@ -288,8 +306,8 @@
     hands[p]=hands[p].filter(x=>x.id!==c.id);
     if (c.s===trump && !trumpBroken && !(trick.length===0 && false)){ if (trick.length && trick[0].c.s!==trump){ trumpBroken=true; toast(t('broken'),'#ffd23f',900); } else if(!trick.length){ trumpBroken=true; } }
     trick.push({p,c});
-    const el=cardEls[c.id]; el.classList.remove('back','mine','ok','no'); el.style.opacity='1'; el.classList.toggle('trump', c.s===trump);
-    const [x,y]=trickXY(p); el.style.left=x+'px'; el.style.top=y+'px'; el.style.transform=`rotate(${(Math.random()-.5)*14}deg)`; el.style.zIndex=50+trick.length;
+    const el=cardEls[c.id]; const wasBack=el.classList.contains('back'); el.classList.remove('back','mine','ok','no'); el.style.opacity='1'; if (wasBack){ el.classList.remove('flipin'); void el.offsetWidth; el.classList.add('flipin'); } el.classList.toggle('trump', c.s===trump);
+    const [x,y]=trickXY(p); el.style.left=x+'px'; el.style.top=y+'px'; el.style.transform=`rotate(${(Math.random()-.5)*14}deg) scale(${wasBack?1.08:1})`; if (wasBack) setTimeout(()=>{ el.style.transform=`rotate(${(Math.random()-.5)*10}deg)`; },260); el.style.zIndex=50+trick.length;
     sfx.card();
     if (p!==0) layoutBots(); layoutHand();
     if (trick.length===4){ phase='resolve'; turn=-1; hud(); setTimeout(resolveTrick, 900); }
@@ -297,12 +315,15 @@
   }
   function resolveTrick(){
     const w=winnerOf(trick); tricks[w]++;
-    const [sx,sy]=seatXY(w);
-    trick.forEach(x=>{ const el=cardEls[x.c.id]; el.style.left=(sx-CW/2)+'px'; el.style.top=(sy-CH/2)+'px'; el.style.transform='scale(.3)'; el.style.opacity='0'; });
-    sparks(sx,sy, w===0?'#7dff6a':'#ffd23f'); sfx.win(w===0);
+    const [sx,sy]=seatXY(w), gx=W/2-CW/2, gy=H*0.47-CH/2;
+    trick.forEach((x,i)=>{ const el=cardEls[x.c.id]; el.style.left=(gx+(i-1.5)*3)+'px'; el.style.top=(gy-i*2)+'px'; el.style.transform=`rotate(${(i-1.5)*6}deg) scale(1.05)`; });
+    const won=trick.slice();
+    setTimeout(()=>{ won.forEach(x=>{ const el=cardEls[x.c.id]; el.style.left=(sx-CW/2)+'px'; el.style.top=(sy-CH/2)+'px'; el.style.transform='scale(.3) rotate(25deg)'; el.style.opacity='0'; });
+      sparks(sx,sy, w===0?'#a6ff4d':'#ffd23f'); document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake'); tableFlash=1; }, 320);
+    sfx.win(w===0); if (w!==0 && Math.random()<0.45) setTimeout(()=>say(w,quip(w),1300),350);
     if (w===0) toast('✋ +1','#7dff6a',700);
     trick=[]; leader=w; turn=w; phase='play';
-    setTimeout(()=>{ if (!hands[0].length) endHand(); else playStep(); }, 600);
+    setTimeout(()=>{ if (!hands[0].length) endHand(); else playStep(); }, 900);
   }
   function endHand(){
     phase='end'; const N=I18N[LANG].names, delta=[0,0,0,0];
@@ -339,7 +360,7 @@
   }
   function menu(){
     phase='menu'; document.documentElement.lang=LANG; hud();
-    show(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><h1>${t('title')}</h1><p>${t('intro')}</p><p class="small">${t('rules')}</p><p class="small" style="color:#ffd23f;font-weight:800">${t('stats',SAVE.wins,SAVE.games)}</p>
+    show(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><h1>${t('title')}</h1><p>${t('intro')}</p><p class="small">${t('rules')}</p><p class="small" style="color:#ffd23f;font-weight:800">${t('stats',SAVE.wins,SAVE.games)}</p><div class="small" style="opacity:.85;font-weight:800">🦎 Bukalemun Studios</div>
       <button class="pb tg" style="font-size:13px;height:auto;padding:8px 12px">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>`,
       [{l:t('quick'),go:()=>newGame(5)},{l:t('normal'),ghost:true,go:()=>newGame(9)}]);
   }
@@ -368,7 +389,7 @@
   function musicStop(){ if(musSrc){ const s0=musSrc; musGain.gain.setTargetAtTime(0.0001,ac.currentTime,0.2); setTimeout(()=>{ try{s0.stop();}catch(e){} },600); musSrc=null; } }
 
   // ---------- arka plan (canvas) ----------
-  const cv=$('c'), ctx=cv.getContext('2d'); let dpr, time=0, lastT, beat=0, stars=[], bokeh=[], parts=[];
+  const cv=$('c'), ctx=cv.getContext('2d'); let tableFlash=0, dpr, time=0, lastT, beat=0, stars=[], bokeh=[], parts=[];
   const hexA=hex=>{ const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},`; };
   function resize(){ dpr=Math.min(2.5,devicePixelRatio||1); sizes(); cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
     stars=Array.from({length:Math.round(W*H/9000)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.3,p:Math.random()*6}));
@@ -378,8 +399,8 @@
   function frame(ts){
     const dt=Math.min(0.05,(ts-(lastT||ts))/1000); lastT=ts; time+=dt;
     if (analyser && freq && SAVE.music){ analyser.getByteFrequencyData(freq); let b=0; for(let i=1;i<6;i++) b+=freq[i]; b=b/5/255; beat=Math.max(beat*0.88, Math.pow(Math.max(0,b-0.35)/0.65,1.6)); } else beat*=0.9;
-    const lg=ctx.createLinearGradient(0,0,W*0.4,H); lg.addColorStop(0,'#5a2fb8'); lg.addColorStop(.55,'#2a1b7a'); lg.addColorStop(1,'#120f45'); ctx.fillStyle=lg; ctx.fillRect(0,0,W,H);
-    const bl=['#ff4fd8','#38e1ff','#7b5cff','#ffb347'], M=Math.max(W,H);
+    const g0=chamBg(time), lg=ctx.createLinearGradient(0,0,W*0.4,H); lg.addColorStop(0,g0[0]); lg.addColorStop(.55,g0[1]); lg.addColorStop(1,g0[2]); ctx.fillStyle=lg; ctx.fillRect(0,0,W,H);
+    const bl=chamBl(time), M=Math.max(W,H);
     ctx.globalCompositeOperation='lighter';
     for(let i=0;i<4;i++){ const x=W*(0.5+0.42*Math.sin(time*0.13+i*1.7)), y=H*(0.45+0.38*Math.cos(time*0.11+i*2.3)), r=M*(0.45+0.1*Math.sin(time*0.2+i));
       const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,hexA(bl[i])+'0.3)'); g.addColorStop(1,hexA(bl[i])+'0)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H); }
@@ -389,10 +410,21 @@
     ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
     // masa: neon oval
     const cx=W/2, cy=H*0.47, rx=Math.min(W*0.46, CW*3.4), ry=Math.min(H*0.2, CH*1.6);
-    const tg=ctx.createRadialGradient(cx,cy,0,cx,cy,rx); tg.addColorStop(0,'rgba(60,220,170,.35)'); tg.addColorStop(1,'rgba(20,90,120,.25)');
+    const heat = (bid||0)>=5 ? (bid-4)/9 : 0; tableFlash*=0.93;
+    const tg=ctx.createRadialGradient(cx,cy,0,cx,cy,rx); tg.addColorStop(0,`rgba(40,${200-heat*80},${150-heat*60},${.38+heat*0.2+tableFlash*0.25})`); tg.addColorStop(1,'rgba(10,40,60,.35)');
     ctx.fillStyle=tg; ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.fill();
-    let bord; try{ bord=ctx.createConicGradient(time*0.6,cx,cy); ['#38e1ff','#ff4fd8','#ffd23f','#5dff8a','#38e1ff'].forEach((c,i)=>bord.addColorStop(i/4,c)); }catch(e){ bord='#fff'; }
-    ctx.save(); ctx.strokeStyle=bord; ctx.lineWidth=3+beat*4; ctx.shadowColor='#fff'; ctx.shadowBlur=14+beat*24; ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.stroke(); ctx.restore();
+    // enerji çizgileri
+    ctx.save(); ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.clip(); ctx.globalAlpha=0.12; ctx.strokeStyle='#fff'; ctx.lineWidth=1;
+    for(let i=0;i<5;i++){ const yy=cy-ry+((time*18+i*ry*0.4)%(ry*2)); ctx.beginPath(); ctx.moveTo(cx-rx,yy); ctx.bezierCurveTo(cx-rx/3,yy-12,cx+rx/3,yy+12,cx+rx,yy); ctx.stroke(); } ctx.restore();
+    // koz hologramı
+    if (trump){ ctx.save(); ctx.globalAlpha=0.16+0.06*Math.sin(time*2); ctx.font=`900 ${ry*1.5}px serif`; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillStyle = RED[trump]?'#ff4f8b':'#a6ff4d'; ctx.shadowColor=ctx.fillStyle; ctx.shadowBlur=30; ctx.translate(cx,cy); ctx.scale(1+0.04*Math.sin(time*1.5),1); ctx.fillText(SYM[trump],0,ry*0.06); ctx.restore(); }
+    // sıra kimdeyse masanın o kenarı parlar
+    if ((phase==='play'||phase==='bid') && turn>=0){ const ang=[Math.PI/2,Math.PI,-Math.PI/2,0][turn]; const ex=cx+Math.cos(ang)*rx, ey=cy+Math.sin(ang)*ry;
+      const gl=ctx.createRadialGradient(ex,ey,0,ex,ey,rx*0.7); gl.addColorStop(0,`rgba(166,255,77,${0.35+0.15*Math.sin(time*6)})`); gl.addColorStop(1,'rgba(166,255,77,0)');
+      ctx.save(); ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.clip(); ctx.fillStyle=gl; ctx.fillRect(0,0,W,H); ctx.restore(); }
+    let bord; try{ bord=ctx.createConicGradient(time*0.6,cx,cy); ['#2ee6c8','#a6ff4d','#ffd23f','#ff8c42','#2ee6c8'].forEach((c,i)=>bord.addColorStop(i/4,c)); }catch(e){ bord='#fff'; }
+    ctx.save(); ctx.strokeStyle=bord; ctx.lineWidth=3+beat*4+tableFlash*3; ctx.shadowColor='#fff'; ctx.shadowBlur=14+beat*24; ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.stroke(); ctx.restore();
     // ekolayzer
     const nb=26, bw=W/nb;
     for (let i=0;i<nb;i++){ const v=freq&&SAVE.music ? freq[Math.min(freq.length-1,1+Math.floor(i*freq.length*0.7/nb))]/255 : (0.2+0.15*Math.sin(time*3+i*0.7)*Math.sin(time*1.3+i));

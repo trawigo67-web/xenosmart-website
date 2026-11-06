@@ -8,14 +8,14 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#2a1b7a">
+<meta name="theme-color" content="#145a5a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Neon Blok – düşen blokları diz, satırları patlat. Diş Fırlat ile aynı neon stilde.">
 <style>
-  :root{--a:#38e1ff;--b:#ff4fd8;--glass:rgba(255,255,255,.16)}
-  html,body{margin:0;height:100%;background:#2a1b7a;color:#fff;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  :root{--a:#2ee6c8;--b:#a6ff4d;--glass:rgba(255,255,255,.16)}
+  html,body{margin:0;height:100%;background:#145a5a;color:#fff;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
   canvas{display:block;width:100vw;height:100vh;height:100dvh}
   #top{position:fixed;top:calc(10px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;pointer-events:none}
   .pill{background:var(--glass);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px;white-space:nowrap}
@@ -39,7 +39,7 @@
   #toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
   #card{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,10,60,.35);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);transition:opacity .3s;z-index:5}
   #card.hide{opacity:0;pointer-events:none}
-  .box{background:linear-gradient(160deg,rgba(60,40,150,.8),rgba(30,20,90,.75));border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:24px;padding:24px;text-align:center;width:min(340px,86vw);max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  .box{background:linear-gradient(160deg,rgba(22,92,92,.86),rgba(12,40,60,.84));border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:24px;padding:24px;text-align:center;width:min(340px,86vw);max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
   .box h1{margin:0 0 4px;font-size:34px;font-weight:800;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
   .box p{margin:6px 0 14px;color:#e4e6ff;font-size:15px;line-height:1.45}
   .btns{display:flex;flex-direction:column;gap:9px;margin-top:6px}
@@ -55,7 +55,7 @@
   body[data-device=tablet] .cb{width:80px;height:80px;font-size:32px} body[data-device=tablet] .cb.drop{width:120px}
   body[data-device=tablet] .box{width:min(460px,80vw);padding:32px} body[data-device=tablet] .box h1{font-size:44px}
   #picker{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;justify-content:flex-start;background:rgba(0,0,0,.25)}
-  #picker .pk{margin:calc(52px + env(safe-area-inset-top)) 0 0 10px;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:16px;background:linear-gradient(160deg,rgba(60,40,150,.92),rgba(30,20,90,.88));border:1px solid rgba(255,255,255,.35)}
+  #picker .pk{margin:calc(52px + env(safe-area-inset-top)) 0 0 10px;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:16px;background:linear-gradient(160deg,rgba(22,92,92,.94),rgba(12,40,60,.92));border:1px solid rgba(255,255,255,.35)}
   #picker a{color:#fff;text-decoration:none;font-weight:800;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.1);font-family:inherit}
 </style>
 </head>
@@ -91,6 +91,14 @@
   const t=(k,...a)=>{ const v=(I18N[LANG]||I18N.tr)[k]; return typeof v==='function'?v(...a):v; };
   const fmt=n=>n.toLocaleString(t('loc'));
 
+
+  // ---- 🦎 Bukalemun Studios: renk değiştiren palet ----
+  const CHAM_H=[150,175,95,32,320,150];
+  function chamHue(tm,off=0){ const pos=((tm*0.018+off)%5+5)%5, i=Math.floor(pos), f=pos-i; const a=CHAM_H[i], b=CHAM_H[i+1]; const d=((b-a+540)%360)-180; return (a+d*f+360)%360; }
+  function hsl2hex(h,s,l){ s/=100; l/=100; const k=n=>(n+h/30)%12, a=s*Math.min(l,1-l), f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));
+    return '#'+[f(0),f(8),f(4)].map(x=>Math.round(x*255).toString(16).padStart(2,'0')).join(''); }
+  const chamBg=(tm,off)=>{ const h=chamHue(tm,off); return [hsl2hex(h,68,34),hsl2hex((h+28)%360,70,20),hsl2hex((h+55)%360,70,10)]; };
+  const chamBl=(tm,off)=>{ const h=chamHue(tm,off); return [hsl2hex(h,90,58),hsl2hex((h+45)%360,90,60),hsl2hex((h+320)%360,90,60),hsl2hex((h+150)%360,90,64)]; };
   // ---------- parçalar ----------
   const COLS=10, ROWS=20;
   const SHAPES = {
@@ -239,7 +247,7 @@
   }
   function menu(){
     state='menu'; document.documentElement.lang=LANG;
-    showCard(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><h1>${t('title')}</h1><p>${t('intro')}</p>${matchMedia('(pointer:fine)').matches?`<p class="small" style="color:#fff">${t('keys')}</p>`:''}<p style="color:#ffd23f;font-weight:800">${t('hi',fmt(SAVE.hi))} · ${t('best',SAVE.best||1)}</p><button class="tg ${SAVE.music?'on':''}">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>${SAVE.shareDay===new Date().toISOString().slice(0,10) ? `<div class="small" style="color:#7dff6a;font-weight:800">${t('shareReady')}</div>` : `<a class="shr" style="display:block;margin-top:12px;padding:10px;border-radius:14px;font-weight:800;text-decoration:none;color:#0b0d1a;background:linear-gradient(90deg,#25d366,#38e1ff)" href="https://wa.me/?text=${encodeURIComponent(t('shareText'))}" target="_blank" rel="noopener">${t('share')}</a>`}`,
+    showCard(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><h1>${t('title')}</h1><p>${t('intro')}</p>${matchMedia('(pointer:fine)').matches?`<p class="small" style="color:#fff">${t('keys')}</p>`:''}<p style="color:#ffd23f;font-weight:800">${t('hi',fmt(SAVE.hi))} · ${t('best',SAVE.best||1)}</p><button class="tg ${SAVE.music?'on':''}">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>${SAVE.shareDay===new Date().toISOString().slice(0,10) ? `<div class="small" style="color:#7dff6a;font-weight:800">${t('shareReady')}</div>` : `<a class="shr" style="display:block;margin-top:12px;padding:10px;border-radius:14px;font-weight:800;text-decoration:none;color:#0b0d1a;background:linear-gradient(90deg,#25d366,#38e1ff)" href="https://wa.me/?text=${encodeURIComponent(t('shareText'))}" target="_blank" rel="noopener">${t('share')}</a>`}<div class="small" style="margin-top:12px;opacity:.85;font-weight:800;letter-spacing:.5px">🦎 Bukalemun Studios</div>`,
       [{label:t('start'),go:newGame},{label:'🃏 Neon Batak',ghost:true,go:()=>{ location.href='batak.html'; }},{label:t('back'),ghost:true,go:goBack}]);
   }
 
@@ -301,9 +309,9 @@
   const floatText=(x,y,text,color,size)=>floaters.push({x,y,text,color,size,life:1.2});
 
   function drawBg(){
-    const g0 = fever>0 ? ['#ff7a18','#b8326a','#4a1450'] : LEVEL_BG[(level-1)%LEVEL_BG.length];
+    const g0 = fever>0 ? ['#ff7a18','#b8326a','#4a1450'] : chamBg(time, level*0.7);
     const lg=ctx.createLinearGradient(0,0,W*0.4,H); lg.addColorStop(0,g0[0]); lg.addColorStop(.55,g0[1]); lg.addColorStop(1,g0[2]); ctx.fillStyle=lg; ctx.fillRect(0,0,W,H);
-    const bl = fever>0 ? ['#ffd23f','#ff4f8b','#ff9f1c','#ffffff'] : LEVEL_BL[(level-1)%LEVEL_BL.length], M=Math.max(W,H);
+    const bl = fever>0 ? ['#ffd23f','#ff4f8b','#ff9f1c','#ffffff'] : chamBl(time, level*0.7), M=Math.max(W,H);
     ctx.globalCompositeOperation='lighter';
     for(let i=0;i<4;i++){ const x=W*(0.5+0.42*Math.sin(time*0.13+i*1.7)), y=H*(0.45+0.38*Math.cos(time*0.11+i*2.3)), r=M*(0.45+0.1*Math.sin(time*0.2+i));
       const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,hexA(bl[i])+'0.32)'); g.addColorStop(1,hexA(bl[i])+'0)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H); }
