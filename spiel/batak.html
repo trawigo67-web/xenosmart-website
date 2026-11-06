@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Neon Batak</title>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#2a1b7a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Neon Batak – ihaleli batak, 3 bilgisayar rakibe karşı. Hızlı oyun, neon grafik.">
+<style>
+  :root{--a:#38e1ff;--b:#ff4fd8;--glass:rgba(255,255,255,.16);--cw:60px;--ch:86px}
+  html,body{margin:0;height:100%;background:#2a1b7a;color:#fff;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  canvas{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;z-index:0}
+  #top{position:fixed;top:calc(10px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;z-index:3}
+  .pill{background:var(--glass);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px;white-space:nowrap;color:#fff;font-family:inherit}
+  .sw{cursor:pointer;padding:6px 10px}
+  #info{background:linear-gradient(90deg,rgba(255,79,216,.45),rgba(56,225,255,.45))}
+  /* oyuncular */
+  .seat{position:fixed;z-index:2;display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:none;transition:transform .3s}
+  .av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,.08));border:2px solid rgba(255,255,255,.4);box-shadow:0 4px 16px rgba(0,0,0,.3)}
+  .seat.turn .av{border-color:#7dff6a;box-shadow:0 0 18px #7dff6a,0 0 0 4px rgba(125,255,106,.25);animation:pulse 1s infinite}
+  @keyframes pulse{50%{transform:scale(1.08)}}
+  .nm{font-size:12px;font-weight:800;background:rgba(20,10,60,.55);padding:2px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.2)}
+  .st{font-size:11px;font-weight:700;color:#ffd23f}
+  .bubble{position:absolute;top:-8px;left:50%;transform:translate(-50%,-100%);background:#fff;color:#2a1b7a;font-weight:900;font-size:14px;padding:4px 10px;border-radius:12px;white-space:nowrap;opacity:0;transition:.25s}
+  .bubble.show{opacity:1}
+  .seat.s0 .bubble{top:auto;bottom:-6px;transform:translate(-50%,100%)}
+  /* kartlar */
+  .card{position:fixed;width:var(--cw);height:var(--ch);border-radius:9px;z-index:4;transition:left .35s cubic-bezier(.2,.8,.2,1),top .35s cubic-bezier(.2,.8,.2,1),transform .35s,opacity .3s,box-shadow .2s;
+    background:linear-gradient(160deg,#ffffff,#e9e6ff);box-shadow:0 4px 12px rgba(0,0,0,.35);color:#2a1b7a;font-weight:900}
+  .card .r{position:absolute;left:5px;top:3px;font-size:calc(var(--cw)*.3);line-height:1}
+  .card .s1{position:absolute;left:5px;top:calc(var(--cw)*.32);font-size:calc(var(--cw)*.24);line-height:1}
+  .card .big{position:absolute;right:4px;bottom:2px;font-size:calc(var(--cw)*.55);line-height:1}
+  .card.red{color:#ff2d75} .card.blk{color:#3a2bb0}
+  .card.back{background:repeating-linear-gradient(45deg,#7b5cff 0 6px,#ff4fd8 6px 12px);border:3px solid #fff}
+  .card.back *{display:none}
+  .card.mine{cursor:pointer}
+  .card.mine.ok{box-shadow:0 0 0 2px #7dff6a,0 0 16px rgba(125,255,106,.8)}
+  .card.mine.no{filter:brightness(.55) saturate(.6)}
+  .card.trump::after{content:'';position:absolute;inset:-2px;border-radius:10px;box-shadow:0 0 14px #ffd23f;pointer-events:none}
+  /* panel */
+  #panel{position:fixed;left:50%;transform:translateX(-50%);z-index:6;display:none;flex-wrap:wrap;justify-content:center;gap:6px;max-width:94vw;padding:12px;border-radius:20px;background:linear-gradient(160deg,rgba(60,40,150,.85),rgba(30,20,90,.8));border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 10px 40px rgba(0,0,0,.4)}
+  #panel .tt{width:100%;text-align:center;font-weight:800;font-size:15px;margin-bottom:4px}
+  .pb{font:inherit;font-weight:900;font-size:17px;min-width:44px;height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);color:#fff;cursor:pointer}
+  .pb.main{background:linear-gradient(90deg,var(--a),var(--b));color:#1a1050;border:0}
+  .pb.suit{font-size:30px;width:62px;height:62px;background:#fff}
+  #toast{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%) scale(.9);font-size:24px;font-weight:900;opacity:0;transition:.25s;pointer-events:none;white-space:nowrap;text-shadow:0 0 20px currentColor;z-index:7}
+  #toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  #trumpBadge{position:fixed;z-index:3;left:12px;top:calc(56px + env(safe-area-inset-top));font-weight:800;font-size:13px}
+  #card2{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,10,60,.4);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);transition:opacity .3s;z-index:9}
+  #card2.hide{opacity:0;pointer-events:none}
+  .box{background:linear-gradient(160deg,rgba(60,40,150,.85),rgba(30,20,90,.8));border:1px solid rgba(255,255,255,.35);border-radius:24px;padding:24px;text-align:center;width:min(360px,88vw);max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  .box h1{margin:0 0 4px;font-size:34px;font-weight:800;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .box p{margin:6px 0 12px;color:#e4e6ff;font-size:14px;line-height:1.45}
+  .btns{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+  .btn{font:inherit;font-weight:800;font-size:17px;color:#1a1050;border:0;border-radius:999px;padding:12px 20px;background:linear-gradient(90deg,var(--a),var(--b));box-shadow:0 0 22px rgba(255,79,216,.35);cursor:pointer}
+  .btn.ghost{background:rgba(255,255,255,.12);color:#fff;box-shadow:none;border:1px solid rgba(255,255,255,.3)}
+  .langs{display:flex;justify-content:center;gap:10px;margin:-6px 0 8px}
+  .lg{font-size:26px;line-height:1;padding:6px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);cursor:pointer;opacity:.6}
+  .lg.sel{opacity:1;border-color:var(--a);box-shadow:0 0 12px var(--a)}
+  table.sc{width:100%;border-collapse:collapse;margin:8px 0;font-size:14px}
+  table.sc td,table.sc th{padding:6px 4px;border-bottom:1px solid rgba(255,255,255,.15)}
+  table.sc th{color:#c9ccf0;font-size:12px}
+  .plus{color:#7dff6a;font-weight:900} .minus{color:#ff6b8a;font-weight:900}
+  .small{font-size:12px;color:#c9ccf0;margin-top:8px;line-height:1.4}
+  #picker{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;justify-content:flex-start;background:rgba(0,0,0,.25)}
+  #picker .pk{margin:calc(52px + env(safe-area-inset-top)) 0 0 10px;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:16px;background:linear-gradient(160deg,rgba(60,40,150,.9),rgba(30,20,90,.85));border:1px solid rgba(255,255,255,.35)}
+  #picker a{color:#fff;text-decoration:none;font-weight:800;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.1)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="top"><button class="pill sw" id="sw">🎮 ⇄</button><div class="pill" id="info">—</div><div class="pill" id="hand">—</div></div>
+<div id="trumpBadge" class="pill" style="display:none"></div>
+<div class="seat s0" id="seat0"><div class="bubble"></div><div class="nm"></div><div class="st"></div></div>
+<div class="seat s1" id="seat1"><div class="bubble"></div><div class="av">🦊</div><div class="nm"></div><div class="st"></div></div>
+<div class="seat s2" id="seat2"><div class="bubble"></div><div class="av">🐼</div><div class="nm"></div><div class="st"></div></div>
+<div class="seat s3" id="seat3"><div class="bubble"></div><div class="av">🐯</div><div class="nm"></div><div class="st"></div></div>
+<div id="panel"></div>
+<div id="toast"></div>
+<div id="card2" class="hide"><div class="box" id="box"></div></div>
+<div id="picker"><div class="pk"><a href="index.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
+<script>
+(() => {
+  // ---------- kayıt & dil ----------
+  let SHARED={}; try{ SHARED=JSON.parse(localStorage.getItem('disfirlat2')||'{}'); }catch(e){}
+  let SAVE={wins:0, games:0, music:true}; try{ Object.assign(SAVE, JSON.parse(localStorage.getItem('neonbatak')||'{}')); }catch(e){}
+  let LANG=SHARED.lang||((navigator.language||'tr').slice(0,2)); if(!['tr','de','en'].includes(LANG)) LANG='en';
+  const persist=()=>{ try{ localStorage.setItem('neonbatak',JSON.stringify(SAVE)); SHARED.lang=LANG; localStorage.setItem('disfirlat2',JSON.stringify(SHARED)); }catch(e){} };
+  const I18N={
+    tr:{title:'Neon Batak', intro:'İhaleli batak – 3 bilgisayar rakibe karşı.<br>En yüksek ihaleyi veren kozu seçer ve ilk kartı atar.<br>Renge uymak ve yükseltmek zorunlu; rengin yoksa koz atmalısın.', quick:'⚡ Hızlı oyun (5 el)', normal:'🃏 Normal oyun (9 el)', back:'⚙️ Diş Fırlat', names:['Sen','Ayşe','Mehmet','Zeynep'],
+        hand:(a,b)=>`El ${a}/${b}`, bidTitle:(c)=>`İhale ver (şu an: ${c||'—'})`, pass:'Pas', passSay:'Pas', trumpTitle:'Kozu seç', bidInfo:(n,b)=>`${n} · ihale ${b}`, trump:'Koz', yourTurn:'Sıra sende', tricks:(t,b)=>b?`${t}/${b}`:`${t}`,
+        made:'İhale tuttu!', failed:'İhale battı!', batak:'BATTI (0 el)', next:'Sonraki el →', handRes:'El sonucu', total:'Toplam', player:'Oyuncu', got:'Aldı', pts:'Puan', winner:n=>`🏆 Kazanan: ${n}`, youWin:'🎉 Tebrikler, kazandın!', again:'Tekrar oyna', menu:'Menü',
+        rules:'Puanlama: İhaleyi tutturan aldığı el kadar puan alır, tutturamayan ihale kadar puan kaybeder. Diğerleri aldıkları el kadar puan alır; hiç el alamayan ihale kadar kaybeder.', stats:(w,g)=>`Galibiyet: ${w} / ${g} oyun`, forced:n=>`Herkes pas – ${n} 5 ile mecbur`, broken:'Koz kırıldı! 💥', music:'Müzik', on:'Açık', off:'Kapalı'},
+    de:{title:'Neon Batak', intro:'Batak mit Ansage – gegen 3 Computergegner.<br>Wer am höchsten bietet, wählt Trumpf und spielt aus.<br>Farbe bedienen und überstechen ist Pflicht; ohne Farbe musst du trumpfen.', quick:'⚡ Schnelles Spiel (5 Hände)', normal:'🃏 Normales Spiel (9 Hände)', back:'⚙️ Diş Fırlat', names:['Du','Anna','Max','Lea'],
+        hand:(a,b)=>`Hand ${a}/${b}`, bidTitle:(c)=>`Gebot abgeben (aktuell: ${c||'—'})`, pass:'Passe', passSay:'Passe', trumpTitle:'Trumpf wählen', bidInfo:(n,b)=>`${n} · Gebot ${b}`, trump:'Trumpf', yourTurn:'Du bist dran', tricks:(t,b)=>b?`${t}/${b}`:`${t}`,
+        made:'Gebot erfüllt!', failed:'Gebot verfehlt!', batak:'NULL STICHE', next:'Nächste Hand →', handRes:'Ergebnis der Hand', total:'Gesamt', player:'Spieler', got:'Stiche', pts:'Punkte', winner:n=>`🏆 Gewinner: ${n}`, youWin:'🎉 Glückwunsch, du hast gewonnen!', again:'Nochmal', menu:'Menü',
+        rules:'Wertung: Wer sein Gebot schafft, bekommt so viele Punkte wie Stiche; sonst verliert er das Gebot. Die anderen bekommen ihre Stiche; wer keinen Stich hat, verliert die Höhe des Gebots.', stats:(w,g)=>`Siege: ${w} / ${g} Spiele`, forced:n=>`Alle passen – ${n} muss 5 spielen`, broken:'Trumpf gebrochen! 💥', music:'Musik', on:'An', off:'Aus'},
+    en:{title:'Neon Batak', intro:'Bidding Batak – against 3 computer players.<br>The highest bidder picks trump and leads.<br>You must follow suit and beat the trick; if void, you must trump.', quick:'⚡ Quick game (5 hands)', normal:'🃏 Normal game (9 hands)', back:'⚙️ Diş Fırlat', names:['You','Amy','Leo','Zoe'],
+        hand:(a,b)=>`Hand ${a}/${b}`, bidTitle:(c)=>`Place a bid (current: ${c||'—'})`, pass:'Pass', passSay:'Pass', trumpTitle:'Choose trump', bidInfo:(n,b)=>`${n} · bid ${b}`, trump:'Trump', yourTurn:'Your turn', tricks:(t,b)=>b?`${t}/${b}`:`${t}`,
+        made:'Bid made!', failed:'Bid failed!', batak:'ZERO TRICKS', next:'Next hand →', handRes:'Hand result', total:'Total', player:'Player', got:'Tricks', pts:'Points', winner:n=>`🏆 Winner: ${n}`, youWin:'🎉 Congratulations, you won!', again:'Play again', menu:'Menu',
+        rules:'Scoring: the bidder scores their tricks if the bid is made, otherwise loses the bid. Others score their tricks; anyone with no tricks loses the bid amount.', stats:(w,g)=>`Wins: ${w} / ${g} games`, forced:n=>`Everyone passed – ${n} must play 5`, broken:'Trump broken! 💥', music:'Music', on:'On', off:'Off'},
+  };
+  const FLAGS={tr:'🇹🇷',de:'🇩🇪',en:'🇬🇧'};
+  const t=(k,...a)=>{ const v=(I18N[LANG]||I18N.tr)[k]; return typeof v==='function'?v(...a):v; };
+
+  // ---------- kart mantığı ----------
+  const SUITS=['S','H','D','C'], SYM={S:'♠',H:'♥',D:'♦',C:'♣'}, RED={H:1,D:1};
+  const RN={11:'J',12:'Q',13:'K',14:'A'}; const rname=r=>RN[r]||String(r);
+  const next=p=>(p+3)%4;   // saat yönünün tersine: sen → sağ → üst → sol
+  let hands, trump, bid, bidder, dealer=0, tricks, trick, leader, turn, trumpBroken, phase='menu', handNo=0, HANDS=5, scores=[0,0,0,0], bids, passed, history=[];
+  const sortHand=h=>h.sort((a,b)=> a.s===b.s ? b.r-a.r : SUITS.indexOf(a.s)-SUITS.indexOf(b.s));
+
+  function deal(){
+    const deck=[]; for(const s of SUITS) for(let r=2;r<=14;r++) deck.push({s,r,id:s+r});
+    for(let i=deck.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [deck[i],deck[j]]=[deck[j],deck[i]]; }
+    hands=[0,1,2,3].map(p=>sortHand(deck.slice(p*13,p*13+13)));
+  }
+  function legal(p){
+    const h=hands[p];
+    if (!trick.length){
+      if (!trumpBroken){ const nt=h.filter(c=>c.s!==trump); if (nt.length) return nt; }
+      return h.slice();
+    }
+    const lead=trick[0].c.s, follow=h.filter(c=>c.s===lead);
+    const trumped = lead!==trump && trick.some(x=>x.c.s===trump);
+    if (follow.length){
+      if (trumped) return follow;
+      const hi=Math.max(...trick.filter(x=>x.c.s===lead).map(x=>x.c.r));
+      const beat=follow.filter(c=>c.r>hi); return beat.length?beat:follow;
+    }
+    const tr=h.filter(c=>c.s===trump);
+    if (tr.length){
+      const hiT=Math.max(0,...trick.filter(x=>x.c.s===trump).map(x=>x.c.r));
+      const over=tr.filter(c=>c.r>hiT); return over.length?over:tr;
+    }
+    return h.slice();
+  }
+  function winnerOf(tr){
+    let best=tr[0]; for(const x of tr){ const b=best.c, c=x.c;
+      if (c.s===b.s ? c.r>b.r : c.s===trump) best=x; } return best.p;
+  }
+
+  // ---------- yapay zekâ ----------
+  function estimate(h, tsuit){
+    let e=0; const by={}; SUITS.forEach(s=>by[s]=h.filter(c=>c.s===s));
+    for(const s of SUITS){ const cs=by[s], n=cs.length, rs=cs.map(c=>c.r);
+      if (rs.includes(14)) e+=1; if (rs.includes(13)) e+= n>=2?0.8:0.3; if (rs.includes(12)) e+= n>=3?0.45:0.1;
+      if (s===tsuit){ e+=Math.max(0,n-3)*0.85; if (rs.includes(11)) e+=0.3; } }
+    return e;
+  }
+  const bestSuit=h=>SUITS.map(s=>({s,v:h.filter(c=>c.s===s).reduce((a,c)=>a+1+(c.r>=12?0.6:0),0)})).sort((a,b)=>b.v-a.v)[0].s;
+  function botBid(p){ const ts=bestSuit(hands[p]); const e=estimate(hands[p],ts)+ (Math.random()-.5)*0.6; const v=Math.floor(e); return (v>=5 && v>bid) ? Math.min(13,v) : 0; }
+  function botPlay(p){
+    const L=legal(p); const lowest=arr=>arr.reduce((a,c)=>(c.r<a.r?c:a)); const highest=arr=>arr.reduce((a,c)=>(c.r>a.r?c:a));
+    const val=c=>c.r+(c.s===trump?20:0);
+    if (!trick.length){
+      const myTr=L.filter(c=>c.s===trump);
+      if (p===bidder && myTr.length && myTr.some(c=>c.r>=13)) return highest(myTr);
+      const aces=L.filter(c=>c.r===14 && c.s!==trump); if (aces.length) return aces[0];
+      const nonT=L.filter(c=>c.s!==trump); return lowest(nonT.length?nonT:L);
+    }
+    // kazanabilir mi?
+    const wins=L.filter(c=>{ const tr=[...trick,{p,c}]; return winnerOf(tr)===p; });
+    if (wins.length){
+      // son oyuncuysa en düşük kazananı, değilse güçlü kazananı
+      if (trick.length===3) return wins.reduce((a,c)=>(val(c)<val(a)?c:a));
+      return wins.reduce((a,c)=>(val(c)>val(a)?c:a));
+    }
+    return L.reduce((a,c)=>(val(c)<val(a)?c:a));
+  }
+
+  // ---------- görünüm ----------
+  const $=id=>document.getElementById(id);
+  const cardEls={};
+  let W,H,CW,CH,device;
+  function sizes(){
+    W=innerWidth; H=innerHeight; device=Math.min(W,H)>=700?'tablet':(W>H?'landscape':'phone');
+    CW=Math.round(Math.min(device==='tablet'?92:66, (W-24)/7.2, H/9)); CH=Math.round(CW*1.43);
+    document.documentElement.style.setProperty('--cw',CW+'px'); document.documentElement.style.setProperty('--ch',CH+'px');
+    const sat=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sat'))||0;
+    const pos=[[W/2, H-CH-34],[34, H*0.42],[W/2, 78+(device==='landscape'?0:24)],[W-34, H*0.42]];
+    pos.forEach((q,i)=>{ const el=$('seat'+i); el.style.left=(i===1?6:i===3?W-86:q[0]-40)+'px'; el.style.width='80px'; el.style.top=(i===0? (H-24) : q[1])+'px'; });
+    $('seat0').style.top=(H-CH-12-30)+'px';
+  }
+  function seatXY(p){
+    if (p===0) return [W/2, H-CH*0.5-16];
+    if (p===1) return [46, H*0.42+30];
+    if (p===2) return [W/2, 120];
+    return [W-46, H*0.42+30];
+  }
+  function trickXY(p){ const cx=W/2, cy=H*0.47, d=CW*0.75;
+    return [[cx-CW/2, cy-CH/2+d*0.8],[cx-CW/2-d*1.1, cy-CH/2],[cx-CW/2, cy-CH/2-d*0.8],[cx-CW/2+d*1.1, cy-CH/2]][p]; }
+  function makeCard(c){
+    const el=document.createElement('div'); el.className='card '+(RED[c.s]?'red':'blk');
+    el.innerHTML=`<div class="r">${rname(c.r)}</div><div class="s1">${SYM[c.s]}</div><div class="big">${SYM[c.s]}</div>`;
+    el.addEventListener('pointerdown',e=>{ e.preventDefault(); onMyCard(c); });
+    document.body.appendChild(el); cardEls[c.id]=el; return el;
+  }
+  function layoutHand(){
+    const h=hands[0], n=h.length; if(!n) return;
+    const maxW=Math.min(W-16, device==='tablet'? CW*n*0.75 : W-16);
+    const step=Math.min(CW*0.9, (maxW-CW)/Math.max(1,n-1)); const x0=W/2-((n-1)*step+CW)/2;
+    const L = (phase==='play' && turn===0) ? legal(0).map(c=>c.id) : null;
+    h.forEach((c,i)=>{ const el=cardEls[c.id]; el.classList.add('mine'); el.classList.remove('back');
+      const lift = L && L.includes(c.id) ? -CH*0.12 : 0;
+      const rot=(i-(n-1)/2)*(device==='tablet'?1.6:2.4);
+      el.style.left=(x0+i*step)+'px'; el.style.top=(H-CH-14+Math.abs(i-(n-1)/2)*1.6+lift)+'px'; el.style.transform=`rotate(${rot}deg)`; el.style.zIndex=10+i;
+      el.classList.toggle('ok', !!(L && L.includes(c.id))); el.classList.toggle('no', !!(L && !L.includes(c.id)));
+      el.classList.toggle('trump', !!trump && c.s===trump);
+    });
+  }
+  function layoutBots(){
+    for (const p of [1,2,3]) hands[p].forEach((c,i)=>{ const el=cardEls[c.id]; el.classList.add('back');
+      const [sx,sy]=seatXY(p); el.style.left=(sx-CW/2)+'px'; el.style.top=(sy-CH/2)+'px'; el.style.transform='scale(.35)'; el.style.opacity='0'; el.style.zIndex=3; });
+  }
+  function hud(){
+    const N=I18N[LANG].names;
+    for (let p=0;p<4;p++){ const s=$('seat'+p);
+      s.querySelector('.nm').textContent=N[p]+(p===bidder&&bid?` · ${bid}`:'');
+      s.querySelector('.st').textContent=`⭐${scores[p]}  ✋${tricks?tricks[p]:0}${p&&hands?'  🂠'+hands[p].length:''}`;
+      s.classList.toggle('turn', (phase==='play'||phase==='bid') && turn===p); }
+    $('hand').textContent=t('hand',handNo,HANDS);
+    $('info').textContent = bidder!=null && bid ? t('bidInfo',N[bidder],bid) : 'Neon Batak';
+    const tb=$('trumpBadge'); if (trump){ tb.style.display='block'; tb.innerHTML=`${t('trump')}: <b style="font-size:18px;color:${RED[trump]?'#ff7aa8':'#c3b5ff'}">${SYM[trump]}</b>${trumpBroken?' 💥':''}`; } else tb.style.display='none';
+  }
+  function say(p,txt,ms=1100){ const b=$('seat'+p).querySelector('.bubble'); b.textContent=txt; b.classList.add('show'); clearTimeout(b._t); b._t=setTimeout(()=>b.classList.remove('show'),ms); }
+  function toast(text,color,ms=1100){ const el=$('toast'); el.textContent=text; el.style.color=color; el.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>el.classList.remove('show'),ms); }
+
+  // ---------- akış ----------
+  function newGame(n){ HANDS=n; handNo=0; scores=[0,0,0,0]; history=[]; dealer=Math.floor(Math.random()*4); startHand(); }
+  function startHand(){
+    handNo++; Object.values(cardEls).forEach(el=>el.remove()); for (const k in cardEls) delete cardEls[k];
+    deal(); trump=null; bid=0; bidder=null; tricks=[0,0,0,0]; trick=[]; trumpBroken=false; passed=[false,false,false,false]; bids=[0,0,0,0];
+    // dağıtma animasyonu
+    [0,1,2,3].forEach(p=>hands[p].forEach(c=>{ const el=makeCard(c); el.classList.add('back'); el.style.left=(W/2-CW/2)+'px'; el.style.top=(H/2-CH/2)+'px'; el.style.transform='scale(.6)'; }));
+    phase='deal'; hud(); sfx.deal();
+    setTimeout(()=>{ [1,2,3].forEach(p=>hands[p].forEach(c=>{ const el=cardEls[c.id]; const [sx,sy]=seatXY(p); el.style.left=(sx-CW/2)+'px'; el.style.top=(sy-CH/2)+'px'; el.style.transform='scale(.45)'; })); layoutHand(); setTimeout(()=>layoutBots(),450); phase='bid'; turn=next(dealer); hud(); setTimeout(bidStep, 500); }, 120);
+  }
+  function bidStep(){
+    const active=[0,1,2,3].filter(p=>!passed[p]);
+    if (bidder!=null && active.length===1 && active[0]===bidder) return chooseTrump();
+    if (active.length===0){ bidder=dealer; bid=5; toast(t('forced',I18N[LANG].names[dealer]),'#ffd23f',1500); return setTimeout(chooseTrump,1200); }
+    if (passed[turn]){ turn=next(turn); return bidStep(); }
+    if (bidder===turn && active.length===1) return chooseTrump();
+    hud();
+    if (turn===0) return showBidPanel();
+    setTimeout(()=>{ const v=botBid(turn); if (v){ bid=v; bidder=turn; say(turn,String(v)); sfx.bid(); } else { passed[turn]=true; say(turn,t('passSay')); }
+      turn=next(turn); hud(); setTimeout(bidStep, 450); }, 700);
+  }
+  function showBidPanel(){
+    const pn=$('panel'); pn.style.display='flex'; pn.style.top=(H*0.47-60)+'px';
+    let html=`<div class="tt">${t('bidTitle',bid)}</div><button class="pb" data-v="0">${t('pass')}</button>`;
+    for (let v=Math.max(5,bid+1); v<=13; v++) html+=`<button class="pb main" data-v="${v}">${v}</button>`;
+    pn.innerHTML=html;
+    pn.querySelectorAll('.pb').forEach(b=>b.addEventListener('pointerdown',e=>{ e.preventDefault(); unlockAudio(); const v=+b.dataset.v; pn.style.display='none';
+      if (v){ bid=v; bidder=0; say(0,String(v)); sfx.bid(); } else { passed[0]=true; say(0,t('passSay')); }
+      turn=next(0); hud(); setTimeout(bidStep,400); }));
+  }
+  function chooseTrump(){
+    phase='trump'; hud();
+    if (bidder===0){
+      const pn=$('panel'); pn.style.display='flex'; pn.style.top=(H*0.47-70)+'px';
+      pn.innerHTML=`<div class="tt">${t('trumpTitle')}</div>`+SUITS.map(s=>`<button class="pb suit" data-s="${s}" style="color:${RED[s]?'#ff2d75':'#3a2bb0'}">${SYM[s]}</button>`).join('');
+      pn.querySelectorAll('.pb').forEach(b=>b.addEventListener('pointerdown',e=>{ e.preventDefault(); pn.style.display='none'; setTrump(b.dataset.s); }));
+    } else setTimeout(()=>setTrump(bestSuit(hands[bidder])), 700);
+  }
+  function setTrump(s){ trump=s; say(bidder, SYM[s]); toast(`${t('trump')}: ${SYM[s]}`, RED[s]?'#ff7aa8':'#c3b5ff', 1200); sfx.trump(); phase='play'; leader=bidder; turn=bidder; hud(); layoutHand(); setTimeout(playStep, 900); }
+  let playToken=0;
+  function playStep(){
+    hud(); layoutHand();
+    const tok=++playToken, p=turn;
+    if (p===0 || p<0) return;
+    setTimeout(()=>{ if (tok!==playToken || phase!=='play' || turn!==p || trick.length>=4) return; playCard(p, botPlay(p)); }, 650);
+  }
+  function onMyCard(c){
+    if (phase!=='play' || turn!==0) return;
+    if (!legal(0).some(x=>x.id===c.id)){ const el=cardEls[c.id]; el.animate([{transform:el.style.transform+' translateX(-5px)'},{transform:el.style.transform+' translateX(5px)'},{transform:el.style.transform}],{duration:200}); sfx.no(); return; }
+    unlockAudio(); playCard(0,c);
+  }
+  function playCard(p,c){
+    hands[p]=hands[p].filter(x=>x.id!==c.id);
+    if (c.s===trump && !trumpBroken && !(trick.length===0 && false)){ if (trick.length && trick[0].c.s!==trump){ trumpBroken=true; toast(t('broken'),'#ffd23f',900); } else if(!trick.length){ trumpBroken=true; } }
+    trick.push({p,c});
+    const el=cardEls[c.id]; el.classList.remove('back','mine','ok','no'); el.style.opacity='1'; el.classList.toggle('trump', c.s===trump);
+    const [x,y]=trickXY(p); el.style.left=x+'px'; el.style.top=y+'px'; el.style.transform=`rotate(${(Math.random()-.5)*14}deg)`; el.style.zIndex=50+trick.length;
+    sfx.card();
+    if (p!==0) layoutBots(); layoutHand();
+    if (trick.length===4){ phase='resolve'; turn=-1; hud(); setTimeout(resolveTrick, 900); }
+    else { turn=next(p); playStep(); }
+  }
+  function resolveTrick(){
+    const w=winnerOf(trick); tricks[w]++;
+    const [sx,sy]=seatXY(w);
+    trick.forEach(x=>{ const el=cardEls[x.c.id]; el.style.left=(sx-CW/2)+'px'; el.style.top=(sy-CH/2)+'px'; el.style.transform='scale(.3)'; el.style.opacity='0'; });
+    sparks(sx,sy, w===0?'#7dff6a':'#ffd23f'); sfx.win(w===0);
+    if (w===0) toast('✋ +1','#7dff6a',700);
+    trick=[]; leader=w; turn=w; phase='play';
+    setTimeout(()=>{ if (!hands[0].length) endHand(); else playStep(); }, 600);
+  }
+  function endHand(){
+    phase='end'; const N=I18N[LANG].names, delta=[0,0,0,0];
+    for (let p=0;p<4;p++){
+      if (p===bidder) delta[p] = tricks[p]>=bid ? tricks[p] : -bid;
+      else delta[p] = tricks[p]>0 ? tricks[p] : -bid;
+      scores[p]+=delta[p];
+    }
+    history.push(delta); hud();
+    const made = tricks[bidder]>=bid;
+    toast(made?t('made'):t('failed'), made?'#7dff6a':'#ff6b8a', 1400); made?sfx.made():sfx.fail();
+    const rows=[0,1,2,3].map(p=>`<tr><td style="text-align:left">${p===bidder?'👑 ':''}${N[p]}</td><td>${tricks[p]}${p===bidder?' / '+bid:''}</td><td class="${delta[p]>=0?'plus':'minus'}">${delta[p]>=0?'+':''}${delta[p]}${tricks[p]===0&&p!==bidder?' 💀':''}</td><td><b>${scores[p]}</b></td></tr>`).join('');
+    const last = handNo>=HANDS;
+    setTimeout(()=>{
+      if (!last){ show(`<h1>${t('handRes')}</h1><table class="sc"><tr><th>${t('player')}</th><th>${t('got')}</th><th>${t('pts')}</th><th>${t('total')}</th></tr>${rows}</table>`,
+          [{l:t('next'),go:()=>{ dealer=next(dealer); startHand(); }}]); }
+      else {
+        const best=Math.max(...scores), wi=scores.indexOf(best), me=wi===0;
+        SAVE.games++; if (me) SAVE.wins++; persist();
+        if (me) for(let i=0;i<6;i++) setTimeout(()=>sparks(Math.random()*W, Math.random()*H*0.6, ['#ffd23f','#ff4fd8','#38e1ff','#7dff6a'][i%4]), i*180);
+        show(`<h1>${me?t('youWin'):t('winner',N[wi])}</h1><table class="sc"><tr><th>${t('player')}</th><th>${t('got')}</th><th>${t('pts')}</th><th>${t('total')}</th></tr>${rows}</table><p class="small">${t('stats',SAVE.wins,SAVE.games)}</p>`,
+          [{l:t('again'),go:()=>newGame(HANDS)},{l:t('menu'),ghost:true,go:menu}]);
+      }
+    }, 1500);
+  }
+
+  // ---------- menü / kart ----------
+  function show(html, buttons){
+    const bx=$('box'); bx.innerHTML=html+`<div class="btns">${buttons.map((b,i)=>`<button class="btn ${b.ghost?'ghost':''}" data-i="${i}">${b.l}</button>`).join('')}</div>`;
+    $('card2').classList.remove('hide');
+    bx.querySelectorAll('.btn').forEach(el=>el.addEventListener('pointerdown',e=>{ e.preventDefault(); e.stopPropagation(); unlockAudio(); $('card2').classList.add('hide'); buttons[+el.dataset.i].go(); }));
+    bx.querySelectorAll('.lg').forEach(el=>el.addEventListener('pointerdown',e=>{ e.preventDefault(); LANG=el.dataset.l; persist(); menu(); }));
+    bx.querySelectorAll('.tg').forEach(el=>el.addEventListener('pointerdown',e=>{ e.preventDefault(); unlockAudio(); SAVE.music=!SAVE.music; persist(); SAVE.music?musicStart():musicStop(); menu(); }));
+  }
+  function menu(){
+    phase='menu'; document.documentElement.lang=LANG; hud();
+    show(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><h1>${t('title')}</h1><p>${t('intro')}</p><p class="small">${t('rules')}</p><p class="small" style="color:#ffd23f;font-weight:800">${t('stats',SAVE.wins,SAVE.games)}</p>
+      <button class="pb tg" style="font-size:13px;height:auto;padding:8px 12px">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>`,
+      [{l:t('quick'),go:()=>newGame(5)},{l:t('normal'),ghost:true,go:()=>newGame(9)}]);
+  }
+  $('sw').addEventListener('pointerdown',e=>{ e.preventDefault(); $('picker').style.display='flex'; });
+  $('picker').addEventListener('pointerdown',e=>{ if(e.target.id==='picker') $('picker').style.display='none'; });
+
+  // ---------- ses ----------
+  try{ if (navigator.audioSession) navigator.audioSession.type='ambient'; }catch(e){}
+  let ac, musGain, musSrc, musBuf=null, musTried=false, analyser=null, freq=null;
+  function unlockAudio(){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); ac.resume&&ac.resume(); if(SAVE.music&&!musSrc) musicStart(); }catch(e){} }
+  function tone(f,d,type='sine',v=0.06,when=0){ try{ if(!ac) return; const t0=ac.currentTime+when, o=ac.createOscillator(), g=ac.createGain();
+    o.type=type; o.frequency.setValueAtTime(f,t0); g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(v,t0+0.005); g.gain.exponentialRampToValueAtTime(0.0001,t0+d);
+    o.connect(g).connect(ac.destination); o.start(t0); o.stop(t0+d+0.02); }catch(e){} }
+  function noise(d,v=0.08,hp=1500){ try{ if(!ac) return; const len=Math.floor(ac.sampleRate*d), b=ac.createBuffer(1,len,ac.sampleRate), ch=b.getChannelData(0);
+    for(let i=0;i<len;i++) ch[i]=(Math.random()*2-1)*Math.pow(1-i/len,2); const s=ac.createBufferSource(), f=ac.createBiquadFilter(), g=ac.createGain(); f.type='highpass'; f.frequency.value=hp; g.gain.value=v; s.buffer=b; s.connect(f).connect(g).connect(ac.destination); s.start(); }catch(e){} }
+  const sfx={ card:()=>{ noise(0.07,0.12,2500); }, deal:()=>{ for(let i=0;i<10;i++) setTimeout(()=>noise(0.04,0.06,3000),i*35); }, bid:()=>tone(880,0.1,'triangle',0.05),
+    trump:()=>[523,784,1047].forEach((f,i)=>tone(f,0.16,'triangle',0.06,i*0.07)), win:me=>me?[880,1319].forEach((f,i)=>tone(f,0.14,'sine',0.07,i*0.07)):tone(440,0.12,'sine',0.04),
+    made:()=>[784,988,1175,1568].forEach((f,i)=>tone(f,0.2,'triangle',0.06,i*0.08)), fail:()=>[392,330,262].forEach((f,i)=>tone(f,0.25,'sawtooth',0.04,i*0.12)), no:()=>tone(150,0.12,'square',0.04) };
+  function musicStart(){
+    if(!ac||musSrc) return;
+    const play=()=>{ if(!SAVE.music||musSrc) return; if(!musGain){ musGain=ac.createGain(); musGain.gain.value=0.0001; analyser=ac.createAnalyser(); analyser.fftSize=128; analyser.smoothingTimeConstant=0.75; musGain.connect(analyser); analyser.connect(ac.destination); freq=new Uint8Array(analyser.frequencyBinCount); }
+      musSrc=ac.createBufferSource(); musSrc.buffer=musBuf; musSrc.loop=true; musSrc.connect(musGain); musSrc.start(); musGain.gain.setTargetAtTime(0.38,ac.currentTime,0.4); };
+    if (musBuf) return play(); if (musTried) return; musTried=true;
+    try{ const x=new XMLHttpRequest(); x.open('GET','music-gears.mp3'); x.responseType='arraybuffer'; x.onload=()=>{ if(x.response&&x.response.byteLength>1000) ac.decodeAudioData(x.response,b=>{ musBuf=b; play(); },()=>{}); }; x.send(); }catch(e){}
+  }
+  function musicStop(){ if(musSrc){ const s0=musSrc; musGain.gain.setTargetAtTime(0.0001,ac.currentTime,0.2); setTimeout(()=>{ try{s0.stop();}catch(e){} },600); musSrc=null; } }
+
+  // ---------- arka plan (canvas) ----------
+  const cv=$('c'), ctx=cv.getContext('2d'); let dpr, time=0, lastT, beat=0, stars=[], bokeh=[], parts=[];
+  const hexA=hex=>{ const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},`; };
+  function resize(){ dpr=Math.min(2.5,devicePixelRatio||1); sizes(); cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    stars=Array.from({length:Math.round(W*H/9000)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.3,p:Math.random()*6}));
+    bokeh=Array.from({length:12},(_,i)=>({x:Math.random(),y:Math.random(),r:0.04+Math.random()*0.09,s:0.2+Math.random()*0.5,p:Math.random()*6,c:i%4}));
+    if (hands){ layoutBots(); layoutHand(); trick.forEach(x=>{ const [a,b]=trickXY(x.p); const el=cardEls[x.c.id]; el.style.left=a+'px'; el.style.top=b+'px'; }); } }
+  function sparks(x,y,color){ for(let i=0;i<26;i++){ const a=Math.random()*Math.PI*2, s=60+Math.random()*260; parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:0.7+Math.random()*0.4,color,r:1.5+Math.random()*2.5}); } }
+  function frame(ts){
+    const dt=Math.min(0.05,(ts-(lastT||ts))/1000); lastT=ts; time+=dt;
+    if (analyser && freq && SAVE.music){ analyser.getByteFrequencyData(freq); let b=0; for(let i=1;i<6;i++) b+=freq[i]; b=b/5/255; beat=Math.max(beat*0.88, Math.pow(Math.max(0,b-0.35)/0.65,1.6)); } else beat*=0.9;
+    const lg=ctx.createLinearGradient(0,0,W*0.4,H); lg.addColorStop(0,'#5a2fb8'); lg.addColorStop(.55,'#2a1b7a'); lg.addColorStop(1,'#120f45'); ctx.fillStyle=lg; ctx.fillRect(0,0,W,H);
+    const bl=['#ff4fd8','#38e1ff','#7b5cff','#ffb347'], M=Math.max(W,H);
+    ctx.globalCompositeOperation='lighter';
+    for(let i=0;i<4;i++){ const x=W*(0.5+0.42*Math.sin(time*0.13+i*1.7)), y=H*(0.45+0.38*Math.cos(time*0.11+i*2.3)), r=M*(0.45+0.1*Math.sin(time*0.2+i));
+      const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,hexA(bl[i])+'0.3)'); g.addColorStop(1,hexA(bl[i])+'0)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H); }
+    for (const b of bokeh){ const x=((b.x+Math.sin(time*0.05*b.s+b.p)*0.05)%1)*W, y=(((b.y-time*0.012*b.s)%1)+1)%1*H, r=b.r*Math.min(W,H);
+      const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,hexA(bl[b.c])+'0.2)'); g.addColorStop(1,hexA(bl[b.c])+'0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); }
+    for (const s of stars){ ctx.globalAlpha=0.35+0.55*Math.sin(time*1.6+s.p)**2; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fill(); }
+    ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
+    // masa: neon oval
+    const cx=W/2, cy=H*0.47, rx=Math.min(W*0.46, CW*3.4), ry=Math.min(H*0.2, CH*1.6);
+    const tg=ctx.createRadialGradient(cx,cy,0,cx,cy,rx); tg.addColorStop(0,'rgba(60,220,170,.35)'); tg.addColorStop(1,'rgba(20,90,120,.25)');
+    ctx.fillStyle=tg; ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.fill();
+    let bord; try{ bord=ctx.createConicGradient(time*0.6,cx,cy); ['#38e1ff','#ff4fd8','#ffd23f','#5dff8a','#38e1ff'].forEach((c,i)=>bord.addColorStop(i/4,c)); }catch(e){ bord='#fff'; }
+    ctx.save(); ctx.strokeStyle=bord; ctx.lineWidth=3+beat*4; ctx.shadowColor='#fff'; ctx.shadowBlur=14+beat*24; ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.stroke(); ctx.restore();
+    // ekolayzer
+    const nb=26, bw=W/nb;
+    for (let i=0;i<nb;i++){ const v=freq&&SAVE.music ? freq[Math.min(freq.length-1,1+Math.floor(i*freq.length*0.7/nb))]/255 : (0.2+0.15*Math.sin(time*3+i*0.7)*Math.sin(time*1.3+i));
+      const h=Math.max(4,v*H*0.2); const g=ctx.createLinearGradient(0,H-h,0,H); g.addColorStop(0,'rgba(255,255,255,.4)'); g.addColorStop(0.3,hexA(bl[i%4])+'0.35)'); g.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.fillStyle=g; ctx.fillRect(i*bw+bw*0.2,H-h,bw*0.6,h); }
+    for(const p of parts){ p.life-=dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vx*=.96; p.vy=p.vy*.96+300*dt; } parts=parts.filter(p=>p.life>0);
+    for(const p of parts){ ctx.globalAlpha=Math.max(0,p.life); ctx.fillStyle=p.color; ctx.shadowColor=p.color; ctx.shadowBlur=8; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill(); }
+    ctx.globalAlpha=1; ctx.shadowBlur=0;
+    requestAnimationFrame(frame);
+  }
+  addEventListener('resize',resize);
+  addEventListener('keydown',e=>{ if(!$('card2').classList.contains('hide') && (e.code==='Enter'||e.code==='Space')){ e.preventDefault(); $('box').querySelector('.btn')?.dispatchEvent(new Event('pointerdown')); } });
+  document.documentElement.style.setProperty('--sat','env(safe-area-inset-top)');
+  resize(); menu(); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
