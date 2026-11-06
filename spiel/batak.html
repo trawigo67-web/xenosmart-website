@@ -87,11 +87,15 @@
   #picker{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;justify-content:flex-start;background:rgba(0,0,0,.25)}
   #picker .pk{margin:calc(52px + env(safe-area-inset-top)) 0 0 10px;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:16px;background:linear-gradient(160deg,rgba(22,92,92,.94),rgba(12,40,60,.92));border:1px solid rgba(255,255,255,.35)}
   #picker a{color:#fff;text-decoration:none;font-weight:800;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.1)}
+  #top .lft{display:flex;gap:6px;align-items:center}
+  .ib{pointer-events:auto;cursor:pointer;font-family:inherit;color:#fff;min-width:36px;height:34px;padding:0 9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+  .ib.off{opacity:.45}
+  body[data-device=tablet] .ib{height:44px;min-width:48px;font-size:22px}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="top"><button class="pill sw" id="sw">🎮 ⇄</button><div class="pill" id="info">—</div><div class="pill" id="hand">—</div></div>
+<div id="top"><div class="lft"><button class="pill sw ib" id="sw" title="Games">🎮</button><button class="pill ib" id="mus" title="Music">🎵</button></div><div class="pill" id="info">—</div><div class="pill" id="hand">—</div></div>
 <div id="trumpBadge" class="pill" style="display:none"></div>
 <div class="seat s0" id="seat0"><div class="bubble"></div><div class="nm"></div><div class="st"></div></div>
 <div class="seat s1" id="seat1"><div class="bubble"></div><div class="av">🦊</div><div class="nm"></div><div class="st"></div></div>
@@ -388,7 +392,7 @@
     $('card2').classList.remove('hide');
     bx.querySelectorAll('.btn').forEach(el=>el.addEventListener('pointerdown',e=>{ e.preventDefault(); e.stopPropagation(); unlockAudio(); $('card2').classList.add('hide'); buttons[+el.dataset.i].go(); }));
     bx.querySelectorAll('.lg').forEach(el=>el.addEventListener('pointerdown',e=>{ e.preventDefault(); LANG=el.dataset.l; persist(); menu(); }));
-    bx.querySelectorAll('.tg').forEach(el=>el.addEventListener('pointerdown',e=>{ e.preventDefault(); unlockAudio(); SAVE.music=!SAVE.music; persist(); SAVE.music?musicStart():musicStop(); menu(); }));
+    bx.querySelectorAll('.tg').forEach(el=>el.addEventListener('pointerdown',e=>{ e.preventDefault(); unlockAudio(); SAVE.music=!SAVE.music; persist(); SAVE.music?musicStart():musicStop(); musIcon(); menu(); }));
   }
   function menu(){
     phase='menu'; document.documentElement.lang=LANG; hud(); helperBtn();
@@ -397,6 +401,9 @@
       [{l:t('quick'),go:()=>newGame(5)},{l:t('normal'),ghost:true,go:()=>newGame(9)}]);
   }
   $('hbtn').addEventListener('pointerdown',e=>{ e.preventDefault(); SAVE.helper=!SAVE.helper; persist(); helperBtn(); if(hands) layoutHand(); });
+  function musIcon(){ const b=$('mus'); b.textContent=SAVE.music?'🎵':'🔇'; b.classList.toggle('off',!SAVE.music); }
+  $('mus').addEventListener('pointerdown',e=>{ e.preventDefault(); e.stopPropagation(); unlockAudio(); SAVE.music=!SAVE.music; persist(); SAVE.music?musicStart():musicStop(); musIcon(); if(phase==='menu') menu(); });
+  setTimeout(()=>musIcon(),0);
   $('sw').addEventListener('pointerdown',e=>{ e.preventDefault(); $('picker').style.display='flex'; });
   $('picker').addEventListener('pointerdown',e=>{ if(e.target.id==='picker') $('picker').style.display='none'; });
 

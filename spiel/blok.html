@@ -58,11 +58,15 @@
   #picker{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;justify-content:flex-start;background:rgba(0,0,0,.25)}
   #picker .pk{margin:calc(52px + env(safe-area-inset-top)) 0 0 10px;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:16px;background:linear-gradient(160deg,rgba(22,92,92,.94),rgba(12,40,60,.92));border:1px solid rgba(255,255,255,.35)}
   #picker a{color:#fff;text-decoration:none;font-weight:800;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.1);font-family:inherit}
+  #top .lft{display:flex;gap:6px;align-items:center}
+  .ib{pointer-events:auto;cursor:pointer;font-family:inherit;color:#fff;min-width:36px;height:34px;padding:0 9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+  .ib.off{opacity:.45}
+  body[data-device=tablet] .ib{height:44px;min-width:48px;font-size:22px}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="top"><button class="pill sw" id="sw" title="Oyunlar">🎮⇄</button><div class="pill" id="lvl"></div><div class="pill" id="score">0</div><div class="pill" id="lines"></div></div>
+<div id="top"><div class="lft"><button class="pill sw ib" id="sw" title="Games">🎮</button><button class="pill ib" id="mus" title="Music">🎵</button></div><div class="pill" id="lvl"></div><div class="pill" id="score">0</div><div class="pill" id="lines"></div></div>
 <div id="combo"></div>
 <div id="ctrl">
   <div class="grp gl"><button class="cb" data-a="left">◀</button><button class="cb" data-a="rot">⟳</button></div>
@@ -82,7 +86,7 @@
 
   const I18N = {
     tr:{loc:'tr-TR', lvl:l=>`Seviye ${l}`, lines:n=>`${n} satır`, title:'Neon Blok', intro:'Blokları diz, dolu satırları patlat!<br>◀ ▶ kaydır · ⟳ çevir · ⬇ düşür · ⇄ sakla<br>Ekranda: kaydır = hareket, dokun = çevir, aşağı fırlat = düşür', start:'▶ Başla', back:'⚙️ Diş Fırlat\'a dön', hi:h=>`Rekor: ${h}`,
-        over:'Oyun Bitti', overText:(s,l,rec)=>`Skor <b>${s}</b> · ${l} satır<br>${rec?'🏆 YENİ REKOR!':''}`, again:'Tekrar Oyna', single:'GÜZEL!', double:'SÜPER!', triple:'HARİKA!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ TERTEMİZ +3000', levelUp:l=>`⬆️ SEVİYE ${l}`, fever:'🔥 FEVER x2', music:'Müzik', keys:'⌨️ A/D ◀▶ · W/E ⟳ · Q/Z ⟲ · S ⬇ yavaş · Boşluk düşür · C/Shift sakla · P duraklat', on:'Açık', off:'Kapalı', lifeLost:'💥 −1 can · devam!', toNext:n=>`sonraki seviyeye ${n} satır`, best:l=>`En iyi seviye: ${l}/15`, share:'📤 Arkadaşına gönder → ❤️ +1 can', shareDone:'❤️ Sonraki oyunda 4 can!', shareReady:'❤️ Bedava canın hazır (yarın yeniden paylaşabilirsin)', shareText:'Buko Games'i dene! 🦎🎮 Neon Blok, Diş Fırlat & Neon Batak – ücretsiz: https://xenosmart.de/spiel/blok.html'},
+        over:'Oyun Bitti', overText:(s,l,rec)=>`Skor <b>${s}</b> · ${l} satır<br>${rec?'🏆 YENİ REKOR!':''}`, again:'Tekrar Oyna', single:'GÜZEL!', double:'SÜPER!', triple:'HARİKA!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ TERTEMİZ +3000', levelUp:l=>`⬆️ SEVİYE ${l}`, fever:'🔥 FEVER x2', music:'Müzik', keys:'⌨️ A/D ◀▶ · W/E ⟳ · Q/Z ⟲ · S ⬇ yavaş · Boşluk düşür · C/Shift sakla · P duraklat', on:'Açık', off:'Kapalı', lifeLost:'💥 −1 can · devam!', toNext:n=>`sonraki seviyeye ${n} satır`, best:l=>`En iyi seviye: ${l}/15`, share:'📤 Arkadaşına gönder → ❤️ +1 can', shareDone:'❤️ Sonraki oyunda 4 can!', shareReady:'❤️ Bedava canın hazır (yarın yeniden paylaşabilirsin)', shareText:'Buko Games’i dene! 🦎🎮 Neon Blok, Diş Fırlat & Neon Batak – ücretsiz: https://xenosmart.de/spiel/blok.html'},
     de:{loc:'de-DE', lvl:l=>`Level ${l}`, lines:n=>`${n} Reihen`, title:'Neon Block', intro:'Staple die Blöcke, sprenge volle Reihen!<br>◀ ▶ schieben · ⟳ drehen · ⬇ fallen · ⇄ halten<br>Auf dem Feld: wischen = bewegen, tippen = drehen, nach unten wischen = fallen', start:'▶ Start', back:'⚙️ Zurück zu Diş Fırlat', hi:h=>`Rekord: ${h}`,
         over:'Spiel vorbei', overText:(s,l,rec)=>`Punkte <b>${s}</b> · ${l} Reihen<br>${rec?'🏆 NEUER REKORD!':''}`, again:'Nochmal', single:'GUT!', double:'SUPER!', triple:'KLASSE!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ ALLES LEER +3000', levelUp:l=>`⬆️ LEVEL ${l}`, fever:'🔥 FEVER x2', music:'Musik', keys:'⌨️ A/D ◀▶ · W/E ⟳ · Q/Z ⟲ · S langsam ⬇ · Leertaste fallen · C/Shift halten · P Pause', on:'An', off:'Aus', lifeLost:'💥 −1 Leben · weiter!', toNext:n=>`noch ${n} Reihen bis zum nächsten Level`, best:l=>`Bestes Level: ${l}/15`, share:'📤 An Freunde senden → ❤️ +1 Leben', shareDone:'❤️ Nächstes Spiel mit 4 Leben!', shareReady:'❤️ Dein Gratis-Leben ist bereit (morgen wieder teilen)', shareText:'Probier Buko Games! 🦎🎮 Neon Block, Diş Fırlat & Neon Batak – kostenlos: https://xenosmart.de/spiel/blok.html'},
     en:{loc:'en-US', lvl:l=>`Level ${l}`, lines:n=>`${n} lines`, title:'Neon Block', intro:'Stack the blocks, blast full rows!<br>◀ ▶ move · ⟳ rotate · ⬇ drop · ⇄ hold<br>On the board: swipe = move, tap = rotate, flick down = drop', start:'▶ Play', back:'⚙️ Back to Diş Fırlat', hi:h=>`Record: ${h}`,
@@ -172,7 +176,10 @@
     for (const k of [0,1,-1,2,-2]) if(!collide(m,cur.x+k,cur.y)){ cur.m=m; cur.x+=k; lockT=0; sfx.rot(); return; } }
   let paused=false;
   function pauseToggle(){ if (state==='play'){ state='paused'; paused=true; showToast('⏸','#ffffff',100000); } else if (state==='paused'){ state='play'; paused=false; showToast('▶','#7dff6a',500); } }
-  function toggleMusic(){ unlockAudio(); SAVE.music=!SAVE.music; persist(); SAVE.music?musicStart():musicStop(); showToast(SAVE.music?'🎵':'🔇','#ffffff',700); }
+  function toggleMusic(){ unlockAudio(); SAVE.music=!SAVE.music; persist(); SAVE.music?musicStart():musicStop(); showToast(SAVE.music?'🎵':'🔇','#ffffff',700); musIcon(); }
+  function musIcon(){ const b=document.getElementById('mus'); b.textContent=SAVE.music?'🎵':'🔇'; b.classList.toggle('off',!SAVE.music); }
+  document.getElementById('mus').addEventListener('pointerdown',e=>{ e.preventDefault(); e.stopPropagation(); toggleMusic(); });
+  setTimeout(musIcon,0);
   function doHold(){ if(state!=='play'||holdUsed) return; const k=cur.k; if(hold){ queue.unshift(hold); } hold=k; spawn(); holdUsed=true; sfx.rot(); }
 
   function lock(){
@@ -244,7 +251,7 @@
     box.querySelectorAll('.shr').forEach(el=>{ el.addEventListener('pointerdown',e=>e.stopPropagation()); el.addEventListener('click',e=>{
       if (navigator.share && !/wv\)/.test(navigator.userAgent)){ e.preventDefault(); navigator.share({text:t('shareText')}).catch(()=>{}); }
       SAVE.shareDay=new Date().toISOString().slice(0,10); SAVE.extraLife=true; persist(); setTimeout(()=>{ showToast(t('shareDone'),'#7dff6a',2200); if(state==='menu') menu(); },400); }); });
-    box.querySelectorAll('.tg').forEach(el=>el.addEventListener('pointerdown',e=>{ e.preventDefault(); e.stopPropagation(); unlockAudio(); SAVE.music=!SAVE.music; persist(); SAVE.music?musicStart():musicStop(); el.classList.toggle('on',SAVE.music); el.textContent=`🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}`; }));
+    box.querySelectorAll('.tg').forEach(el=>el.addEventListener('pointerdown',e=>{ e.preventDefault(); e.stopPropagation(); unlockAudio(); SAVE.music=!SAVE.music; persist(); SAVE.music?musicStart():musicStop(); musIcon(); el.classList.toggle('on',SAVE.music); el.textContent=`🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}`; }));
   }
   function menu(){
     state='menu'; document.documentElement.lang=LANG;

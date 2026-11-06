@@ -54,8 +54,6 @@
   .th i{display:block;width:22px;height:22px;border-radius:50%;margin:0 auto 3px}
   .th.sel{border-color:var(--a);box-shadow:0 0 12px var(--a)}
   .th.lock{opacity:.4}
-  #mus{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:52px;height:52px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;font-size:22px}
-  #mus.off{opacity:.35}
   .music{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1)}
   .music .row{display:flex;gap:6px;justify-content:center;margin:6px 0}
   .tg{flex:1;font:inherit;font-size:12px;font-weight:700;padding:8px 4px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#ccd}
@@ -69,7 +67,6 @@
   body[data-device=tablet] #dots{top:calc(142px + env(safe-area-inset-top));gap:8px}
   body[data-device=tablet] #dots i{width:10px;height:10px}
   body[data-device=tablet] #slow{width:84px;height:84px;font-size:13px} body[data-device=tablet] #slow b{font-size:30px}
-  body[data-device=tablet] #mus{width:68px;height:68px;font-size:28px}
   body[data-device=tablet] #hint{font-size:16px}
   body[data-device=tablet] .box{width:min(460px,80vw);padding:32px}
   body[data-device=tablet] .box h1{font-size:44px} body[data-device=tablet] .box p{font-size:18px}
@@ -85,16 +82,19 @@
   #picker{position:fixed;inset:0;z-index:20;display:none;align-items:flex-start;justify-content:flex-start;background:rgba(0,0,0,.25)}
   #picker .pk{margin:calc(52px + env(safe-area-inset-top)) 0 0 10px;display:flex;flex-direction:column;gap:6px;padding:10px;border-radius:16px;background:linear-gradient(160deg,rgba(22,92,92,.94),rgba(12,40,60,.92));border:1px solid rgba(255,255,255,.35)}
   #picker a{color:#fff;text-decoration:none;font-weight:800;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.1);font-family:inherit}
+  #top .lft{display:flex;gap:6px;align-items:center}
+  .ib{pointer-events:auto;cursor:pointer;font-family:inherit;color:#fff;min-width:36px;height:34px;padding:0 9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+  .ib.off{opacity:.45}
+  body[data-device=tablet] .ib{height:44px;min-width:48px;font-size:22px}
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
-<div id="top"><button class="pill sw" id="sw" title="Oyunlar">🎮⇄</button><div class="pill" id="lvl">Seviye 1</div><div class="pill" id="score">0</div><div class="pill" id="hearts"></div></div>
+<div id="top"><div class="lft"><button class="pill sw ib" id="sw" title="Games">🎮</button><button class="pill ib" id="mus" title="Music">🎵</button></div><div class="pill" id="lvl">Seviye 1</div><div class="pill" id="score">0</div><div class="pill" id="hearts"></div></div>
 <div id="sub"></div>
 <div id="combo"></div>
 <div id="dots"></div>
 <div id="hint"></div>
-<button id="mus" title="Oyun müziği">🎵</button>
 <button id="slow"><b>⏱</b>YAVAŞ</button>
 <div id="toast"></div>
 <div id="card"><div class="box" id="box"></div></div>
@@ -162,7 +162,7 @@
      intro:'Boş yuva <b>alta</b> gelince dokun.<br>Tam ortaya denk getir: <b>PERFECT!</b><br>5 PERFECT üst üste = 🔥 FEVER<br>Bonus yuvaları: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Günlük bonus: +${d} puan (seri: ${st}. gün)`,
      music:'🎵 Müzik', gm:'Oyun müziği', sfx:'Efekt sesi', on:'Açık', off:'Kapalı', musicNote:'Kendi müziğin için: uygulamada şarkıyı başlat, oyuna geri dön, müzik arkada çalar (oyun müziğini kapat). YouTube / YT Music için Premium gerekir, Spotify ücretsiz de çalışır.',
      ios:"📱 iPhone'da uygulama gibi: Safari'de <b>Paylaş ⬆️</b> → <b>Ana Ekrana Ekle</b><br>Ses için telefonun sessiz modu kapalı olmalı.", apk:'📱 Android uygulamasını indir (APK)', stars:n=>`Toplam yıldız: ${n} ★`,
-     th:{cham:'Bukalemun',neon:'Neon',gold:'Altın',ice:'Buz',lava:'Lav'}, slow:'YAVAŞ', roundDone:(r,b)=>`Tur ${r} tamam! +${b}`, plusLife:'+1 can ❤️', block:'🧱 Neon Blok oyna (yeni!)', helper:'🎯 Zamanlama yardımcısı', now:'ŞİMDİ!', batak:'🃏 Neon Batak oyna (yeni!)', keys:'⌨️ Boşluk / W / ↑ = fırlat · S = yavaş · M = müzik · B = Neon Blok', share:'📤 Arkadaşına gönder → 🛡️ bedava kalkan', shareDone:'🛡️ Kalkan hazır! Sonraki oyunda seni korur', shareReady:'🛡️ Bedava kalkanın hazır (yarın yeniden paylaşabilirsin)', shareText:'Buko Games'i dene! 🦎🎮 Diş Fırlat, Neon Blok & Neon Batak – ücretsiz: https://xenosmart.de/spiel/' },
+     th:{cham:'Bukalemun',neon:'Neon',gold:'Altın',ice:'Buz',lava:'Lav'}, slow:'YAVAŞ', roundDone:(r,b)=>`Tur ${r} tamam! +${b}`, plusLife:'+1 can ❤️', block:'🧱 Neon Blok oyna (yeni!)', helper:'🎯 Zamanlama yardımcısı', now:'ŞİMDİ!', batak:'🃏 Neon Batak oyna (yeni!)', keys:'⌨️ Boşluk / W / ↑ = fırlat · S = yavaş · M = müzik · B = Neon Blok', share:'📤 Arkadaşına gönder → 🛡️ bedava kalkan', shareDone:'🛡️ Kalkan hazır! Sonraki oyunda seni korur', shareReady:'🛡️ Bedava kalkanın hazır (yarın yeniden paylaşabilirsin)', shareText:'Buko Games’i dene! 🦎🎮 Diş Fırlat, Neon Blok & Neon Batak – ücretsiz: https://xenosmart.de/spiel/' },
    de:{ loc:'de-DE', lvl:(l,t)=>`Level ${l}/${t}`, round:r=>`∞ Runde ${r}`, gear:'Zahnrad', tooth:'Zahn', flip:'Richtung wechselt', wobble:'Tempo schwankt', bossHint:'Boss: stoppt & sperrt Lücken', tapHint:'Tippe, wenn eine leere Lücke unten ist',
      gem1:'💎 x2 PUNKTE 10 s', gem2:'💎 10 Sekunden doppelte Punkte!', clock:'⏱️ ZEITLUPE bereit', heart:'❤️ +1 LEBEN', shield1:'🛡️ SCHILD', shield2:'🛡️ Der nächste Fehler zählt nicht', shieldSaved:'🛡️ Der Schild hat dich gerettet!',
      perfectGear:'✨ PERFEKTES ZAHNRAD +1000', nextGear:'Super! Nächstes Zahnrad +300', locked:'Gesperrte Lücke!', full:'Lücke schon voll!', wrong:'Falscher Moment!', lifeLost:' −1 Leben', speed:p=>`⚡ TEMPO-BONUS +${p}`, fever:'🔥 FEVER-MODUS! x2', combo:'KOMBO',
@@ -465,7 +465,7 @@
     }, 100);
   }
   function musicStop(){ if (musicSrc){ try{ const s0=musicSrc; musGain.gain.setTargetAtTime(0.0001, ac.currentTime, 0.2); setTimeout(()=>{ try{s0.stop();}catch(e){} },600); }catch(e){} musicSrc=null; musTimer=null; return; } if (musTimer && musTimer!=='loading'){ clearInterval(musTimer); } musTimer=null; if (musGain && ac) musGain.gain.setTargetAtTime(0.0001, ac.currentTime, 0.2); }
-  function setMusic(on){ SAVE.music=on; persist(); on ? (unlockAudio(), musicStart()) : musicStop(); musBtn.classList.toggle('off', !on); }
+  function setMusic(on){ SAVE.music=on; persist(); on ? (unlockAudio(), musicStart()) : musicStop(); musBtn.classList.toggle('off', !on); musBtn.textContent = on?'🎵':'🔇'; }
   function tone(f, d, type='sine', v=0.07, when=0){
     try{ if(!ac || !SAVE.sfx) return; const t0=ac.currentTime+when;
       const o=ac.createOscillator(), g=ac.createGain(); o.type=type; o.frequency.setValueAtTime(f,t0);
@@ -503,7 +503,7 @@
   cv.addEventListener('pointerdown', tap);
   document.getElementById('sw').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); try{persist();}catch(_){} document.getElementById('picker').style.display='flex'; });
   document.getElementById('picker').addEventListener('pointerdown', e => { if (e.target.id==='picker') document.getElementById('picker').style.display='none'; else e.stopPropagation(); });
-  musBtn.classList.toggle('off', !SAVE.music);
+  musBtn.classList.toggle('off', !SAVE.music); musBtn.textContent = SAVE.music?'🎵':'🔇';
   musBtn.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); setMusic(!SAVE.music); });
   slowBtn.addEventListener('pointerdown', e => {
     e.preventDefault(); e.stopPropagation(); unlockAudio();
