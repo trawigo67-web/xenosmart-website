@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Diş Fırlat</title>
+<title>Diş Fırlat · Buko Games</title>
 <link rel="stylesheet" href="../fonts/fonts.css">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Diş Fırlat">
+<meta name="apple-mobile-web-app-title" content="Buko Games">
 <meta name="description" content="Diş Fırlat – dönen çarklara dişi doğru anda fırlat. 15 seviye, boss çarkları, sonsuz mod. Ücretsiz oyna.">
 <style>
   :root{--a:#38e1ff;--b:#ff4fd8;--glass:rgba(255,255,255,.16);--sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom)}
@@ -98,7 +98,7 @@
 <button id="slow"><b>⏱</b>YAVAŞ</button>
 <div id="toast"></div>
 <div id="card"><div class="box" id="box"></div></div>
-<div id="picker"><div class="pk"><a href="index.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
+<div id="picker"><div class="pk"><div style="font-weight:900;letter-spacing:2px;color:#a6ff4d;padding:2px 6px 4px">🦎 BUKO GAMES</div><a href="index.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
 <script>
 (() => {
   // ================= AYARLAR =================
@@ -138,7 +138,7 @@
   function applyTheme(){ document.documentElement.style.setProperty('--a', T.a); document.documentElement.style.setProperty('--b', T.b); }
   applyTheme();
 
-  // ---- 🦎 Bukalemun Studios: renk değiştiren palet ----
+  // ---- 🦎 Buko Games: renk değiştiren palet ----
   const CHAM_H=[150,175,95,32,320,150];
   function chamHue(tm,off=0){ const pos=((tm*0.018+off)%5+5)%5, i=Math.floor(pos), f=pos-i; const a=CHAM_H[i], b=CHAM_H[i+1]; const d=((b-a+540)%360)-180; return (a+d*f+360)%360; }
   function hsl2hex(h,s,l){ s/=100; l/=100; const k=n=>(n+h/30)%12, a=s*Math.min(l,1-l), f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));
@@ -162,7 +162,7 @@
      intro:'Boş yuva <b>alta</b> gelince dokun.<br>Tam ortaya denk getir: <b>PERFECT!</b><br>5 PERFECT üst üste = 🔥 FEVER<br>Bonus yuvaları: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Günlük bonus: +${d} puan (seri: ${st}. gün)`,
      music:'🎵 Müzik', gm:'Oyun müziği', sfx:'Efekt sesi', on:'Açık', off:'Kapalı', musicNote:'Kendi müziğin için: uygulamada şarkıyı başlat, oyuna geri dön, müzik arkada çalar (oyun müziğini kapat). YouTube / YT Music için Premium gerekir, Spotify ücretsiz de çalışır.',
      ios:"📱 iPhone'da uygulama gibi: Safari'de <b>Paylaş ⬆️</b> → <b>Ana Ekrana Ekle</b><br>Ses için telefonun sessiz modu kapalı olmalı.", apk:'📱 Android uygulamasını indir (APK)', stars:n=>`Toplam yıldız: ${n} ★`,
-     th:{cham:'Bukalemun',neon:'Neon',gold:'Altın',ice:'Buz',lava:'Lav'}, slow:'YAVAŞ', roundDone:(r,b)=>`Tur ${r} tamam! +${b}`, plusLife:'+1 can ❤️', block:'🧱 Neon Blok oyna (yeni!)', helper:'🎯 Zamanlama yardımcısı', now:'ŞİMDİ!', batak:'🃏 Neon Batak oyna (yeni!)', keys:'⌨️ Boşluk / W / ↑ = fırlat · S = yavaş · M = müzik · B = Neon Blok', share:'📤 Arkadaşına gönder → 🛡️ bedava kalkan', shareDone:'🛡️ Kalkan hazır! Sonraki oyunda seni korur', shareReady:'🛡️ Bedava kalkanın hazır (yarın yeniden paylaşabilirsin)', shareText:'Bu oyunu dene! 🎮 Diş Fırlat & Neon Blok – ücretsiz: https://xenosmart.de/spiel/' },
+     th:{cham:'Bukalemun',neon:'Neon',gold:'Altın',ice:'Buz',lava:'Lav'}, slow:'YAVAŞ', roundDone:(r,b)=>`Tur ${r} tamam! +${b}`, plusLife:'+1 can ❤️', block:'🧱 Neon Blok oyna (yeni!)', helper:'🎯 Zamanlama yardımcısı', now:'ŞİMDİ!', batak:'🃏 Neon Batak oyna (yeni!)', keys:'⌨️ Boşluk / W / ↑ = fırlat · S = yavaş · M = müzik · B = Neon Blok', share:'📤 Arkadaşına gönder → 🛡️ bedava kalkan', shareDone:'🛡️ Kalkan hazır! Sonraki oyunda seni korur', shareReady:'🛡️ Bedava kalkanın hazır (yarın yeniden paylaşabilirsin)', shareText:'Buko Games'i dene! 🦎🎮 Diş Fırlat, Neon Blok & Neon Batak – ücretsiz: https://xenosmart.de/spiel/' },
    de:{ loc:'de-DE', lvl:(l,t)=>`Level ${l}/${t}`, round:r=>`∞ Runde ${r}`, gear:'Zahnrad', tooth:'Zahn', flip:'Richtung wechselt', wobble:'Tempo schwankt', bossHint:'Boss: stoppt & sperrt Lücken', tapHint:'Tippe, wenn eine leere Lücke unten ist',
      gem1:'💎 x2 PUNKTE 10 s', gem2:'💎 10 Sekunden doppelte Punkte!', clock:'⏱️ ZEITLUPE bereit', heart:'❤️ +1 LEBEN', shield1:'🛡️ SCHILD', shield2:'🛡️ Der nächste Fehler zählt nicht', shieldSaved:'🛡️ Der Schild hat dich gerettet!',
      perfectGear:'✨ PERFEKTES ZAHNRAD +1000', nextGear:'Super! Nächstes Zahnrad +300', locked:'Gesperrte Lücke!', full:'Lücke schon voll!', wrong:'Falscher Moment!', lifeLost:' −1 Leben', speed:p=>`⚡ TEMPO-BONUS +${p}`, fever:'🔥 FEVER-MODUS! x2', combo:'KOMBO',
@@ -177,7 +177,7 @@
      intro:'Tippe, wenn eine leere Lücke <b>unten</b> ist.<br>Genau in die Mitte: <b>PERFECT!</b><br>5× PERFECT hintereinander = 🔥 FEVER<br>Bonus-Lücken: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Tagesbonus: +${d} Punkte (Serie: Tag ${st})`,
      music:'🎵 Musik', gm:'Spielmusik', sfx:'Effekte', on:'An', off:'Aus', musicNote:'Eigene Musik: Song in der App starten, zurück ins Spiel – die Musik läuft im Hintergrund weiter (Spielmusik ausschalten). YouTube / YT Music brauchen Premium, Spotify geht auch kostenlos.',
      ios:'📱 Auf dem iPhone wie eine App: in Safari <b>Teilen ⬆️</b> → <b>Zum Home-Bildschirm</b><br>Für Ton den Stumm-Schalter ausschalten.', apk:'📱 Android-App herunterladen (APK)', stars:n=>`Sterne gesamt: ${n} ★`,
-     th:{cham:'Chamäleon',neon:'Neon',gold:'Gold',ice:'Eis',lava:'Lava'}, slow:'LANGSAM', roundDone:(r,b)=>`Runde ${r} geschafft! +${b}`, plusLife:'+1 Leben ❤️', block:'🧱 Neon Block spielen (neu!)', helper:'🎯 Timing-Hilfe', now:'JETZT!', batak:'🃏 Neon Batak spielen (neu!)', keys:'⌨️ Leertaste / W / ↑ = werfen · S = Zeitlupe · M = Musik · B = Neon Block', share:'📤 An Freunde senden → 🛡️ Gratis-Schild', shareDone:'🛡️ Schild bereit! Schützt dich im nächsten Spiel', shareReady:'🛡️ Dein Gratis-Schild ist bereit (morgen wieder teilen)', shareText:'Probier dieses Spiel! 🎮 Diş Fırlat & Neon Block – kostenlos: https://xenosmart.de/spiel/' },
+     th:{cham:'Chamäleon',neon:'Neon',gold:'Gold',ice:'Eis',lava:'Lava'}, slow:'LANGSAM', roundDone:(r,b)=>`Runde ${r} geschafft! +${b}`, plusLife:'+1 Leben ❤️', block:'🧱 Neon Block spielen (neu!)', helper:'🎯 Timing-Hilfe', now:'JETZT!', batak:'🃏 Neon Batak spielen (neu!)', keys:'⌨️ Leertaste / W / ↑ = werfen · S = Zeitlupe · M = Musik · B = Neon Block', share:'📤 An Freunde senden → 🛡️ Gratis-Schild', shareDone:'🛡️ Schild bereit! Schützt dich im nächsten Spiel', shareReady:'🛡️ Dein Gratis-Schild ist bereit (morgen wieder teilen)', shareText:'Probier Buko Games! 🦎🎮 Diş Fırlat, Neon Block & Neon Batak – kostenlos: https://xenosmart.de/spiel/' },
    en:{ loc:'en-US', lvl:(l,t)=>`Level ${l}/${t}`, round:r=>`∞ Round ${r}`, gear:'Gear', tooth:'Tooth', flip:'direction flips', wobble:'speed varies', bossHint:'boss: stops & locks slots', tapHint:'Tap when an empty slot is at the bottom',
      gem1:'💎 x2 POINTS 10 s', gem2:'💎 Double points for 10 seconds!', clock:'⏱️ SLOW-MO refilled', heart:'❤️ +1 LIFE', shield1:'🛡️ SHIELD', shield2:'🛡️ Your next miss is forgiven', shieldSaved:'🛡️ The shield saved you!',
      perfectGear:'✨ FLAWLESS GEAR +1000', nextGear:'Great! Next gear +300', locked:'Locked slot!', full:'Slot taken!', wrong:'Wrong timing!', lifeLost:' −1 life', speed:p=>`⚡ SPEED BONUS +${p}`, fever:'🔥 FEVER MODE! x2', combo:'COMBO',
@@ -192,7 +192,7 @@
      intro:'Tap when an empty slot is at the <b>bottom</b>.<br>Hit dead center: <b>PERFECT!</b><br>5 PERFECTs in a row = 🔥 FEVER<br>Bonus slots: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Daily bonus: +${d} points (streak: day ${st})`,
      music:'🎵 Music', gm:'Game music', sfx:'Sound FX', on:'On', off:'Off', musicNote:'Your own music: start a song in the app, come back to the game – it keeps playing in the background (turn game music off). YouTube / YT Music need Premium, Spotify works free.',
      ios:'📱 Use it like an app on iPhone: in Safari tap <b>Share ⬆️</b> → <b>Add to Home Screen</b><br>Turn off silent mode for sound.', apk:'📱 Download Android app (APK)', stars:n=>`Total stars: ${n} ★`,
-     th:{cham:'Chameleon',neon:'Neon',gold:'Gold',ice:'Ice',lava:'Lava'}, slow:'SLOW', roundDone:(r,b)=>`Round ${r} complete! +${b}`, plusLife:'+1 life ❤️', block:'🧱 Play Neon Block (new!)', helper:'🎯 Timing helper', now:'NOW!', batak:'🃏 Play Neon Batak (new!)', keys:'⌨️ Space / W / ↑ = shoot · S = slow-mo · M = music · B = Neon Block', share:'📤 Send to a friend → 🛡️ free shield', shareDone:'🛡️ Shield ready! It protects you next game', shareReady:'🛡️ Your free shield is ready (share again tomorrow)', shareText:'Try this game! 🎮 Diş Fırlat & Neon Block – free: https://xenosmart.de/spiel/' },
+     th:{cham:'Chameleon',neon:'Neon',gold:'Gold',ice:'Ice',lava:'Lava'}, slow:'SLOW', roundDone:(r,b)=>`Round ${r} complete! +${b}`, plusLife:'+1 life ❤️', block:'🧱 Play Neon Block (new!)', helper:'🎯 Timing helper', now:'NOW!', batak:'🃏 Play Neon Batak (new!)', keys:'⌨️ Space / W / ↑ = shoot · S = slow-mo · M = music · B = Neon Block', share:'📤 Send to a friend → 🛡️ free shield', shareDone:'🛡️ Shield ready! It protects you next game', shareReady:'🛡️ Your free shield is ready (share again tomorrow)', shareText:'Try Buko Games! 🦎🎮 Diş Fırlat, Neon Block & Neon Batak – free: https://xenosmart.de/spiel/' },
   };
   const FLAGS = {tr:'🇹🇷', de:'🇩🇪', en:'🇬🇧'};
   if (!SAVE.lang){ const nl=(navigator.language||'tr').slice(0,2); SAVE.lang = I18N[nl] ? nl : (nl==='de'?'de':'en'); if(!I18N[SAVE.lang]) SAVE.lang='tr'; }
@@ -378,7 +378,7 @@
     const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
     const getApp = ios
       ? (standalone ? '' : `<div class="small" style="color:#dfe3ff;font-size:13px">${t('ios')}</div>`)
-      : `<a class="lnk" style="background:#3ddc84;color:#0b0d1a;display:block" href="https://xenosmart.de/spiel/DisFirlat.apk" download>${t('apk')}</a>`;
+      : `<a class="lnk" style="background:#3ddc84;color:#0b0d1a;display:block" href="https://xenosmart.de/spiel/BukoGames.apk" download>${t('apk')}</a>`;
     const extra = web ? `<div class="music">${getApp}
       <div class="small"><a href="https://xenosmart.de/" style="color:#8a90b8">XenoSmart</a> · <a href="https://xenosmart.de/impressum.html" style="color:#8a90b8">Impressum</a> · <a href="https://xenosmart.de/datenschutz.html" style="color:#8a90b8">Datenschutz</a></div></div>` : '';
     const today=new Date().toISOString().slice(0,10);
@@ -386,7 +386,7 @@
       ? `<div class="small" style="color:#7dff6a;font-weight:800;font-size:13px;margin-top:12px">${t('shareReady')}</div>`
       : `<a class="lnk shr" style="background:linear-gradient(90deg,#25d366,#38e1ff);color:#0b0d1a;display:block;margin-top:12px" href="https://wa.me/?text=${encodeURIComponent(t('shareText'))}" target="_blank" rel="noopener">${t('share')}</a>`;
     const helperBtn = shareBox + `<div class="row" style="margin-top:12px"><button class="tg ${SAVE.helper?'on':''}" data-t="helper">${t('helper')}: ${SAVE.helper?t('on'):t('off')}</button></div>`;
-    return helperBtn + musicHtml() + extra + `<div class="themes">${Object.entries(THEMES).map(([k,t])=>`<div class="th ${SAVE.theme===k?'sel':''} ${ts<t.need?'lock':''}" data-k="${k}"><i style="background:linear-gradient(135deg,${t.a},${t.b})"></i>${ts<t.need?'🔒'+t.need+'★':I18N[SAVE.lang].th[k]}</div>`).join('')}</div><div class="small">${STARS_TXT(ts)}</div><div class="small" style="margin-top:12px;opacity:.85;font-weight:800;letter-spacing:.5px">🦎 Bukalemun Studios</div>`;
+    return helperBtn + musicHtml() + extra + `<div class="themes">${Object.entries(THEMES).map(([k,t])=>`<div class="th ${SAVE.theme===k?'sel':''} ${ts<t.need?'lock':''}" data-k="${k}"><i style="background:linear-gradient(135deg,${t.a},${t.b})"></i>${ts<t.need?'🔒'+t.need+'★':I18N[SAVE.lang].th[k]}</div>`).join('')}</div><div class="small">${STARS_TXT(ts)}</div><div class="small" style="margin-top:12px;opacity:.85;font-weight:800;letter-spacing:.5px">🦎 Buko Games</div>`;
   }
   function musicHtml(){
     return `<div class="music"><div style="font-weight:800;font-size:14px">${t('music')}</div>
@@ -731,7 +731,7 @@
     btns.push({label: SAVE.done ? t('endlessRec',fmt(SAVE.hi)) : t('endlessLock'), ghost:true, go: SAVE.done ? startEndless : menu});
     btns.push({label:t('block'), ghost:true, go:()=>{ location.href = 'blok.html'; }});
     btns.push({label:t('batak'), ghost:true, go:()=>{ persist(); location.href = 'batak.html'; }});
-    showCard(`${langHtml()}<h1>Diş Fırlat</h1><p>${t('intro')}</p>${matchMedia('(pointer:fine)').matches?`<p class="small" style="color:#fff">${t('keys')}</p>`:''}${dbShown?`<p style="color:#ffd23f;font-weight:800">${t('daily',dbShown,SAVE.streak)}</p>`:''}`, btns, true);
+    showCard(`${langHtml()}<div style="font-weight:900;font-size:13px;letter-spacing:2px;color:#a6ff4d;text-shadow:0 0 10px rgba(166,255,77,.6);margin-bottom:2px">🦎 BUKO GAMES</div><h1>Diş Fırlat</h1><p>${t('intro')}</p>${matchMedia('(pointer:fine)').matches?`<p class="small" style="color:#fff">${t('keys')}</p>`:''}${dbShown?`<p style="color:#ffd23f;font-weight:800">${t('daily',dbShown,SAVE.streak)}</p>`:''}`, btns, true);
   }
 
   // ================= ÇİZİM =================

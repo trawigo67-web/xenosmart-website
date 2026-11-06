@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Neon Batak</title>
+<title>Neon Batak · Buko Games</title>
 <link rel="stylesheet" href="../fonts/fonts.css">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#145a5a">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Buko Games">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Neon Batak – ihaleli batak, 3 bilgisayar rakibe karşı. Hızlı oyun, neon grafik.">
@@ -92,7 +93,7 @@
 <div id="panel"></div>
 <div id="toast"></div>
 <div id="card2" class="hide"><div class="box" id="box"></div></div>
-<div id="picker"><div class="pk"><a href="index.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
+<div id="picker"><div class="pk"><div style="font-weight:900;letter-spacing:2px;color:#a6ff4d;padding:2px 6px 4px">🦎 BUKO GAMES</div><a href="index.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
 <script>
 (() => {
   // ---------- kayıt & dil ----------
@@ -121,7 +122,7 @@
   const quip=p=>{ const a=(QUIPS[LANG]||QUIPS.tr)[p]; return a[Math.floor(Math.random()*a.length)]; };
   const t=(k,...a)=>{ const v=(I18N[LANG]||I18N.tr)[k]; return typeof v==='function'?v(...a):v; };
 
-  // ---- 🦎 Bukalemun Studios: renk değiştiren palet ----
+  // ---- 🦎 Buko Games: renk değiştiren palet ----
   const CHAM_H=[150,175,95,32,320,150];
   function chamHue(tm,off=0){ const pos=((tm*0.018+off)%5+5)%5, i=Math.floor(pos), f=pos-i; const a=CHAM_H[i], b=CHAM_H[i+1]; const d=((b-a+540)%360)-180; return (a+d*f+360)%360; }
   function hsl2hex(h,s,l){ s/=100; l/=100; const k=n=>(n+h/30)%12, a=s*Math.min(l,1-l), f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));
@@ -360,7 +361,7 @@
   }
   function menu(){
     phase='menu'; document.documentElement.lang=LANG; hud();
-    show(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><h1>${t('title')}</h1><p>${t('intro')}</p><p class="small">${t('rules')}</p><p class="small" style="color:#ffd23f;font-weight:800">${t('stats',SAVE.wins,SAVE.games)}</p><div class="small" style="opacity:.85;font-weight:800">🦎 Bukalemun Studios</div>
+    show(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><div style="font-weight:900;font-size:13px;letter-spacing:2px;color:#a6ff4d;text-shadow:0 0 10px rgba(166,255,77,.6);margin-bottom:2px">🦎 BUKO GAMES</div><h1>${t('title')}</h1><p>${t('intro')}</p><p class="small">${t('rules')}</p><p class="small" style="color:#ffd23f;font-weight:800">${t('stats',SAVE.wins,SAVE.games)}</p><div class="small" style="opacity:.85;font-weight:800">🦎 Buko Games</div>
       <button class="pb tg" style="font-size:13px;height:auto;padding:8px 12px">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>`,
       [{l:t('quick'),go:()=>newGame(5)},{l:t('normal'),ghost:true,go:()=>newGame(9)}]);
   }

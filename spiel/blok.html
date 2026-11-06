@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Neon Blok</title>
+<title>Neon Blok · Buko Games</title>
 <link rel="stylesheet" href="../fonts/fonts.css">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#145a5a">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Buko Games">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Neon Blok – düşen blokları diz, satırları patlat. Diş Fırlat ile aynı neon stilde.">
@@ -70,7 +71,7 @@
 </div>
 <div id="toast"></div>
 <div id="card"><div class="box" id="box"></div></div>
-<div id="picker"><div class="pk"><a href="index.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
+<div id="picker"><div class="pk"><div style="font-weight:900;letter-spacing:2px;color:#a6ff4d;padding:2px 6px 4px">🦎 BUKO GAMES</div><a href="index.html">⚙️ Diş Fırlat</a><a href="blok.html">🧱 Neon Blok</a><a href="batak.html">🃏 Neon Batak</a></div></div>
 <script>
 (() => {
   // ---------- kayıt (Diş Fırlat ile ortak dil ayarı) ----------
@@ -81,18 +82,18 @@
 
   const I18N = {
     tr:{loc:'tr-TR', lvl:l=>`Seviye ${l}`, lines:n=>`${n} satır`, title:'Neon Blok', intro:'Blokları diz, dolu satırları patlat!<br>◀ ▶ kaydır · ⟳ çevir · ⬇ düşür · ⇄ sakla<br>Ekranda: kaydır = hareket, dokun = çevir, aşağı fırlat = düşür', start:'▶ Başla', back:'⚙️ Diş Fırlat\'a dön', hi:h=>`Rekor: ${h}`,
-        over:'Oyun Bitti', overText:(s,l,rec)=>`Skor <b>${s}</b> · ${l} satır<br>${rec?'🏆 YENİ REKOR!':''}`, again:'Tekrar Oyna', single:'GÜZEL!', double:'SÜPER!', triple:'HARİKA!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ TERTEMİZ +3000', levelUp:l=>`⬆️ SEVİYE ${l}`, fever:'🔥 FEVER x2', music:'Müzik', keys:'⌨️ A/D ◀▶ · W/E ⟳ · Q/Z ⟲ · S ⬇ yavaş · Boşluk düşür · C/Shift sakla · P duraklat', on:'Açık', off:'Kapalı', lifeLost:'💥 −1 can · devam!', toNext:n=>`sonraki seviyeye ${n} satır`, best:l=>`En iyi seviye: ${l}/15`, share:'📤 Arkadaşına gönder → ❤️ +1 can', shareDone:'❤️ Sonraki oyunda 4 can!', shareReady:'❤️ Bedava canın hazır (yarın yeniden paylaşabilirsin)', shareText:'Bu oyunu dene! 🎮 Neon Blok & Diş Fırlat – ücretsiz: https://xenosmart.de/spiel/blok.html'},
+        over:'Oyun Bitti', overText:(s,l,rec)=>`Skor <b>${s}</b> · ${l} satır<br>${rec?'🏆 YENİ REKOR!':''}`, again:'Tekrar Oyna', single:'GÜZEL!', double:'SÜPER!', triple:'HARİKA!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ TERTEMİZ +3000', levelUp:l=>`⬆️ SEVİYE ${l}`, fever:'🔥 FEVER x2', music:'Müzik', keys:'⌨️ A/D ◀▶ · W/E ⟳ · Q/Z ⟲ · S ⬇ yavaş · Boşluk düşür · C/Shift sakla · P duraklat', on:'Açık', off:'Kapalı', lifeLost:'💥 −1 can · devam!', toNext:n=>`sonraki seviyeye ${n} satır`, best:l=>`En iyi seviye: ${l}/15`, share:'📤 Arkadaşına gönder → ❤️ +1 can', shareDone:'❤️ Sonraki oyunda 4 can!', shareReady:'❤️ Bedava canın hazır (yarın yeniden paylaşabilirsin)', shareText:'Buko Games'i dene! 🦎🎮 Neon Blok, Diş Fırlat & Neon Batak – ücretsiz: https://xenosmart.de/spiel/blok.html'},
     de:{loc:'de-DE', lvl:l=>`Level ${l}`, lines:n=>`${n} Reihen`, title:'Neon Block', intro:'Staple die Blöcke, sprenge volle Reihen!<br>◀ ▶ schieben · ⟳ drehen · ⬇ fallen · ⇄ halten<br>Auf dem Feld: wischen = bewegen, tippen = drehen, nach unten wischen = fallen', start:'▶ Start', back:'⚙️ Zurück zu Diş Fırlat', hi:h=>`Rekord: ${h}`,
-        over:'Spiel vorbei', overText:(s,l,rec)=>`Punkte <b>${s}</b> · ${l} Reihen<br>${rec?'🏆 NEUER REKORD!':''}`, again:'Nochmal', single:'GUT!', double:'SUPER!', triple:'KLASSE!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ ALLES LEER +3000', levelUp:l=>`⬆️ LEVEL ${l}`, fever:'🔥 FEVER x2', music:'Musik', keys:'⌨️ A/D ◀▶ · W/E ⟳ · Q/Z ⟲ · S langsam ⬇ · Leertaste fallen · C/Shift halten · P Pause', on:'An', off:'Aus', lifeLost:'💥 −1 Leben · weiter!', toNext:n=>`noch ${n} Reihen bis zum nächsten Level`, best:l=>`Bestes Level: ${l}/15`, share:'📤 An Freunde senden → ❤️ +1 Leben', shareDone:'❤️ Nächstes Spiel mit 4 Leben!', shareReady:'❤️ Dein Gratis-Leben ist bereit (morgen wieder teilen)', shareText:'Probier dieses Spiel! 🎮 Neon Block & Diş Fırlat – kostenlos: https://xenosmart.de/spiel/blok.html'},
+        over:'Spiel vorbei', overText:(s,l,rec)=>`Punkte <b>${s}</b> · ${l} Reihen<br>${rec?'🏆 NEUER REKORD!':''}`, again:'Nochmal', single:'GUT!', double:'SUPER!', triple:'KLASSE!', tetra:'💥 MEGA x4!', combo:n=>`KOMBO x${n}`, clear:'✨ ALLES LEER +3000', levelUp:l=>`⬆️ LEVEL ${l}`, fever:'🔥 FEVER x2', music:'Musik', keys:'⌨️ A/D ◀▶ · W/E ⟳ · Q/Z ⟲ · S langsam ⬇ · Leertaste fallen · C/Shift halten · P Pause', on:'An', off:'Aus', lifeLost:'💥 −1 Leben · weiter!', toNext:n=>`noch ${n} Reihen bis zum nächsten Level`, best:l=>`Bestes Level: ${l}/15`, share:'📤 An Freunde senden → ❤️ +1 Leben', shareDone:'❤️ Nächstes Spiel mit 4 Leben!', shareReady:'❤️ Dein Gratis-Leben ist bereit (morgen wieder teilen)', shareText:'Probier Buko Games! 🦎🎮 Neon Block, Diş Fırlat & Neon Batak – kostenlos: https://xenosmart.de/spiel/blok.html'},
     en:{loc:'en-US', lvl:l=>`Level ${l}`, lines:n=>`${n} lines`, title:'Neon Block', intro:'Stack the blocks, blast full rows!<br>◀ ▶ move · ⟳ rotate · ⬇ drop · ⇄ hold<br>On the board: swipe = move, tap = rotate, flick down = drop', start:'▶ Play', back:'⚙️ Back to Diş Fırlat', hi:h=>`Record: ${h}`,
-        over:'Game Over', overText:(s,l,rec)=>`Score <b>${s}</b> · ${l} lines<br>${rec?'🏆 NEW RECORD!':''}`, again:'Play again', single:'NICE!', double:'GREAT!', triple:'AWESOME!', tetra:'💥 MEGA x4!', combo:n=>`COMBO x${n}`, clear:'✨ ALL CLEAR +3000', levelUp:l=>`⬆️ LEVEL ${l}`, fever:'🔥 FEVER x2', music:'Music', keys:'⌨️ A/D ◀▶ · W/E ⟳ · Q/Z ⟲ · S soft drop · Space drop · C/Shift hold · P pause', on:'On', off:'Off', lifeLost:'💥 −1 life · keep going!', toNext:n=>`${n} lines to next level`, best:l=>`Best level: ${l}/15`, share:'📤 Send to a friend → ❤️ +1 life', shareDone:'❤️ 4 lives next game!', shareReady:'❤️ Your free life is ready (share again tomorrow)', shareText:'Try this game! 🎮 Neon Block & Diş Fırlat – free: https://xenosmart.de/spiel/blok.html'},
+        over:'Game Over', overText:(s,l,rec)=>`Score <b>${s}</b> · ${l} lines<br>${rec?'🏆 NEW RECORD!':''}`, again:'Play again', single:'NICE!', double:'GREAT!', triple:'AWESOME!', tetra:'💥 MEGA x4!', combo:n=>`COMBO x${n}`, clear:'✨ ALL CLEAR +3000', levelUp:l=>`⬆️ LEVEL ${l}`, fever:'🔥 FEVER x2', music:'Music', keys:'⌨️ A/D ◀▶ · W/E ⟳ · Q/Z ⟲ · S soft drop · Space drop · C/Shift hold · P pause', on:'On', off:'Off', lifeLost:'💥 −1 life · keep going!', toNext:n=>`${n} lines to next level`, best:l=>`Best level: ${l}/15`, share:'📤 Send to a friend → ❤️ +1 life', shareDone:'❤️ 4 lives next game!', shareReady:'❤️ Your free life is ready (share again tomorrow)', shareText:'Try Buko Games! 🦎🎮 Neon Block, Diş Fırlat & Neon Batak – free: https://xenosmart.de/spiel/blok.html'},
   };
   const FLAGS={tr:'🇹🇷',de:'🇩🇪',en:'🇬🇧'};
   const t=(k,...a)=>{ const v=(I18N[LANG]||I18N.tr)[k]; return typeof v==='function'?v(...a):v; };
   const fmt=n=>n.toLocaleString(t('loc'));
 
 
-  // ---- 🦎 Bukalemun Studios: renk değiştiren palet ----
+  // ---- 🦎 Buko Games: renk değiştiren palet ----
   const CHAM_H=[150,175,95,32,320,150];
   function chamHue(tm,off=0){ const pos=((tm*0.018+off)%5+5)%5, i=Math.floor(pos), f=pos-i; const a=CHAM_H[i], b=CHAM_H[i+1]; const d=((b-a+540)%360)-180; return (a+d*f+360)%360; }
   function hsl2hex(h,s,l){ s/=100; l/=100; const k=n=>(n+h/30)%12, a=s*Math.min(l,1-l), f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));
@@ -247,7 +248,7 @@
   }
   function menu(){
     state='menu'; document.documentElement.lang=LANG;
-    showCard(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><h1>${t('title')}</h1><p>${t('intro')}</p>${matchMedia('(pointer:fine)').matches?`<p class="small" style="color:#fff">${t('keys')}</p>`:''}<p style="color:#ffd23f;font-weight:800">${t('hi',fmt(SAVE.hi))} · ${t('best',SAVE.best||1)}</p><button class="tg ${SAVE.music?'on':''}">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>${SAVE.shareDay===new Date().toISOString().slice(0,10) ? `<div class="small" style="color:#7dff6a;font-weight:800">${t('shareReady')}</div>` : `<a class="shr" style="display:block;margin-top:12px;padding:10px;border-radius:14px;font-weight:800;text-decoration:none;color:#0b0d1a;background:linear-gradient(90deg,#25d366,#38e1ff)" href="https://wa.me/?text=${encodeURIComponent(t('shareText'))}" target="_blank" rel="noopener">${t('share')}</a>`}<div class="small" style="margin-top:12px;opacity:.85;font-weight:800;letter-spacing:.5px">🦎 Bukalemun Studios</div>`,
+    showCard(`<div class="langs">${Object.keys(FLAGS).map(k=>`<button class="lg ${LANG===k?'sel':''}" data-l="${k}">${FLAGS[k]}</button>`).join('')}</div><div style="font-weight:900;font-size:13px;letter-spacing:2px;color:#a6ff4d;text-shadow:0 0 10px rgba(166,255,77,.6);margin-bottom:2px">🦎 BUKO GAMES</div><h1>${t('title')}</h1><p>${t('intro')}</p>${matchMedia('(pointer:fine)').matches?`<p class="small" style="color:#fff">${t('keys')}</p>`:''}<p style="color:#ffd23f;font-weight:800">${t('hi',fmt(SAVE.hi))} · ${t('best',SAVE.best||1)}</p><button class="tg ${SAVE.music?'on':''}">🎵 ${t('music')}: ${SAVE.music?t('on'):t('off')}</button>${SAVE.shareDay===new Date().toISOString().slice(0,10) ? `<div class="small" style="color:#7dff6a;font-weight:800">${t('shareReady')}</div>` : `<a class="shr" style="display:block;margin-top:12px;padding:10px;border-radius:14px;font-weight:800;text-decoration:none;color:#0b0d1a;background:linear-gradient(90deg,#25d366,#38e1ff)" href="https://wa.me/?text=${encodeURIComponent(t('shareText'))}" target="_blank" rel="noopener">${t('share')}</a>`}<div class="small" style="margin-top:12px;opacity:.85;font-weight:800;letter-spacing:.5px">🦎 Buko Games</div>`,
       [{label:t('start'),go:newGame},{label:'🃏 Neon Batak',ghost:true,go:()=>{ location.href='batak.html'; }},{label:t('back'),ghost:true,go:goBack}]);
   }
 
