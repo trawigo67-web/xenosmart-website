@@ -2,32 +2,36 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Diş Fırlat</title>
 <link rel="stylesheet" href="../fonts/fonts.css">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b0d1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Diş Fırlat">
 <meta name="description" content="Diş Fırlat – dönen çarklara dişi doğru anda fırlat. 15 seviye, boss çarkları, sonsuz mod. Ücretsiz oyna.">
 <style>
   :root{--a:#38e1ff;--b:#ff4fd8;--glass:rgba(255,255,255,.07)}
   html,body{margin:0;height:100%;background:#0b0d1a;color:#eef;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
   canvas{display:block;width:100vw;height:100vh}
-  #top{position:fixed;top:12px;left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;pointer-events:none}
+  #top{position:fixed;top:calc(12px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;pointer-events:none}
   .pill{background:var(--glass);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px;font-weight:600;font-size:14px;white-space:nowrap}
   #score{font-weight:900;font-size:16px;min-width:64px;text-align:center}
   #hearts span{font-size:16px;margin:0 1px;display:inline-block;transition:.3s}
   #hearts .off{filter:grayscale(1);opacity:.25;transform:scale(.8)}
-  #sub{position:fixed;top:56px;left:0;right:0;text-align:center;font-weight:800;font-size:19px;pointer-events:none;text-shadow:0 0 18px var(--a)}
-  #combo{position:fixed;top:84px;left:0;right:0;text-align:center;font-weight:900;font-size:15px;color:var(--b);pointer-events:none;height:18px;text-shadow:0 0 12px var(--b)}
-  #dots{position:fixed;top:106px;left:0;right:0;display:flex;justify-content:center;gap:5px;pointer-events:none}
+  #sub{position:fixed;top:calc(56px + env(safe-area-inset-top));left:0;right:0;text-align:center;font-weight:800;font-size:19px;pointer-events:none;text-shadow:0 0 18px var(--a)}
+  #combo{position:fixed;top:calc(84px + env(safe-area-inset-top));left:0;right:0;text-align:center;font-weight:900;font-size:15px;color:var(--b);pointer-events:none;height:18px;text-shadow:0 0 12px var(--b)}
+  #dots{position:fixed;top:calc(106px + env(safe-area-inset-top));left:0;right:0;display:flex;justify-content:center;gap:5px;pointer-events:none}
   #dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.15)}
   #dots i.done{background:var(--a);box-shadow:0 0 6px var(--a)}
   #dots i.cur{background:var(--b);box-shadow:0 0 10px var(--b);transform:scale(1.35)}
   #dots i.boss{outline:1.5px solid #ff4d6d;outline-offset:1px}
-  #hint{position:fixed;bottom:22px;left:0;right:90px;text-align:center;color:#8a90b8;font-size:13px;pointer-events:none;padding-left:90px}
-  #slow{position:fixed;right:14px;bottom:14px;width:64px;height:64px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.25),rgba(255,255,255,.05));color:#fff;font:inherit;font-weight:800;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 0 18px rgba(56,225,255,.25)}
+  #hint{position:fixed;bottom:calc(22px + env(safe-area-inset-bottom));left:0;right:90px;text-align:center;color:#8a90b8;font-size:13px;pointer-events:none;padding-left:90px}
+  #slow{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:64px;height:64px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.25),rgba(255,255,255,.05));color:#fff;font:inherit;font-weight:800;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 0 18px rgba(56,225,255,.25)}
   #slow b{font-size:22px;line-height:1}
   #slow.used{opacity:.25;filter:grayscale(1)}
   #slow.on{box-shadow:0 0 28px var(--a);border-color:var(--a)}
@@ -35,7 +39,7 @@
   #toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
   #card{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,6,15,.6);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);transition:opacity .3s;z-index:5}
   #card.hide{opacity:0;pointer-events:none}
-  .box{background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.18);border-radius:24px;padding:24px 24px 20px;text-align:center;width:min(330px,86vw);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .box{background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.18);border-radius:24px;padding:24px 24px 20px;text-align:center;width:min(330px,86vw);max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5)}
   .box h1{margin:0 0 4px;font-size:32px;font-weight:900;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
   .box p{margin:6px 0 14px;color:#b9bee0;font-size:15px;line-height:1.45}
   .stars{font-size:38px;letter-spacing:4px;margin:4px 0 2px}
@@ -48,7 +52,7 @@
   .th i{display:block;width:22px;height:22px;border-radius:50%;margin:0 auto 3px}
   .th.sel{border-color:var(--a);box-shadow:0 0 12px var(--a)}
   .th.lock{opacity:.4}
-  #mus{position:fixed;left:14px;bottom:14px;width:52px;height:52px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;font-size:22px}
+  #mus{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:52px;height:52px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#fff;font-size:22px}
   #mus.off{opacity:.35}
   .music{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1)}
   .music .row{display:flex;gap:6px;justify-content:center;margin:6px 0}
@@ -199,7 +203,12 @@
   function themesHtml(){
     const ts=totalStars();
     const web = location.protocol.startsWith('http');
-    const extra = web ? `<div class="music"><a class="lnk" style="background:#3ddc84;color:#0b0d1a;display:block" href="DisFirlat.apk" download>📱 Android uygulamasını indir (APK)</a>
+    const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+    const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+    const getApp = ios
+      ? (standalone ? '' : `<div class="small" style="color:#dfe3ff;font-size:13px">📱 iPhone'da uygulama gibi: Safari'de <b>Paylaş ⬆️</b> → <b>Ana Ekrana Ekle</b><br>Ses için telefonun sessiz modu kapalı olmalı.</div>`)
+      : `<a class="lnk" style="background:#3ddc84;color:#0b0d1a;display:block" href="DisFirlat.apk" download>📱 Android uygulamasını indir (APK)</a>`;
+    const extra = web ? `<div class="music">${getApp}
       <div class="small"><a href="../" style="color:#8a90b8">XenoSmart</a> · <a href="../impressum.html" style="color:#8a90b8">Impressum</a> · <a href="../datenschutz.html" style="color:#8a90b8">Datenschutz</a></div></div>` : '';
     return musicHtml() + extra + `<div class="themes">${Object.entries(THEMES).map(([k,t])=>`<div class="th ${SAVE.theme===k?'sel':''} ${ts<t.need?'lock':''}" data-k="${k}"><i style="background:linear-gradient(135deg,${t.a},${t.b})"></i>${ts<t.need?'🔒'+t.need+'★':t.name}</div>`).join('')}</div><div class="small">Toplam yıldız: ${ts} ★</div>`;
   }
