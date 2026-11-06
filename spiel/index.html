@@ -148,7 +148,7 @@
      intro:'Boş yuva <b>alta</b> gelince dokun.<br>Tam ortaya denk getir: <b>PERFECT!</b><br>5 PERFECT üst üste = 🔥 FEVER<br>Bonus yuvaları: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Günlük bonus: +${d} puan (seri: ${st}. gün)`,
      music:'🎵 Müzik', gm:'Oyun müziği', sfx:'Efekt sesi', on:'Açık', off:'Kapalı', musicNote:'Kendi müziğin için: uygulamada şarkıyı başlat, oyuna geri dön, müzik arkada çalar (oyun müziğini kapat). YouTube / YT Music için Premium gerekir, Spotify ücretsiz de çalışır.',
      ios:"📱 iPhone'da uygulama gibi: Safari'de <b>Paylaş ⬆️</b> → <b>Ana Ekrana Ekle</b><br>Ses için telefonun sessiz modu kapalı olmalı.", apk:'📱 Android uygulamasını indir (APK)', stars:n=>`Toplam yıldız: ${n} ★`,
-     th:{neon:'Neon',gold:'Altın',ice:'Buz',lava:'Lav'}, slow:'YAVAŞ', roundDone:(r,b)=>`Tur ${r} tamam! +${b}`, plusLife:'+1 can ❤️', block:'🧱 Neon Blok oyna (yeni!)', helper:'🎯 Zamanlama yardımcısı', now:'ŞİMDİ!' },
+     th:{neon:'Neon',gold:'Altın',ice:'Buz',lava:'Lav'}, slow:'YAVAŞ', roundDone:(r,b)=>`Tur ${r} tamam! +${b}`, plusLife:'+1 can ❤️', block:'🧱 Neon Blok oyna (yeni!)', helper:'🎯 Zamanlama yardımcısı', now:'ŞİMDİ!', share:'📤 Arkadaşına gönder → 🛡️ bedava kalkan', shareDone:'🛡️ Kalkan hazır! Sonraki oyunda seni korur', shareReady:'🛡️ Bedava kalkanın hazır (yarın yeniden paylaşabilirsin)', shareText:'Bu oyunu dene! 🎮 Diş Fırlat & Neon Blok – ücretsiz: https://xenosmart.de/spiel/' },
    de:{ loc:'de-DE', lvl:(l,t)=>`Level ${l}/${t}`, round:r=>`∞ Runde ${r}`, gear:'Zahnrad', tooth:'Zahn', flip:'Richtung wechselt', wobble:'Tempo schwankt', bossHint:'Boss: stoppt & sperrt Lücken', tapHint:'Tippe, wenn eine leere Lücke unten ist',
      gem1:'💎 x2 PUNKTE 10 s', gem2:'💎 10 Sekunden doppelte Punkte!', clock:'⏱️ ZEITLUPE bereit', heart:'❤️ +1 LEBEN', shield1:'🛡️ SCHILD', shield2:'🛡️ Der nächste Fehler zählt nicht', shieldSaved:'🛡️ Der Schild hat dich gerettet!',
      perfectGear:'✨ PERFEKTES ZAHNRAD +1000', nextGear:'Super! Nächstes Zahnrad +300', locked:'Gesperrte Lücke!', full:'Lücke schon voll!', wrong:'Falscher Moment!', lifeLost:' −1 Leben', speed:p=>`⚡ TEMPO-BONUS +${p}`, fever:'🔥 FEVER-MODUS! x2', combo:'KOMBO',
@@ -163,7 +163,7 @@
      intro:'Tippe, wenn eine leere Lücke <b>unten</b> ist.<br>Genau in die Mitte: <b>PERFECT!</b><br>5× PERFECT hintereinander = 🔥 FEVER<br>Bonus-Lücken: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Tagesbonus: +${d} Punkte (Serie: Tag ${st})`,
      music:'🎵 Musik', gm:'Spielmusik', sfx:'Effekte', on:'An', off:'Aus', musicNote:'Eigene Musik: Song in der App starten, zurück ins Spiel – die Musik läuft im Hintergrund weiter (Spielmusik ausschalten). YouTube / YT Music brauchen Premium, Spotify geht auch kostenlos.',
      ios:'📱 Auf dem iPhone wie eine App: in Safari <b>Teilen ⬆️</b> → <b>Zum Home-Bildschirm</b><br>Für Ton den Stumm-Schalter ausschalten.', apk:'📱 Android-App herunterladen (APK)', stars:n=>`Sterne gesamt: ${n} ★`,
-     th:{neon:'Neon',gold:'Gold',ice:'Eis',lava:'Lava'}, slow:'LANGSAM', roundDone:(r,b)=>`Runde ${r} geschafft! +${b}`, plusLife:'+1 Leben ❤️', block:'🧱 Neon Block spielen (neu!)', helper:'🎯 Timing-Hilfe', now:'JETZT!' },
+     th:{neon:'Neon',gold:'Gold',ice:'Eis',lava:'Lava'}, slow:'LANGSAM', roundDone:(r,b)=>`Runde ${r} geschafft! +${b}`, plusLife:'+1 Leben ❤️', block:'🧱 Neon Block spielen (neu!)', helper:'🎯 Timing-Hilfe', now:'JETZT!', share:'📤 An Freunde senden → 🛡️ Gratis-Schild', shareDone:'🛡️ Schild bereit! Schützt dich im nächsten Spiel', shareReady:'🛡️ Dein Gratis-Schild ist bereit (morgen wieder teilen)', shareText:'Probier dieses Spiel! 🎮 Diş Fırlat & Neon Block – kostenlos: https://xenosmart.de/spiel/' },
    en:{ loc:'en-US', lvl:(l,t)=>`Level ${l}/${t}`, round:r=>`∞ Round ${r}`, gear:'Gear', tooth:'Tooth', flip:'direction flips', wobble:'speed varies', bossHint:'boss: stops & locks slots', tapHint:'Tap when an empty slot is at the bottom',
      gem1:'💎 x2 POINTS 10 s', gem2:'💎 Double points for 10 seconds!', clock:'⏱️ SLOW-MO refilled', heart:'❤️ +1 LIFE', shield1:'🛡️ SHIELD', shield2:'🛡️ Your next miss is forgiven', shieldSaved:'🛡️ The shield saved you!',
      perfectGear:'✨ FLAWLESS GEAR +1000', nextGear:'Great! Next gear +300', locked:'Locked slot!', full:'Slot taken!', wrong:'Wrong timing!', lifeLost:' −1 life', speed:p=>`⚡ SPEED BONUS +${p}`, fever:'🔥 FEVER MODE! x2', combo:'COMBO',
@@ -178,7 +178,7 @@
      intro:'Tap when an empty slot is at the <b>bottom</b>.<br>Hit dead center: <b>PERFECT!</b><br>5 PERFECTs in a row = 🔥 FEVER<br>Bonus slots: ⭐ 💎 ⏱️ 🛡️ ❤️', daily:(d,st)=>`🎁 Daily bonus: +${d} points (streak: day ${st})`,
      music:'🎵 Music', gm:'Game music', sfx:'Sound FX', on:'On', off:'Off', musicNote:'Your own music: start a song in the app, come back to the game – it keeps playing in the background (turn game music off). YouTube / YT Music need Premium, Spotify works free.',
      ios:'📱 Use it like an app on iPhone: in Safari tap <b>Share ⬆️</b> → <b>Add to Home Screen</b><br>Turn off silent mode for sound.', apk:'📱 Download Android app (APK)', stars:n=>`Total stars: ${n} ★`,
-     th:{neon:'Neon',gold:'Gold',ice:'Ice',lava:'Lava'}, slow:'SLOW', roundDone:(r,b)=>`Round ${r} complete! +${b}`, plusLife:'+1 life ❤️', block:'🧱 Play Neon Block (new!)', helper:'🎯 Timing helper', now:'NOW!' },
+     th:{neon:'Neon',gold:'Gold',ice:'Ice',lava:'Lava'}, slow:'SLOW', roundDone:(r,b)=>`Round ${r} complete! +${b}`, plusLife:'+1 life ❤️', block:'🧱 Play Neon Block (new!)', helper:'🎯 Timing helper', now:'NOW!', share:'📤 Send to a friend → 🛡️ free shield', shareDone:'🛡️ Shield ready! It protects you next game', shareReady:'🛡️ Your free shield is ready (share again tomorrow)', shareText:'Try this game! 🎮 Diş Fırlat & Neon Block – free: https://xenosmart.de/spiel/' },
   };
   const FLAGS = {tr:'🇹🇷', de:'🇩🇪', en:'🇬🇧'};
   if (!SAVE.lang){ const nl=(navigator.language||'tr').slice(0,2); SAVE.lang = I18N[nl] ? nl : (nl==='de'?'de':'en'); if(!I18N[SAVE.lang]) SAVE.lang='tr'; }
@@ -345,6 +345,11 @@
       el.classList.toggle('on', SAVE[k]); el.textContent = (k==='music'?t('gm'):k==='helper'?t('helper'):t('sfx')) + ': ' + (SAVE[k]?t('on'):t('off'));
     }));
     box.querySelectorAll('.lnk').forEach(el => el.addEventListener('pointerdown', e => e.stopPropagation()));
+    box.querySelectorAll('.shr').forEach(el => el.addEventListener('click', e => {
+      if (navigator.share && !/wv\)/.test(navigator.userAgent)){ e.preventDefault(); navigator.share({text:t('shareText')}).catch(()=>{}); }
+      SAVE.shareDay=new Date().toISOString().slice(0,10); SAVE.bonusShield=true; persist();
+      setTimeout(()=>{ showToast(t('shareDone'),'#7dff6a',2200); if (state==='menu') menu(); }, 400);
+    }));
     box.querySelectorAll('.th').forEach(el => el.addEventListener('pointerdown', e => {
       e.preventDefault(); e.stopPropagation(); const k=el.dataset.k, t=THEMES[k];
       if (totalStars() < t.need){ el.animate([{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:200}); return; }
@@ -362,7 +367,11 @@
       : `<a class="lnk" style="background:#3ddc84;color:#0b0d1a;display:block" href="https://xenosmart.de/spiel/DisFirlat.apk" download>${t('apk')}</a>`;
     const extra = web ? `<div class="music">${getApp}
       <div class="small"><a href="https://xenosmart.de/" style="color:#8a90b8">XenoSmart</a> · <a href="https://xenosmart.de/impressum.html" style="color:#8a90b8">Impressum</a> · <a href="https://xenosmart.de/datenschutz.html" style="color:#8a90b8">Datenschutz</a></div></div>` : '';
-    const helperBtn = `<div class="row" style="margin-top:12px"><button class="tg ${SAVE.helper?'on':''}" data-t="helper">${t('helper')}: ${SAVE.helper?t('on'):t('off')}</button></div>`;
+    const today=new Date().toISOString().slice(0,10);
+    const shareBox = SAVE.shareDay===today
+      ? `<div class="small" style="color:#7dff6a;font-weight:800;font-size:13px;margin-top:12px">${t('shareReady')}</div>`
+      : `<a class="lnk shr" style="background:linear-gradient(90deg,#25d366,#38e1ff);color:#0b0d1a;display:block;margin-top:12px" href="https://wa.me/?text=${encodeURIComponent(t('shareText'))}" target="_blank" rel="noopener">${t('share')}</a>`;
+    const helperBtn = shareBox + `<div class="row" style="margin-top:12px"><button class="tg ${SAVE.helper?'on':''}" data-t="helper">${t('helper')}: ${SAVE.helper?t('on'):t('off')}</button></div>`;
     return helperBtn + musicHtml() + extra + `<div class="themes">${Object.entries(THEMES).map(([k,t])=>`<div class="th ${SAVE.theme===k?'sel':''} ${ts<t.need?'lock':''}" data-k="${k}"><i style="background:linear-gradient(135deg,${t.a},${t.b})"></i>${ts<t.need?'🔒'+t.need+'★':I18N[SAVE.lang].th[k]}</div>`).join('')}</div><div class="small">${STARS_TXT(ts)}</div>`;
   }
   function musicHtml(){
@@ -686,9 +695,10 @@
     SAVE.bank = (SAVE.bank||0) + 500*Math.min(SAVE.streak,7); persist();
     return 500*Math.min(SAVE.streak,7);
   }
+  const useBonusShield = () => { if (SAVE.bonusShield){ SAVE.bonusShield=false; persist(); setTimeout(()=>showToast('🛡️','#7dff6a',900),300); return true; } return false; };
   const takeBank = () => { const b=SAVE.bank||0; SAVE.bank=0; persist(); return b; };
-  function startEndless(){ endless=true; lives=MAX_LIVES; score=takeBank(); shield=false; combo=0; fever=0; startLevel(0); state='play'; }
-  function startCampaign(i){ endless=false; lives=MAX_LIVES; combo=0; fever=0; score=takeBank(); shield=false; startLevel(i); state='play'; }
+  function startEndless(){ endless=true; lives=MAX_LIVES; score=takeBank(); shield=useBonusShield(); combo=0; fever=0; startLevel(0); state='play'; }
+  function startCampaign(i){ endless=false; lives=MAX_LIVES; combo=0; fever=0; score=takeBank(); shield=useBonusShield(); startLevel(i); state='play'; }
   let dbShown=0;
   function menu(){
     const db = dailyBonus(); if (db) dbShown = db;
