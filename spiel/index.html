@@ -287,6 +287,7 @@
   }
 
   function startLevel(i){
+    shards=[]; exploded=[];
     if (endless){ round=i; L=endlessLevel(i); } else { level=i; L=LEVELS[i]; }
     N=L.n; K=N.length; rot0=0; filled=N.map(n=>Array(n).fill(null));
     active=0; flying=null; dir=1; flipAt=time+2+Math.random()*2;
@@ -641,9 +642,56 @@
     }
   }
 
+  // ---------- ÇARK PATLAMASI (hafif ama gösterişli) ----------
+  let shards=[], exploded=[];
+  const LITE = (navigator.hardwareConcurrency||4) <= 4;
+  function explodeGears(){
+    for (let g=0; g<K; g++){
+      setTimeout(()=>{
+        if (state!=='levelup') return;
+        exploded[g]=true;
+        const r=R[g], n=N[g], step=Math.PI*2/n, col=T.body, pc=T.pal[g%T.pal.length];
+        // gövde dilimleri
+        const parts = LITE ? 5 : 7, off=Math.random()*Math.PI;
+        for (let k=0;k<parts;k++){
+          const a0=off+k*Math.PI*2/parts, a1=a0+Math.PI*2/parts, mid=(a0+a1)/2, sp=(180+Math.random()*220)*(r/80);
+          shards.push({t:'w', x:cx[g], y:cy[g], vx:Math.cos(mid)*sp, vy:Math.sin(mid)*sp-160, rot:0, vr:(Math.random()-.5)*6, a0, a1, r, c:col[k%2?0:2], e:pc, life:1.25});
+        }
+        // dişler
+        for (let i=0;i<n;i++){
+          const a=rots[g]+i*step, sp=260+Math.random()*260;
+          shards.push({t:'d', x:cx[g]+Math.cos(a)*(r+th*0.5), y:cy[g]+Math.sin(a)*(r+th*0.5), vx:Math.cos(a)*sp, vy:Math.sin(a)*sp-200, rot:a, vr:(Math.random()-.5)*10, c:filled[g][i]||pc, life:1.4});
+        }
+        waves.push({x:cx[g],y:cy[g],r:r*0.4,life:0.6,c:'#ffffff'}); waves.push({x:cx[g],y:cy[g],r:r*0.2,life:0.8,c:pc});
+        burst(cx[g],cy[g],pc, LITE?14:24, 320); burst(cx[g],cy[g],'#ffffff', LITE?6:10, 200);
+        flashT=0.18; shake=Math.max(shake,0.3);
+        noise(0.35,0.16,200); tone(90,0.4,'sine',0.16); tone(55,0.5,'sine',0.12,0.05); tone(1568+g*220,0.25,'triangle',0.05,0.08);
+        buzz(35);
+      }, 150+g*170);
+    }
+  }
+  function updateShards(dt){
+    for (const p of shards){ p.life-=dt; p.vy+=900*dt; p.vx*=0.985; p.x+=p.vx*dt; p.y+=p.vy*dt; p.rot+=p.vr*dt; }
+    shards=shards.filter(p=>p.life>0 && p.y<H+200);
+    if (flashT>0) flashT-=dt;
+  }
+  function drawShards(){
+    for (const p of shards){
+      const a=Math.min(1,p.life*1.4);
+      ctx.save(); ctx.globalAlpha=a; ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      if (p.t==='w'){
+        const gr=ctx.createLinearGradient(-p.r,-p.r,p.r,p.r); gr.addColorStop(0,p.c); gr.addColorStop(1,shade(p.c,-0.3));
+        ctx.fillStyle=gr; ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,p.r,p.a0,p.a1); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle=p.e; ctx.lineWidth=2.5; ctx.stroke();      // parlayan kırık kenar
+      } else { toothShape(-th/2, toothW()); fillTooth(p.c, -th/2, false); }
+      ctx.restore();
+    }
+    if (flashT>0){ ctx.fillStyle=`rgba(255,255,255,${flashT*1.6})`; ctx.fillRect(0,0,W,H); }
+  }
+  let flashT=0;
   function levelDone(){
     state='levelup'; sfx.win(); buzz([20,40,20,40,60]);
-    for(let j=0;j<K;j++) burst(cx[j],cy[j],T.pal[j%T.pal.length],34);
+    explodeGears();
     const totalTeeth = N.reduce((a,b)=>a+b,0), secs = time-levelStart;
     const speed = Math.max(0, Math.round((totalTeeth*1.6 - secs)*80));
     if (speed>0) floatText(W/2, H*0.3, t('speed',speed), '#ffd23f', 22);
@@ -651,7 +699,7 @@
     if (endless){
       updateHud();
       showToast(t('roundDone',round+1,bonus), '#7dff6a', 1200);
-      setTimeout(()=>{ if (round%3===2 && lives<MAX_LIVES){ lives++; showToast(t('plusLife'),'#ff6b8a',900); } startLevel(round+1); state='play'; }, 1300);
+      setTimeout(()=>{ if (round%3===2 && lives<MAX_LIVES){ lives++; showToast(t('plusLife'),'#ff6b8a',900); } startLevel(round+1); state='play'; }, 1700);
       return;
     }
     const pr = lvStats.perf/Math.max(1,lvStats.hits);
@@ -676,7 +724,7 @@
           [{label:t('spinBtn'), go:()=>luckyWheel(()=>{ startLevel(level+1); state='play'; })},
            {label:t('skipTo',level+2), ghost:true, go:()=>{ startLevel(level+1); state='play'; }},{label:t('replay'), ghost:true, go:()=>{ startLevel(level); state='play'; }}]);
       }
-    }, 900);
+    }, 1500);
   }
 
   // ---------- ŞANS ÇARKI ----------
@@ -756,6 +804,7 @@
   }
 
   function drawGear(g){
+    if (exploded[g]) return;
     const r=R[g], n=N[g], step=Math.PI*2/n, w=toothW();
     const isActive = g===active && (state==='play'||state==='fail');
     const done = filled[g].every(Boolean);
@@ -920,6 +969,7 @@
     if (analyser && freq && SAVE.music){ analyser.getByteFrequencyData(freq); let b=0; for(let i=1;i<6;i++) b+=freq[i]; b=b/5/255; beat=Math.max(beat*0.88, Math.pow(Math.max(0,b-0.35)/0.65,1.6)); }
     else beat=Math.max(beat*0.9, Math.pow(Math.max(0,Math.sin(time*Math.PI*2*100/60)),8)*0.5);
     for (const w of waves){ w.r+=dt*th*30; w.life-=dt; } waves=waves.filter(w=>w.life>0);
+    updateShards(dt);
     if (slowT>0){ slowT-=dt; if (slowT<=0) slowBtn.classList.remove('on'); }
     if (fever>0 && running){ fever-=dt; if (fever<=0) updateHud(); }
     if (doubleT>0 && running){ doubleT-=dt; if (doubleT<=0) updateHud(); }
@@ -939,7 +989,7 @@
       ctx.save();
       if (shake>0) ctx.translate((Math.random()-.5)*12*shake/.4,(Math.random()-.5)*12*shake/.4);
       for (let j=K-1;j>=0;j--) drawGear(j);
-      drawArcs(); drawHelper(); drawLauncher();
+      drawShards(); drawArcs(); drawHelper(); drawLauncher();
       for (const w of waves){ ctx.save(); ctx.globalAlpha=Math.max(0,w.life*1.6); ctx.strokeStyle=w.c; ctx.lineWidth=3; ctx.shadowColor=w.c; ctx.shadowBlur=16; ctx.beginPath(); ctx.arc(w.x,w.y,w.r,0,Math.PI*2); ctx.stroke(); ctx.restore(); }
       if (flying){
         const g=flying.g;
