@@ -98,21 +98,21 @@
 (() => {
   // ================= AYARLAR =================
   const LEVELS = [
-    {n:[6],         w:1.4, win:0.24},
-    {n:[6,4],       w:1.6, win:0.22},
-    {n:[7,5],       w:1.8, win:0.20},
-    {n:[6,5,4],     w:1.6, win:0.20},
-    {n:[7,5,4],     w:1.8, win:0.19, boss:true},
-    {n:[8,6,5],     w:1.9, win:0.18, flip:true},
-    {n:[8,6,4],     w:2.0, win:0.17, wobble:true},
-    {n:[7,6,5,4],   w:1.7, win:0.17},
-    {n:[8,6,5,4],   w:1.9, win:0.16, flip:true},
-    {n:[9,7,5,4],   w:2.0, win:0.15, wobble:true, boss:true},
-    {n:[9,7,6,5],   w:2.1, win:0.14, flip:true, wobble:true},
-    {n:[10,8,6,5],  w:2.2, win:0.135, flip:true, wobble:true},
-    {n:[11,8,7,5],  w:2.3, win:0.13, flip:true, wobble:true},
-    {n:[12,9,7,5],  w:2.4, win:0.12, flip:true, wobble:true},
-    {n:[12,10,8,6], w:2.5, win:0.11, flip:true, wobble:true, boss:true},
+    {n:[6],         w:1.00, win:0.34},
+    {n:[6,4],       w:1.10, win:0.32},
+    {n:[6,5],       w:1.20, win:0.30},
+    {n:[6,5,4],     w:1.15, win:0.30},
+    {n:[7,5,4],     w:1.25, win:0.28, boss:true},
+    {n:[7,6,5],     w:1.30, win:0.27},
+    {n:[8,6,4],     w:1.35, win:0.26, flip:true},
+    {n:[7,6,5,4],   w:1.30, win:0.25},
+    {n:[8,6,5,4],   w:1.40, win:0.24, wobble:true},
+    {n:[8,7,5,4],   w:1.45, win:0.23, flip:true, boss:true},
+    {n:[9,7,6,5],   w:1.50, win:0.22, flip:true},
+    {n:[9,8,6,5],   w:1.55, win:0.21, wobble:true},
+    {n:[10,8,6,5],  w:1.60, win:0.20, flip:true, wobble:true},
+    {n:[10,8,7,5],  w:1.65, win:0.19, flip:true, wobble:true},
+    {n:[11,9,7,5],  w:1.70, win:0.18, flip:true, wobble:true, boss:true},
   ];
   const TOTAL = LEVELS.length, MAX_LIVES = 3, FLY = 0.12;
   const THEMES = {
@@ -249,7 +249,7 @@
     const k = 2 + (r % 3), n = [];
     let top = Math.min(12, 7 + Math.floor(r/2) + Math.floor(Math.random()*2));
     for (let j=0;j<k;j++){ n.push(Math.max(4, top)); top -= 1 + Math.floor(Math.random()*2); }
-    return {n, w:Math.min(3.4, 2.2 + r*0.08), win:Math.max(0.085, 0.13 - r*0.003), flip:true, wobble:r>1, boss:(r+1)%5===0};
+    return {n, w:Math.min(2.4, 1.5 + r*0.05), win:Math.max(0.13, 0.22 - r*0.004), flip:r>0, wobble:r>2, boss:(r+1)%5===0};
   }
 
   function startLevel(i){
@@ -290,6 +290,7 @@
     if (type==='shield'){ shield=true; floatText(x, y-th*3.2, t('shield1'), B.color, 20); showToast(t('shield2'), B.color, 1200); }
     tone(1568,0.25,'sine',0.07); tone(2093,0.3,'sine',0.05,0.08); buzz([15,30,15]);
   }
+  function retryGear(g){ filled[g]=Array(N[g]).fill(null); gearPerfect[g]=true; flying=null; state='play'; boss.lock=null; updateHud(); }
   function retryLevel(){ filled=N.map(n=>Array(n).fill(null)); active=0; flying=null; state='play'; boss.lock=null; makeBonusSlots(); updateHud(); }
 
   function updateHud(){
@@ -471,7 +472,7 @@
 
   const norm = a => { a%=Math.PI*2; if(a<-Math.PI) a+=Math.PI*2; if(a>Math.PI) a-=Math.PI*2; return a; };
   function speedFactor(){
-    let f = L.wobble ? 1+0.42*Math.sin(time*1.4) : 1;
+    let f = L.wobble ? 1+0.25*Math.sin(time*1.1) : 1;
     if (slowT>0) f*=0.35;
     if (boss.pause>0) f=0;
     return f;
@@ -486,7 +487,7 @@
   function zap(g){ for (const j of [g-1,g+1]) if (j>=0 && j<K) arcs.push({a:g,b:j,life:0.3}); }
 
   // ================= İSABET =================
-  function tolOf(g){ const step=Math.PI*2/N[g]; let tol=Math.min(step*0.42, L.win*omegaOf(g)/2); if (fever>0) tol*=1.25; return tol; }
+  function tolOf(g){ const step=Math.PI*2/N[g]; let tol=Math.min(step*0.45, L.win*omegaOf(g)/2); if (fever>0) tol*=1.25; return tol; }
   // ---------- ZAMANLAMA YARDIMCISI ----------
   let helperIn=false;
   function drawHelper(){
@@ -562,7 +563,7 @@
       state='fail'; shake=0.4; lives--; lvStats.lost++; combo=0; perfStreak=0;
       burst(cx[g],hitY,'#ff4d6d',22); sfx.miss(); buzz([70,40,70]); updateHud();
       const why = locked ? t('locked') : (filled[g][bi] && bd<=tol) ? t('full') : t('wrong');
-      if (lives>0){ showToast(why+t('lifeLost'), '#ff6b8a', 1100); setTimeout(retryLevel, 1100); }
+      if (lives>0){ showToast(why+t('lifeLost'), '#ff6b8a', 1100); setTimeout(()=>retryGear(g), 1000); }
       else setTimeout(gameOver, 900);
     }
   }
@@ -820,13 +821,13 @@
   // ================= DÖNGÜ =================
   function updateBoss(dt){
     if (!L.boss || state!=='play') return;
-    if (boss.pause>0){ boss.pause-=dt; if (boss.pause<=0) boss.next=time+2.2+Math.random()*1.6; }
+    if (boss.pause>0){ boss.pause-=dt; if (boss.pause<=0) boss.next=time+3.2+Math.random()*2; }
     else if (time>boss.next-0.55 && boss.warn<=0 && time<boss.next){ boss.warn=0.55; sfx.warn(); }
-    if (boss.warn>0){ boss.warn-=dt; if (boss.warn<=0){ boss.pause=0.6; } }
+    if (boss.warn>0){ boss.warn-=dt; if (boss.warn<=0){ boss.pause=0.45; } }
     if (time>boss.lockAt){
       const g=active, empt=[]; for(let i=0;i<N[g];i++) if(!filled[g][i]) empt.push(i);
       if (empt.length>1){ boss.lock={g, i:empt[Math.floor(Math.random()*empt.length)], until:time+2.2}; }
-      boss.lockAt=time+3+Math.random()*1.5;
+      boss.lockAt=time+4.5+Math.random()*2;
     }
   }
 
@@ -834,7 +835,7 @@
     const dt=Math.min(0.05,(t-(lastT||t))/1000); lastT=t; time+=dt;
     const running = state==='play'||state==='fail';
     if (L){
-      if (running && L.flip && time>flipAt){ dir*=-1; flipAt=time+1.8+Math.random()*1.8; }
+      if (running && L.flip && time>flipAt){ dir*=-1; flipAt=time+3+Math.random()*2.5; }
       if (running) updateBoss(dt);
       rot0 += (running ? L.w*speedFactor() : 0.5)*dir*dt; computeRots();
     }
