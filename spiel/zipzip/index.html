@@ -31,6 +31,8 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
 #bS{right:18px;bottom:118px;width:56px;height:56px}
 #home{position:fixed;z-index:6;left:calc(10px + env(safe-area-inset-left));top:10px;width:46px;height:46px;border-radius:14px;border:2px solid rgba(255,255,255,.5);background:rgba(20,14,50,.55);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 #home svg{width:30px;height:30px}
+#snd{position:fixed;z-index:6;right:calc(10px + env(safe-area-inset-right));top:62px;width:46px;height:46px;border-radius:14px;border:2px solid rgba(255,255,255,.5);background:rgba(20,14,50,.55);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#snd svg{width:30px;height:30px}#snd.hide{display:none}
 #ov{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;background:rgba(8,6,26,.42);padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 #ov.hide{display:none}
 .card{width:min(560px,92vw);max-height:92vh;overflow:auto;box-sizing:border-box;padding:18px 20px 16px;border-radius:26px;background:linear-gradient(160deg,rgba(46,28,110,.94),rgba(20,12,56,.95));border:2px solid rgba(255,255,255,.18);box-shadow:0 18px 60px rgba(0,0,0,.5);text-align:center}
@@ -60,6 +62,7 @@ h3{margin:12px 0 6px;font-size:14px;letter-spacing:2px;opacity:.8;text-transform
 <body>
 <canvas id="c"></canvas>
 <button id="home" class="hide" aria-label="Menü"><svg viewBox="0 0 32 32"><path d="M4 15.5 16 5l12 10.5" fill="none" stroke="#ffe35a" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 14v12.5h6v-6.5h4v6.5h6V14" fill="#7c6cff" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><circle cx="16" cy="12.5" r="2" fill="#ffe35a"/></svg></button>
+<button id="snd" class="hide" aria-label="Ses"></button>
 <div id="pad" class="tc hide"><div class="btn" data-k="f" id="bF2"><svg viewBox="0 0 40 40"><path d="M20 3l3.6 9.4L33 9l-3.4 9.4L38 22l-9.3 3 2.4 9.7L22 30l-4.5 8.5-2.2-9.6L5.6 32l4.7-8.6L2 18.6l9.6-1.4L9.3 7.7l8.6 4.4z" fill="#ff8a3d" stroke="#fff" stroke-width="2" stroke-linejoin="round"/><circle cx="20" cy="20" r="5" fill="#fff36b"/></svg><span class="lab" id="lF2"></span></div><div id="dpad" class="btn"><div class="half" id="hl"><svg viewBox="0 0 40 40"><path d="M26 7 11 20l15 13" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="31" cy="20" r="3" fill="#ffe35a"/></svg></div><div class="half" id="hr"><svg viewBox="0 0 40 40"><path d="m14 7 15 13-15 13" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="20" r="3" fill="#ffe35a"/></svg></div></div></div>
 <div id="act" class="tc hide">
  <div class="btn" data-k="s" id="bS"><svg viewBox="0 0 40 40"><path d="M31 15a12 12 0 0 0-21-3" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="m8 5 2 7 7-2" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 25a12 12 0 0 0 21 3" fill="none" stroke="#ffe35a" stroke-width="4" stroke-linecap="round"/><path d="m32 35-2-7-7 2" fill="none" stroke="#ffe35a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lab" id="lS"></span></div>
@@ -80,7 +83,7 @@ const isTouch=(window.matchMedia&&matchMedia('(pointer: coarse)').matches)||('on
 /* ================= Kayıt ================= */
 const SKEY='bukoZipzipV1';
 const navL=(navigator.language||'tr').slice(0,2);
-let save={unlocked:1,lang:['tr','de','en'].includes(navL)?navL:'en',vol:1,best:{}};
+let save={unlocked:1,lang:['tr','de','en'].includes(navL)?navL:'en',vol:2,best:{}};
 try{Object.assign(save,JSON.parse(localStorage.getItem(SKEY)||'{}'))}catch(e){}
 function persist(){try{localStorage.setItem(SKEY,JSON.stringify(save))}catch(e){}}
 
@@ -153,13 +156,20 @@ function ell(x,y,rx,ry){ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx
 function ov(a,b){return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y}
 
 /* ================= Ses ================= */
-const VOLS=[0,.05,.1,.16];
+const VOLS=[0,.12,.22,.36];
 let AC=null,master=null,musG=null,mus=null,pendingSong=-1;
+let iosA=null;
+function iosUnlock(){
+ try{if(navigator.audioSession)navigator.audioSession.type='playback'}catch(e){}
+ if(iosA)return;try{const sr=8000,n=sr,b=new ArrayBuffer(44+n*2),v=new DataView(b);const w=(o,t)=>{for(let i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i))};
+  w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+  iosA=new Audio(URL.createObjectURL(new Blob([b],{type:'audio/wav'})));iosA.loop=true;iosA.setAttribute('playsinline','');const pr=iosA.play();if(pr)pr.catch(()=>{iosA=null})}catch(e){iosA=null}}
 function initAudio(){
- if(AC){if(AC.state==='suspended')AC.resume();return}
+ iosUnlock();
+ if(AC){if(AC.state!=='running')AC.resume();return}
  try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return}
  master=AC.createGain();master.gain.value=VOLS[save.vol];master.connect(AC.destination);
- musG=AC.createGain();musG.gain.value=.55;musG.connect(master);
+ musG=AC.createGain();musG.gain.value=.6;musG.connect(master);try{AC.resume()}catch(e){}
  if(pendingSong>=0)playMusic(pendingSong);
 }
 function setVol(v){save.vol=v;persist();if(master)master.gain.value=VOLS[v]}
@@ -263,7 +273,7 @@ function buildLevel(i){
   if(thb==='factory')lv.decos.push({k:'beacon',x:c*T+T/2,y:(gr-4)*T,s:Math.random()*9});
   if(thb==='palace'&&c%14===3)lv.decos.push({k:'banner',x:c*T+T*3.5,y:0,s:c});
   if((thb==='palace'||thb==='castle')&&c%14===10)lv.decos.push({k:'lamp',x:c*T+T/2,y:2.6*T,s:c});
-  if(thb==='valley'&&c%14===3)lv.decos.push({k:'sign',x:c*T+T/2,y:gr*T,s:c})}
+  if(thb==='valley'&&c%42===3)lv.decos.push({k:'sign',x:c*T+T/2,y:gr*T,s:c})}
  P={hang:null,climb:null,sq:0,combo:0,x:lv.spawn.x,y:lv.spawn.y,w:22,h:44,vx:0,vy:0,face:def.mirror?-1:1,onGround:false,coy:0,jbuf:0,hp:3,inv:1,cur:0,ammo:[Infinity,0,0,0],fireCd:0,lives:3,anim:0,coins:0,dead:false,deadT:0,shootT:0,ride:null,spawn:{x:lv.spawn.x,y:lv.spawn.y},blink:0};
  camX=clamp(P.x-VW/2,0,Math.max(0,lv.w-VW));levelTime=0;banner=3;
 }
@@ -798,7 +808,8 @@ const ovEl=document.getElementById('ov');const homeB=document.getElementById('ho
 const lockSvg='<svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3" fill="#ffd23f"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="#ffd23f" stroke-width="2.6"/></svg>';
 function volSvg(){const v=save.vol;let w='';for(let i=1;i<=3;i++)w+=`<path d="M${12+i*4} ${16-i*3.2}q${3+i} ${i*3.2} 0 ${i*6.4}" fill="none" stroke="${i<=v?'#fff':'rgba(255,255,255,.22)'}" stroke-width="2.4" stroke-linecap="round"/>`;
  return `<svg viewBox="0 0 32 32"><path d="M4 12h5l6-5v18l-6-5H4z" fill="${v?'#ffd23f':'#888'}"/>${w}${v?'':'<path d="M18 11l9 10M27 11l-9 10" stroke="#ff5f7a" stroke-width="3" stroke-linecap="round"/>'}</svg>`}
-function setControls(show){const s=S();document.getElementById('lF').textContent=s.fire;document.getElementById('lF2').textContent=s.fire;document.getElementById('lJ').textContent=s.jump;document.getElementById('lS').textContent=s.swap;document.querySelectorAll('.tc').forEach(e=>e.classList.toggle('hide',!(show&&isTouch)));homeB.classList.toggle('hide',!show)}
+const sndB=document.getElementById('snd');sndB.addEventListener('click',()=>{initAudio();setVol((save.vol+1)%4);sndB.innerHTML=volSvg();if(save.vol)sfx('coin')});
+function setControls(show){sndB.classList.toggle('hide',!show);sndB.innerHTML=volSvg();sndB.style.top=(OY+62)+'px';const s=S();document.getElementById('lF').textContent=s.fire;document.getElementById('lF2').textContent=s.fire;document.getElementById('lJ').textContent=s.jump;document.getElementById('lS').textContent=s.swap;document.querySelectorAll('.tc').forEach(e=>e.classList.toggle('hide',!(show&&isTouch)));homeB.classList.toggle('hide',!show)}
 function openMenu(paused){
  state=paused?'pause':'menu';if(!paused){lv=null;playMusic(0)}setControls(false);
  const s=S();let lvh='';
