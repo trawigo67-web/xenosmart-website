@@ -11,7 +11,7 @@
 <title>Zıpzıp Macerası – Buko Games</title>
 <style>
 html,body{margin:0;height:100%;background:#0c0a1e;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#fff}
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block}
 .tc{position:fixed;pointer-events:none;z-index:5}
 .tc.hide,#home.hide{display:none}
 .btn{position:absolute;pointer-events:auto;border-radius:50%;background:rgba(255,255,255,.13);border:2px solid rgba(255,255,255,.38);display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:none}
@@ -50,6 +50,7 @@ h3{margin:12px 0 6px;font-size:14px;letter-spacing:2px;opacity:.8;text-transform
 .lb small{display:block;font-size:10px;line-height:1.15;min-height:24px;opacity:.95}
 .lb.locked{background:#3b3566;box-shadow:0 4px 0 #221d44;cursor:default;opacity:.7}
 .lb svg{width:18px;height:18px}
+.skr{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px}.skr small{opacity:.8;font-size:12px}
 .etn{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:10px}.etn h3{margin:0;min-width:120px}.sb:disabled{opacity:.3}
 .row{display:flex;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap}
 .sb{min-width:52px;height:42px;border-radius:13px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font:800 15px system-ui,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0 10px}
@@ -75,7 +76,20 @@ h3{margin:12px 0 6px;font-size:14px;letter-spacing:2px;opacity:.8;text-transform
 'use strict';
 /* ================= Ayarlar / Settings ================= */
 // Kahramanın görünümü – oğlunun fotoğrafına göre buradan değiştirilebilir
-const HERO={hair:'#3a2214',skin:'#f3c9a2',shirt:'#e8463c',shirt2:'#ffd23f',pants:'#2d5fa8',shoes:'#ffffff',shoeStripe:'#ff5f7a',eye:'#3b2a1a'};
+const HERO0={hair:'#3a2214',skin:'#f3c9a2',shirt:'#e8463c',shirt2:'#ffd23f',pants:'#2d5fa8',pants2:'#21467f',shoes:'#ffffff',shoeStripe:'#ff5f7a',eye:'#3b2a1a',acc:''};
+const HERO=Object.assign({},HERO0);
+const SKINS=[
+ {at:1,c:{}},
+ {at:4,acc:'ninja',c:{shirt:'#2b2b3a',shirt2:'#e8463c',pants:'#1c1c28',pants2:'#121219',shoes:'#2b2b3a',shoeStripe:'#e8463c'}},
+ {at:8,acc:'astro',c:{shirt:'#f2f4f8',shirt2:'#3fc3ff',pants:'#d5dae4',pants2:'#aab2c2',shoes:'#ff8a3d',shoeStripe:'#ffffff'}},
+ {at:13,acc:'cape',c:{shirt:'#2a6fdc',shirt2:'#ffd23f',pants:'#e8463c',pants2:'#b02a2a',shoes:'#e8463c',shoeStripe:'#ffd23f'}},
+ {at:21,acc:'pirate',c:{shirt:'#f4efe2',shirt2:'#e8463c',pants:'#5a3b1a',pants2:'#3a2410',shoes:'#2b1a10',shoeStripe:'#c8932f'}},
+ {at:31,acc:'dino',c:{shirt:'#5ee36a',shirt2:'#ffe35a',pants:'#2fa83d',pants2:'#1f7a2a',shoes:'#ffffff',shoeStripe:'#5ee36a'}},
+ {at:46,acc:'viking',c:{shirt:'#8a5a2c',shirt2:'#c8932f',pants:'#4a3b2a',pants2:'#2f2518',shoes:'#6b4a2a',shoeStripe:'#c8932f'}},
+ {at:66,acc:'king',c:{shirt:'#7c3fd6',shirt2:'#ffd23f',pants:'#3a2a6b',pants2:'#271c4a',shoes:'#ffd23f',shoeStripe:'#ffffff'}},
+ {at:105,acc:'king',c:{shirt:'#ffd23f',shirt2:'#fff6b0',pants:'#e8a80c',pants2:'#b87d00',shoes:'#fff6b0',shoeStripe:'#ffd23f'}}
+];
+function applySkin(i){const k=SKINS[i]||SKINS[0];for(const q in HERO)delete HERO[q];Object.assign(HERO,HERO0,k.c);HERO.acc=k.acc||''}
 const T=36, ROWS=15, VH=ROWS*T, G=2300, STEP=1/120;
 const cv=document.getElementById('c');let ctx=cv.getContext('2d');
 let W=0,H=0,DPR=1,SC=1,VW=640,OY=0,TT=0;
@@ -86,6 +100,7 @@ const SKEY='bukoZipzipV1';
 const navL=(navigator.language||'tr').slice(0,2);
 let save={unlocked:1,lang:['tr','de','en'].includes(navL)?navL:'en',vol:2,best:{}};
 try{Object.assign(save,JSON.parse(localStorage.getItem(SKEY)||'{}'))}catch(e){}
+function skinOpen(i){return (save.unlocked||1)>=SKINS[i].at}
 function persist(){try{localStorage.setItem(SKEY,JSON.stringify(save))}catch(e){}}
 
 /* ================= Metinler ================= */
@@ -94,19 +109,19 @@ tr:{title:'ZIPZIP MACERASI',sub:'Koş, zıpla, ateş et!',play:'OYNA',cont:'DEVA
  names:['Yeşil Vadi','Kum Sarayı','Kristal Mağara','Gece Kalesi','Demir Dev’in Fabrikası'],
  complete:'BÖLÜM TAMAM!',next:'SONRAKİ BÖLÜM',menu:'ANA MENÜ',retry:'TEKRAR DENE',over:'OYUN BİTTİ',coins:'Altın',time:'Süre',
  win:'TEBRİKLER!',winTxt:'105 bölümün hepsini bitirdin – gerçek bir kahramansın!',check:'Kontrol noktası!',locked:'Önce boss’u yen!',boss:'DEMİR DEV',bossN:{slimeking:'JÖLE KRAL',scorpion:'KUM AKREBİ',batqueen:'KANAT KRALİÇE',knight:'GECE ŞÖVALYESİ',iron:'DEMİR DEV'},etap:'Etap',etapDone:n=>`Etap ${n} tamamlandı! 🎉`,
- weap:['Köpük Tabancası','Üçlü Atış','Lazer','Konfeti Bombası'],heart:'+1 Can',combo:'SÜPER!',wlv:'SİLAH SV.',wup:n=>`Silahların güçlendi! Silah seviyesi ${n}`,hintT:'⭐ = ATEŞ   ·   ⌃ = ZIPLA (havada 2. kez = ÇİFT ZIPLA)   ·   sol tuş = ZIPLA + ATEŞ',hintK:'J veya X = ATEŞ   ·   BOŞLUK = ZIPLA (2× = ÇİFT ZIPLA)   ·   Q = SİLAH',fire:'ATEŞ',fj:'ZIPLA+ATEŞ',jump:'ZIPLA',swap:'SİLAH',
+ weap:['Köpük Tabancası','Üçlü Atış','Lazer','Konfeti Bombası'],heart:'+1 Can',combo:'SÜPER!',skin:'Kostüm',skinN:['Klasik','Ninja','Astronot','Süper Kahraman','Korsan','Dino','Viking','Kral','Altın Kahraman'],skinAt:n=>`${n}. bölüme gelince açılır`,skinNew:n=>`Yeni kostüm açıldı: ${n}!`,wlv:'SİLAH SV.',wup:n=>`Silahların güçlendi! Silah seviyesi ${n}`,hintT:'⭐ = ATEŞ   ·   ⌃ = ZIPLA (havada 2. kez = ÇİFT ZIPLA)   ·   sol tuş = ZIPLA + ATEŞ',hintK:'J veya X = ATEŞ   ·   BOŞLUK = ZIPLA (2× = ÇİFT ZIPLA)   ·   Q = SİLAH',fire:'ATEŞ',fj:'ZIPLA+ATEŞ',jump:'ZIPLA',swap:'SİLAH',
  helpT:'Düşmanların kafasına zıpla ya da uzaktan ateş et! Silah kutularını topla.',help:'← → / A D: koş · Boşluk / W: zıpla · J / X: ateş · Q: silah değiştir · Esc: menü',dir:['→ soldan sağa','← sağdan sola']},
 de:{title:'ZIPZIP ABENTEUER',sub:'Lauf, spring, schieß!',play:'SPIELEN',cont:'WEITER',levels:'Level',lv:'Level',
  names:['Grünes Tal','Sandpalast','Kristallhöhle','Nachtburg','Fabrik des Eisenriesen'],
  complete:'LEVEL GESCHAFFT!',next:'NÄCHSTES LEVEL',menu:'HAUPTMENÜ',retry:'NOCHMAL',over:'GAME OVER',coins:'Münzen',time:'Zeit',
  win:'GLÜCKWUNSCH!',winTxt:'Alle 105 Level geschafft – du bist ein echter Held!',check:'Checkpoint!',locked:'Besiege zuerst den Boss!',boss:'EISENRIESE',bossN:{slimeking:'SCHLEIMKÖNIG',scorpion:'SANDSKORPION',batqueen:'FLÜGELKÖNIGIN',knight:'NACHTRITTER',iron:'EISENRIESE'},etap:'Etappe',etapDone:n=>`Etappe ${n} geschafft! 🎉`,
- weap:['Blasenpistole','Dreifachschuss','Laser','Konfettibombe'],heart:'+1 Leben',combo:'SUPER!',wlv:'WAFFEN-STUFE',wup:n=>`Deine Waffen sind stärker! Waffen-Stufe ${n}`,hintT:'⭐ = SCHIESSEN   ·   ⌃ = SPRINGEN (in der Luft nochmal = DOPPELSPRUNG)   ·   linke Taste = SPRUNG + FEUER',hintK:'J oder X = SCHIESSEN   ·   LEERTASTE = SPRINGEN (2× = DOPPELSPRUNG)   ·   Q = WAFFE',fire:'FEUER',fj:'SPRUNG+FEUER',jump:'SPRUNG',swap:'WAFFE',
+ weap:['Blasenpistole','Dreifachschuss','Laser','Konfettibombe'],heart:'+1 Leben',combo:'SUPER!',skin:'Kostüm',skinN:['Klassisch','Ninja','Astronaut','Superheld','Pirat','Dino','Wikinger','König','Goldheld'],skinAt:n=>`Freigeschaltet ab Level ${n}`,skinNew:n=>`Neues Kostüm freigeschaltet: ${n}!`,wlv:'WAFFEN-STUFE',wup:n=>`Deine Waffen sind stärker! Waffen-Stufe ${n}`,hintT:'⭐ = SCHIESSEN   ·   ⌃ = SPRINGEN (in der Luft nochmal = DOPPELSPRUNG)   ·   linke Taste = SPRUNG + FEUER',hintK:'J oder X = SCHIESSEN   ·   LEERTASTE = SPRINGEN (2× = DOPPELSPRUNG)   ·   Q = WAFFE',fire:'FEUER',fj:'SPRUNG+FEUER',jump:'SPRUNG',swap:'WAFFE',
  helpT:'Spring Gegnern auf den Kopf oder schieß aus der Ferne! Sammle Waffenkisten.',help:'← → / A D: laufen · Leertaste / W: springen · J / X: schießen · Q: Waffe wechseln · Esc: Menü',dir:['→ links nach rechts','← rechts nach links']},
 en:{title:'ZIPZIP ADVENTURE',sub:'Run, jump, blast!',play:'PLAY',cont:'CONTINUE',levels:'Levels',lv:'Level',
  names:['Green Valley','Sand Palace','Crystal Cave','Night Castle','Iron Giant’s Factory'],
  complete:'LEVEL CLEAR!',next:'NEXT LEVEL',menu:'MAIN MENU',retry:'TRY AGAIN',over:'GAME OVER',coins:'Coins',time:'Time',
  win:'CONGRATS!',winTxt:'All 105 levels done – you are a true hero!',check:'Checkpoint!',locked:'Beat the boss first!',boss:'IRON GIANT',bossN:{slimeking:'SLIME KING',scorpion:'SAND SCORPION',batqueen:'WING QUEEN',knight:'NIGHT KNIGHT',iron:'IRON GIANT'},etap:'Stage',etapDone:n=>`Stage ${n} complete! 🎉`,
- weap:['Bubble Blaster','Triple Shot','Laser','Confetti Bomb'],heart:'+1 Heart',combo:'SUPER!',wlv:'WEAPON LV',wup:n=>`Your weapons got stronger! Weapon level ${n}`,hintT:'⭐ = SHOOT   ·   ⌃ = JUMP (again in the air = DOUBLE JUMP)   ·   left button = JUMP + FIRE',hintK:'J or X = SHOOT   ·   SPACE = JUMP (2× = DOUBLE JUMP)   ·   Q = WEAPON',fire:'FIRE',fj:'JUMP+FIRE',jump:'JUMP',swap:'WEAPON',
+ weap:['Bubble Blaster','Triple Shot','Laser','Confetti Bomb'],heart:'+1 Heart',combo:'SUPER!',skin:'Skin',skinN:['Classic','Ninja','Astronaut','Superhero','Pirate','Dino','Viking','King','Golden Hero'],skinAt:n=>`Unlocks at level ${n}`,skinNew:n=>`New skin unlocked: ${n}!`,wlv:'WEAPON LV',wup:n=>`Your weapons got stronger! Weapon level ${n}`,hintT:'⭐ = SHOOT   ·   ⌃ = JUMP (again in the air = DOUBLE JUMP)   ·   left button = JUMP + FIRE',hintK:'J or X = SHOOT   ·   SPACE = JUMP (2× = DOUBLE JUMP)   ·   Q = WEAPON',fire:'FIRE',fj:'JUMP+FIRE',jump:'JUMP',swap:'WEAPON',
  helpT:'Stomp on enemies or blast them from afar! Grab weapon boxes.',help:'← → / A D: run · Space / W: jump · J / X: shoot · Q: switch weapon · Esc: menu',dir:['→ left to right','← right to left']}
 };
 const S=()=>STR[save.lang]||STR.tr;
@@ -532,7 +547,8 @@ function drawKid(g,x,y,face,st){
  const ph=st.ph||0,air=st.air||st.hang,bob=air?0:-Math.abs(Math.sin(ph))*1.6;
  const la=air?-.55:Math.sin(ph)*.65,lb=air?.45:-Math.sin(ph)*.65;
  const leg=(ox,a,col)=>{g.save();g.translate(ox,-13);g.rotate(a);g.fillStyle=col;g.fillRect(-3.2,0,6.4,9);g.fillStyle=HERO.shoes;rr(g,-4,7.5,11,5.5,2.5);g.fill();g.fillStyle=HERO.shoeStripe;g.fillRect(-2,9.2,6,1.6);g.restore()};
- leg(-3,lb,'#21467f');
+ if(HERO.acc==='cape'){const sw=Math.sin(TT*6)*3+(air?6:Math.abs(Math.sin(ph))*4);g.fillStyle='#e8463c';g.beginPath();g.moveTo(-8,-29+bob);g.lineTo(5,-29+bob);g.quadraticCurveTo(-6,-14,-14-sw,-3);g.lineTo(-24-sw,-9);g.closePath();g.fill();g.fillStyle='#b02a2a';g.beginPath();g.moveTo(-8,-29+bob);g.quadraticCurveTo(-14,-18,-24-sw,-9);g.lineTo(-19-sw,-6);g.closePath();g.fill()}
+ leg(-3,lb,HERO.pants2);
  // arka kol
  g.fillStyle=HERO.shirt;g.save();g.translate(-6,-24+bob);g.rotate(air?-.8:-Math.sin(ph)*.6);rr(g,-2.5,0,5,10,2.5);g.fill();g.fillStyle=HERO.skin;circ(0,10,2.6);g.restore();
  // gövde (kapüşonlu)
@@ -547,12 +563,14 @@ function drawKid(g,x,y,face,st){
  g.beginPath();g.moveTo(-14,hy-3);g.quadraticCurveTo(-16,hy+6,-10,hy+5);g.lineTo(-8,hy-4);g.fill();
  g.beginPath();g.moveTo(3,hy-9);g.lineTo(14,hy-4);g.lineTo(9,hy-12);g.fill();
  g.beginPath();g.moveTo(-3,hy-14);g.quadraticCurveTo(-1,hy-23,6,hy-21);g.quadraticCurveTo(1,hy-19,2,hy-13);g.fill();
+ if(HERO.acc==='cape'){g.fillStyle='#1b3a8a';rr(g,-3,hy-3.5,17,9,4);g.fill()}
  // gözler
  const blink=st.blink?1:5.2;
  g.fillStyle='#fff';g.beginPath();g.ellipse(2.5,hy+1,3.6,blink,0,0,Math.PI*2);g.ellipse(9.8,hy+1,3.2,blink*.95,0,0,Math.PI*2);g.fill();
  if(!st.blink){g.fillStyle=st.dead?'#000':HERO.eye;circ(3.8,hy+1.6,2.2);circ(10.8,hy+1.6,2);g.fillStyle='#fff';circ(4.6,hy,.9);circ(11.5,hy,.8)}
  g.fillStyle='rgba(255,110,130,.45)';circ(9,hy+7.5,2.8);circ(-1,hy+7.5,2.4);
  g.strokeStyle='#7a2b1e';g.lineWidth=1.6;g.lineCap='round';g.beginPath();if(st.dead){g.arc(7,hy+10,2.5,Math.PI,0)}else g.arc(7,hy+6.5,3,.15*Math.PI,.85*Math.PI);g.stroke();
+ drawAcc(g,hy);
  // ön kol + oyuncak silah
  if(st.hang){g.restore();return}
  const rc=st.shoot?-2.5:0;
@@ -577,6 +595,21 @@ function outlined(cx,cy,hw,hh,fn,ink){
  for(const q of[[o,0],[-o,0],[0,o],[0,-o],[d,d],[-d,d],[d,-d],[-d,-d]])ctx.drawImage(SC2,0,0,w,h,x0+q[0],y0+q[1],W2,H2);
  ctx.drawImage(OC,0,0,w,h,x0,y0,W2,H2);
 }
+function drawAcc(g,hy){
+ switch(HERO.acc){
+ case'ninja':{g.fillStyle='#e8463c';rr(g,-14.5,hy-9,29,5,2);g.fill();const w=Math.sin(TT*10)*2;g.beginPath();g.moveTo(-13,hy-8);g.quadraticCurveTo(-20,hy-9+w,-27,hy-4+w);g.lineTo(-25,hy-1+w);g.quadraticCurveTo(-19,hy-4,-13,hy-4);g.fill();g.fillStyle='#2b2b3a';g.beginPath();g.moveTo(-5,hy+5);g.quadraticCurveTo(6,hy+3,14,hy+4);g.lineTo(13,hy+11);g.quadraticCurveTo(4,hy+15,-6,hy+10);g.fill();break}
+ case'astro':{g.fillStyle='rgba(170,225,255,.28)';circ(1,hy-1,18.5);g.strokeStyle='#ffffff';g.lineWidth=2.2;g.beginPath();g.arc(1,hy-1,18.5,0,Math.PI*2);g.stroke();g.strokeStyle='rgba(255,255,255,.8)';g.lineWidth=2;g.beginPath();g.arc(1,hy-1,14,-2.6,-1.9);g.stroke();g.fillStyle='#d5dae4';rr(g,-12,hy+15,26,6,3);g.fill();g.strokeStyle='#9aa5b8';g.lineWidth=2;g.beginPath();g.moveTo(-4,hy-19);g.lineTo(-6,hy-27);g.stroke();g.fillStyle='#ff3b3b';circ(-6,hy-28,2.6);break}
+ case'pirate':{g.fillStyle='#1b1b24';g.beginPath();g.ellipse(0,hy-9,18,5,-.08,0,Math.PI*2);g.fill();g.beginPath();g.moveTo(-12,hy-9);g.quadraticCurveTo(-2,hy-30,13,hy-9);g.fill();g.fillStyle='#c8932f';g.fillRect(-12,hy-12,25,2);g.fillStyle='#fff';circ(1,hy-17,3);g.fillStyle='#1b1b24';circ(0,hy-17.5,.9);circ(2.2,hy-17.5,.9);
+  g.fillStyle='#111';circ(9.8,hy+1.2,4.4);g.strokeStyle='#111';g.lineWidth=1.4;g.beginPath();g.moveTo(5,hy-1);g.lineTo(-12,hy-5);g.stroke();break}
+ case'dino':{g.fillStyle=HERO.shirt;g.beginPath();g.arc(0,hy-1,16,Math.PI*1.02,Math.PI*1.98);g.lineTo(15,hy+2);g.lineTo(10,hy-6);g.quadraticCurveTo(0,hy-11,-12,hy-5);g.lineTo(-15,hy+6);g.closePath();g.fill();g.fillStyle='#fff';for(let k=0;k<4;k++){const x0=-8+k*5.5;g.beginPath();g.moveTo(x0,hy-7.5+Math.abs(k-1.5)*.6);g.lineTo(x0+2.6,hy-4.5);g.lineTo(x0+5.2,hy-7.5+Math.abs(k-1.5)*.6);g.fill()}
+  g.fillStyle=HERO.shirt2;for(let k=0;k<5;k++){const a=Math.PI*(1.15+k*.17),x0=Math.cos(a)*16,y0=hy-1+Math.sin(a)*16;g.beginPath();g.moveTo(x0-3,y0+1);g.lineTo(x0+Math.cos(a)*7,y0+Math.sin(a)*7);g.lineTo(x0+3,y0+1);g.fill()}break}
+ case'viking':{g.fillStyle='#f3ead2';for(const sd of[-1,1]){g.beginPath();g.moveTo(sd*11,hy-9);g.quadraticCurveTo(sd*22,hy-12,sd*20,hy-26);g.quadraticCurveTo(sd*17,hy-15,sd*8,hy-13);g.fill()}g.fillStyle='#9aa5b8';g.beginPath();g.arc(0,hy-6,14.5,Math.PI,0);g.fill();g.fillStyle='#c8932f';g.fillRect(-14.5,hy-8,29,4);g.fillRect(-1.5,hy-20,3,13);g.fillStyle='rgba(255,255,255,.4)';ell(-5,hy-14,4,2.5);
+  g.fillStyle='#c8692a';g.beginPath();g.moveTo(-1,hy+8);g.quadraticCurveTo(7,hy+20,15,hy+7);g.quadraticCurveTo(7,hy+12,-1,hy+8);g.fill();break}
+ case'king':{crown(1,hy-11,24,16);g.fillStyle='#c0263a';rr(g,-12,-29,24,5,2.5);g.fill();break}
+ }}
+function drawSkinPreview(){const cv2=document.getElementById('skc');if(!cv2)return;const c2=cv2.getContext('2d'),dp=Math.min(3,window.devicePixelRatio||1);cv2.width=84*dp;cv2.height=92*dp;c2.setTransform(dp,0,0,dp,0,0);
+ const open=skinOpen(mSkin),keep=save.skin||0;applySkin(mSkin);const m=ctx;ctx=c2;try{c2.save();c2.translate(42,84);c2.scale(1.25,1.25);if(!open)c2.globalAlpha=.35;drawKid(c2,0,0,1,{ph:0,air:false});c2.restore()}finally{ctx=m;applySkin(keep)}
+ if(!open){c2.fillStyle='#ffd23f';rr(c2,31,40,22,17,4);c2.fill();c2.strokeStyle='#ffd23f';c2.lineWidth=3.5;c2.beginPath();c2.arc(42,40,6.5,Math.PI,0);c2.stroke()}}
 /* ================= Çizim: Düşmanlar ================= */
 function F(e,c){return e.flash>0?'#ffffff':c}
 function drawEnemy(e){
@@ -921,18 +954,19 @@ function volSvg(){const v=save.vol;let w='';for(let i=1;i<=3;i++)w+=`<path d="M$
  return `<svg viewBox="0 0 32 32"><path d="M4 12h5l6-5v18l-6-5H4z" fill="${v?'#ffd23f':'#888'}"/>${w}${v?'':'<path d="M18 11l9 10M27 11l-9 10" stroke="#ff5f7a" stroke-width="3" stroke-linecap="round"/>'}</svg>`}
 const sndB=document.getElementById('snd');sndB.addEventListener('click',()=>{initAudio();setVol((save.vol+1)%4);sndB.innerHTML=volSvg();if(save.vol)sfx('coin')});
 function setControls(show){sndB.classList.toggle('hide',!show);sndB.innerHTML=volSvg();sndB.style.top=(OY+62)+'px';const s=S();document.getElementById('lF').textContent=s.fire;document.getElementById('lF2').textContent=s.fj;document.getElementById('lJ').textContent=s.jump;document.getElementById('lS').textContent=s.swap;document.querySelectorAll('.tc').forEach(e=>e.classList.toggle('hide',!(show&&isTouch)));homeB.classList.toggle('hide',!show)}
-let mEtap=-1;
+let mEtap=-1,mSkin=-1;
 function openMenu(paused,keepMusic){
  state=paused?'pause':'menu';if(!paused){lv=null;if(!keepMusic)playMusic(0)}setControls(false);
  const s=S();let lvh='';
- if(mEtap<0)mEtap=Math.min(20,Math.floor((save.unlocked-1)/5));
+ if(mEtap<0)mEtap=Math.min(20,Math.floor((save.unlocked-1)/5));if(mSkin<0)mSkin=save.skin||0;
  for(let k=0;k<5;k++){const i=mEtap*5+k,open=i<save.unlocked;lvh+=`<button class="lb ${open?'':'locked'}" data-lv="${i}" ${open?'':'disabled'}><b>${i+1}</b><small>${open?s.names[LDEF(i).th]:lockSvg}</small></button>`}
  ovEl.innerHTML=`<div class="card"><a class="brand homeLink" style="color:#a6ff4d;text-decoration:none;font-weight:900">🦎 BUKO GAMES</a><h1>${s.title}</h1><p class="sub">${s.sub}</p>
  ${paused?`<button class="mb" data-act="cont">${s.cont}</button><button class="mb alt" data-act="menu">${s.menu}</button>`:`<button class="mb" data-act="play">${s.play}</button>`}
  ${paused?'':`<div class="etn"><button class="sb" data-et="-1" ${mEtap>0?'':'disabled'}>◀</button><h3>${s.etap} ${mEtap+1} / 21</h3><button class="sb" data-et="1" ${mEtap<20?'':'disabled'}>▶</button></div><div class="lvls">${lvh}</div>`}
+ ${paused?'':`<div class="skr"><button class="sb" data-sk="-1">◀</button><div><canvas id="skc" style="width:84px;height:92px;display:block;margin:0 auto"></canvas><b>${s.skin}: ${s.skinN[mSkin]}</b><br><small>${skinOpen(mSkin)?(mSkin===(save.skin||0)?'✓':''):s.skinAt(SKINS[mSkin].at)}</small></div><button class="sb" data-sk="1">▶</button></div>`}
  <div class="row">${['tr','de','en'].map(l=>`<button class="sb ${save.lang===l?'on':''}" data-lang="${l}">${l.toUpperCase()}</button>`).join('')}<button class="sb" data-act="vol" aria-label="Ses">${volSvg()}</button></div>
  <p class="help">${s.helpT}${isTouch?'':'<br>'+s.help}</p></div>`;
- ovEl.classList.remove('hide');setHome();
+ ovEl.classList.remove('hide');setHome();drawSkinPreview();
 }
 const HOME=/xenosmart\./.test(location.hostname)?'../':'https://xenosmart.de/spiel/';
 function setHome(){ovEl.querySelectorAll('.homeLink').forEach(a=>{a.href=HOME})}
@@ -942,10 +976,10 @@ function fmtT(t){const m=Math.floor(t/60),s=Math.floor(t%60);return m+':'+String
 let WLsnap=1;
 function completeLevel(){
  if(state!=='play')return;state='complete';sfx('win');setControls(false);
- WLsnap=WL()+1;save.unlocked=Math.max(save.unlocked,Math.min(NLV,lvIdx+2));const b=save.best[lvIdx];if(!b||levelTime<b)save.best[lvIdx]=Math.round(levelTime);persist();
+ const uBefore=save.unlocked||1;WLsnap=WL()+1;save.unlocked=Math.max(save.unlocked,Math.min(NLV,lvIdx+2));const b=save.best[lvIdx];if(!b||levelTime<b)save.best[lvIdx]=Math.round(levelTime);persist();
  const wBefore=WLsnap;const s=S(),last=lvIdx===NLV-1,etd=lvIdx%5===4,wNow=WL()+1,wUp=wNow>wBefore;
  ovEl.innerHTML=`<div class="card"><h2>${last?s.win:s.complete}</h2><p class="sub">${last?s.winTxt:(etd?s.etapDone(Math.floor(lvIdx/5)+1):s.names[LDEF(lvIdx).th])}</p>
- ${wUp?`<p class="sub" style="color:#ffe35a;font-weight:900">⚡ ${s.wup(wNow)}</p>`:''}<div class="stat"><div>${s.coins}<br><b>${P.coins}</b></div><div>${s.time}<br><b>${fmtT(levelTime)}</b></div></div>
+ ${SKINS.map((k,i)=>k.at>uBefore&&k.at<=save.unlocked?`<p class="sub" style="color:#7dff8a;font-weight:900">👕 ${s.skinNew(s.skinN[i])}</p>`:'').join('')}${wUp?`<p class="sub" style="color:#ffe35a;font-weight:900">⚡ ${s.wup(wNow)}</p>`:''}<div class="stat"><div>${s.coins}<br><b>${P.coins}</b></div><div>${s.time}<br><b>${fmtT(levelTime)}</b></div></div>
  ${last?'':`<button class="mb" data-act="next">${s.next}</button>`}<button class="mb alt" data-act="menu">${s.menu}</button></div>`;
  ovEl.classList.remove('hide');
 }
@@ -954,6 +988,7 @@ function showOver(){setControls(false);const s=S();
  ovEl.classList.remove('hide')}
 ovEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;initAudio();
  if(b.dataset.lv!==undefined){startLevel(+b.dataset.lv);return}
+ if(b.dataset.sk){mSkin=(mSkin+(+b.dataset.sk)+SKINS.length)%SKINS.length;if(skinOpen(mSkin)){save.skin=mSkin;persist();applySkin(mSkin)}openMenu(false,true);return}
  if(b.dataset.et){mEtap=clamp(mEtap+(+b.dataset.et),0,20);openMenu(false,true);return}
  if(b.dataset.lang){save.lang=b.dataset.lang;persist();document.documentElement.lang=save.lang;openMenu(state==='pause');return}
  switch(b.dataset.act){
@@ -974,6 +1009,7 @@ function resize(){
 }
 addEventListener('resize',resize);resize();
 document.documentElement.lang=save.lang;
+applySkin(skinOpen(save.skin||0)?(save.skin||0):0);
 openMenu(false);
 requestAnimationFrame(frame);
 </script>
