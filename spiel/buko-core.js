@@ -46,6 +46,16 @@
   }
   rollTasks();
 
+  // --- günlük seri (her gün oynayana artan ödül) ---
+  function streakInfo(){
+    const t=today(), y=(()=>{ const d=new Date(); d.setDate(d.getDate()-1); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); })();
+    if (D.sDay!==t){ D.streak = (D.sDay===y) ? (D.streak||0)+1 : 1; D.sDay=t; D.claimed=false; save(); }
+    const reward=20+10*Math.min((D.streak||1)-1,6);
+    return {streak:D.streak, claimed:!!D.claimed, reward};
+  }
+  function claimDaily(){ const i=streakInfo(); if (i.claimed) return 0; D.claimed=true; D.coins+=i.reward; D.total=(D.total||0)+i.reward; save(); return i.reward; }
+  streakInfo();
+
   // --- küçük bildirim kutusu ---
   let box=null;
   function toast(html, color){
@@ -71,5 +81,5 @@
   function buy(id){ const it=SHOP.find(x=>x.id===id); if(!it || D.owned[id]) return false; if (D.coins<it.price) return false; D.coins-=it.price; D.owned[id]=1; save(); return true; }
   function select(id){ const it=SHOP.find(x=>x.id===id); if(!it||!D.owned[id]) return; D.sel[it.type]=id.split('_')[1]; save(); }
 
-  window.BK={ get coins(){ return D.coins; }, get data(){ return D; }, add, ev, played, ach, buy, select, toast, TASKS, ACH, SHOP, lang, rollTasks };
+  window.BK={ get coins(){ return D.coins; }, get data(){ return D; }, add, ev, played, ach, buy, select, toast, streakInfo, claimDaily, TASKS, ACH, SHOP, lang, rollTasks };
 })();

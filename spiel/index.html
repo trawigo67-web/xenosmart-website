@@ -62,6 +62,11 @@
   footer a{color:#d9f5ee}
   .feat{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
   .feat span{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.2)}
+  .daily{margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;font-weight:800;font-size:15px}
+  .daily .fl{padding:7px 14px;border-radius:999px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.25)}
+  .daily button{font:inherit;font-weight:900;border:0;border-radius:999px;padding:9px 18px;cursor:pointer;background:linear-gradient(90deg,#a6ff4d,#2ee6c8);color:#08222c;box-shadow:0 6px 20px rgba(46,230,200,.45);animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{50%{transform:scale(1.06)}}
+  .cont{margin-top:12px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:900;font-size:18px;padding:12px 26px;border-radius:999px;background:#fff;color:#13231f;box-shadow:0 10px 26px rgba(0,0,0,.3)}
   .coins{margin-top:10px;font-weight:900;font-size:20px;padding:8px 18px;border-radius:999px;background:linear-gradient(90deg,#ffd23f,#ff9f1c);color:#3a2300;box-shadow:0 6px 20px rgba(255,170,30,.45)}
   .panel{margin-top:22px;border-radius:22px;padding:16px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
   .panel h3{margin:0 0 10px;font-size:19px}
@@ -108,6 +113,8 @@ play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l1
     <div class="tag" id="tag"></div>
     <div class="langs" id="langs"></div>
     <div class="coins" id="coins">🪙 0</div>
+    <div class="daily" id="daily"></div>
+    <a class="cont" id="cont" style="display:none"></a>
   </header>
   <div class="feat" id="feat"></div>
   <div class="grid">
@@ -188,6 +195,17 @@ play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l1
     $('achs').innerHTML=Object.entries(BK.ACH).map(([k,a])=>`<span class="${D.ach[k]?'got':''}">${D.ach[k]?'🏆':'🔒'} ${a[L]} · ${a.r}🪙</span>`).join('');
   }
   window.addEventListener('pageshow',()=>render());
+  const DT={tr:{st:n=>`🔥 ${n}. gün serisi`,cl:r=>`🎁 Bugünün ödülü: +${r} 🪙`,ok:'✓ Bugünkü ödül alındı – yarın daha fazlası!',cont:g=>`▶ Devam et: ${g}`},
+            de:{st:n=>`🔥 ${n}-Tage-Serie`,cl:r=>`🎁 Tagesbelohnung: +${r} 🪙`,ok:'✓ Heute abgeholt – morgen gibt’s mehr!',cont:g=>`▶ Weiterspielen: ${g}`},
+            en:{st:n=>`🔥 ${n}-day streak`,cl:r=>`🎁 Today’s reward: +${r} 🪙`,ok:'✓ Collected today – more tomorrow!',cont:g=>`▶ Continue: ${g}`}};
+  const GN={'disfirlat.html':'Diş Fırlat','blok.html':'Neon Blok','batak.html':'Neon Batak','tavla.html':'Tavla','1453/':'1453','zipzip/':'Zıpzıp','mechablock.html':'MechaBlock'};
+  function renderDaily(){
+    if (!window.BK||!BK.streakInfo) return; const d=DT[L]||DT.tr, i=BK.streakInfo();
+    $('daily').innerHTML=`<span class="fl">${d.st(i.streak)}</span>`+(i.claimed?`<span class="fl" style="opacity:.8">${d.ok}</span>`:`<button id="claim">${d.cl(i.reward)}</button>`);
+    const c=$('claim'); if (c) c.onclick=()=>{ const r=BK.claimDaily(); if(r) BK.toast(`+${r} 🪙`,'#ffd23f'); render(); };
+    let last=null; try{ last=JSON.parse(localStorage.getItem('buko_last')||'null'); }catch(e){}
+    if (last && last.g && GN[last.g] && Date.now()-last.t<14*864e5){ const a=$('cont'); a.href=last.g; a.textContent=d.cont(GN[last.g]); a.style.display='inline-flex'; }
+  }
   function render(){
     const t=T[L]; document.documentElement.lang=L;
     $('tag').textContent=t.tag; $('feat').innerHTML=t.feat.map(f=>`<span>${f}</span>`).join('');
@@ -205,7 +223,7 @@ play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l1
     let acts=`<a class="pill wa" id="shr" href="https://wa.me/?text=${encodeURIComponent(t.shareText)}" target="_blank" rel="noopener">${t.share}</a>`;
     if (!ios && !inApp) acts+=`<a class="pill apk" href="BukoGames.apk" download>${t.apk}</a>`;
     $('actions').innerHTML=acts; $('note').textContent = (ios && !navigator.standalone) ? t.ios : '';
-    renderCore(t);
+    renderCore(t); renderDaily();
     $('shr').onclick=e=>{ if (navigator.share && !inApp){ e.preventDefault(); navigator.share({text:t.shareText}).catch(()=>{}); } };
   }
   if(location.protocol==='file:'){$('g1453').href='https://xenosmart.de/spiel/1453/';$('gzip').href='https://xenosmart.de/spiel/zipzip/';}
