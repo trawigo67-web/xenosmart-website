@@ -37,6 +37,13 @@ body{display:block}
 #bBrake.on{background:#fff;transform:translate(calc(.25*var(--u)),calc(.25*var(--u)))}
 .lv.bonus{background:linear-gradient(135deg,#6aa2c2,#2f6890)!important;color:#fff;text-shadow:calc(.12*var(--u)) calc(.12*var(--u)) 0 var(--ink)}
 .lv.bonus em{color:#fff}
+.oi{width:1.55em;height:1.55em;display:block;flex:none;filter:drop-shadow(0 .06em 0 rgba(255,255,255,.35))}
+.ol{margin-left:.35em}
+.ibtn{background:linear-gradient(180deg,#ffe08a,#f2b632 45%,#c98a1c)!important;position:relative;border-radius:calc(.5*var(--u))}
+.ibtn::after{content:'';position:absolute;inset:calc(.25*var(--u));border:calc(.12*var(--u)) solid rgba(179,38,30,.55);border-radius:calc(.3*var(--u));pointer-events:none}
+.ibtn::before{content:'';position:absolute;left:50%;top:calc(-.55*var(--u));width:calc(.9*var(--u));height:calc(.9*var(--u));background:#b3261e;border:calc(.15*var(--u)) solid #1a1008;transform:translateX(-50%) rotate(45deg);pointer-events:none}
+#fireBtn,#bPull{background:linear-gradient(180deg,#e0533f,#b3261e 55%,#7a1610)!important;color:#fff}
+#fireBtn::after,#bPull::after{border-color:rgba(255,217,59,.7)}
 .ibtn.off{background:#c4b08c;color:#6d5d45}
 .ibtn:active{transform:translate(calc(.25*var(--u)),calc(.25*var(--u)));box-shadow:calc(.1*var(--u)) calc(.1*var(--u)) 0 var(--ink)}
 #ammo{position:absolute;margin-bottom:env(safe-area-inset-bottom);bottom:calc(1.4*var(--u));left:50%;transform:translateX(-50%);display:flex;gap:calc(.9*var(--u))}
@@ -72,6 +79,7 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
 .lv:hover{transform:rotate(-2deg) scale(1.05)}
 .lv:nth-child(3n){background:#f7c75a}
 .lv em{font-style:normal;font-family:Georgia,serif;font-size:calc(.95*var(--u));color:#5a3a12}
+.lv .oi{width:1.25em;height:1.25em;margin-bottom:.05em}
 .lv small{font-size:calc(1.4*var(--u));color:var(--red);letter-spacing:calc(.1*var(--u))}
 .lv.lock{background:#c4b08c!important;color:#7a6a50;cursor:default}
 .introRow{display:flex;gap:calc(2*var(--u));align-items:center;text-align:left}
@@ -108,19 +116,19 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
       <div class="tag" id="hCharge">CEPHANE <span id="chBar" style="display:inline-block;width:calc(7*var(--u));height:calc(1.1*var(--u));border:calc(.2*var(--u)) solid #1a1008;vertical-align:middle;background:#fff6dc;position:relative"><span id="chFill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#f2b632,#c0392b)"></span></span></div>
     </div>
     <div class="hbtns">
-      <a class="ibtn homeLink" title="Ana menü (Buko Games)" style="text-decoration:none">🏠</a>
-      <button class="ibtn" id="bHelp" title="Nişan yardımı (H)">🎯 YARDIM</button>
-      <button class="ibtn" id="bMute" title="Müzik / Ses">♫ MARŞ</button>
-      <button class="ibtn" id="bRetry" title="Yeniden">↻</button>
-      <button class="ibtn" id="bMenu" title="Seviyeler">☰</button>
+      <a class="ibtn homeLink" id="hHome" title="Ana menü (Buko Games)" style="text-decoration:none"></a>
+      <button class="ibtn" id="bHelp" title="Nişan yardımı (H)"></button>
+      <button class="ibtn" id="bMute" title="Müzik / Ses"></button>
+      <button class="ibtn" id="bRetry" title="Yeniden"></button>
+      <button class="ibtn" id="bMenu" title="Seviyeler"></button>
     </div>
   </div>
   <div id="ammo" class="hidden"></div>
-  <button class="ibtn hidden" id="fireBtn">ATEŞ!</button>
+  <button class="ibtn hidden" id="fireBtn"></button>
   <div id="bonusCtl" class="hidden">
-    <button class="ibtn" id="bGrease">YAĞLA ×<span id="gCnt">4</span></button>
-    <button class="ibtn" id="bBrake">FREN</button>
-    <button class="ibtn" id="bPull">ÇEK!</button>
+    <button class="ibtn" id="bGrease"></button>
+    <button class="ibtn" id="bBrake"></button>
+    <button class="ibtn" id="bPull"></button>
   </div>
 
   <div class="overlay" id="scMenu" style="background:linear-gradient(90deg,rgba(26,16,8,0) 35%,rgba(26,16,8,.55)),url(art/cover.jpg) center/cover;justify-content:flex-end;padding-right:calc(4*var(--u))">
@@ -134,7 +142,7 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
       <button class="btn" id="bPlay">OYNA</button>
       <button class="btn gold" id="bLevels">SEVİYELER</button>
       <div class="help">Ekrana bas · geri çek · nişan al · bırak!<br>Klavye: ↑↓ açı · ←→ güç · BOŞLUK ateş · H yardım · M müzik</div>
-      <a class="brand homeLink" style="text-decoration:none">🦎 BUKO GAMES</a>
+      <a class="brand homeLink" style="text-decoration:none">BUKO GAMES</a>
     </div>
   </div>
 
@@ -144,7 +152,7 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
       <div class="orn">6 NİSAN — 29 MAYIS 1453</div>
       <div id="lvgrid"></div>
       <button class="btn gold" id="bBack">GERİ</button>
-      <a class="btn green homeLink" style="text-decoration:none;display:inline-block">🏠 ANA MENÜ</a>
+      <a class="btn green homeLink hm2" style="text-decoration:none;display:inline-flex;align-items:center">ANA MENÜ</a>
     </div>
   </div>
 
@@ -178,7 +186,7 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
     <div class="panel">
       <h2>GÜLLE BİTTİ!</h2>
       <div class="desc" style="text-align:center">Surlar hâlâ ayakta. Topçular yeniden dolduruyor…</div>
-      <a class="btn green homeLink" style="text-decoration:none;display:inline-block">🏠</a>
+      <a class="btn green homeLink hm2" style="text-decoration:none;display:inline-flex;align-items:center"></a>
       <button class="btn gold" id="bLMenu">SEVİYELER</button>
       <button class="btn" id="bLRetry">TEKRAR DENE</button>
     </div>
@@ -191,7 +199,7 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
       <div class="desc" style="max-width:calc(60*var(--u));text-align:center">21 yaşındaki Sultan II. Mehmed, 53 günlük kuşatmanın ardından şehre girdi ve bu zaferle “Fatih” unvanını aldı. Bir çağ kapandı, yeni bir çağ açıldı.</div>
       <div class="small" id="fScore"></div>
       <button class="btn gold" id="bFMenu">SEVİYELER</button>
-      <a class="btn green homeLink" style="text-decoration:none;display:inline-block">🏠 ANA MENÜ</a>
+      <a class="btn green homeLink hm2" style="text-decoration:none;display:inline-flex;align-items:center">ANA MENÜ</a>
     </div>
   </div>
   <div id="loading">YÜKLENİYOR…</div>
@@ -238,6 +246,25 @@ const AMMO={
   s:{name:'Misket',r:11,den:.04,pw:.5,split:true,col:['#a59a8e','#6b6258']},
   m:{name:'misket',r:8,den:.045,pw:.5,R:48,P:4.5,K:3.5,col:['#a59a8e','#6b6258']}
 };
+
+
+/* ---- 1453 özel simgeleri (Osmanlı tarzı) ---- */
+const OI=(()=>{const w=(p,vb='0 0 24 24')=>`<svg class="oi" viewBox="${vb}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+return{
+otag:w('<path d="M2.5 20.5 5 12.5Q12 4.5 19 12.5l2.5 8z" fill="#c0392b" stroke="#1a1008"/><path d="M8 20.5 9 12M16 20.5 15 12M12 20.5V8.6" stroke="#fff1d0" stroke-width="1.8"/><path d="M12 8.6V4.6" stroke="#1a1008"/><path d="M13.6 3.2a2 2 0 1 0 0 2.8 1.6 1.6 0 1 1 0-2.8z" fill="#f2b632" stroke="none"/><path d="M10 20.5l2-4 2 4" fill="#1a1008" stroke="#1a1008"/>'),
+aim:w('<circle cx="12" cy="12" r="7.5" stroke="#1a1008"/><circle cx="12" cy="12" r="7.5" stroke="#c0392b" stroke-width="1.2"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5" stroke="#1a1008" stroke-width="2.4"/><circle cx="12" cy="12" r="2.2" fill="#c0392b" stroke="none"/>'),
+davul:w('<ellipse cx="12" cy="9" rx="8" ry="3.2" fill="#f4e4bc" stroke="#1a1008"/><path d="M4 9v6.5c0 1.8 3.6 3.2 8 3.2s8-1.4 8-3.2V9" fill="#c0392b" stroke="#1a1008"/><path d="M4.5 12.5l3 5M9 13.5l2 5M13 13.5l-2 5M17.5 12.5l-3 5" stroke="#f2b632" stroke-width="1.4"/><path d="M15 3.5l4.5 4.5" stroke="#5e3512" stroke-width="2.4"/><circle cx="14.4" cy="3" r="1.6" fill="#5e3512" stroke="none"/>'),
+ses:w('<path d="M3.5 9.5h3.5L12 5v14l-5-4.5H3.5z" fill="#c0392b" stroke="#1a1008"/><path d="M15.5 9.5a3.4 3.4 0 0 1 0 5M18 7a7 7 0 0 1 0 10" stroke="#1a1008"/>'),
+sus:w('<path d="M3.5 9.5h3.5L12 5v14l-5-4.5H3.5z" fill="#c4b08c" stroke="#1a1008"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" stroke="#b3261e" stroke-width="2.6"/>'),
+tekrar:w('<path d="M19 12a7 7 0 1 1-2.1-5" stroke="#1a1008" stroke-width="2.6"/><path d="M19.5 3.5v4.4h-4.4" stroke="#1a1008" stroke-width="2.6"/><path d="M12 9.2l1 1.8 2 .2-1.5 1.4.4 2-1.9-1-1.9 1 .4-2L9 11.2l2-.2z" fill="#c0392b" stroke="none"/>'),
+ferman:w('<path d="M6 4.5h11a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H7" fill="#f4e4bc" stroke="#1a1008"/><path d="M6 4.5a2 2 0 0 0-2 2v1.5h4V6.5a2 2 0 0 0-2-2zM7 19.5a2 2 0 0 1-2-2V16h4v1.5a2 2 0 0 1-2 2z" fill="#d9b37a" stroke="#1a1008"/><path d="M10.5 9h5.5M10.5 12h5.5M10.5 15h3.5" stroke="#b3261e" stroke-width="1.6"/>'),
+top:w('<path d="M2.5 15.5l12.5-6.5 2.2 4.2-12.5 6.5z" fill="#d99a2b" stroke="#1a1008"/><circle cx="8" cy="18" r="3.2" fill="#7a4a22" stroke="#1a1008"/><path d="M17.5 8.5l1.8-1.8M19 11.2l2.4-.3M18.8 6.1l.4-2.4" stroke="#ffd93b" stroke-width="2.2"/>'),
+yag:w('<path d="M8 6.5h8l-1 2.5c2.6 1 4 3.4 4 6 0 3.2-3.1 5.5-7 5.5s-7-2.3-7-5.5c0-2.6 1.4-5 4-6z" fill="#c98a3a" stroke="#1a1008"/><path d="M9 6.5V4.5h6v2" stroke="#1a1008"/><path d="M12 11.5c-1.6 2-2.2 3-2.2 4a2.2 2.2 0 0 0 4.4 0c0-1-.6-2-2.2-4z" fill="#ffd93b" stroke="none"/>'),
+fren:w('<path d="M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17z" fill="#c0392b" stroke="#1a1008"/><path d="M7.5 12h9" stroke="#fff" stroke-width="3"/>'),
+cek:w('<path d="M3 15c3-1 5-4 9-4s6 3 9 4" stroke="#d9b37a" stroke-width="3"/><path d="M3 15c3-1 5-4 9-4s6 3 9 4" stroke="#1a1008" stroke-width="1" stroke-dasharray="2 3"/><path d="M16 7.5l4 3.5-4.5 2.5" stroke="#fff" stroke-width="2.6"/>'),
+kilit:w('<rect x="5" y="10.5" width="14" height="10" rx="2" fill="#a08a64" stroke="#1a1008"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" stroke="#1a1008" stroke-width="2.4"/><circle cx="12" cy="15" r="1.6" fill="#1a1008" stroke="none"/>'),
+gemi:w('<path d="M2.5 14.5h19l-3 5h-13z" fill="#7a4a22" stroke="#1a1008"/><path d="M11.5 14.5V3.5" stroke="#1a1008"/><path d="M12 4.5c4 2 5 6 4.5 9H12z" fill="#fff1d0" stroke="#1a1008"/><path d="M11.5 3.5l-4 1.5 4 1.5" fill="#c0392b" stroke="#c0392b"/>')};})();
+function setIco(el,ic,txt){if(!el)return;el.innerHTML=OI[ic]+(txt?`<span class="ol">${txt}</span>`:'');}
 
 /* ------------------------------ SEVİYELER ------------------------------ */
 const LEVELS=[
@@ -397,7 +424,7 @@ function initAudio(){try{if(!AC){AC=new(window.AudioContext||window.webkitAudioC
   if(AC.state==='suspended')AC.resume();applySound();}catch(e){AC=null;}}
 function musicAllowed(){return soundMode===0||(soundMode===1&&state==='finale');}
 function applySound(){if(!AC)return;master.gain.value=soundMode===2?0:.5;musBus.gain.value=musicAllowed()&&!bonusActive?(state==='finale'?.42:.3):0;if(musicAllowed())startMusic();
-  $('bMute').textContent=['♫ MARŞ','SES','SESSİZ'][soundMode];}
+  setIco($('bMute'),['davul','ses','sus'][soundMode],['MARŞ','SES','SESSİZ'][soundMode]);}
 function noise(dur,f0,f1,vol,type='lowpass',dl=0,bus=sfxBus){if(!AC)return;const t=AC.currentTime+dl,s=AC.createBufferSource();s.buffer=NB;s.loopStart=Math.random();const f=AC.createBiquadFilter();f.type=type;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(Math.max(30,f1),t+dur);const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(g);g.connect(bus);s.start(t,Math.random());s.stop(t+dur+.05);}
 function tone(f0,f1,dur,vol,type='sine',dl=0,bus=sfxBus,at=.01){if(!AC)return;const t=AC.currentTime+dl,o=AC.createOscillator();o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+dur);const g=AC.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+at);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g);g.connect(bus);o.start(t);o.stop(t+dur+.05);}
 function sfx(n){if(!AC||soundMode===2)return;switch(n){
@@ -1006,7 +1033,7 @@ function drawBubbles(){for(const b of bubbles){const a=b.t<.15?b.t/.15:b.t>b.lif
 /* ------------------------------ ARAYÜZ ------------------------------ */
 const screens=['scMenu','scLevels','scIntro','scWin','scLose','scFinal'];
 function show(id){screens.forEach(s=>$(s).classList.toggle('hidden',s!==id));const inGame=id===null;['hud','ammo','fireBtn'].forEach(s=>$(s).classList.toggle('hidden',!inGame||bonusActive));$('bonusCtl').classList.toggle('hidden',!(inGame&&bonusActive));if(bonusActive&&inGame){$('hud').classList.remove('hidden');$('ammo').classList.add('hidden');}}
-function updateHUD(){if(!lvl)return;$('hCharge').classList.toggle('hidden',!!bonusActive);$('chFill').style.width=Math.min(100,charge)+'%';if(bonusActive){$('hLvl').innerHTML=`⛵ BONUS · <b>${lvl.name.toUpperCase()}</b>`;$('hTg').textContent=`${BN?BN.delivered:0}/3 GEMİ`;$('hWind').innerHTML='ŞAFAĞA: <b>'+(BN?Math.max(0,Math.ceil(BN.timeLeft)):0)+' sn</b>';$('hScore').textContent=score;return;}$('hLvl').innerHTML=`SEVİYE ${lvlIdx+1} · <b>${lvl.name.toUpperCase()}</b>`;$('hTg').textContent=targets().length;$('hScore').textContent=score;
+function updateHUD(){if(!lvl)return;$('hCharge').classList.toggle('hidden',!!bonusActive);$('chFill').style.width=Math.min(100,charge)+'%';if(bonusActive){$('hLvl').innerHTML=`BONUS · <b>${lvl.name.toUpperCase()}</b>`;$('hTg').textContent=`${BN?BN.delivered:0}/3 GEMİ`;$('hWind').innerHTML='ŞAFAĞA: <b>'+(BN?Math.max(0,Math.ceil(BN.timeLeft)):0)+' sn</b>';$('hScore').textContent=score;return;}$('hLvl').innerHTML=`SEVİYE ${lvlIdx+1} · <b>${lvl.name.toUpperCase()}</b>`;$('hTg').textContent=targets().length;$('hScore').textContent=score;
   const w=wind,m=Math.abs(w);$('hWind').innerHTML='RÜZGAR: '+(m<1?'YOK':`<b>${(w<0?'◀':'▶').repeat(m>140?3:m>80?2:1)}</b>`);}
 function buildAmmoUI(){const el=$('ammo');el.innerHTML='';for(const k of['n','b','f','s']){if(!(k in ammo))continue;const A=AMMO[k],b=document.createElement('button');
   b.className='am'+(k===sel?' sel':'')+(ammo[k]?'':' empty');
@@ -1015,7 +1042,7 @@ function buildAmmoUI(){const el=$('ammo');el.innerHTML='';for(const k of['n','b'
   b.onclick=e=>{e.stopPropagation();if(ammo[k]){sel=k;buildAmmoUI();}};el.appendChild(b);}
   updateHUD();}
 function buildLevels(){const g=$('lvgrid');g.innerHTML='';LEVELS.forEach((l,i)=>{const b=document.createElement('button');const lock=i>=save.unlocked;b.className='lv'+(lock?' lock':'')+(l.bonus?' bonus':'');
-  const st=save.stars[i]||0;b.innerHTML=lock?'🔒<em>'+l.date.replace(' 1453','')+'</em>':`${l.bonus?'⛵ BONUS':i+1}<em>${l.date.replace(' 1453','').replace(' gecesi','')}</em><small>${'★'.repeat(st)}${'☆'.repeat(3-st)}</small>`;b.title=l.name;
+  const st=save.stars[i]||0;b.innerHTML=lock?OI.kilit+'<em>'+l.date.replace(' 1453','')+'</em>':`${l.bonus?OI.gemi+'BONUS':i+1}<em>${l.date.replace(' 1453','').replace(' gecesi','')}</em><small>${'★'.repeat(st)}${'☆'.repeat(3-st)}</small>`;b.title=l.name;
   if(!lock)b.onclick=()=>startLevel(i);g.appendChild(b);});}
 function drawPortrait(){const p=$('portrait'),g=p.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,340,420);
   if(ART.pok){g.drawImage(ART.pt,0,0,340,420);if(lvl&&lvl.night){g.fillStyle='rgba(10,20,70,.45)';g.fillRect(0,0,340,420);}g.strokeStyle=INK;g.lineWidth=8;g.strokeRect(0,0,340,420);return;}
@@ -1089,7 +1116,7 @@ $('bLMenu').onclick=toMenuLevels;$('bFMenu').onclick=toMenuLevels;
 $('bRetry').onclick=e=>{e.stopPropagation();startLevel(lvlIdx);};
 $('bMenu').onclick=e=>{e.stopPropagation();toMenuLevels();};
 $('bMute').onclick=e=>{e.stopPropagation();initAudio();soundMode=(soundMode+1)%3;applySound();};
-function applyHelp(){$('bHelp').classList.toggle('off',!save.help);$('bHelp').textContent=save.help?'🎯 YARDIM':'🎯 KAPALI';}applyHelp();
+function applyHelp(){$('bHelp').classList.toggle('off',!save.help);setIco($('bHelp'),'aim',save.help?'YARDIM':'KAPALI');}applyHelp();
 $('bHelp').onclick=e=>{e.stopPropagation();save.help=!save.help;persist();applyHelp();};
 $('fireBtn').onclick=e=>{e.stopPropagation();fire();};
 
@@ -1116,9 +1143,9 @@ const bslope=x=>Math.atan2(bh(x+6)-bh(x-6),12);
 const BEAT=60/104,BT=120,BEND=2500;
 function startBonus(){engine=null;bodies=[];balls=[];parts=[];pops=[];bubbles=[];score=0;BG=getBG({night:true});bonusActive=true;
   BN={x:120,v:0,hull:100,grease:1,pots:4,delivered:0,lost:0,timeLeft:BT,beatT:0,beatN:0,lastPull:-9,brake:false,dist:0,camX:120,camH:0,shipN:1,fade:0,pullFx:0,warn:0,done:false,started:false,quality:''};
-  $('iDate').textContent=lvl.date;$('iName').textContent='⛵ BONUS: '+lvl.name;$('iDesc').textContent=lvl.desc;$('iTip').classList.remove('hidden');$('iTip').textContent=lvl.tip;
+  $('iDate').textContent=lvl.date;$('iName').textContent='BONUS: '+lvl.name;$('iDesc').textContent=lvl.desc;$('iTip').classList.remove('hidden');$('iTip').textContent=lvl.tip;
   $('iAmmo').innerHTML='HEDEF: <b style="color:#b3261e">3 gemi</b> · SÜRE: <b style="color:#b3261e">şafağa 120 sn</b> · Klavye: BOŞLUK çek · ↓ fren · G yağla';
-  $('gCnt').textContent=BN.pots;drawPortrait();state='intro';show('scIntro');applySound();}
+  setIco($('bGrease'),'yag','YAĞLA ×<span id="gCnt">'+BN.pots+'</span>');drawPortrait();state='intro';show('scIntro');applySound();}
 function beginBonus(){state='bonus';show(null);BN.started=true;BN.beatT=0;updateHUD();bubble('DAVULA UYARAK ÇEK!',0,0,3.5);sfx('whoosh');}
 function bonusPull(){if(state!=='bonus'||!BN||BN.fade>0)return;const ph=BN.beatT/BEAT;const off=Math.min(ph,1-ph)*BEAT;
   if(time-BN.lastPull<.3){BN.quality='ACELE ETME!';BN.qT=.6;BN.lastPull=time;return;}BN.lastPull=time;
@@ -1127,7 +1154,7 @@ function bonusPull(){if(state!=='bonus'||!BN||BN.fade>0)return;const ph=BN.beatT
   if(q==='MÜKEMMEL!'){BN.combo=(BN.combo||0)+1;if(BN.combo%4===0)pop('HEYAMOLA!',0,0,1,'#ffd93b');}else BN.combo=0;
   if(AC&&soundMode<2){tone(q==='ZAYIF'?160:220,90,.2,.25,'triangle');noise(.2,800,200,.15);}}
 function bonusBrake(on){if(BN)BN.brake=on;$('bBrake').classList.toggle('on',!!on);}
-function bonusGrease(){if(!BN||BN.pots<=0||state!=='bonus')return;BN.pots--;BN.grease=1;$('gCnt').textContent=BN.pots;pop('YAĞLANDI!',0,0,.9,'#ffd93b');if(AC&&soundMode<2)noise(.6,3000,1200,.25,'bandpass');
+function bonusGrease(){if(!BN||BN.pots<=0||state!=='bonus')return;BN.pots--;BN.grease=1;setIco($('bGrease'),'yag','YAĞLA ×<span id="gCnt">'+BN.pots+'</span>');pop('YAĞLANDI!',0,0,.9,'#ffd93b');if(AC&&soundMode<2)noise(.6,3000,1200,.25,'bandpass');
   for(let i=0;i<14;i++)addP({k:'smoke',x:BN.x+rnd(-70,70),y:-bh(BN.x),vx:rnd(-20,20),vy:rnd(-40,-10),life:1,t:0,s:6,col:'rgba(255,240,160,'});}
 function nextShip(lost){BN.fade=1.2;BN.pending=lost;}
 function bonusUpdate(dt){if(!BN)return;const B=BN;
@@ -1266,6 +1293,9 @@ $('bBrake').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefa
 $('bGrease').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();bonusGrease();});
 
 const HOME=/xenosmart\./.test(location.hostname)?'../':'https://xenosmart.de/spiel/';document.querySelectorAll('.homeLink').forEach(a=>{a.href=HOME;a.addEventListener('pointerdown',e=>e.stopPropagation());});
+function initIcons(){setIco($('hHome'),'otag');setIco($('bRetry'),'tekrar');setIco($('bMenu'),'ferman');setIco($('fireBtn'),'top','ATEŞ!');setIco($('bBrake'),'fren','FREN');setIco($('bPull'),'cek','ÇEK!');setIco($('bGrease'),'yag','YAĞLA ×<span id="gCnt">4</span>');
+  document.querySelectorAll('.hm2').forEach(a=>{a.innerHTML=OI.otag+(a.textContent?'<span class="ol">'+a.textContent+'</span>':'');});applyHelp();if(!AC)setIco($('bMute'),'davul','MARŞ');}
+initIcons();
 function boot(){if(typeof Matter==='undefined'){$('loading').textContent='Fizik motoru yüklenemedi. Sayfayı yenile.';return;}
   $('loading').remove();resize();
   lvl=LEVELS[LEVELS.length-1];initWorld();lvl.build(L);BG=getBG(lvl);computeAimView();cam={...aimView};lvl=null;

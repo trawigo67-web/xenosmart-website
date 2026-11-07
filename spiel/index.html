@@ -62,6 +62,12 @@
   .feat{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
   .feat span{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.2)}
 </style>
+<script>
+window.HI={share:'<svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5.5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="18.5" r="2.6"/><path d="M8.3 10.8l7.4-4M8.3 13.2l7.4 4"/></svg>',
+phone:'<svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10.5 18.5h3"/><path d="M12 7v6M9.5 10.5 12 13l2.5-2.5"/></svg>',
+play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l11.2-7.2a1 1 0 0 0 0-1.8L8.5 3.9A1 1 0 0 0 7 4.8z" fill="currentColor"/></svg>'};
+</script>
+<style>.bi{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.2em}.play .bi{margin-right:.35em}</style>
 </head>
 <body>
 <div id="bg"></div>
@@ -104,12 +110,12 @@
   let B={}, K={}, F={}; try{ F=JSON.parse(localStorage.getItem('surlar1453')||'{}'); }catch(e){} try{ B=JSON.parse(localStorage.getItem('neonblok')||'{}'); K=JSON.parse(localStorage.getItem('neonbatak')||'{}'); }catch(e){}
   let L=S.lang||((navigator.language||'tr').slice(0,2)); if(!['tr','de','en'].includes(L)) L='en';
   const T={
-    tr:{tag:'Stres at, eğlen! 4 ücretsiz oyun – reklamsız.', d4:'Fatih Sultan Mehmet ile Konstantinopolis surlarını Şahi topuyla yık! 19 seviye, gemileri karadan yürütme bonusu, mehter marşı.', s4:(n,st)=>`Seviye ${n}/19 · ⭐ ${st}`, feat:['📱 Telefon & tablet','🌍 3 dil','🎵 Özel müzik','🚫 Reklam yok'], d1:'Dönen çarklara dişi tam zamanında fırlat. 15 seviye, boss çarkları, şans çarkı.', d2:'Düşen blokları diz, satırları patlat. Müziğe göre dans eden neon dünya.', d3:'Nostaljik kahvehanede ihaleli batak – 3 rakibe karşı.', play:'▶ Oyna', newT:'YENİ',
-        s1:(l,st)=>`Seviye ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Rekor ${h} · En iyi seviye ${b}`, s3:(w,g)=>`Galibiyet ${w}/${g}`, share:'📤 Arkadaşına gönder', apk:'📱 Android uygulaması', ios:"📱 iPhone'da: Safari → Paylaş ⬆️ → Ana Ekrana Ekle", shareText:'Buko Games’i dene! 🦎🎮 1453 Surları Yık, Diş Fırlat, Neon Blok & Neon Batak – ücretsiz: https://xenosmart.de/spiel/'},
-    de:{tag:'Stress abbauen, Spaß haben! 4 kostenlose Spiele – ohne Werbung.', d4:'Brich mit Fatih Sultan Mehmet und der Şahi-Kanone die Mauern Konstantinopels! 19 Level, Bonus: Schiffe über Land, Mehter-Marsch.', s4:(n,st)=>`Level ${n}/19 · ⭐ ${st}`, feat:['📱 Handy & Tablet','🌍 3 Sprachen','🎵 Eigene Musik','🚫 Keine Werbung'], d1:'Schieß die Zähne genau im richtigen Moment in die drehenden Zahnräder. 15 Level, Boss-Räder, Glücksrad.', d2:'Staple Blöcke, sprenge Reihen. Eine Neon-Welt, die zur Musik tanzt.', d3:'Batak mit Ansage im nostalgischen Kahvehane – gegen 3 Gegner.', play:'▶ Spielen', newT:'NEU',
-        s1:(l,st)=>`Level ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Rekord ${h} · Bestes Level ${b}`, s3:(w,g)=>`Siege ${w}/${g}`, share:'📤 An Freunde senden', apk:'📱 Android-App', ios:'📱 Auf dem iPhone: Safari → Teilen ⬆️ → Zum Home-Bildschirm', shareText:'Probier Buko Games! 🦎🎮 1453 Surları Yık, Diş Fırlat, Neon Block & Neon Batak – kostenlos: https://xenosmart.de/spiel/'},
-    en:{tag:'Relax and have fun! 4 free games – no ads.', d4:'Break the walls of Constantinople with Sultan Mehmed II and the giant Şahi cannon! 19 levels, ships-over-land bonus, Ottoman march.', s4:(n,st)=>`Level ${n}/19 · ⭐ ${st}`, feat:['📱 Phone & tablet','🌍 3 languages','🎵 Original music','🚫 No ads'], d1:'Shoot teeth into spinning gears at the perfect moment. 15 levels, boss gears, lucky wheel.', d2:'Stack blocks, blast rows. A neon world that dances to the music.', d3:'Bidding Batak in a nostalgic Turkish tea house – against 3 rivals.', play:'▶ Play', newT:'NEW',
-        s1:(l,st)=>`Level ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Record ${h} · Best level ${b}`, s3:(w,g)=>`Wins ${w}/${g}`, share:'📤 Send to a friend', apk:'📱 Android app', ios:'📱 On iPhone: Safari → Share ⬆️ → Add to Home Screen', shareText:'Try Buko Games! 🦎🎮 1453 Surları Yık, Diş Fırlat, Neon Block & Neon Batak – free: https://xenosmart.de/spiel/'},
+    tr:{tag:'Stres at, eğlen! 4 ücretsiz oyun – reklamsız.', d4:'Fatih Sultan Mehmet ile Konstantinopolis surlarını Şahi topuyla yık! 19 seviye, gemileri karadan yürütme bonusu, mehter marşı.', s4:(n,st)=>`Seviye ${n}/19 · ⭐ ${st}`, feat:['📱 Telefon & tablet','🌍 3 dil','🎵 Özel müzik','🚫 Reklam yok'], d1:'Dönen çarklara dişi tam zamanında fırlat. 15 seviye, boss çarkları, şans çarkı.', d2:'Düşen blokları diz, satırları patlat. Müziğe göre dans eden neon dünya.', d3:'Nostaljik kahvehanede ihaleli batak – 3 rakibe karşı.', play:'Oyna', newT:'YENİ',
+        s1:(l,st)=>`Seviye ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Rekor ${h} · En iyi seviye ${b}`, s3:(w,g)=>`Galibiyet ${w}/${g}`, share:HI.share+' Arkadaşına gönder', apk:HI.phone+' Android uygulaması', ios:"📱 iPhone'da: Safari → Paylaş ⬆️ → Ana Ekrana Ekle", shareText:'Buko Games’i dene! 🦎🎮 1453 Surları Yık, Diş Fırlat, Neon Blok & Neon Batak – ücretsiz: https://xenosmart.de/spiel/'},
+    de:{tag:'Stress abbauen, Spaß haben! 4 kostenlose Spiele – ohne Werbung.', d4:'Brich mit Fatih Sultan Mehmet und der Şahi-Kanone die Mauern Konstantinopels! 19 Level, Bonus: Schiffe über Land, Mehter-Marsch.', s4:(n,st)=>`Level ${n}/19 · ⭐ ${st}`, feat:['📱 Handy & Tablet','🌍 3 Sprachen','🎵 Eigene Musik','🚫 Keine Werbung'], d1:'Schieß die Zähne genau im richtigen Moment in die drehenden Zahnräder. 15 Level, Boss-Räder, Glücksrad.', d2:'Staple Blöcke, sprenge Reihen. Eine Neon-Welt, die zur Musik tanzt.', d3:'Batak mit Ansage im nostalgischen Kahvehane – gegen 3 Gegner.', play:'Spielen', newT:'NEU',
+        s1:(l,st)=>`Level ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Rekord ${h} · Bestes Level ${b}`, s3:(w,g)=>`Siege ${w}/${g}`, share:HI.share+' An Freunde senden', apk:HI.phone+' Android-App', ios:'📱 Auf dem iPhone: Safari → Teilen ⬆️ → Zum Home-Bildschirm', shareText:'Probier Buko Games! 🦎🎮 1453 Surları Yık, Diş Fırlat, Neon Block & Neon Batak – kostenlos: https://xenosmart.de/spiel/'},
+    en:{tag:'Relax and have fun! 4 free games – no ads.', d4:'Break the walls of Constantinople with Sultan Mehmed II and the giant Şahi cannon! 19 levels, ships-over-land bonus, Ottoman march.', s4:(n,st)=>`Level ${n}/19 · ⭐ ${st}`, feat:['📱 Phone & tablet','🌍 3 languages','🎵 Original music','🚫 No ads'], d1:'Shoot teeth into spinning gears at the perfect moment. 15 levels, boss gears, lucky wheel.', d2:'Stack blocks, blast rows. A neon world that dances to the music.', d3:'Bidding Batak in a nostalgic Turkish tea house – against 3 rivals.', play:'Play', newT:'NEW',
+        s1:(l,st)=>`Level ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Record ${h} · Best level ${b}`, s3:(w,g)=>`Wins ${w}/${g}`, share:HI.share+' Send to a friend', apk:HI.phone+' Android app', ios:'📱 On iPhone: Safari → Share ⬆️ → Add to Home Screen', shareText:'Try Buko Games! 🦎🎮 1453 Surları Yık, Diş Fırlat, Neon Block & Neon Batak – free: https://xenosmart.de/spiel/'},
   };
   const FL={tr:'🇹🇷',de:'🇩🇪',en:'🇬🇧'};
   const $=id=>document.getElementById(id);
@@ -118,9 +124,9 @@
   function render(){
     const t=T[L]; document.documentElement.lang=L;
     $('tag').textContent=t.tag; $('feat').innerHTML=t.feat.map(f=>`<span>${f}</span>`).join('');
-    $('d4').textContent=t.d4;$('p4').textContent=t.play;$('nw4').textContent=t.newT;{const st=(F.stars||[]).reduce((a,v)=>a+(v||0),0);$('s4').textContent=F.unlocked>1?t.s4(Math.min(19,F.unlocked),st):'';}
+    $('d4').textContent=t.d4;$('p4').innerHTML=HI.play+t.play;$('nw4').textContent=t.newT;{const st=(F.stars||[]).reduce((a,v)=>a+(v||0),0);$('s4').textContent=F.unlocked>1?t.s4(Math.min(19,F.unlocked),st):'';}
     $('d1').textContent=t.d1; $('d2').textContent=t.d2; $('d3').textContent=t.d3;
-    ['p1','p2','p3'].forEach(k=>$(k).textContent=t.play);
+    ['p1','p2','p3'].forEach(k=>$(k).innerHTML=HI.play+t.play);
     const stars=(S.stars||[]).reduce((a,v)=>a+(v||0),0);
     $('s1').textContent = (S.lvl||stars) ? t.s1((S.lvl||0)+1, stars) : '';
     $('s2').textContent = B.hi ? t.s2(B.hi.toLocaleString(L), B.best||1) : '';
