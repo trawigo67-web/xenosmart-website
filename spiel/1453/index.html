@@ -505,7 +505,7 @@ function persist(){try{localStorage.setItem('surlar1453',JSON.stringify(save));}
 
 /* ------------------------------ SES + MEHTER MARŞI ------------------------------ */
 let AC=null,NB=null,master=null,musBus=null,sfxBus=null,soundMode=0,lastCrack=0,musicOn=false,musNext=0,musStep=0,musTimer=null;
-const VO={},VOL={bismillah:1,ekber:1,allah:.95,allah1:.9,hucum:.9,masallah:1,fetih:1};let voLast=-9,voPlaying=null;
+const VO={},VOL={heya:.75,bismillah:1,ekber:1,allah:.95,allah1:.9,hucum:.9,masallah:1,fetih:1};let voLast=-9,voPlaying=null;
 function loadVO(){if(!AC||VO._l)return;VO._l=1;Object.keys(VOL).forEach(k=>{fetch('sfx/vo-'+k+'.mp3').then(r=>r.arrayBuffer()).then(b=>AC.decodeAudioData(b)).then(buf=>{VO[k]=buf;}).catch(()=>{});});}
 function vo(k,chance=1,cd=2.2,force){if(!AC||soundMode===2||!VO[k])return;if(Math.random()>chance)return;const now=AC.currentTime;if(!force&&now-voLast<cd)return;voLast=now;try{if(voPlaying&&force)voPlaying.stop();}catch(e){}
   const src=AC.createBufferSource();src.buffer=VO[k];src.playbackRate.value=1+(Math.random()-.5)*.06;const g=AC.createGain();g.gain.value=VOL[k]*1.15;src.connect(g);g.connect(sfxBus||master);src.start();voPlaying=src;}
@@ -549,17 +549,17 @@ const FMEL=[['D5',2],['D5',1],['D5',1],['G5',2],['D5',2], ['E5',1],['D5',1],['C5
 function mkMap(m){const mp=[];let s=0;for(const n of m){mp[s]=n;s+=n[1];}return{map:mp,steps:s};}
 const SONGS={march:{...mkMap(MEL),hz:HZ,bpm:104,vol:.11},fetih:{...mkMap(FMEL),hz:HZ2,bpm:126,vol:.12}};let song='march';
 const MELSTEPS=SONGS.march.steps,melMap=SONGS.march.map;
-function zurna(f,t,dur,vol){const o=AC.createOscillator(),o2=AC.createOscillator();o.type='sawtooth';o2.type='square';o.frequency.value=f;o2.frequency.value=f*1.004;
+function zurna(f,t,dur,vol,bus){const o=AC.createOscillator(),o2=AC.createOscillator();o.type='sawtooth';o2.type='square';o.frequency.value=f;o2.frequency.value=f*1.004;
   const vib=AC.createOscillator(),vg=AC.createGain();vib.frequency.value=5.5;vg.gain.value=f*.012;vib.connect(vg);vg.connect(o.frequency);vg.connect(o2.frequency);
   o.frequency.setValueAtTime(f*.97,t);o.frequency.linearRampToValueAtTime(f,t+.04);
   const bp=AC.createBiquadFilter();bp.type='bandpass';bp.frequency.value=f*2.4;bp.Q.value=1.2;const g=AC.createGain();
   g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+.025);g.gain.setValueAtTime(vol*.85,t+dur*.7);g.gain.exponentialRampToValueAtTime(.001,t+dur);
-  const g2=AC.createGain();g2.gain.value=.35;o.connect(bp);o2.connect(g2);g2.connect(bp);bp.connect(g);g.connect(musBus);
+  const g2=AC.createGain();g2.gain.value=.35;o.connect(bp);o2.connect(g2);g2.connect(bp);bp.connect(g);g.connect(bus||musBus);
   [o,o2,vib].forEach(x=>{x.start(t);x.stop(t+dur+.05);});}
 function drum(t,f,vol,dur=.35,bus){bus=bus||musBus;const o=AC.createOscillator();o.type='sine';o.frequency.setValueAtTime(f*2.2,t);o.frequency.exponentialRampToValueAtTime(f,t+.06);const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g);g.connect(bus);o.start(t);o.stop(t+dur+.05);
   const s=AC.createBufferSource();s.buffer=NB;const fl=AC.createBiquadFilter();fl.frequency.value=900;const g2=AC.createGain();g2.gain.setValueAtTime(vol*.5,t);g2.gain.exponentialRampToValueAtTime(.001,t+.12);s.connect(fl);fl.connect(g2);g2.connect(bus);s.start(t,Math.random());s.stop(t+.15);}
-function tek(t,vol){const s=AC.createBufferSource();s.buffer=NB;const fl=AC.createBiquadFilter();fl.type='bandpass';fl.frequency.value=2400;fl.Q.value=2;const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+.07);s.connect(fl);fl.connect(g);g.connect(musBus);s.start(t,Math.random());s.stop(t+.1);}
-function zil(t,vol){const s=AC.createBufferSource();s.buffer=NB;const fl=AC.createBiquadFilter();fl.type='highpass';fl.frequency.value=6000;const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+.6);s.connect(fl);fl.connect(g);g.connect(musBus);s.start(t,Math.random());s.stop(t+.65);}
+function tek(t,vol,bus){const s=AC.createBufferSource();s.buffer=NB;const fl=AC.createBiquadFilter();fl.type='bandpass';fl.frequency.value=2400;fl.Q.value=2;const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+.07);s.connect(fl);fl.connect(g);g.connect(bus||musBus);s.start(t,Math.random());s.stop(t+.1);}
+function zil(t,vol,bus){const s=AC.createBufferSource();s.buffer=NB;const fl=AC.createBiquadFilter();fl.type='highpass';fl.frequency.value=6000;const g=AC.createGain();g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+.6);s.connect(fl);fl.connect(g);g.connect(bus||musBus);s.start(t,Math.random());s.stop(t+.65);}
 function startMusic(){if(musTimer||!AC)return;musNext=AC.currentTime+.1;musStep=0;
   musTimer=setInterval(()=>{if(!musicAllowed()){musNext=AC.currentTime+.1;return;}const SG=SONGS[song],e=60/SG.bpm/2;const fet=song==='fetih';
     while(musNext<AC.currentTime+.25){const s=musStep%SG.steps,t=musNext,beat=s%8;
@@ -1264,6 +1264,12 @@ function startBonus(){engine=null;bodies=[];balls=[];parts=[];pops=[];bubbles=[]
   $('iAmmo').innerHTML='HEDEF: <b style="color:#b3261e">3 gemi</b> · SÜRE: <b style="color:#b3261e">şafağa 120 sn</b> · Klavye: BOŞLUK çek · ↓ fren · G yağla';
   setIco($('bGrease'),'yag','YAĞLA ×<span id="gCnt">'+BN.pots+'</span>');drawPortrait();state='intro';show('scIntro');applySound();}
 function beginBonus(){state='bonus';show(null);BN.started=true;BN.beatT=0;updateHUD();bubble('DAVULA UYARAK ÇEK!',0,0,3.5);sfx('whoosh');}
+const HEYMEL=['D4','F4s','G4','A4','A4','Bb4','A4','G4','F4s','G4','A4','D5','C5','Bb4','A4','D4'];
+function bonusBeat(n){const t=AC.currentTime+.01,down=n%4===0;
+  drum(t,down?40:52,down?.95:.6,.4,sfxBus);tek(t+BEAT/2,.22,sfxBus);if(down)zil(t,.18,sfxBus);
+  if(soundMode===0){const f=HZ[HEYMEL[n%16]];zurna(f,t,BEAT*.82,down?.16:.12,sfxBus);if(n%2===1)zurna(f*1.122,t+BEAT*.5,BEAT*.3,.07,sfxBus);
+    if(down)drum(t,30,.35,.6,sfxBus);}
+  if(down&&VO.heya){const src=AC.createBufferSource();src.buffer=VO.heya;src.playbackRate.value=1+(Math.random()-.5)*.05;const g=AC.createGain();g.gain.value=.75;src.connect(g);g.connect(sfxBus);src.start(t);}}
 function bonusPull(){if(state!=='bonus'||!BN||BN.fade>0)return;const ph=BN.beatT/BEAT;const off=Math.min(ph,1-ph)*BEAT;
   if(time-BN.lastPull<.3){BN.quality='ACELE ETME!';BN.qT=.6;BN.lastPull=time;return;}BN.lastPull=time;
   let imp,q,col;if(off<.12){imp=58;q='MÜKEMMEL!';col='#ffd93b';}else if(off<.24){imp=42;q='İYİ!';col='#fff';}else{imp=12;q='ZAYIF';col='#c4b08c';}
@@ -1277,7 +1283,7 @@ function nextShip(lost){BN.fade=1.2;BN.pending=lost;}
 function bonusUpdate(dt){if(!BN)return;const B=BN;
   if(state==='bonus'){B.timeLeft-=dt;
     // davul
-    B.beatT+=dt;if(B.beatT>=BEAT){B.beatT-=BEAT;B.beatN++;if(AC&&soundMode<2){const t=AC.currentTime;drum(t,B.beatN%4===0?40:52,B.beatN%4===0?.9:.6,.4,sfxBus);if(B.beatN%2)tek(t+BEAT/2,.15);}}
+    B.beatT+=dt;if(B.beatT>=BEAT){B.beatT-=BEAT;B.beatN++;if(AC&&soundMode<2)bonusBeat(B.beatN);}
     if(B.fade>0){B.fade-=dt;if(B.fade<=.6&&B.pending!==undefined){B.x=120;B.v=0;B.hull=100;B.grease=Math.max(B.grease,.6);B.shipN++;B.camX=120;B.pending=undefined;}}
     else{const th=bslope(B.x),inWater=B.x<200||B.x>BEND;
       let a=-148*Math.sin(th);const fr=inWater?.6:(.28+(1-B.grease)*1.25);a-=fr*B.v;if(B.brake&&B.v>0)a-=190;if(B.brake&&B.v<0)a+=190;
@@ -1388,7 +1394,7 @@ function bonusDraw(){const B=BN;if(!B)return;const night=1-clamp((BT-B.timeLeft)
   for(const p of pops){p.x=VW/2;p.y=200;}drawPopsScreen();
   for(const b of bubbles){const a=b.t<.15?b.t/.15:b.t>b.life-.3?(b.life-b.t)/.3:1;drawBubbleAt(b.txt,VW*.42+250,330,Math.max(0,a));}
   // davul ritim göstergesi
-  const cx=VW/2,cy=VH-92,ph2=B.beatT/BEAT;const rr2=34+ (1-ph2)*60;
+  const cx=VW-150,cy=VH-235,ph2=B.beatT/BEAT;const rr2=34+ (1-ph2)*60;
   ctx.fillStyle='rgba(26,16,8,.55)';ctx.beginPath();ctx.arc(cx,cy,48,0,7);ctx.fill();
   ctx.strokeStyle='#ffd93b';ctx.lineWidth=4;ctx.beginPath();ctx.arc(cx,cy,rr2,0,7);ctx.stroke();
   const flash=ph2<.12||ph2>.94;ctx.fillStyle=flash?'#ffd93b':'#c98a3a';ctx.strokeStyle=INK;ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(cx,cy,30,30,0,0,7);ctx.fill();ctx.stroke();
@@ -1398,9 +1404,9 @@ function bonusDraw(){const B=BN;if(!B)return;const night=1-clamp((BT-B.timeLeft)
   // göstergeler
   const bar=(x,y,w,v,label,col)=>{ctx.fillStyle='#f4e4bc';ctx.fillRect(x,y,w,18);ctx.fillStyle=col;ctx.fillRect(x,y,w*clamp(v,0,1),18);ctx.strokeStyle=INK;ctx.lineWidth=3;ctx.strokeRect(x,y,w,18);ctx.font='18px Bangers, Impact';ctx.textAlign='left';ctx.fillStyle='#fff';ctx.lineWidth=4;ctx.strokeText(label,x,y-8);ctx.fillText(label,x,y-8);};
   bar(40,VH-110,200,B.grease,'KÜTÜK YAĞI',B.grease<.3?'#c0392b':'#f2b632');bar(40,VH-60,200,B.hull/100,'GEMİ SAĞLAMLIĞI',B.hull<35?'#c0392b':'#6f9a3a');
-  const prog=clamp((B.x-120)/(BEND-120),0,1);ctx.fillStyle='rgba(26,16,8,.5)';ctx.fillRect(300,VH-40,460,8);ctx.fillStyle='#ffd93b';ctx.fillRect(300,VH-40,460*prog,8);ctx.font='15px Bangers, Impact';ctx.fillStyle='#fff';ctx.textAlign='left';ctx.fillText('BOĞAZ',300,VH-48);ctx.textAlign='right';ctx.fillText('HALİÇ',760,VH-48);
-  ctx.fillStyle='#fff';ctx.strokeStyle=INK;ctx.lineWidth=2;ctx.beginPath();ctx.arc(300+460*prog,VH-36,8,0,7);ctx.fill();ctx.stroke();
-  if(B.warn>0){ctx.font='34px Bangers, Impact';ctx.textAlign='center';ctx.lineWidth=6;ctx.strokeStyle=INK;const t2=B.v<0?'GERİ KAYIYOR! ÇEK!':'ÇOK HIZLI! FRENLE!';ctx.strokeText(t2,VW/2,150);ctx.fillStyle='#ff5a3c';ctx.fillText(t2,VW/2,150);}
+  const prog=clamp((B.x-120)/(BEND-120),0,1);const px0=VW/2-230,py0=112;ctx.fillStyle='rgba(244,228,188,.45)';ctx.fillRect(px0,py0,460,8);ctx.strokeStyle=INK;ctx.lineWidth=2;ctx.strokeRect(px0,py0,460,8);ctx.fillStyle='#ffd93b';ctx.fillRect(px0,py0,460*prog,8);ctx.font='17px Bangers, Impact';ctx.lineWidth=4;ctx.strokeStyle=INK;ctx.fillStyle='#fff';ctx.textAlign='left';ctx.strokeText('BOĞAZ',px0,py0-8);ctx.fillText('BOĞAZ',px0,py0-8);ctx.textAlign='right';ctx.strokeText('HALİÇ',px0+460,py0-8);ctx.fillText('HALİÇ',px0+460,py0-8);
+  ctx.fillStyle='#fff';ctx.strokeStyle=INK;ctx.lineWidth=2;ctx.beginPath();ctx.arc(px0+460*prog,py0+4,8,0,7);ctx.fill();ctx.stroke();
+  if(B.warn>0){ctx.font='34px Bangers, Impact';ctx.textAlign='center';ctx.lineWidth=6;ctx.strokeStyle=INK;const t2=B.v<0?'GERİ KAYIYOR! ÇEK!':'ÇOK HIZLI! FRENLE!';ctx.strokeText(t2,VW/2,170);ctx.fillStyle='#ff5a3c';ctx.fillText(t2,VW/2,170);}
   ctx.strokeStyle=INK;ctx.lineWidth=14;ctx.strokeRect(0,0,VW,VH);ctx.strokeStyle='#b3261e';ctx.lineWidth=2.5;ctx.strokeRect(10,10,VW-20,VH-20);}
 function mix(a,b,t){const pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16);const r=Math.round(((pa>>16)&255)*(1-t)+((pb>>16)&255)*t),g=Math.round(((pa>>8)&255)*(1-t)+((pb>>8)&255)*t),bl=Math.round((pa&255)*(1-t)+(pb&255)*t);return`rgb(${r},${g},${bl})`;}
 
