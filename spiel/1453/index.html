@@ -505,6 +505,10 @@ function persist(){try{localStorage.setItem('surlar1453',JSON.stringify(save));}
 
 /* ------------------------------ SES + MEHTER MARŞI ------------------------------ */
 let AC=null,NB=null,master=null,musBus=null,sfxBus=null,soundMode=0,lastCrack=0,musicOn=false,musNext=0,musStep=0,musTimer=null;
+const VO={},VOL={bismillah:1,ekber:1,allah:.95,allah1:.9,hucum:.9,masallah:1,fetih:1};let voLast=-9,voPlaying=null;
+function loadVO(){if(!AC||VO._l)return;VO._l=1;Object.keys(VOL).forEach(k=>{fetch('sfx/vo-'+k+'.mp3').then(r=>r.arrayBuffer()).then(b=>AC.decodeAudioData(b)).then(buf=>{VO[k]=buf;}).catch(()=>{});});}
+function vo(k,chance=1,cd=2.2,force){if(!AC||soundMode===2||!VO[k])return;if(Math.random()>chance)return;const now=AC.currentTime;if(!force&&now-voLast<cd)return;voLast=now;try{if(voPlaying&&force)voPlaying.stop();}catch(e){}
+  const src=AC.createBufferSource();src.buffer=VO[k];src.playbackRate.value=1+(Math.random()-.5)*.06;const g=AC.createGain();g.gain.value=VOL[k]*1.15;src.connect(g);g.connect(sfxBus||master);src.start();voPlaying=src;}
 function initAudio(){try{if(!AC){AC=new(window.AudioContext||window.webkitAudioContext)();const n=AC.sampleRate*2;NB=AC.createBuffer(1,n,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
     master=AC.createGain();master.gain.value=.5;master.connect(AC.destination);
     const comp=AC.createDynamicsCompressor();comp.threshold.value=-20;comp.ratio.value=6;comp.knee.value=12;comp.connect(master);
@@ -512,7 +516,7 @@ function initAudio(){try{if(!AC){AC=new(window.AudioContext||window.webkitAudioC
     // basit yankı
     const dl=AC.createDelay();dl.delayTime.value=.18;const fb=AC.createGain();fb.gain.value=.28;const lp=AC.createBiquadFilter();lp.frequency.value=1800;
     musBus.connect(dl);dl.connect(lp);lp.connect(fb);fb.connect(dl);lp.connect(comp);}
-  if(AC.state==='suspended')AC.resume();applySound();}catch(e){AC=null;}}
+  if(AC.state==='suspended')AC.resume();loadVO();applySound();}catch(e){AC=null;}}
 function musicAllowed(){return soundMode===0||(soundMode===1&&state==='finale');}
 function applySound(){if(!AC)return;master.gain.value=soundMode===2?0:.5;musBus.gain.value=musicAllowed()&&!bonusActive?(state==='finale'?.42:.3):0;if(musicAllowed())startMusic();
   setIco($('bMute'),['davul','ses','sus'][soundMode],['MARŞ','SES','SESSİZ'][soundMode]);}
@@ -851,7 +855,7 @@ function totalAmmo(){let s=0;for(const k in ammo)s+=ammo[k];return s;}
 function targets(){return bodies.filter(b=>b.gd.kind==='tg'&&!b.gd.dead);}
 function groundAt(x){if(x<HILLX)return HILLY;if(x<HILLX2)return HILLY+(GROUND-HILLY)*(x-HILLX)/(HILLX2-HILLX);if(x>MOAT0&&x<MOAT1)return GROUND+70;return GROUND;}
 function fire(){if(state!=='play'||balls.length||!ammo[sel]||!canShoot())return;initAudio();
-  ammo[sel]--;const A=AMMO[sel],mx=PIV.x+Math.cos(aim.a)*BL,my=PIV.y+Math.sin(aim.a)*BL;
+  ammo[sel]--;vo(Math.random()<.5?'bismillah':'ekber',.55,3);const A=AMMO[sel],mx=PIV.x+Math.cos(aim.a)*BL,my=PIV.y+Math.sin(aim.a)*BL;
   const b=Bodies.circle(mx,my,A.r,{density:A.den,frictionAir:0,friction:.3,restitution:.18});b.gd={kind:'ball',k:sel,t:0,exploded:false,trail:[]};
   Composite.add(world,b);Body.setVelocity(b,{x:Math.cos(aim.a)*aim.p/60,y:Math.sin(aim.a)*aim.p/60});balls.push(b);recPath={b,pts:[[mx,my]]};
   recoil=1;shake=Math.max(shake,sel==='b'?16:9);cam.z*=1.025;sfx('cannon');flashA=.35;
@@ -879,7 +883,7 @@ function damage(b,d){const g=b.gd;if(g.dead)return;g.hp-=d;g.hitT=.12;
   if(g.crack&&g.crack.stage<2&&g.hp<g.max*.4)g.crack=mkCrack(g.w,g.h,2,g.crack);
   if(g.hp<=0){g.dead=true;removeQ.add(b);}}
 function mkCrack(w,h,stage,prev){const lines=prev?prev.lines.slice():[];const n=stage===1?1:2;for(let k=0;k<n;k++){let x=rnd(-w/2,w/2)*.7,y=-h/2;const pts=[[x,y]];while(y<h/2){x+=rnd(-6,6);y+=rnd(4,8);pts.push([clamp(x,-w/2+1,w/2-1),Math.min(y,h/2)]);}lines.push(pts);}return{stage,lines};}
-function kill(b){const g=b.gd;if(g.dead)return;g.dead=true;if(state==='play'){addCharge(6);shotKills++;if(shotKills===3)giveAmmo('ÜÇLÜ VURUŞ! +1 GÜLLE');}removeQ.add(b);const x=b.position.x,y=b.position.y;score+=g.type==='D'?250:300;smoke(x,y,9,60,12);
+function kill(b){const g=b.gd;if(g.dead)return;g.dead=true;if(state==='play'){addCharge(6);shotKills++;if(shotKills===2)vo('allah',1,2.5);if(shotKills===3)giveAmmo('ÜÇLÜ VURUŞ! +1 GÜLLE');}removeQ.add(b);const x=b.position.x,y=b.position.y;score+=g.type==='D'?250:300;smoke(x,y,9,60,12);
   if(g.type==='D'){pop(pick(['AMAN!','EYVAH!','KAÇIN!','İMDAT!','OF!','VAY!']),x,y-40,.8,'#fff');addP({k:'helmet',x,y:y-18,vx:rnd(-140,140),vy:rnd(-420,-240),life:2.2,t:0,rot:0,vr:rnd(-14,14),s:8});sfx('yell');}
   else{pop('BAYRAK DÜŞTÜ!',x,y-50,.8,'#f2b632');addP({k:'flagp',x,y:y-20,vx:rnd(-90,90),vy:rnd(-320,-170),life:2.2,t:0,rot:0,vr:rnd(-6,6),s:12});}
   for(let i=0;i<10;i++)addP({k:'star',x,y:y-10,vx:rnd(-160,160),vy:rnd(-260,-80),life:rnd(.5,.9),t:0,s:rnd(4,7),rot:0,vr:rnd(-8,8)});
@@ -1169,16 +1173,16 @@ function startLevel(i){endFinale();initAudio();lvlIdx=i;lvl=LEVELS[i];nightMode=
   $('iTip').classList.toggle('hidden',!lvl.tip);$('iTip').textContent=lvl.tip||'';
   $('iAmmo').innerHTML='CEPHANE: '+Object.keys(ammo).map(k=>`${AMMO[k].name} <b style="color:#b3261e">×${ammo[k]}</b>`).join(' · ')+(wind?` · RÜZGAR: <b style="color:#b3261e">${wind<0?'KARŞIDAN':'ARKADAN'}</b>`:'');
   drawPortrait();buildAmmoUI();state='intro';show('scIntro');}
-function beginPlay(){if(lvl.bonus){beginBonus();return;}state='play';show(null);grace=time+.4;bubble(lvl.say,62,HILLY-130,3.2);sfx('whoosh');}
+function beginPlay(){if(lvl.bonus){beginBonus();return;}state='play';show(null);grace=time+.4;bubble(lvl.say,62,HILLY-130,3.2);sfx('whoosh');setTimeout(()=>vo(Math.random()<.6?'hucum':'allah1',.75,0),350);}
 function winLevel(){if(state!=='play')return;state='win';const rem=totalAmmo();const stars=rem>=2?3:rem===1?2:1;const _rk0=rankOf(starTotal()).i;score+=rem*500;score=Math.round(score*D().mult);
   save.stars[lvlIdx]=Math.max(save.stars[lvlIdx]||0,stars);save.best=save.best||[];save.best[lvlIdx]=Math.max(save.best[lvlIdx]||0,score);save.unlocked=Math.max(save.unlocked,Math.min(LEVELS.length,lvlIdx+2));persist();const _rk1=rankOf(starTotal());window._newRank=_rk1.i>_rk0?_rk1.name:'';showRank();
-  fanfare();bubbles=[];for(let i=0;i<5;i++)setTimeout(()=>addP({k:'rocket',x:rnd(aimView.x-200,structMax),y:GROUND-20,vx:rnd(-50,50),vy:rnd(-700,-520),life:rnd(.8,1.1),t:0}),i*160);buzz([40,60,40]);bubble(pick(['MAŞALLAH!','AFERİN!','HELAL OLSUN!']),62,HILLY-130,3);
+  fanfare();setTimeout(()=>vo('masallah',1,0,true),250);bubbles=[];for(let i=0;i<5;i++)setTimeout(()=>addP({k:'rocket',x:rnd(aimView.x-200,structMax),y:GROUND-20,vx:rnd(-50,50),vy:rnd(-700,-520),life:rnd(.8,1.1),t:0}),i*160);buzz([40,60,40]);bubble(pick(['MAŞALLAH!','AFERİN!','HELAL OLSUN!']),62,HILLY-130,3);
   setTimeout(()=>{if(lvl.finale||lvl.finale2){startFinale(!!lvl.finale2);return;}
     $('wTitle').textContent=pick(['SUR YIKILDI!','ZAFER!','HARİKA ATIŞ!']);
     $('wRank').textContent=window._newRank?'YENİ RÜTBE: '+window._newRank.toUpperCase()+'!':'';$('wStars').innerHTML=[0,1,2].map(i=>`<span class="${i<stars?'':'off'}">★</span>`).join('');$('wScore').textContent=`PUAN: ${score}  ·  KALAN GÜLLE: ${rem}`;show('scWin');},800);}
 let FP=[];
 let finTitle='FETİH MÜBAREK OLSUN!';
-function startFinale(big){finTitle=big?'TOPÇUBAŞI OLDUN!':'FETİH MÜBAREK OLSUN!';
+function startFinale(big){setTimeout(()=>{vo('allah',1,0,true);setTimeout(()=>vo('fetih',1,0,true),2600);},400);finTitle=big?'TOPÇUBAŞI OLDUN!':'FETİH MÜBAREK OLSUN!';
   $('fCap').textContent=big?'1453 – 1480':'29 Mayıs 1453';$('fH').textContent=big?'BÜTÜN SEFERLER TAMAM!':'İSTANBUL FETHEDİLDİ!';
   $('fDesc').textContent=big?'İstanbul’dan Rodos’a kadar 100 kuşatmanın hepsini geçtin. Osmanlı topçu ocağı seni Topçubaşı ilan etti! Yeni seferler yakında…':'21 yaşındaki Sultan II. Mehmed, 53 günlük kuşatmanın ardından şehre girdi ve bu zaferle “Fatih” unvanını aldı. Bir çağ kapandı, yeni bir çağ açıldı.';
   $('bFNext').classList.toggle('hidden',big||lvlIdx+1>=LEVELS.length);
