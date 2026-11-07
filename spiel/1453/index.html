@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="1453">
 <link rel="icon" href="art/icon.png"><link rel="apple-touch-icon" href="art/icon.png">
 <script src="vendor/matter.min.js"></script>
+<script src="lb.js"></script>
 <style>
 @font-face{font-family:'Bangers';src:url(fonts/bangers-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap}
 @font-face{font-family:'Bangers';src:url(fonts/bangers-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap}
@@ -116,6 +117,7 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
       <div class="tag" id="hCharge">CEPHANE <span id="chBar" style="display:inline-block;width:calc(7*var(--u));height:calc(1.1*var(--u));border:calc(.2*var(--u)) solid #1a1008;vertical-align:middle;background:#fff6dc;position:relative"><span id="chFill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#f2b632,#c0392b)"></span></span></div>
     </div>
     <div class="hbtns">
+      <button class="ibtn" id="hLB" title="Puan tablosu"></button>
       <a class="ibtn homeLink" id="hHome" title="Ana menü (Buko Games)" style="text-decoration:none"></a>
       <button class="ibtn" id="bHelp" title="Nişan yardımı (H)"></button>
       <button class="ibtn" id="bMute" title="Müzik / Ses"></button>
@@ -141,6 +143,7 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
       <div class="quote">“Ya ben İstanbul'u alırım, ya İstanbul beni!”</div>
       <button class="btn" id="bPlay">OYNA</button>
       <button class="btn gold" id="bLevels">SEVİYELER</button>
+      <button class="btn lbBtn" style="background:#2f6b3a">PUAN TABLOSU</button>
       <div class="help">Ekrana bas · geri çek · nişan al · bırak!<br>Klavye: ↑↓ açı · ←→ güç · BOŞLUK ateş · H yardım · M müzik</div>
       <a class="brand homeLink" style="text-decoration:none">BUKO GAMES</a>
     </div>
@@ -177,6 +180,7 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
       <h2 id="wTitle">SUR YIKILDI!</h2>
       <div class="stars" id="wStars"></div>
       <div class="small" id="wScore"></div>
+      <button class="btn lbBtn" style="background:#2f6b3a">TABLOYA YAZ</button>
       <button class="btn gold" id="bWRetry">TEKRAR</button>
       <button class="btn green" id="bNext">SONRAKİ</button>
     </div>
@@ -198,6 +202,7 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
       <h2 style="font-size:calc(4.2*var(--u))">İSTANBUL FETHEDİLDİ!</h2>
       <div class="desc" style="max-width:calc(60*var(--u));text-align:center">21 yaşındaki Sultan II. Mehmed, 53 günlük kuşatmanın ardından şehre girdi ve bu zaferle “Fatih” unvanını aldı. Bir çağ kapandı, yeni bir çağ açıldı.</div>
       <div class="small" id="fScore"></div>
+      <button class="btn lbBtn" style="background:#b3261e">TABLOYA YAZ</button>
       <button class="btn gold" id="bFMenu">SEVİYELER</button>
       <a class="btn green homeLink hm2" style="text-decoration:none;display:inline-flex;align-items:center">ANA MENÜ</a>
     </div>
@@ -257,6 +262,7 @@ davul:w('<ellipse cx="12" cy="9" rx="8" ry="3.2" fill="#f4e4bc" stroke="#1a1008"
 ses:w('<path d="M3.5 9.5h3.5L12 5v14l-5-4.5H3.5z" fill="#c0392b" stroke="#1a1008"/><path d="M15.5 9.5a3.4 3.4 0 0 1 0 5M18 7a7 7 0 0 1 0 10" stroke="#1a1008"/>'),
 sus:w('<path d="M3.5 9.5h3.5L12 5v14l-5-4.5H3.5z" fill="#c4b08c" stroke="#1a1008"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" stroke="#b3261e" stroke-width="2.6"/>'),
 tekrar:w('<path d="M19 12a7 7 0 1 1-2.1-5" stroke="#1a1008" stroke-width="2.6"/><path d="M19.5 3.5v4.4h-4.4" stroke="#1a1008" stroke-width="2.6"/><path d="M12 9.2l1 1.8 2 .2-1.5 1.4.4 2-1.9-1-1.9 1 .4-2L9 11.2l2-.2z" fill="#c0392b" stroke="none"/>'),
+kupa:w('<path d="M7 3.5h10v6a5 5 0 0 1-10 0z" fill="#f2b632" stroke="#1a1008"/><path d="M7 5.5H4.2a3.2 3.2 0 0 0 3.3 4.4M17 5.5h2.8a3.2 3.2 0 0 1-3.3 4.4" stroke="#1a1008"/><path d="M12 14.5v3M8 21h8l-1-3.5H9z" fill="#b3261e" stroke="#1a1008"/><path d="M13.6 5.6a2.4 2.4 0 1 0 0 3.4 1.9 1.9 0 1 1 0-3.4z" fill="#b3261e" stroke="none"/>'),
 ferman:w('<path d="M6 4.5h11a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H7" fill="#f4e4bc" stroke="#1a1008"/><path d="M6 4.5a2 2 0 0 0-2 2v1.5h4V6.5a2 2 0 0 0-2-2zM7 19.5a2 2 0 0 1-2-2V16h4v1.5a2 2 0 0 1-2 2z" fill="#d9b37a" stroke="#1a1008"/><path d="M10.5 9h5.5M10.5 12h5.5M10.5 15h3.5" stroke="#b3261e" stroke-width="1.6"/>'),
 top:w('<path d="M2.5 15.5l12.5-6.5 2.2 4.2-12.5 6.5z" fill="#d99a2b" stroke="#1a1008"/><circle cx="8" cy="18" r="3.2" fill="#7a4a22" stroke="#1a1008"/><path d="M17.5 8.5l1.8-1.8M19 11.2l2.4-.3M18.8 6.1l.4-2.4" stroke="#ffd93b" stroke-width="2.2"/>'),
 yag:w('<path d="M8 6.5h8l-1 2.5c2.6 1 4 3.4 4 6 0 3.2-3.1 5.5-7 5.5s-7-2.3-7-5.5c0-2.6 1.4-5 4-6z" fill="#c98a3a" stroke="#1a1008"/><path d="M9 6.5V4.5h6v2" stroke="#1a1008"/><path d="M12 11.5c-1.6 2-2.2 3-2.2 4a2.2 2.2 0 0 0 4.4 0c0-1-.6-2-2.2-4z" fill="#ffd93b" stroke="none"/>'),
@@ -1063,7 +1069,7 @@ function startLevel(i){endFinale();initAudio();lvlIdx=i;lvl=LEVELS[i];nightMode=
   drawPortrait();buildAmmoUI();state='intro';show('scIntro');}
 function beginPlay(){if(lvl.bonus){beginBonus();return;}state='play';show(null);grace=time+.4;bubble(lvl.say,62,HILLY-130,3.2);sfx('whoosh');}
 function winLevel(){if(state!=='play')return;state='win';const rem=totalAmmo();const stars=rem>=2?3:rem===1?2:1;score+=rem*500;
-  save.stars[lvlIdx]=Math.max(save.stars[lvlIdx]||0,stars);save.unlocked=Math.max(save.unlocked,Math.min(LEVELS.length,lvlIdx+2));persist();
+  save.stars[lvlIdx]=Math.max(save.stars[lvlIdx]||0,stars);save.best=save.best||[];save.best[lvlIdx]=Math.max(save.best[lvlIdx]||0,score);save.unlocked=Math.max(save.unlocked,Math.min(LEVELS.length,lvlIdx+2));persist();
   fanfare();bubbles=[];for(let i=0;i<5;i++)setTimeout(()=>addP({k:'rocket',x:rnd(aimView.x-200,structMax),y:GROUND-20,vx:rnd(-50,50),vy:rnd(-700,-520),life:rnd(.8,1.1),t:0}),i*160);buzz([40,60,40]);bubble(pick(['MAŞALLAH!','AFERİN!','HELAL OLSUN!']),62,HILLY-130,3);
   setTimeout(()=>{if(lvlIdx===LEVELS.length-1){startFinale();return;}
     $('wTitle').textContent=pick(['SUR YIKILDI!','ZAFER!','HARİKA ATIŞ!']);
@@ -1177,7 +1183,7 @@ function bonusUpdate(dt){if(!BN)return;const B=BN;
   B.camX+=(B.x+140-B.camX)*Math.min(1,dt*3);B.camH+=(bh(B.x)-B.camH)*Math.min(1,dt*2.5);}
 function bonusEnd(){if(state!=='bonus')return;state='bonusEnd';bonusBrake(false);const d=BN.delivered;score+=Math.max(0,Math.round(BN.timeLeft))*20;
   setTimeout(()=>{if(d===0){$('scLose').querySelector('h2').textContent='ŞAFAK SÖKTÜ!';$('scLose').querySelector('.desc').textContent='Hiçbir gemi Haliç’e ulaşamadı. Davulun ritmini yakala ve tekrar dene!';show('scLose');return;}
-    save.stars[lvlIdx]=Math.max(save.stars[lvlIdx]||0,d);save.unlocked=Math.max(save.unlocked,Math.min(LEVELS.length,lvlIdx+2));persist();
+    save.stars[lvlIdx]=Math.max(save.stars[lvlIdx]||0,d);save.best=save.best||[];save.best[lvlIdx]=Math.max(save.best[lvlIdx]||0,score);save.unlocked=Math.max(save.unlocked,Math.min(LEVELS.length,lvlIdx+2));persist();
     $('wTitle').textContent=d===3?'BÜTÜN GEMİLER HALİÇ’TE!':'GEMİLER HALİÇ’TE!';$('wStars').innerHTML=[0,1,2].map(i=>`<span class="${i<d?'':'off'}">★</span>`).join('');
     $('wScore').textContent=`PUAN: ${score}  ·  ULAŞAN GEMİ: ${d}/3`;show('scWin');},900);}
 // ---- çizim
@@ -1293,7 +1299,10 @@ $('bBrake').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefa
 $('bGrease').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();bonusGrease();});
 
 const HOME=/xenosmart\./.test(location.hostname)?'../':'https://xenosmart.de/spiel/';document.querySelectorAll('.homeLink').forEach(a=>{a.href=HOME;a.addEventListener('pointerdown',e=>e.stopPropagation());});
-function initIcons(){setIco($('hHome'),'otag');setIco($('bRetry'),'tekrar');setIco($('bMenu'),'ferman');setIco($('fireBtn'),'top','ATEŞ!');setIco($('bBrake'),'fren','FREN');setIco($('bPull'),'cek','ÇEK!');setIco($('bGrease'),'yag','YAĞLA ×<span id="gCnt">4</span>');
+function lbTotal(){return (save.best||[]).reduce((a,v)=>a+(v||0),0);}
+function openLB(){if(!window.BukoLB)return;BukoLB.open({game:'1453',score:lbTotal,unit:'puan',theme:'ott'});}
+function initIcons(){setIco($('hLB'),'kupa');document.querySelectorAll('.lbBtn').forEach(b=>{b.innerHTML=OI.kupa+'<span class="ol">'+b.textContent+'</span>';b.style.display='inline-flex';b.style.alignItems='center';b.addEventListener('click',e=>{e.stopPropagation();openLB();});});
+  $('hLB').addEventListener('click',e=>{e.stopPropagation();openLB();});setIco($('hHome'),'otag');setIco($('bRetry'),'tekrar');setIco($('bMenu'),'ferman');setIco($('fireBtn'),'top','ATEŞ!');setIco($('bBrake'),'fren','FREN');setIco($('bPull'),'cek','ÇEK!');setIco($('bGrease'),'yag','YAĞLA ×<span id="gCnt">4</span>');
   document.querySelectorAll('.hm2').forEach(a=>{a.innerHTML=OI.otag+(a.textContent?'<span class="ol">'+a.textContent+'</span>':'');});applyHelp();if(!AC)setIco($('bMute'),'davul','MARŞ');}
 initIcons();
 function boot(){if(typeof Matter==='undefined'){$('loading').textContent='Fizik motoru yüklenemedi. Sayfayı yenile.';return;}
