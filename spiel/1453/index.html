@@ -58,7 +58,7 @@ body{display:block}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes pop{0%{transform:scale(.55) rotate(-4deg);opacity:0}65%{transform:scale(1.04) rotate(1deg);opacity:1}100%{transform:scale(1) rotate(0)}}
 @keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(calc(-.5*var(--u))) rotate(1deg)}}
-.panel{background-color:var(--parch);background-image:radial-gradient(rgba(150,80,20,.12) 18%,transparent 19%),linear-gradient(180deg,rgba(255,255,255,.35),rgba(160,100,40,.12));background-size:calc(.85*var(--u)) calc(.85*var(--u)),100% 100%;border:calc(.5*var(--u)) solid var(--ink);box-shadow:calc(1*var(--u)) calc(1*var(--u)) 0 var(--ink);padding:calc(2*var(--u)) calc(3*var(--u));text-align:center;position:relative;max-width:calc(76*var(--u));animation:pop .4s cubic-bezier(.2,.9,.3,1.2)}
+.panel{max-height:94%;overflow-y:auto;background-color:var(--parch);background-image:radial-gradient(rgba(150,80,20,.12) 18%,transparent 19%),linear-gradient(180deg,rgba(255,255,255,.35),rgba(160,100,40,.12));background-size:calc(.85*var(--u)) calc(.85*var(--u)),100% 100%;border:calc(.5*var(--u)) solid var(--ink);box-shadow:calc(1*var(--u)) calc(1*var(--u)) 0 var(--ink);padding:calc(2*var(--u)) calc(3*var(--u));text-align:center;position:relative;max-width:calc(76*var(--u));animation:pop .4s cubic-bezier(.2,.9,.3,1.2)}
 .panel::before{content:'';position:absolute;inset:calc(.55*var(--u));border:calc(.2*var(--u)) solid var(--red);pointer-events:none}
 .panel::after{content:'';position:absolute;inset:calc(.95*var(--u));border:calc(.1*var(--u)) solid rgba(179,38,30,.45);pointer-events:none}
 .corner{position:absolute;width:calc(3*var(--u));height:calc(3*var(--u));pointer-events:none;background:radial-gradient(circle at center,var(--gold) 28%,var(--red) 30%,var(--red) 42%,transparent 44%);}
@@ -81,6 +81,19 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
 .lv:nth-child(3n){background:#f7c75a}
 .lv em{font-style:normal;font-family:Georgia,serif;font-size:calc(.95*var(--u));color:#5a3a12}
 .lv .oi{width:1.25em;height:1.25em;margin-bottom:.05em}
+.dfWrap{display:flex;gap:calc(.7*var(--u));justify-content:center;margin:calc(.6*var(--u)) 0}
+.dfb{font-family:inherit;flex:1;max-width:calc(15*var(--u));padding:calc(.4*var(--u)) calc(.6*var(--u));border:calc(.28*var(--u)) solid var(--ink);background:#fff6dc;color:var(--ink);cursor:pointer;box-shadow:calc(.3*var(--u)) calc(.3*var(--u)) 0 var(--ink);line-height:1.05}
+.dfb b{display:block;font-weight:normal;font-size:calc(1.8*var(--u));letter-spacing:calc(.1*var(--u))}
+.dfb small{display:block;font-family:Georgia,serif;font-size:calc(.85*var(--u));color:#5a3a12}
+.dfb.on{background:var(--dc);color:#fff;transform:translateY(calc(-.3*var(--u)))}
+.dfb.on small{color:#fff}
+#chTabs{display:flex;gap:calc(.5*var(--u));flex-wrap:wrap;justify-content:center;margin-top:calc(.8*var(--u))}
+.cht{font-family:inherit;display:flex;flex-direction:column;align-items:center;padding:calc(.3*var(--u)) calc(.8*var(--u));border:calc(.25*var(--u)) solid var(--ink);background:#fff6dc;cursor:pointer;color:var(--ink);font-size:calc(1.3*var(--u));line-height:1.1}
+.cht small{font-family:Georgia,serif;font-size:calc(.8*var(--u));color:#7a4a1a}
+.cht.on{background:var(--red);color:#fff}.cht.on small{color:#ffe08a}
+.cht.lock{background:#c4b08c;color:#7a6a50;cursor:default}.cht .oi{width:1em;height:1em}
+#lvgrid{max-height:calc(26*var(--u));overflow-y:auto}
+.lv em{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 .3em}
 .lv small{font-size:calc(1.4*var(--u));color:var(--red);letter-spacing:calc(.1*var(--u))}
 .lv.lock{background:#c4b08c!important;color:#7a6a50;cursor:default}
 .introRow{display:flex;gap:calc(2*var(--u));align-items:center;text-align:left}
@@ -141,6 +154,7 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
       <div class="big1453">1453</div>
       <div class="sub">SURLARI YIK!</div>
       <div class="quote">“Ya ben İstanbul'u alırım, ya İstanbul beni!”</div>
+      <div class="dfWrap" id="mDiff"></div>
       <button class="btn" id="bPlay">OYNA</button>
       <button class="btn gold" id="bLevels">SEVİYELER</button>
       <button class="btn lbBtn" style="background:#2f6b3a">PUAN TABLOSU</button>
@@ -152,8 +166,10 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
   <div class="overlay hidden" id="scLevels">
     <div class="panel">
       <h2>KUŞATMA GÜNLÜĞÜ</h2>
-      <div class="orn">6 NİSAN — 29 MAYIS 1453</div>
+      <div class="orn" id="lvOrn">6 NİSAN — 29 MAYIS 1453</div>
+      <div id="chTabs"></div>
       <div id="lvgrid"></div>
+      <div class="dfWrap" id="lvDiff"></div>
       <button class="btn gold" id="bBack">GERİ</button>
       <a class="btn green homeLink hm2" style="text-decoration:none;display:inline-flex;align-items:center">ANA MENÜ</a>
     </div>
@@ -198,12 +214,13 @@ h2{font-size:calc(3.7*var(--u));font-weight:normal;color:var(--red);-webkit-text
 
   <div class="overlay hidden" id="scFinal" style="background:rgba(26,16,8,.15)">
     <div class="panel">
-      <div class="cap">29 Mayıs 1453</div>
-      <h2 style="font-size:calc(4.2*var(--u))">İSTANBUL FETHEDİLDİ!</h2>
-      <div class="desc" style="max-width:calc(60*var(--u));text-align:center">21 yaşındaki Sultan II. Mehmed, 53 günlük kuşatmanın ardından şehre girdi ve bu zaferle “Fatih” unvanını aldı. Bir çağ kapandı, yeni bir çağ açıldı.</div>
+      <div class="cap" id="fCap">29 Mayıs 1453</div>
+      <h2 id="fH" style="font-size:calc(4.2*var(--u))">İSTANBUL FETHEDİLDİ!</h2>
+      <div class="desc" id="fDesc" style="max-width:calc(60*var(--u));text-align:center">21 yaşındaki Sultan II. Mehmed, 53 günlük kuşatmanın ardından şehre girdi ve bu zaferle “Fatih” unvanını aldı. Bir çağ kapandı, yeni bir çağ açıldı.</div>
       <div class="small" id="fScore"></div>
       <button class="btn lbBtn" style="background:#b3261e">TABLOYA YAZ</button>
       <button class="btn gold" id="bFMenu">SEVİYELER</button>
+      <button class="btn green" id="bFNext">YENİ SEFERLER ▶</button>
       <a class="btn green homeLink hm2" style="text-decoration:none;display:inline-flex;align-items:center">ANA MENÜ</a>
     </div>
   </div>
@@ -353,13 +370,80 @@ const LEVELS=[
   desc:'Theodosius Surları üç katmanlıdır: önde alçak bir duvar, ortada dış sur, en arkada devasa iç sur. Hepsini aş!',
   say:'Üç sur da düşecek!',
   build(L){const a=L.wall(960,2,3,'s');L.def(a.m(0));const b=L.wall(1100,4,8,'s',{bands:1});L.def(b.m(0));L.def(b.m(3));const c=L.wall(1320,5,14,'T',{bands:1});L.def(c.m(0));L.def(c.m(2));L.def(c.m(4));L.flag(c.g(1));}},
- {name:'Son Hücum',date:'29 Mayıs 1453',ammo:{n:5,b:2,f:2,s:2},
+ {name:'Son Hücum',date:'29 Mayıs 1453',finale:true,ammo:{n:5,b:2,f:2,s:2},
   desc:'Şafak sökmeden son hücum başladı. Aziz Romanos (Topkapı) kapısı önünde bütün toplar aynı anda gürlüyor. Bu sur düşerse İstanbul fethedilir!',
   say:'Ya ben İstanbul’u alırım, ya İstanbul beni!',
   build(L){const t1=L.tower(980,3,9),w1=L.wall(1120,4,7,'s',{bands:1}),t2=L.tower(1300,4,15,'T'),w2=L.wall(1460,5,11,'s',{bands:1}),t3=L.tower(1680,4,16,'T');
     L.def(t1.m(0));L.def(t1.m(2));L.def(w1.m(0));L.def(w1.m(3));L.def(t2.m(0));L.def(t2.m(3));L.def(w2.m(0));L.def(w2.m(4));L.def(t3.m(0));L.def(t3.m(3));
     L.flag(t2.g(1));L.flag(w2.g(2));L.flag(t3.g(1));}}
 ];
+
+/* =====================================================================
+   SEFERLER – 1453'ten sonraki kuşatmalar (otomatik üretilen seviyeler)
+   YENİ SEFER EKLEMEK: CHAPTERS listesine bir nesne ekle (n = seviye sayısı).
+   Seviyeler sabit bir tohumla üretilir; herkes aynı seviyeyi görür.
+   ===================================================================== */
+const CHAPTERS=[
+ {key:'fetih',name:'İstanbul’un Fethi',years:'6 Nisan – 29 Mayıs 1453'},
+ {key:'belgrad',name:'Belgrad Kuşatması',years:'Temmuz 1456',date:'Temmuz 1456',n:14,night:.12,windP:.4,wind:90,tstone:.45,wood:.35,
+  intro:'Fetihten üç yıl sonra Sultan Mehmed ordusunu Tuna kıyısındaki Belgrad kalesine götürdü. Kale, nehirlerle çevrili ve çok güçlüydü; tarihte bu kuşatma çok zorlu geçti. Bakalım sen başarabilecek misin?',
+  names:['Tuna Kıyısı','Sava Kapısı','Dış Sur','Hendek Burcu','Kale Kulesi','Nehir Burcu','Aşağı Kale','Yukarı Kale','Liman Kulesi','Gözcü Burcu','Kral Kapısı','Cephanelik','Su Kulesi','Son Burç']},
+ {key:'trabzon',name:'Trabzon Seferi',years:'1461',date:'Ağustos 1461',n:13,night:.15,windP:.35,wind:80,tstone:.5,wood:.25,
+  intro:'1461 yazında ordu sarp Karadeniz dağlarını aşarak Trabzon Rum İmparatorluğu’nun başkentine ulaştı. Şehir yüksek kayalıkların üstündeki surlarla korunuyordu.',
+  names:['Dağ Geçidi','Zağnos Burcu','Orta Hisar','Kayalık Sur','Deniz Kapısı','Saray Kulesi','Yukarı Hisar','Liman Suru','Kıble Kapısı','Güney Burcu','Kale İçi','Kuzey Kulesi','İmparator Kapısı']},
+ {key:'midilli',name:'Midilli Kuşatması',years:'1462',date:'Eylül 1462',n:13,night:.3,windP:.7,wind:140,tstone:.45,wood:.3,
+  intro:'Ege’deki Midilli adası, Cenevizli Gattilusio ailesinin elindeydi. Osmanlı donanması adayı kuşattı, toplar karaya çıkarılıp kale surlarına çevrildi. Adada deniz rüzgârı hiç dinmez!',
+  names:['Liman Kulesi','Deniz Suru','Rüzgâr Burcu','Kayalık Kale','Fener Kulesi','Dalgakıran','Ceneviz Kapısı','Kıyı Burcu','Kale Tepesi','Rıhtım Kulesi','Martı Burcu','Ada Hisarı','Son Kale']},
+ {key:'bosna',name:'Bosna Seferi',years:'1463',date:'Haziran 1463',n:14,night:.2,windP:.4,wind:100,tstone:.6,wood:.4,
+  intro:'1463’te ordu Bosna Krallığı’nın dağlardaki kalelerine yürüdü. Ormanlarla çevrili bu kaleler taş ve kalın kerestelerle yapılmıştı; ateşli gülleler burada çok işe yarar.',
+  names:['Orman Kalesi','Dağ Burcu','Ahşap Palanka','Nehir Kalesi','Kral Kulesi','Uçurum Suru','Köprü Kapısı','Yayla Hisarı','Kayın Burcu','Taş Kule','Kale Kapısı','Sis Burcu','Kartal Kulesi','Kral Hisarı']},
+ {key:'egriboz',name:'Eğriboz Kuşatması',years:'1470',date:'Temmuz 1470',n:13,night:.35,windP:.6,wind:130,tstone:.65,wood:.25,
+  intro:'Venedik’in en güçlü üssü olan Eğriboz adasına ulaşmak için gemilerden bir köprü kuruldu. Ada kalesinin kalın surları, Osmanlı topçularının en büyük sınavlarından biriydi.',
+  names:['Gemi Köprüsü','Venedik Suru','Kanal Kulesi','Arslan Burcu','Liman Kapısı','Kale Hendeği','Deniz Burcu','Mazgallı Sur','Köprü Kulesi','Doğu Burcu','Kumandan Kulesi','İç Hisar','Aziz Mark Kapısı']},
+ {key:'rodos',name:'Rodos Kuşatması',years:'1480',date:'Mayıs 1480',n:14,night:.3,windP:.65,wind:150,tstone:.85,wood:.15,
+  intro:'Sefer defterinin son sayfası: şövalyelerin efsanevi Rodos kalesi. Dünyanın en kalın surlarından biri; tarihte bu kuşatma da çok zorlu geçti. Gerçek bir topçubaşı olduğunu kanıtla!',
+  names:['Şövalye Suru','Aziz Nikola Kulesi','Liman Burcu','Yahudi Mahallesi Suru','Büyük Usta Sarayı','İtalya Burcu','Kayalık Hendek','Fransız Burcu','Deniz Kapısı','Bastiyon','Çifte Sur','Çan Kulesi','Usta Kulesi','Rodos’un Kalbi']}
+];
+const SAYS=['Topçular, nişan alın!','Bu sur da yıkılacak!','Sabırla, isabetle!','Haydi yiğitlerim!','Allah yardımcımız olsun!','Gülleleri hazırlayın!','Rüzgâra dikkat!','Kulenin dibine vurun!','Bir atışta iki kuş!','Şahi’yi doldurun!'];
+const LINES=['Kale komutanı teslim olmayı reddetti. Surları dövmeye başla!','Gözcüler yeni bir burç buldu. Mazgallardaki askerleri düşür.','Bu surlar daha kalın; gülleni akıllı kullan.','Gece gündüz top atışı sürüyor. Zayıf noktayı bul!','Kalenin bu yanı iki katlı. Alttan vurursan üstü de çöker.','Bayrakları indir, askerler dağılsın!','Rüzgâr yön değiştirdi, atışlarını ona göre ayarla.','Kale içinde son direniş başladı.'];
+function planLevel(ch,ci,i,g){const R=rng(g*7919+ci*131+13);const t=clamp(ci/7+i/ch.n*.6,0,1);
+  const k=Math.min(4,2+(t>.35?1:0)+(t>.7?1:0)+(R()<.3?1:0));const S=[];let x=960+R()*50,tg=0,hasW=false,hasT=false,maxRows=0;
+  for(let s=0;s<k;s++){let cols=2+Math.floor(R()*3);let type=pick2(R,t<.3?['wall','wall','tower','pal']:t<.65?['wall','tower','stack','gate','tower']:['tower','stack','gate','stack','wall']);
+    if(type==='gate'&&cols<3)cols=3;if(type==='stack'&&cols<3)cols=3;
+    if(x+cols*40>1880){if(x+80>1880)break;cols=Math.floor((1880-x)/40);if(cols<2)break;if(type==='gate'||type==='stack')type='wall';}
+    let rows=Math.round(3+t*9+R()*3);if(type==='pal')rows=Math.max(3,Math.min(6,rows-3));rows=Math.min(15,rows);if(s===0&&rows>10)rows-=3;
+    let mat=type==='pal'?'w':(R()<ch.tstone*t*1.4?'T':'s');if(mat==='w')hasW=true;if(mat==='T')hasT=true;if(type==='gate')hasW=true;maxRows=Math.max(maxRows,rows);
+    const defs=[0];if(cols>=3&&R()<.55+t*.4)defs.push(cols-1);if(cols>=4&&R()<t*.6)defs.push(Math.floor(cols/2));
+    const flag=(s===k-1||R()<.3)?Math.floor(R()*(cols-1)):-1;tg+=defs.length+(flag>=0?1:0);
+    S.push({type,x,cols,rows,mat,defs,flag});x+=cols*40+50+R()*80;}
+  const night=R()<ch.night,wind=R()<ch.windP?Math.round((R()*2-1)*ch.wind*(.45+t*.6)):0,cracked=hasT&&R()<.12;
+  let total=clamp(Math.ceil(tg*(.5-t*.15)+S.length*.3)+1+(Math.abs(wind)>90?1:0),3,8);const ammo={};
+  if(hasT||maxRows>11){ammo.b=1;total--;}if(hasW&&R()<.7){ammo.f=1;total--;}if(tg>=6&&R()<.6){ammo.s=1;total--;}ammo.n=Math.max(1,total);
+  return{S,night,wind,cracked,ammo,t};}
+function pick2(R,a){return a[Math.floor(R()*a.length)];}
+function buildPlan(L,P){for(const s of P.S){let w;
+  if(s.type==='pal')w=L.wall(s.x,s.cols,s.rows,'w',{crown:true});
+  else if(s.type==='tower')w=L.tower(s.x,s.cols,s.rows,s.mat);
+  else if(s.type==='stack'){L.wall(s.x,s.cols,Math.ceil(s.rows/2),s.mat,{bands:1,crown:false});w=L.tower(s.x+20,s.cols-1,Math.floor(s.rows/2)+2,s.mat);s._c=s.cols-1;}
+  else if(s.type==='gate')w=L.wall(s.x,s.cols,s.rows,'s',{bands:1,gate:{i0:1,i1:s.cols-2,rows:Math.min(3,s.rows-1)}});
+  else w=L.wall(s.x,s.cols,s.rows,s.mat,{bands:s.mat!=='w'});
+  const c=s._c||s.cols;const used=new Set();for(const d of s.defs){const m=Math.min(d,c-1);if(used.has(m))continue;used.add(m);L.def(w.m(m));}
+  if(s.flag>=0&&c>1)L.flag(w.g(Math.min(s.flag,c-2)));}}
+(function genChapters(){let g=LEVELS.length;
+  CHAPTERS.forEach((ch,ci)=>{if(ci===0){ch.from=0;ch.to=LEVELS.length-1;return;}ch.from=LEVELS.length;
+    for(let i=0;i<ch.n;i++,g++){const P=planLevel(ch,ci,i,g);const R=rng(g*31+7);
+      LEVELS.push({gen:true,chapter:ci,tough:1+P.t*.35,name:ch.names[i%ch.names.length],date:ch.date,ammo:P.ammo,wind:P.wind,night:P.night,cracked:P.cracked,
+        desc:i===0?ch.intro:pick2(R,LINES),tip:i===0?`YENİ SEFER: ${ch.name.toUpperCase()} — ${ch.n} seviye.`:undefined,say:pick2(R,SAYS),
+        finale2:ci===CHAPTERS.length-1&&i===ch.n-1,build(L){buildPlan(L,planLevel(ch,ci,i,LEVELS.indexOf(this)))}});}
+    ch.to=LEVELS.length-1;});})();
+const chapterOf=i=>CHAPTERS.findIndex(c=>i>=c.from&&i<=c.to);
+
+/* ---------------- ZORLUK ---------------- */
+const DIFF=[{name:'ACEMİ',d:'Bol gülle, kırılgan surlar, hafif rüzgâr',ammo:1,hp:.8,wind:.7,mult:.7,help:true,charge:1.3,col:'#2f6b3a'},
+ {name:'YENİÇERİ',d:'Dengeli – asıl oyun',ammo:0,hp:1,wind:1,mult:1,help:true,charge:1,col:'#c98a1c'},
+ {name:'PAŞA',d:'Az gülle, sağlam surlar, sert rüzgâr, nişan yardımı yok – puan ×1,5',ammo:-1,hp:1.3,wind:1.35,mult:1.5,help:false,charge:.7,col:'#b3261e'}];
+const D=()=>DIFF[clamp(save.diff??1,0,2)];
+function applyDiffAmmo(a){const d=D().ammo;a={...a};if(d>0)a.n=(a.n||0)+d;else if(d<0){if((a.n||0)>1)a.n--;else{for(const k of['s','f','b'])if((a[k]||0)>1){a[k]--;break;}}}return a;}
 
 /* ------------------------------ FİZİK ------------------------------ */
 const {Engine,Bodies,Body,Composite,Events,Sleeping,Vertices,Query}=Matter;
@@ -767,7 +851,7 @@ function fire(){if(state!=='play'||balls.length||!ammo[sel]||!canShoot())return;
   addP({k:'flash',x:mx,y:my,life:.14,t:0,s:70});sparks(mx,my,14);ring(mx,my,sel==='b'?90:60);for(let i=0;i<10;i++)addP({k:'smoke',x:PIV.x+rnd(-60,40),y:HILLY-4,vx:rnd(-120,120),vy:rnd(-40,-5),life:rnd(.8,1.4),t:0,s:rnd(8,16),col:'rgba(200,170,120,'});buzz(sel==='b'?60:30);
   if(Math.random()<.6)bubble(pick(['ATEŞ!','VUR!','HAYDİ!','AL SANA!','YA ALLAH!']),178,560,1.1);
   shotFired=true;lastShot=time;shotKills=0;hint=false;camMode='follow';loadAnim=2.2;stillT=0;if(!ammo[sel])autoSel();buildAmmoUI();}
-function addCharge(v){if(state!=='play')return;charge+=v;if(charge>=100){charge-=100;giveAmmo('CEPHANE GELDİ! +1 GÜLLE');}updateHUD();}
+function addCharge(v){if(state!=='play')return;charge+=v*D().charge;if(charge>=100){charge-=100;giveAmmo('CEPHANE GELDİ! +1 GÜLLE');}updateHUD();}
 function giveAmmo(msg){const k=(shotKills>=3&&lvl.ammo.b)?'b':'n';ammo[k]=(ammo[k]||0)+1;cartT=3.2;pop(msg,PIV.x+40,PIV.y-170,.85,'#7dff9a');bubble(pick(['GÜLLE GELDİ!','BARUT HAZIR!','DOLDURUN!']),178,560,1.4);
   if(AC&&soundMode<2){tone(660,880,.15,.12,'square');tone(880,1320,.2,.1,'square',.12);}if(!ammo[sel])sel=k;buildAmmoUI();}
 function canShoot(){return !balls.length&&(stillT>.45||time-lastShot>6);}
@@ -880,7 +964,7 @@ addEventListener('resize',resize);
 function setWorld(){ctx.setTransform(S*cam.z,0,0,S*cam.z,S*(VW/2-cam.x*cam.z),S*(VH/2-cam.y*cam.z));}
 function drawLayer(Lr){const kl=lerp(1,cam.z,Lr.f);const horizonW=(600-cam.y)*cam.z+VH/2;const hy=lerp(VH*.5,horizonW,Lr.f);
   const sx=(BG.LX0-cam.x*Lr.f)*kl+VW/2,sy=hy-Lr.B*kl;ctx.setTransform(S*kl,0,0,S*kl,S*sx,S*sy);ctx.drawImage(Lr.img,0,0);}
-function simPath(){const pts=[];const A=AMMO[sel];const full=save.help;let x=PIV.x+Math.cos(aim.a)*BL,y=PIV.y+Math.sin(aim.a)*BL,vx=Math.cos(aim.a)*aim.p,vy=Math.sin(aim.a)*aim.p;const h=1/60;let hitP=null,hitT=null,split=null;
+function simPath(){const pts=[];const A=AMMO[sel];const full=save.help&&D().help;let x=PIV.x+Math.cos(aim.a)*BL,y=PIV.y+Math.sin(aim.a)*BL,vx=Math.cos(aim.a)*aim.p,vy=Math.sin(aim.a)*aim.p;const h=1/60;let hitP=null,hitT=null,split=null;
   const N=full?420:40;
   for(let i=0;i<N;i++){vy+=GPX*h;vx+=wind*h;x+=vx*h;y+=vy*h;
     if(A.split&&!split&&vy>0)split=[x,y];
@@ -1039,7 +1123,7 @@ function drawBubbles(){for(const b of bubbles){const a=b.t<.15?b.t/.15:b.t>b.lif
 /* ------------------------------ ARAYÜZ ------------------------------ */
 const screens=['scMenu','scLevels','scIntro','scWin','scLose','scFinal'];
 function show(id){screens.forEach(s=>$(s).classList.toggle('hidden',s!==id));const inGame=id===null;['hud','ammo','fireBtn'].forEach(s=>$(s).classList.toggle('hidden',!inGame||bonusActive));$('bonusCtl').classList.toggle('hidden',!(inGame&&bonusActive));if(bonusActive&&inGame){$('hud').classList.remove('hidden');$('ammo').classList.add('hidden');}}
-function updateHUD(){if(!lvl)return;$('hCharge').classList.toggle('hidden',!!bonusActive);$('chFill').style.width=Math.min(100,charge)+'%';if(bonusActive){$('hLvl').innerHTML=`BONUS · <b>${lvl.name.toUpperCase()}</b>`;$('hTg').textContent=`${BN?BN.delivered:0}/3 GEMİ`;$('hWind').innerHTML='ŞAFAĞA: <b>'+(BN?Math.max(0,Math.ceil(BN.timeLeft)):0)+' sn</b>';$('hScore').textContent=score;return;}$('hLvl').innerHTML=`SEVİYE ${lvlIdx+1} · <b>${lvl.name.toUpperCase()}</b>`;$('hTg').textContent=targets().length;$('hScore').textContent=score;
+function updateHUD(){if(!lvl)return;$('hCharge').classList.toggle('hidden',!!bonusActive);$('chFill').style.width=Math.min(100,charge)+'%';if(bonusActive){$('hLvl').innerHTML=`BONUS · <b>${lvl.name.toUpperCase()}</b>`;$('hTg').textContent=`${BN?BN.delivered:0}/3 GEMİ`;$('hWind').innerHTML='ŞAFAĞA: <b>'+(BN?Math.max(0,Math.ceil(BN.timeLeft)):0)+' sn</b>';$('hScore').textContent=score;return;}$('hLvl').innerHTML=`${lvlIdx+1}/${LEVELS.length} · <b>${lvl.name.toUpperCase()}</b> · ${D().name}`;$('hTg').textContent=targets().length;$('hScore').textContent=score;
   const w=wind,m=Math.abs(w);$('hWind').innerHTML='RÜZGAR: '+(m<1?'YOK':`<b>${(w<0?'◀':'▶').repeat(m>140?3:m>80?2:1)}</b>`);}
 function buildAmmoUI(){const el=$('ammo');el.innerHTML='';for(const k of['n','b','f','s']){if(!(k in ammo))continue;const A=AMMO[k],b=document.createElement('button');
   b.className='am'+(k===sel?' sel':'')+(ammo[k]?'':' empty');
@@ -1047,9 +1131,17 @@ function buildAmmoUI(){const el=$('ammo');el.innerHTML='';for(const k of['n','b'
   b.innerHTML=`<i style="background:${bgc};${k==='b'?'width:calc(2.5*var(--u));height:calc(2.5*var(--u))':''}"></i>${A.name}<span class="cnt">×${ammo[k]}</span>`;
   b.onclick=e=>{e.stopPropagation();if(ammo[k]){sel=k;buildAmmoUI();}};el.appendChild(b);}
   updateHUD();}
-function buildLevels(){const g=$('lvgrid');g.innerHTML='';LEVELS.forEach((l,i)=>{const b=document.createElement('button');const lock=i>=save.unlocked;b.className='lv'+(lock?' lock':'')+(l.bonus?' bonus':'');
-  const st=save.stars[i]||0;b.innerHTML=lock?OI.kilit+'<em>'+l.date.replace(' 1453','')+'</em>':`${l.bonus?OI.gemi+'BONUS':i+1}<em>${l.date.replace(' 1453','').replace(' gecesi','')}</em><small>${'★'.repeat(st)}${'☆'.repeat(3-st)}</small>`;b.title=l.name;
-  if(!lock)b.onclick=()=>startLevel(i);g.appendChild(b);});}
+let curCh=null;
+function buildLevels(){if(curCh===null)curCh=Math.max(0,chapterOf(Math.min(save.unlocked-1,LEVELS.length-1)));
+  const tabs=$('chTabs');tabs.innerHTML='';CHAPTERS.forEach((c,ci)=>{const b=document.createElement('button');const lock=c.from>=save.unlocked;let st=0;for(let i=c.from;i<=c.to;i++)st+=save.stars[i]||0;
+    b.className='cht'+(ci===curCh?' on':'')+(lock?' lock':'');b.innerHTML=`${lock?OI.kilit:''}<span>${c.name}</span><small>${c.years} · ★${st}/${(c.to-c.from+1)*3}</small>`;
+    if(!lock)b.onclick=()=>{curCh=ci;buildLevels();};tabs.appendChild(b);});
+  const ch=CHAPTERS[curCh];$('lvOrn').textContent=ch.years.toUpperCase();
+  const g=$('lvgrid');g.innerHTML='';for(let i=ch.from;i<=ch.to;i++){const l=LEVELS[i];const b=document.createElement('button');const lock=i>=save.unlocked;b.className='lv'+(lock?' lock':'')+(l.bonus?' bonus':'');
+  const st=save.stars[i]||0;const sub=l.gen?l.name:l.date.replace(' 1453','').replace(' gecesi','');b.innerHTML=lock?OI.kilit+'<em>'+sub+'</em>':`${l.bonus?OI.gemi+'BONUS':i+1}<em>${sub}</em><small>${'★'.repeat(st)}${'☆'.repeat(3-st)}</small>`;b.title=l.name;
+  if(!lock)b.onclick=()=>startLevel(i);g.appendChild(b);}
+  buildDiff($('lvDiff'));}
+function buildDiff(el){if(!el)return;el.innerHTML='';DIFF.forEach((d,i)=>{const b=document.createElement('button');b.className='dfb'+(i===(save.diff??1)?' on':'');b.style.setProperty('--dc',d.col);b.innerHTML=`<b>${d.name}</b><small>${d.d}</small>`;b.onclick=e=>{e.stopPropagation();save.diff=i;persist();document.querySelectorAll('.dfWrap').forEach(buildDiff);applyHelp&&applyHelp();};el.appendChild(b);});}
 function drawPortrait(){const p=$('portrait'),g=p.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,340,420);
   if(ART.pok){g.drawImage(ART.pt,0,0,340,420);if(lvl&&lvl.night){g.fillStyle='rgba(10,20,70,.45)';g.fillRect(0,0,340,420);}g.strokeStyle=INK;g.lineWidth=8;g.strokeRect(0,0,340,420);return;}
   const night=lvl&&lvl.night;const gr=g.createLinearGradient(0,0,0,420);if(night){gr.addColorStop(0,'#0b1430');gr.addColorStop(1,'#3b477a');}else{gr.addColorStop(0,'#ee8f4f');gr.addColorStop(1,'#fde3a8');}g.fillStyle=gr;g.fillRect(0,0,340,420);
@@ -1059,23 +1151,29 @@ function drawPortrait(){const p=$('portrait'),g=p.getContext('2d');g.setTransfor
   drawSultan(g,175,560,5.2,false,0);
   g.strokeStyle=INK;g.lineWidth=8;g.strokeRect(0,0,340,420);}
 function startLevel(i){endFinale();initAudio();lvlIdx=i;lvl=LEVELS[i];nightMode=!!lvl.night;bonusActive=false;$('bonusCtl').classList.add('hidden');if(lvl.bonus){startBonus();return;}applySound();initWorld();lvl.build(L);
+  {const hm=D().hp*(lvl.tough||1);if(hm!==1)for(const b of bodies)if(b.gd.kind==='blk'){b.gd.max=Math.max(1,b.gd.max*hm);b.gd.hp=b.gd.max;}}
   if(lvl.cracked)for(const b of bodies)if(b.gd.kind==='blk'&&(b.gd.mat==='s'||b.gd.mat==='T')){b.gd.max=Math.ceil(b.gd.max*.45);b.gd.hp=b.gd.max;b.gd.crack=mkCrack(b.gd.w,b.gd.h,1);}
-  ammo={...lvl.ammo};sel='n';if(!ammo[sel])autoSel();if(i===5)sel='b';if(i===6)sel='f';if(i===7)sel='s';
-  wind=lvl.wind||0;charge=0;cartT=0;decals=[];lastPath=[];recPath=null;parts=[];pops=[];bubbles=[];score=0;shotFired=false;endTimer=0;hint=true;stillT=1;lastShot=-99;grace=time+.6;slowT=0;timeScale=1;
+  ammo=applyDiffAmmo(lvl.ammo);sel='n';if(!ammo[sel])autoSel();if(i===5)sel='b';if(i===6)sel='f';if(i===7)sel='s';
+  wind=Math.round((lvl.wind||0)*D().wind);charge=0;cartT=0;decals=[];lastPath=[];recPath=null;parts=[];pops=[];bubbles=[];score=0;shotFired=false;endTimer=0;hint=true;stillT=1;lastShot=-99;grace=time+.6;slowT=0;timeScale=1;
   BG=getBG(lvl);computeAimView();cam={...aimView};camMode='aim';
   $('iDate').textContent=lvl.date;$('iName').textContent=`${i+1}. ${lvl.name}`;$('iDesc').textContent=lvl.desc;
   $('iTip').classList.toggle('hidden',!lvl.tip);$('iTip').textContent=lvl.tip||'';
   $('iAmmo').innerHTML='CEPHANE: '+Object.keys(ammo).map(k=>`${AMMO[k].name} <b style="color:#b3261e">×${ammo[k]}</b>`).join(' · ')+(wind?` · RÜZGAR: <b style="color:#b3261e">${wind<0?'KARŞIDAN':'ARKADAN'}</b>`:'');
   drawPortrait();buildAmmoUI();state='intro';show('scIntro');}
 function beginPlay(){if(lvl.bonus){beginBonus();return;}state='play';show(null);grace=time+.4;bubble(lvl.say,62,HILLY-130,3.2);sfx('whoosh');}
-function winLevel(){if(state!=='play')return;state='win';const rem=totalAmmo();const stars=rem>=2?3:rem===1?2:1;score+=rem*500;
+function winLevel(){if(state!=='play')return;state='win';const rem=totalAmmo();const stars=rem>=2?3:rem===1?2:1;score+=rem*500;score=Math.round(score*D().mult);
   save.stars[lvlIdx]=Math.max(save.stars[lvlIdx]||0,stars);save.best=save.best||[];save.best[lvlIdx]=Math.max(save.best[lvlIdx]||0,score);save.unlocked=Math.max(save.unlocked,Math.min(LEVELS.length,lvlIdx+2));persist();
   fanfare();bubbles=[];for(let i=0;i<5;i++)setTimeout(()=>addP({k:'rocket',x:rnd(aimView.x-200,structMax),y:GROUND-20,vx:rnd(-50,50),vy:rnd(-700,-520),life:rnd(.8,1.1),t:0}),i*160);buzz([40,60,40]);bubble(pick(['MAŞALLAH!','AFERİN!','HELAL OLSUN!']),62,HILLY-130,3);
-  setTimeout(()=>{if(lvlIdx===LEVELS.length-1){startFinale();return;}
+  setTimeout(()=>{if(lvl.finale||lvl.finale2){startFinale(!!lvl.finale2);return;}
     $('wTitle').textContent=pick(['SUR YIKILDI!','ZAFER!','HARİKA ATIŞ!']);
     $('wStars').innerHTML=[0,1,2].map(i=>`<span class="${i<stars?'':'off'}">★</span>`).join('');$('wScore').textContent=`PUAN: ${score}  ·  KALAN GÜLLE: ${rem}`;show('scWin');},800);}
 let FP=[];
-function startFinale(){state='finale';finalT=0;FP=[];$('fScore').textContent='SON PUAN: '+score;show('scFinal');$('scFinal').classList.add('fin');
+let finTitle='FETİH MÜBAREK OLSUN!';
+function startFinale(big){finTitle=big?'TOPÇUBAŞI OLDUN!':'FETİH MÜBAREK OLSUN!';
+  $('fCap').textContent=big?'1453 – 1480':'29 Mayıs 1453';$('fH').textContent=big?'BÜTÜN SEFERLER TAMAM!':'İSTANBUL FETHEDİLDİ!';
+  $('fDesc').textContent=big?'İstanbul’dan Rodos’a kadar 100 kuşatmanın hepsini geçtin. Osmanlı topçu ocağı seni Topçubaşı ilan etti! Yeni seferler yakında…':'21 yaşındaki Sultan II. Mehmed, 53 günlük kuşatmanın ardından şehre girdi ve bu zaferle “Fatih” unvanını aldı. Bir çağ kapandı, yeni bir çağ açıldı.';
+  $('bFNext').classList.toggle('hidden',big||lvlIdx+1>=LEVELS.length);
+  state='finale';finalT=0;FP=[];$('fScore').textContent='SON PUAN: '+score;show('scFinal');$('scFinal').classList.add('fin');
   song='fetih';musStep=0;if(AC)musNext=AC.currentTime+.05;applySound();buzz([80,60,80,60,200]);}
 function endFinale(){if(song!=='march'){song='march';musStep=0;}$('scFinal').classList.remove('fin');if(state==='finale')state='levels';applySound();}
 function finUpdate(dt){finalT+=dt;
@@ -1103,7 +1201,7 @@ function drawFinale(){ctx.setTransform(S,0,0,S,0,0);const T=finalT;
   const ty=VH*.1,ap=Math.min(1,T/1.2);ctx.save();ctx.globalAlpha=ap;ctx.translate(VW*.68,ty);const sc=(.8+ap*.2+Math.sin(T*2)*.015)*.78;ctx.scale(sc,sc);
   ctx.fillStyle='#b3261e';ctx.strokeStyle=INK;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-340,-42);ctx.lineTo(340,-42);ctx.lineTo(305,0);ctx.lineTo(340,42);ctx.lineTo(-340,42);ctx.lineTo(-305,0);ctx.closePath();ctx.fill();ctx.stroke();
   ctx.strokeStyle='#f2b632';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-320,-32);ctx.lineTo(320,-32);ctx.moveTo(-320,32);ctx.lineTo(320,32);ctx.stroke();
-  ctx.font='54px Bangers, Impact';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=8;ctx.strokeStyle=INK;ctx.strokeText('FETİH MÜBAREK OLSUN!',0,3);ctx.fillStyle='#ffd93b';ctx.fillText('FETİH MÜBAREK OLSUN!',0,3);ctx.restore();
+  ctx.font='54px Bangers, Impact';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=8;ctx.strokeStyle=INK;ctx.strokeText(finTitle,0,3);ctx.fillStyle='#ffd93b';ctx.fillText(finTitle,0,3);ctx.restore();
   if(BG)ctx.drawImage(BG.vig,0,0,VW,VH);
   ctx.strokeStyle=INK;ctx.lineWidth=14;ctx.strokeRect(0,0,VW,VH);ctx.strokeStyle='#f2b632';ctx.lineWidth=3;ctx.strokeRect(10,10,VW-20,VH-20);}
 
@@ -1116,13 +1214,13 @@ $('bPlay').onclick=()=>{initAudio();goFull();startLevel(Math.min(save.unlocked-1
 $('bLevels').onclick=()=>{initAudio();toMenuLevels();};
 $('bBack').onclick=()=>{state='menu';show('scMenu');};
 $('bStart').onclick=beginPlay;
-$('bNext').onclick=()=>startLevel(Math.min(lvlIdx+1,LEVELS.length-1));
+$('bNext').onclick=()=>{if(lvlIdx+1<LEVELS.length)startLevel(lvlIdx+1);else toMenuLevels();};
 $('bWRetry').onclick=()=>startLevel(lvlIdx);$('bLRetry').onclick=()=>startLevel(lvlIdx);
-$('bLMenu').onclick=toMenuLevels;$('bFMenu').onclick=toMenuLevels;
+$('bFNext').onclick=()=>startLevel(lvlIdx+1);$('bLMenu').onclick=toMenuLevels;$('bFMenu').onclick=toMenuLevels;
 $('bRetry').onclick=e=>{e.stopPropagation();startLevel(lvlIdx);};
 $('bMenu').onclick=e=>{e.stopPropagation();toMenuLevels();};
 $('bMute').onclick=e=>{e.stopPropagation();initAudio();soundMode=(soundMode+1)%3;applySound();};
-function applyHelp(){$('bHelp').classList.toggle('off',!save.help);setIco($('bHelp'),'aim',save.help?'YARDIM':'KAPALI');}applyHelp();
+function applyHelp(){const on=save.help&&D().help;$('bHelp').classList.toggle('off',!on);setIco($('bHelp'),'aim',!D().help?'PAŞA: YOK':save.help?'YARDIM':'KAPALI');}applyHelp();
 $('bHelp').onclick=e=>{e.stopPropagation();save.help=!save.help;persist();applyHelp();};
 $('fireBtn').onclick=e=>{e.stopPropagation();fire();};
 
@@ -1301,13 +1399,14 @@ $('bGrease').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDef
 const HOME=/xenosmart\./.test(location.hostname)?'../':'https://xenosmart.de/spiel/';document.querySelectorAll('.homeLink').forEach(a=>{a.href=HOME;a.addEventListener('pointerdown',e=>e.stopPropagation());});
 function lbTotal(){return (save.best||[]).reduce((a,v)=>a+(v||0),0);}
 function openLB(){if(!window.BukoLB)return;BukoLB.open({game:'1453',score:lbTotal,unit:'puan',theme:'ott'});}
-function initIcons(){setIco($('hLB'),'kupa');document.querySelectorAll('.lbBtn').forEach(b=>{b.innerHTML=OI.kupa+'<span class="ol">'+b.textContent+'</span>';b.style.display='inline-flex';b.style.alignItems='center';b.addEventListener('click',e=>{e.stopPropagation();openLB();});});
+function initDiffUI(){buildDiff($('mDiff'));}
+function initIcons(){initDiffUI();setIco($('hLB'),'kupa');document.querySelectorAll('.lbBtn').forEach(b=>{b.innerHTML=OI.kupa+'<span class="ol">'+b.textContent+'</span>';b.style.display='inline-flex';b.style.alignItems='center';b.addEventListener('click',e=>{e.stopPropagation();openLB();});});
   $('hLB').addEventListener('click',e=>{e.stopPropagation();openLB();});setIco($('hHome'),'otag');setIco($('bRetry'),'tekrar');setIco($('bMenu'),'ferman');setIco($('fireBtn'),'top','ATEŞ!');setIco($('bBrake'),'fren','FREN');setIco($('bPull'),'cek','ÇEK!');setIco($('bGrease'),'yag','YAĞLA ×<span id="gCnt">4</span>');
   document.querySelectorAll('.hm2').forEach(a=>{a.innerHTML=OI.otag+(a.textContent?'<span class="ol">'+a.textContent+'</span>':'');});applyHelp();if(!AC)setIco($('bMute'),'davul','MARŞ');}
 initIcons();
 function boot(){if(typeof Matter==='undefined'){$('loading').textContent='Fizik motoru yüklenemedi. Sayfayı yenile.';return;}
   $('loading').remove();resize();
-  lvl=LEVELS[LEVELS.length-1];initWorld();lvl.build(L);BG=getBG(lvl);computeAimView();cam={...aimView};lvl=null;
+  lvl=LEVELS.find(l=>l.finale)||LEVELS[0];initWorld();lvl.build(L);BG=getBG(lvl);computeAimView();cam={...aimView};lvl=null;
   let last=performance.now();
   function loop(now){const dt=Math.min(.033,(now-last)/1000);last=now;update(dt);draw();requestAnimationFrame(loop);}
   requestAnimationFrame(loop);}
