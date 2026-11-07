@@ -7,6 +7,11 @@
 <link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#05040c">
 <style>
+@font-face{font-family:'Orbitron';font-weight:900;font-display:swap;src:url(fonts/orbitron-900.woff2) format('woff2')}
+@font-face{font-family:'Russo One';font-display:swap;src:url(fonts/russo-one-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Russo One';font-display:swap;src:url(fonts/russo-one-latin-ext.woff2) format('woff2');unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+</style>
+<style>
   html,body{margin:0;height:100%;background:#05040c;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#fff;touch-action:manipulation;user-select:none;-webkit-user-select:none}
   #wrap{position:relative;width:100%;height:100%;max-width:520px;margin:0 auto}
   canvas{display:block;width:100%;height:100%}
@@ -14,15 +19,22 @@
   .hud .mid{display:flex;gap:6px}
   .hud .box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:5px 10px;min-width:58px;text-align:center;backdrop-filter:blur(2px)}
   .hud .lbl{font-size:10px;opacity:.7;letter-spacing:.08em;text-transform:uppercase}
-  .hud .val{font-size:20px;font-weight:800}
+  .hud .val{font-size:21px;font-weight:400;font-family:'Russo One',system-ui,sans-serif;letter-spacing:.02em}
+  .hud .lbl,.big,.lv,.tg,.homeb,.row b,.step b{font-family:'Russo One',system-ui,sans-serif;font-weight:400!important;letter-spacing:.04em}
   .ib{pointer-events:auto;width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
   .ib:active{transform:scale(.92)}
   #bRestart{position:absolute;right:12px;bottom:14px}
   .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(5,4,12,.86);backdrop-filter:blur(4px);text-align:center;padding:18px;box-sizing:border-box;overflow-y:auto}
   .overlay.hidden{display:none}
-  .title{font-size:46px;font-weight:900;letter-spacing:.02em;background:linear-gradient(90deg,#00f0ff,#ff3df2,#ffe14d,#00f0ff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px rgba(255,61,242,.5));margin:0;animation:shine 4s linear infinite}
+  .title{font-family:'Russo One',system-ui,sans-serif;font-size:42px;font-weight:400;letter-spacing:.05em;background:linear-gradient(180deg,#ffffff 0%,#dfe6ff 38%,#7c86c4 52%,#e9edff 66%,#9aa3dd 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:1.2px rgba(10,8,40,.9);filter:drop-shadow(0 3px 0 #1a1440) drop-shadow(0 0 14px rgba(0,240,255,.55));margin:0}
+  #logo{width:min(94vw,470px);height:auto;display:block;margin:2px auto 0;overflow:visible}
+  #logo .gearSpin{transform-origin:center;transform-box:fill-box;animation:gspin 6s linear infinite}
+  @keyframes gspin{to{transform:rotate(360deg)}}
+  #logo .sweep{animation:sweep 3.2s ease-in-out infinite}
+  @keyframes sweep{0%{transform:translateX(-700px)}60%,100%{transform:translateX(1100px)}}
   @keyframes shine{to{background-position:300% 0}}
   .homeb{position:absolute;left:12px;top:12px;pointer-events:auto;text-decoration:none;color:#fff;font-weight:800;font-size:14px;padding:9px 13px;border-radius:12px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.22)}
+  .plate{font-family:'Russo One',system-ui,sans-serif;font-size:13px;letter-spacing:.42em;padding:5px 14px 5px 20px;margin:2px 0 4px;border-radius:8px;color:#cfe9ff;background:linear-gradient(180deg,#2c3166,#151536);border:1px solid #5b66b8;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 0 14px rgba(0,240,255,.25)}
   .mascot{font-size:58px;animation:bob 1.6s ease-in-out infinite;filter:drop-shadow(0 0 14px rgba(93,255,122,.6))}
   @keyframes bob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-10px) rotate(6deg)}}
   .sub{opacity:.85;margin:6px 0 14px;font-size:16px}
@@ -70,7 +82,8 @@
   <div class="overlay" id="oStart">
     <a class="homeb" href="index.html" id="bHome">🏠 Buko Games</a>
     <div class="mascot">🦎</div>
-    <h1 class="title" id="tName">MECHABLOCK</h1>
+    <h1 style="margin:0"><svg id="logo" viewBox="0 40 1000 175" role="img" aria-label="MechaBlock"></svg><span id="tName" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">MechaBlock</span></h1>
+    <div class="plate">⚙ BUKO GAMES ⚙</div>
     <div class="sub" id="tSub"></div>
     <div class="how" id="tHow"></div>
     <button class="big" id="bPlay">OYNA</button>
@@ -514,13 +527,13 @@ function draw(t){
     drawPieceFlat(next,52,launchY,size*.6,.8);
   }
   if(state==="play"&&opts.coach&&levelNo<=10) drawCoachUI(t,launchY,size);
-  if(combo>1){ ctx.font=`900 ${20+pulse*4}px system-ui`; ctx.textAlign="center"; const cy=CY-RB-32;
+  if(combo>1){ ctx.font=`${20+pulse*4}px "Russo One", system-ui`; ctx.textAlign="center"; const cy=CY-RB-32;
     const cgr=ctx.createLinearGradient(CX-70,0,CX+70,0); cgr.addColorStop(0,"#ffe14d"); cgr.addColorStop(.5,fever?"#ff3df2":"#ff9e3d"); cgr.addColorStop(1,"#ffe14d");
     ctx.lineWidth=4; ctx.strokeStyle="rgba(0,0,0,.5)"; ctx.strokeText("COMBO x"+combo,CX,cy); ctx.fillStyle=cgr; ctx.fillText("COMBO x"+combo,CX,cy); }
 
   for(const p of particles){ ctx.globalAlpha=Math.max(0,p.life); ctx.fillStyle=p.c; if(opts.fx){ctx.shadowColor=p.c; ctx.shadowBlur=8;} ctx.beginPath(); ctx.arc(p.x,p.y,p.r*(p.sq?1:Math.max(.3,p.life)),0,Math.PI*2); ctx.fill(); }
   ctx.globalAlpha=1; ctx.shadowBlur=0;
-  for(const f of floaters){ ctx.globalAlpha=Math.max(0,Math.min(1,f.life)); const s=f.size*(1+Math.max(0,f.life-1.1)*1.5); ctx.font=`900 ${s}px system-ui`; ctx.textAlign="center";
+  for(const f of floaters){ ctx.globalAlpha=Math.max(0,Math.min(1,f.life)); const s=f.size*(1+Math.max(0,f.life-1.1)*1.5); ctx.font=`${s}px "Russo One", system-ui`; ctx.textAlign="center";
     ctx.lineWidth=4; ctx.strokeStyle="rgba(0,0,0,.45)"; ctx.strokeText(f.txt,f.x,f.y); ctx.fillStyle=f.c; if(opts.fx){ctx.shadowColor=f.c; ctx.shadowBlur=18;} ctx.fillText(f.txt,f.x,f.y); ctx.shadowBlur=0; }
   ctx.globalAlpha=1;
   ctx.restore();
@@ -564,7 +577,7 @@ function drawCoachUI(t,launchY,size){
   }
   if(!key) return;
   const txt=L()[key];
-  ctx.font="700 15px system-ui";
+  ctx.font="15px \"Russo One\", system-ui";
   const maxW=W-130, lines=wrapText(txt,maxW-20), bh=16+lines.length*19, bw=Math.min(maxW,Math.max(...lines.map(l=>ctx.measureText(l).width))+28);
   const bx=CX-bw/2, by=H-bh-12;
   const good=key==="c_now";
@@ -695,7 +708,7 @@ function loop(t){
 function applyLang(){
   const t=L();
   $("lScore").textContent=t.score; $("lLevel").textContent=t.level; $("lGoal").textContent=t.goal;
-  $("tName").textContent=t.name.toUpperCase(); document.title=t.name+" – Buko Games";
+  document.title=t.name+" · Buko Games";
   $("tSub").textContent=t.sub; $("tPause").textContent=t.pause; $("bResume").textContent=t.resume;
   ["bMenu1","bMenu2","bMenu3"].forEach(id=>$(id).textContent=t.menu);
   $("bRestart2").textContent=t.restart; $("bSet1").textContent=t.settings; $("bSet2").textContent=t.settings;
@@ -764,6 +777,75 @@ window.addEventListener("keydown",e=>{
 });
 document.addEventListener("visibilitychange",()=>{ if(document.hidden){ if(state==="play") pauseGame(); else musicStop(); } });
 
+
+// ================= MechaBlock-Logo (Chrom-Schrift, Zahnrad als „O“) =================
+function buildLogo(){
+  const svg=document.getElementById("logo"); if(!svg) return;
+  const NS="http://www.w3.org/2000/svg";
+  const teeth=12, R1=70, R2=86, cx=0, cy=0; let gp="";
+  for(let i=0;i<teeth;i++){ const a0=(i/teeth)*Math.PI*2, a1=a0+Math.PI/teeth*0.45, a2=a0+Math.PI/teeth*1.0, a3=a0+Math.PI/teeth*1.55;
+    const P=(r,a)=>(cx+Math.cos(a)*r).toFixed(1)+","+(cy+Math.sin(a)*r).toFixed(1);
+    gp+=(i?"L":"M")+P(R1,a0)+"L"+P(R2,a1)+"L"+P(R2,a2)+"L"+P(R1,a3); }
+  gp+="Z";
+  const sec=(c,a0,a1)=>{ const P=(r,a)=>(Math.cos(a)*r).toFixed(1)+","+(Math.sin(a)*r).toFixed(1); return `<path d="M${P(24,a0)}L${P(58,a0)}A58 58 0 0 1 ${P(58,a1)}L${P(24,a1)}A24 24 0 0 0 ${P(24,a0)}Z" fill="${c}" stroke="#ffffff" stroke-opacity=".7" stroke-width="2"/>`; };
+  const Q=Math.PI/2, gems=["#00f0ff","#ff3df2","#ffe14d","#5dff7a"].map((c,i)=>sec(`url(#gem${i})`,i*Q-Q/2+0.06,(i+1)*Q-Q/2-0.06)).join("");
+  svg.innerHTML=`
+  <defs>
+    <linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".30" stop-color="#e6ebff"/><stop offset=".47" stop-color="#8b93cc"/>
+      <stop offset=".50" stop-color="#3b3f78"/><stop offset=".56" stop-color="#c9d1ff"/><stop offset=".80" stop-color="#f4f6ff"/><stop offset="1" stop-color="#8f97d6"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00f0ff"/><stop offset=".5" stop-color="#ff3df2"/><stop offset="1" stop-color="#ffe14d"/></linearGradient>
+    <linearGradient id="gearMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2f4ff"/><stop offset=".45" stop-color="#7a82bd"/><stop offset=".6" stop-color="#d4daff"/><stop offset="1" stop-color="#3b3f78"/></linearGradient>
+    ${["#00f0ff","#ff3df2","#ffe14d","#5dff7a"].map((c,i)=>`<radialGradient id="gem${i}" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ffffff"/><stop offset=".25" stop-color="${c}"/><stop offset="1" stop-color="${c}" stop-opacity=".75"/></radialGradient>`).join("")}
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <filter id="glow" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
+    <clipPath id="txtClip"></clipPath>
+  </defs>
+  <g id="lg"></g>`;
+  const lg=svg.querySelector("#lg");
+  const mk=(tag,attrs,txt)=>{ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(txt!=null) e.textContent=txt; return e; };
+  const FS=150, base=172, font="Orbitron, 'Russo One', system-ui, sans-serif";
+  // Breiten messen
+  const probe=mk("text",{x:0,y:base,"font-family":font,"font-weight":"900","font-size":FS,"letter-spacing":"4"},"MECHABL"); lg.appendChild(probe);
+  const w1=probe.getComputedTextLength(); probe.textContent="CK"; const w2=probe.getComputedTextLength(); lg.removeChild(probe);
+  const GS=.74, gearW=2*R2*GS+26, total=w1+gearW+w2, sc=Math.min(1,960/total), x0=(1000-total*sc)/2;
+  const g=mk("g",{transform:`translate(${x0.toFixed(1)} 0) scale(${sc.toFixed(3)})`}); lg.appendChild(g);
+  const gx=w1+gearW/2, gy=base-FS*0.36;
+  const words=[["MECHABL",0],["CK",w1+gearW]];
+  const addText=(attrs)=>words.forEach(([t,x])=>g.appendChild(mk("text",Object.assign({x,y:base,"font-family":font,"font-weight":"900","font-size":FS,"letter-spacing":"4"},attrs),t)));
+  // Neon-Glow
+  addText({fill:"url(#edge)",filter:"url(#glow)",opacity:".75"});
+  // 3D-Tiefe
+  for(let i=8;i>=1;i--){ const t=mk("g",{transform:`translate(${i*0.9} ${i*1.4})`}); g.appendChild(t);
+    words.forEach(([w,x])=>t.appendChild(mk("text",{x,y:base,"font-family":font,"font-weight":"900","font-size":FS,"letter-spacing":"4",fill:i>6?"#07061a":"#1d1a52"},w))); }
+  // Chrom + Kante
+  addText({fill:"url(#chrome)",stroke:"#0b0828","stroke-width":"3.5","paint-order":"stroke"});
+  addText({fill:"none",stroke:"url(#edge)","stroke-width":"1.6",opacity:".9"});
+  // Glanz-Streifen nur über den Buchstaben
+  const clip=svg.querySelector("#txtClip");
+  words.forEach(([w,x])=>clip.appendChild(mk("text",{x:x0+x*sc,y:base,"font-family":font,"font-weight":"900","font-size":FS*sc,"letter-spacing":4*sc},w)));
+  clip.querySelectorAll("text").forEach(t=>t.setAttribute("transform",`translate(0 ${(base-base*sc).toFixed(1)}) scale(1)`));
+  // (Clip-Texte werden unten genau so wie die Gruppe transformiert)
+  clip.innerHTML=""; words.forEach(([w,x])=>clip.appendChild(mk("text",{x,y:base,"font-family":font,"font-weight":"900","font-size":FS,"letter-spacing":"4",transform:`translate(${x0.toFixed(1)} 0) scale(${sc.toFixed(3)})`},w)));
+  const sh=mk("g",{"clip-path":"url(#txtClip)"}); lg.appendChild(sh);
+  sh.appendChild(mk("rect",{class:"sweep",x:"0",y:"0",width:"160",height:"250",fill:"url(#shine)",transform:"skewX(-20)",opacity:".8"}));
+  // Zahnrad als „O“
+  const gear=mk("g",{transform:`translate(${gx.toFixed(1)} ${gy.toFixed(1)}) scale(${GS})`}); g.appendChild(gear);
+  gear.innerHTML=`<circle r="${R2+10}" fill="url(#edge)" filter="url(#glow)" opacity=".7"/>
+    <g transform="translate(5 7)"><path d="${gp}" fill="#07061a"/></g>
+    <g class="gearSpin"><path d="${gp}" fill="url(#gearMetal)" stroke="#0b0828" stroke-width="3.5"/><circle r="62" fill="#120c2a" stroke="#0b0828" stroke-width="3"/>${gems}
+      ${Array.from({length:6},(_,i)=>{const a=i/6*Math.PI*2;return `<circle cx="${(Math.cos(a)*66).toFixed(1)}" cy="${(Math.sin(a)*66).toFixed(1)}" r="3.2" fill="#2a2e52" stroke="#fff" stroke-opacity=".8" stroke-width="1.2"/>`;}).join("")}</g>
+    <circle r="21" fill="#2a1d55" stroke="#a6ff4d" stroke-width="3.5"/><text y="9" text-anchor="middle" font-size="26">🦎</text>`;
+}
+(document.fonts&&document.fonts.load?Promise.all([document.fonts.load("900 150px Orbitron"),document.fonts.load("40px 'Russo One'")]).catch(()=>{}):Promise.resolve()).then(buildLogo);
+// Werkzeug nur für Store-Screenshots (aktiv nur mit #shot in der Adresse)
+if(location.hash==="#shot"){ window.MBshot={
+  start:n=>startLevel(n),
+  fill:(keep)=>{ const pal=palette(); for(let r=0;r<RINGS;r++) for(let s=0;s<SEGS;s++) if(Math.random()<keep*(1-r/RINGS*.6)) grid[r][s]=pal[(r*3+s)%pal.length]; for(let s=0;s<SEGS;s++){ const col=[]; for(let r=0;r<RINGS;r++) if(grid[r][s]) col.push(grid[r][s]); for(let r=0;r<RINGS;r++) grid[r][s]=col[r]||null; } },
+  blast:()=>{ const pal=palette(); for(let s=0;s<SEGS;s++) grid[0][s]=grid[0][s]||pal[s%pal.length]; combo=2; resolveClears(); },
+  freeze:()=>{ cfg.speed=0; }
+}; }
 applyLang(); resize(); updateHud(); setHud(false); requestAnimationFrame(loop);
 })();
 </script>

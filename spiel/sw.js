@@ -1,6 +1,6 @@
 /* Buko Games – offline cache (network-first, cache fallback) */
-const C='buko-v3b';
-const CORE=['./','index.html','disfirlat.html','blok.html','batak.html','tavla.html','mechablock.html','buko-core.js','logo.svg','icon-192.png','icon-512.png','manifest.webmanifest','music-gears.mp3','music-block.mp3','music-kahve1.mp3','music-kahve2.mp3','lb.js','1453/','zipzip/'];
+const C='buko-v3c';
+const CORE=['./','index.html','disfirlat.html','blok.html','batak.html','tavla.html','mechablock.html','fonts/orbitron-900.woff2','fonts/russo-one-latin.woff2','fonts/russo-one-latin-ext.woff2','buko-core.js','logo.svg','icon-192.png','icon-512.png','manifest.webmanifest','music-gears.mp3','music-block.mp3','music-kahve1.mp3','music-kahve2.mp3','lb.js','1453/','zipzip/'];
 self.addEventListener('install',e=>{ e.waitUntil(caches.open(C).then(c=>Promise.all(CORE.map(u=>c.add(u).catch(()=>{})))).then(()=>self.skipWaiting())); });
 self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });
 self.addEventListener('fetch',e=>{
