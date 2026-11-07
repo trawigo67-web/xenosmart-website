@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Buko Games – 5 ücretsiz oyun</title>
-<meta name="description" content="Buko Games: Zıpzıp Macerası, 1453 Surları Yık, Diş Fırlat, Neon Blok ve Neon Batak – reklamsız, ücretsiz, telefonda ve tablette oyna. Türkçe · Deutsch · English.">
+<title>Buko Games – 6 ücretsiz oyun</title>
+<meta name="description" content="Buko Games: Zıpzıp Macerası, 1453 Surları Yık, Diş Fırlat, Neon Blok, Neon Batak ve Tavla – reklamsız, ücretsiz, telefonda ve tablette oyna. Türkçe · Deutsch · English.">
 <link rel="stylesheet" href="../fonts/fonts.css">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -15,8 +15,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Buko Games">
-<meta property="og:title" content="Buko Games – 5 ücretsiz oyun">
-<meta property="og:description" content="Zıpzıp Macerası · 1453 Surları Yık · Diş Fırlat · Neon Blok · Neon Batak">
+<meta property="og:title" content="Buko Games – 6 ücretsiz oyun">
+<meta property="og:description" content="Zıpzıp Macerası · 1453 Surları Yık · Diş Fırlat · Neon Blok · Neon Batak · Tavla">
 <meta property="og:image" content="https://xenosmart.de/spiel/icon-512.png">
 <style>
   :root{--a:#2ee6c8;--b:#a6ff4d}
@@ -62,6 +62,20 @@
   footer a{color:#d9f5ee}
   .feat{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
   .feat span{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.2)}
+  .coins{margin-top:10px;font-weight:900;font-size:20px;padding:8px 18px;border-radius:999px;background:linear-gradient(90deg,#ffd23f,#ff9f1c);color:#3a2300;box-shadow:0 6px 20px rgba(255,170,30,.45)}
+  .panel{margin-top:22px;border-radius:22px;padding:16px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .panel h3{margin:0 0 10px;font-size:19px}
+  .task{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:14px;font-weight:700}
+  .task .bar{flex:1;height:10px;border-radius:9px;background:rgba(255,255,255,.18);overflow:hidden;min-width:60px}
+  .task .bar i{display:block;height:100%;background:linear-gradient(90deg,#a6ff4d,#2ee6c8);border-radius:9px}
+  .task.done{opacity:.65}.task .tx{flex:2}.task .rw{white-space:nowrap;color:#ffe08a}
+  .shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .item{border-radius:16px;padding:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);text-align:center;font-size:13px;font-weight:700}
+  .item .pv{height:56px;border-radius:10px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:26px}
+  .item button{margin-top:6px;width:100%;font:inherit;font-weight:900;border:0;border-radius:999px;padding:7px;cursor:pointer;background:#fff;color:#13231f}
+  .item button.sel{background:#a6ff4d}.item button:disabled{opacity:.45}
+  .ach{display:flex;flex-wrap:wrap;gap:8px}.ach span{font-size:13px;font-weight:800;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);opacity:.5}.ach span.got{opacity:1;background:rgba(255,159,28,.3);border-color:#ffb347}
+  .g6{background:linear-gradient(150deg,#e0a23a,#8a4b1f 55%,#3a1c0a)}
 </style>
 <script>
 window.HI={share:'<svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5.5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="18.5" r="2.6"/><path d="M8.3 10.8l7.4-4M8.3 13.2l7.4 4"/></svg>',
@@ -90,6 +104,7 @@ play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l1
     <h1>BUKO GAMES</h1>
     <div class="tag" id="tag"></div>
     <div class="langs" id="langs"></div>
+    <div class="coins" id="coins">🪙 0</div>
   </header>
   <div class="feat" id="feat"></div>
   <div class="grid">
@@ -113,8 +128,15 @@ play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l1
       <svg class="art" viewBox="0 0 120 120"><g transform="rotate(-14 60 60)"><rect x="30" y="22" width="44" height="62" rx="7" fill="#fffaf0" stroke="#d8c49a" stroke-width="2"/><text x="40" y="44" font-size="16" font-weight="900" fill="#1e1a5a" font-family="Georgia">A</text><text x="46" y="74" font-size="28" fill="#1e1a5a">♠</text></g><g transform="rotate(12 60 60)"><rect x="52" y="28" width="44" height="62" rx="7" fill="#fffaf0" stroke="#d8c49a" stroke-width="2"/><text x="62" y="50" font-size="16" font-weight="900" fill="#ff2d55" font-family="Georgia">K</text><text x="66" y="80" font-size="28" fill="#ff2d55">♥</text></g><path d="M24 100 q6 -10 0 -20 M34 100 q6 -10 0 -20" stroke="#fff" stroke-width="3" fill="none" opacity=".5"/></svg>
       <h2>Neon Batak</h2><p id="d3"></p><div class="stat" id="s3"></div><span class="play" id="p3">▶</span>
     </a>
+    <a class="game g6" href="tavla.html">
+      <svg class="art" viewBox="0 0 120 120"><rect x="14" y="20" width="96" height="80" rx="8" fill="#6b3a1d" stroke="#ffd28a" stroke-width="3"/><g fill="#ffe7b0"><path d="M20 26 l8 34 l8 -34z"/><path d="M52 26 l8 34 l8 -34z"/><path d="M36 94 l8 -34 l8 34z"/><path d="M68 94 l8 -34 l8 34z"/></g><g fill="#c8462d"><path d="M36 26 l8 34 l8 -34z"/><path d="M84 26 l8 34 l8 -34z"/><path d="M20 94 l8 -34 l8 34z"/><path d="M84 94 l8 -34 l8 34z"/></g><circle cx="44" cy="86" r="7" fill="#fff8e6" stroke="#b08a50" stroke-width="2"/><circle cx="76" cy="34" r="7" fill="#2a160b" stroke="#ffd28a" stroke-width="2"/><rect x="58" y="64" width="18" height="18" rx="4" fill="#fff" transform="rotate(14 67 73)"/><circle cx="64" cy="70" r="2" fill="#c8462d"/><circle cx="70" cy="76" r="2" fill="#c8462d"/></svg>
+      <h2>Tavla</h2><p id="d6"></p><div class="stat" id="s6"></div><span class="play" id="p6">▶</span><span class="new" id="nw6"></span>
+    </a>
   </div>
   <div class="champs" id="champs"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h10v6a5 5 0 0 1-10 0z" fill="#f2b632"/><path d="M7 5.5H4.2a3.2 3.2 0 0 0 3.3 4.4M17 5.5h2.8a3.2 3.2 0 0 1-3.3 4.4M12 14.5v3"/><path d="M8 21h8l-1-3.5H9z" fill="#c0392b"/></svg><span id="chT"></span></h3><div class="cg" id="cg"></div></div>
+  <div class="panel"><h3 id="tH"></h3><div id="tasks"></div></div>
+  <div class="panel"><h3 id="shH"></h3><div class="shop" id="shop"></div></div>
+  <div class="panel"><h3 id="aH"></h3><div class="ach" id="achs"></div></div>
   <div class="row" id="actions"></div>
   <div class="note" id="note"></div>
   <footer>
@@ -122,30 +144,48 @@ play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l1
     🎵 Music: Created in collaboration with ElevenLabs
   </footer>
 </div>
+<script src="buko-core.js"></script>
 <script>
 (() => {
   let S={}; try{ S=JSON.parse(localStorage.getItem('disfirlat2')||'{}'); }catch(e){}
   let Z={};try{Z=JSON.parse(localStorage.getItem('bukoZipzipV1')||'{}')}catch(e){}
-  let B={}, K={}, F={}; try{ F=JSON.parse(localStorage.getItem('surlar1453')||'{}'); }catch(e){} try{ B=JSON.parse(localStorage.getItem('neonblok')||'{}'); K=JSON.parse(localStorage.getItem('neonbatak')||'{}'); }catch(e){}
+  let B={}, K={}, F={}, V={}; try{ V=JSON.parse(localStorage.getItem('buko_tavla')||'{}'); }catch(e){} try{ F=JSON.parse(localStorage.getItem('surlar1453')||'{}'); }catch(e){} try{ B=JSON.parse(localStorage.getItem('neonblok')||'{}'); K=JSON.parse(localStorage.getItem('neonbatak')||'{}'); }catch(e){}
   let L=S.lang||((navigator.language||'tr').slice(0,2)); if(!['tr','de','en'].includes(L)) L='en';
   const T={
-    tr:{tag:'Stres at, eğlen! 5 ücretsiz oyun – reklamsız.', d5:'Koş, zıpla, ateş et! Düşmanların kafasına zıpla, 4 silahla uzaktan vur. 5 bölüm ve Demir Dev boss.', s5:n=>`Bölüm ${n}/5`, d4:'Fatih Sultan Mehmet ile Konstantinopolis surlarını Şahi topuyla yık! 19 seviye, gemileri karadan yürütme bonusu, mehter marşı.', s4:(n,st)=>`Seviye ${n}/19 · ⭐ ${st}`, feat:['📱 Telefon & tablet','🌍 3 dil','🎵 Özel müzik','🚫 Reklam yok'], d1:'Dönen çarklara dişi tam zamanında fırlat. 15 seviye, boss çarkları, şans çarkı.', d2:'Düşen blokları diz, satırları patlat. Müziğe göre dans eden neon dünya.', d3:'Nostaljik kahvehanede ihaleli batak – 3 rakibe karşı.', play:'Oyna', newT:'YENİ',
-        s1:(l,st)=>`Seviye ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Rekor ${h} · En iyi seviye ${b}`, s3:(w,g)=>`Galibiyet ${w}/${g}`, share:HI.share+' Arkadaşına gönder', apk:HI.phone+' Android uygulaması', ios:"📱 iPhone'da: Safari → Paylaş ⬆️ → Ana Ekrana Ekle", shareText:'Buko Games’i dene! 🦎🎮 Zıpzıp Macerası, 1453 Surları Yık, Diş Fırlat, Neon Blok & Neon Batak – ücretsiz: https://xenosmart.de/spiel/'},
-    de:{tag:'Stress abbauen, Spaß haben! 5 kostenlose Spiele – ohne Werbung.', d5:'Lauf, spring, schieß! Spring Gegnern auf den Kopf, 4 Waffen für die Ferne. 5 Level und der Eisenriese als Boss.', s5:n=>`Level ${n}/5`, d4:'Brich mit Fatih Sultan Mehmet und der Şahi-Kanone die Mauern Konstantinopels! 19 Level, Bonus: Schiffe über Land, Mehter-Marsch.', s4:(n,st)=>`Level ${n}/19 · ⭐ ${st}`, feat:['📱 Handy & Tablet','🌍 3 Sprachen','🎵 Eigene Musik','🚫 Keine Werbung'], d1:'Schieß die Zähne genau im richtigen Moment in die drehenden Zahnräder. 15 Level, Boss-Räder, Glücksrad.', d2:'Staple Blöcke, sprenge Reihen. Eine Neon-Welt, die zur Musik tanzt.', d3:'Batak mit Ansage im nostalgischen Kahvehane – gegen 3 Gegner.', play:'Spielen', newT:'NEU',
-        s1:(l,st)=>`Level ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Rekord ${h} · Bestes Level ${b}`, s3:(w,g)=>`Siege ${w}/${g}`, share:HI.share+' An Freunde senden', apk:HI.phone+' Android-App', ios:'📱 Auf dem iPhone: Safari → Teilen ⬆️ → Zum Home-Bildschirm', shareText:'Probier Buko Games! 🦎🎮 Zıpzıp Macerası, 1453 Surları Yık, Diş Fırlat, Neon Block & Neon Batak – kostenlos: https://xenosmart.de/spiel/'},
-    en:{tag:'Relax and have fun! 5 free games – no ads.', d5:'Run, jump, blast! Stomp on enemies or hit them from afar with 4 weapons. 5 levels and the Iron Giant boss.', s5:n=>`Level ${n}/5`, d4:'Break the walls of Constantinople with Sultan Mehmed II and the giant Şahi cannon! 19 levels, ships-over-land bonus, Ottoman march.', s4:(n,st)=>`Level ${n}/19 · ⭐ ${st}`, feat:['📱 Phone & tablet','🌍 3 languages','🎵 Original music','🚫 No ads'], d1:'Shoot teeth into spinning gears at the perfect moment. 15 levels, boss gears, lucky wheel.', d2:'Stack blocks, blast rows. A neon world that dances to the music.', d3:'Bidding Batak in a nostalgic Turkish tea house – against 3 rivals.', play:'Play', newT:'NEW',
-        s1:(l,st)=>`Level ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Record ${h} · Best level ${b}`, s3:(w,g)=>`Wins ${w}/${g}`, share:HI.share+' Send to a friend', apk:HI.phone+' Android app', ios:'📱 On iPhone: Safari → Share ⬆️ → Add to Home Screen', shareText:'Try Buko Games! 🦎🎮 Zıpzıp Macerası, 1453 Surları Yık, Diş Fırlat, Neon Block & Neon Batak – free: https://xenosmart.de/spiel/'},
+    tr:{d6:'Kahvehanenin klasiği: erkek tavla, 5 sayılık maç. Zar at, kapı al, mars et!', tag:'Stres at, eğlen! 6 ücretsiz oyun – reklamsız.', d5:'Koş, zıpla, ateş et! Düşmanların kafasına zıpla, 4 silahla uzaktan vur. 5 bölüm ve Demir Dev boss.', s5:n=>`Bölüm ${n}/5`, d4:'Fatih Sultan Mehmet ile Konstantinopolis surlarını Şahi topuyla yık! 19 seviye, gemileri karadan yürütme bonusu, mehter marşı.', s4:(n,st)=>`Seviye ${n}/19 · ⭐ ${st}`, feat:['📱 Telefon & tablet','🌍 3 dil','🎵 Özel müzik','🚫 Reklam yok'], d1:'Dönen çarklara dişi tam zamanında fırlat. 15 seviye, boss çarkları, şans çarkı.', d2:'Düşen blokları diz, satırları patlat. Müziğe göre dans eden neon dünya.', d3:'Nostaljik kahvehanede ihaleli batak – 3 rakibe karşı.', play:'Oyna', newT:'YENİ',
+        s1:(l,st)=>`Seviye ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Rekor ${h} · En iyi seviye ${b}`, s3:(w,g)=>`Galibiyet ${w}/${g}`, share:HI.share+' Arkadaşına gönder', apk:HI.phone+' Android uygulaması', ios:"📱 iPhone'da: Safari → Paylaş ⬆️ → Ana Ekrana Ekle", shareText:'Buko Games’i dene! 🦎🎮 Zıpzıp Macerası, 1453 Surları Yık, Diş Fırlat, Neon Blok & Neon Batak & Tavla – ücretsiz: https://xenosmart.de/spiel/'},
+    de:{d6:'Der Kahvehane-Klassiker: Backgammon (Tavla), Match bis 5. Würfeln, Tore bauen, Mars!', tag:'Stress abbauen, Spaß haben! 6 kostenlose Spiele – ohne Werbung.', d5:'Lauf, spring, schieß! Spring Gegnern auf den Kopf, 4 Waffen für die Ferne. 5 Level und der Eisenriese als Boss.', s5:n=>`Level ${n}/5`, d4:'Brich mit Fatih Sultan Mehmet und der Şahi-Kanone die Mauern Konstantinopels! 19 Level, Bonus: Schiffe über Land, Mehter-Marsch.', s4:(n,st)=>`Level ${n}/19 · ⭐ ${st}`, feat:['📱 Handy & Tablet','🌍 3 Sprachen','🎵 Eigene Musik','🚫 Keine Werbung'], d1:'Schieß die Zähne genau im richtigen Moment in die drehenden Zahnräder. 15 Level, Boss-Räder, Glücksrad.', d2:'Staple Blöcke, sprenge Reihen. Eine Neon-Welt, die zur Musik tanzt.', d3:'Batak mit Ansage im nostalgischen Kahvehane – gegen 3 Gegner.', play:'Spielen', newT:'NEU',
+        s1:(l,st)=>`Level ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Rekord ${h} · Bestes Level ${b}`, s3:(w,g)=>`Siege ${w}/${g}`, share:HI.share+' An Freunde senden', apk:HI.phone+' Android-App', ios:'📱 Auf dem iPhone: Safari → Teilen ⬆️ → Zum Home-Bildschirm', shareText:'Probier Buko Games! 🦎🎮 Zıpzıp Macerası, 1453 Surları Yık, Diş Fırlat, Neon Block & Neon Batak & Tavla – kostenlos: https://xenosmart.de/spiel/'},
+    en:{d6:'The tea house classic: backgammon (Tavla), match to 5. Roll, block, win a gammon!', tag:'Relax and have fun! 6 free games – no ads.', d5:'Run, jump, blast! Stomp on enemies or hit them from afar with 4 weapons. 5 levels and the Iron Giant boss.', s5:n=>`Level ${n}/5`, d4:'Break the walls of Constantinople with Sultan Mehmed II and the giant Şahi cannon! 19 levels, ships-over-land bonus, Ottoman march.', s4:(n,st)=>`Level ${n}/19 · ⭐ ${st}`, feat:['📱 Phone & tablet','🌍 3 languages','🎵 Original music','🚫 No ads'], d1:'Shoot teeth into spinning gears at the perfect moment. 15 levels, boss gears, lucky wheel.', d2:'Stack blocks, blast rows. A neon world that dances to the music.', d3:'Bidding Batak in a nostalgic Turkish tea house – against 3 rivals.', play:'Play', newT:'NEW',
+        s1:(l,st)=>`Level ${l}/15 · ⭐ ${st}`, s2:(h,b)=>`Record ${h} · Best level ${b}`, s3:(w,g)=>`Wins ${w}/${g}`, share:HI.share+' Send to a friend', apk:HI.phone+' Android app', ios:'📱 On iPhone: Safari → Share ⬆️ → Add to Home Screen', shareText:'Try Buko Games! 🦎🎮 Zıpzıp Macerası, 1453 Surları Yık, Diş Fırlat, Neon Block & Neon Batak & Tavla – free: https://xenosmart.de/spiel/'},
   };
   const FL={tr:'🇹🇷',de:'🇩🇪',en:'🇬🇧'};
   const $=id=>document.getElementById(id);
   const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   const inApp=/wv\)/.test(navigator.userAgent) || location.protocol==='file:';
+  const PV={back_classic:'background:repeating-linear-gradient(45deg,#7a1f2b 0 6px,#5a1520 6px 12px)', back_nazar:'background:radial-gradient(circle,#fff 0 12%,#1e5fd8 13% 30%,#fff 31% 40%,#0b2f8a 41%)', back_neon:'background:linear-gradient(135deg,#ff2dd1,#38e1ff)', back_gold:'background:linear-gradient(135deg,#ffe28a,#c8962d)', skin_gem:'background:linear-gradient(135deg,#38e1ff,#7b5cff)', skin_candy:'background:repeating-linear-gradient(90deg,#ff7ab8 0 8px,#fff 8px 16px)', skin_pixel:'background:conic-gradient(#5dff8a 25%,#1f8a6a 0 50%,#5dff8a 0 75%,#1f8a6a 0);background-size:16px 16px'};
+  const UI={tr:{tH:'🎯 Günlük görevler',shH:'🛍️ Mağaza (jetonla)',aH:'🏆 Başarımlar',buy:'Satın al',use:'Kullan',inUse:'✓ Seçili',back:'Kart arkası (Batak)',skin:'Blok stili (Neon Blok)',new:'Yarın yeni görevler gelir'},
+          de:{tH:'🎯 Tagesaufgaben',shH:'🛍️ Shop (mit Münzen)',aH:'🏆 Erfolge',buy:'Kaufen',use:'Benutzen',inUse:'✓ Aktiv',back:'Kartenrücken (Batak)',skin:'Block-Stil (Neon Block)',new:'Morgen gibt es neue Aufgaben'},
+          en:{tH:'🎯 Daily tasks',shH:'🛍️ Shop (coins)',aH:'🏆 Achievements',buy:'Buy',use:'Use',inUse:'✓ Active',back:'Card back (Batak)',skin:'Block style (Neon Block)',new:'New tasks tomorrow'}};
+  function renderCore(t){
+    if (!window.BK) return; BK.rollTasks(); const u=UI[L], D=BK.data;
+    $('coins').textContent='🪙 '+D.coins.toLocaleString(L);
+    $('tH').textContent=u.tH; $('shH').textContent=u.shH; $('aH').textContent=u.aH;
+    $('tasks').innerHTML=D.tasks.map(x=>{const T=BK.TASKS[x.id]; return `<div class="task ${x.done?'done':''}"><span class="tx">${x.done?'✅':'⬜'} ${T[L]}</span><span class="bar"><i style="width:${Math.round(100*x.p/T.goal)}%"></i></span><span class="rw">${x.p}/${T.goal} · +${T.r}🪙</span></div>`}).join('')+(D.tasks.every(x=>x.done)?`<div class="task">🌙 ${u.new}</div>`:'');
+    $('shop').innerHTML=BK.SHOP.map(it=>{ const own=D.owned[it.id], on=D.sel[it.type]===it.id.split('_')[1];
+      const btn= on?`<button class="sel" disabled>${u.inUse}</button>` : own?`<button data-s="${it.id}">${u.use}</button>` : `<button data-b="${it.id}" ${D.coins<it.price?'disabled':''}>${u.buy} · ${it.price}🪙</button>`;
+      return `<div class="item"><div class="pv" style="${PV[it.id]}"></div>${it[L]}<div style="font-size:11px;opacity:.7">${it.type==='back'?u.back:u.skin}</div>${btn}</div>`}).join('');
+    $('shop').querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ if(BK.buy(b.dataset.b)){ BK.select(b.dataset.b); BK.toast('🛍️ ✓','#a6ff4d'); } renderCore(t); });
+    $('shop').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{ BK.select(b.dataset.s); renderCore(t); });
+    $('achs').innerHTML=Object.entries(BK.ACH).map(([k,a])=>`<span class="${D.ach[k]?'got':''}">${D.ach[k]?'🏆':'🔒'} ${a[L]} · ${a.r}🪙</span>`).join('');
+  }
+  window.addEventListener('pageshow',()=>render());
   function render(){
     const t=T[L]; document.documentElement.lang=L;
     $('tag').textContent=t.tag; $('feat').innerHTML=t.feat.map(f=>`<span>${f}</span>`).join('');
     $('d5').textContent=t.d5;$('p5').innerHTML=HI.play+t.play;$('nw5').textContent=t.newT;$('s5').textContent=Z.unlocked>1?t.s5(Math.min(5,Z.unlocked)):'';
     $('d4').textContent=t.d4;$('p4').innerHTML=HI.play+t.play;{const st=(F.stars||[]).reduce((a,v)=>a+(v||0),0);$('s4').textContent=F.unlocked>1?t.s4(Math.min(19,F.unlocked),st):'';}
-    $('d1').textContent=t.d1; $('d2').textContent=t.d2; $('d3').textContent=t.d3;
+    $('d6').textContent=t.d6; $('p6').innerHTML=HI.play+t.play; $('nw6').textContent=t.newT; $('s6').textContent = V.games ? t.s3(V.wins||0, V.games) : ''; $('d1').textContent=t.d1; $('d2').textContent=t.d2; $('d3').textContent=t.d3;
     ['p1','p2','p3'].forEach(k=>$(k).innerHTML=HI.play+t.play);
     const stars=(S.stars||[]).reduce((a,v)=>a+(v||0),0);
     $('s1').textContent = (S.lvl||stars) ? t.s1((S.lvl||0)+1, stars) : '';
@@ -156,10 +196,12 @@ play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l1
     let acts=`<a class="pill wa" id="shr" href="https://wa.me/?text=${encodeURIComponent(t.shareText)}" target="_blank" rel="noopener">${t.share}</a>`;
     if (!ios && !inApp) acts+=`<a class="pill apk" href="BukoGames.apk" download>${t.apk}</a>`;
     $('actions').innerHTML=acts; $('note').textContent = (ios && !navigator.standalone) ? t.ios : '';
+    renderCore(t);
     $('shr').onclick=e=>{ if (navigator.share && !inApp){ e.preventDefault(); navigator.share({text:t.shareText}).catch(()=>{}); } };
   }
   if(location.protocol==='file:'){$('g1453').href='https://xenosmart.de/spiel/1453/';$('gzip').href='https://xenosmart.de/spiel/zipzip/';}
   render();
+  if ('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
   // Haftanın şampiyonları
   const CT={tr:['Bu haftanın şampiyonları','Henüz kimse yok – ilk sen ol!','Tabloyu aç'],de:['Champions dieser Woche','Noch niemand – sei der Erste!','Liste öffnen'],en:["This week's champions",'Nobody yet – be the first!','Open board']};
   const CG=[['1453','1453 Surları Yık','1453/'],['disfirlat','Diş Fırlat','disfirlat.html'],['blok','Neon Blok','blok.html'],['batak','Neon Batak','batak.html']];
