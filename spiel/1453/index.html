@@ -711,7 +711,8 @@ function drawShip(g,x,y,s){g.save();g.translate(x,y);g.scale(s,s);g.strokeStyle=
 
 /* ------------------------------ KARAKTERLER ------------------------------ */
 function shade(g,fn){g.save();g.clip();g.fillStyle='rgba(30,10,0,.22)';fn();g.restore();}
-function drawSultan(g,x,y,s,point,t=0){g.save();g.translate(x,y);g.scale(s,s);g.lineWidth=2.5;g.strokeStyle=INK;g.lineJoin='round';g.lineCap='round';
+function drawSultan(g,x,y,s,point,t=0){if(SPR.sultan.ok&&s<3){sprDraw(g,SPR.sultan,x,y,98*s/1.15,1,1+Math.sin(t*1.8)*.01,Math.sin(t*1.3)*.012);return;}
+g.save();g.translate(x,y);g.scale(s,s);g.lineWidth=2.5;g.strokeStyle=INK;g.lineJoin='round';g.lineCap='round';
   // pelerin (kürk)
   g.fillStyle='#7a1f1a';g.beginPath();g.moveTo(-20,0);g.lineTo(20,0);g.lineTo(14,-46);g.lineTo(-14,-46);g.closePath();g.fill();g.stroke();
   // kaftan
@@ -744,7 +745,11 @@ function drawSultan(g,x,y,s,point,t=0){g.save();g.translate(x,y);g.scale(s,s);g.
   g.strokeStyle=INK;g.lineWidth=2;g.fillStyle='#f2b632';g.beginPath();g.arc(4,-77,3.4,0,7);g.fill();g.stroke();g.fillStyle='#2ea043';g.beginPath();g.arc(4,-77,1.4,0,7);g.fill();
   g.fillStyle='#fff';g.beginPath();g.moveTo(4,-79);g.quadraticCurveTo(13+Math.sin(t*3),-93,7,-100);g.quadraticCurveTo(4,-90,2,-79);g.closePath();g.fill();g.stroke();
   g.restore();}
-function drawJanissary(g,x,y,s,t,pose){g.save();g.translate(x,y);g.scale(s,s);g.lineWidth=2.5;g.strokeStyle=INK;g.lineJoin='round';g.lineCap='round';
+const SPR={};[['sultan',.323],['gunner',.279],['loader',.262],['drummer',.435],['defender',.543]].forEach(([k,fx])=>{const im=new Image();im.fx=fx;im.onload=()=>{im.ok=true;};im.src='art/sp-'+k+'.png';SPR[k]=im;});
+function sprDraw(g,im,x,y,h,sx=1,sy=1,rot=0,dx=0){const w=im.width*h/im.height;g.save();g.translate(x+dx,y);if(rot)g.rotate(rot);g.scale(sx,sy);g.drawImage(im,-w*im.fx,-h,w,h);g.restore();}
+function drawJanissary(g,x,y,s,t,pose){if(pose==='fuse'&&SPR.gunner.ok){const br=1+Math.sin(t*2.2)*.012;sprDraw(g,SPR.gunner,x,y,82*s,1,br,0,(typeof recoilT==='number'?-recoilT*8:0));const fx=x+(SPR.gunner.width*82*s/SPR.gunner.height)*(.72-.0),fy=y-82*s*.73;g.save();g.globalCompositeOperation='lighter';const fl=.6+.4*Math.sin(t*23);const rg=g.createRadialGradient(fx,fy,1,fx,fy,10*s);rg.addColorStop(0,`rgba(255,220,120,${fl})`);rg.addColorStop(1,'rgba(255,120,20,0)');g.fillStyle=rg;g.fillRect(fx-12*s,fy-12*s,24*s,24*s);g.restore();return;}
+  if(pose!=='fuse'&&SPR.loader.ok){const ram=pose==='ram'?Math.max(0,Math.sin(t*9))*10:0;sprDraw(g,SPR.loader,x,y,82*s,1,1+Math.sin(t*2+1)*.012,0,ram);return;}
+g.save();g.translate(x,y);g.scale(s,s);g.lineWidth=2.5;g.strokeStyle=INK;g.lineJoin='round';g.lineCap='round';
   g.fillStyle='#2c3e6b';g.fillRect(-9,-16,7,16);g.strokeRect(-9,-16,7,16);g.fillRect(2,-16,7,16);g.strokeRect(2,-16,7,16);
   g.fillStyle='#d9a441';g.beginPath();g.ellipse(-5,0,7,3,0,0,7);g.ellipse(6,0,7,3,0,0,7);g.fill();g.stroke();
   g.fillStyle='#c0392b';g.beginPath();g.moveTo(-14,-12);g.lineTo(14,-12);g.lineTo(10,-40);g.lineTo(-10,-40);g.closePath();g.fill();shade(g,()=>g.fillRect(3,-42,14,32));g.beginPath();g.moveTo(-14,-12);g.lineTo(14,-12);g.lineTo(10,-40);g.lineTo(-10,-40);g.closePath();g.stroke();
@@ -766,7 +771,8 @@ function drawJanissary(g,x,y,s,t,pose){g.save();g.translate(x,y);g.scale(s,s);g.
   g.beginPath();g.moveTo(-6,-81);g.quadraticCurveTo(-24,-72,-22,-44);g.lineTo(-14,-46);g.quadraticCurveTo(-15,-66,-4,-74);g.closePath();g.fill();g.stroke();
   g.fillStyle='#f2b632';g.fillRect(-10,-61,20,6);g.strokeRect(-10,-61,20,6);g.fillStyle='#f2b632';g.beginPath();g.moveTo(0,-61);g.lineTo(-3,-72);g.lineTo(0,-76);g.lineTo(3,-72);g.closePath();g.fill();g.stroke();
   g.restore();}
-function drawDrummer(g,x,y,s,t,fast){g.save();g.translate(x,y);g.scale(s,s);g.lineWidth=2.5;g.strokeStyle=INK;g.lineJoin='round';
+function drawDrummer(g,x,y,s,t,fast){if(SPR.drummer.ok){const bt=fast?t*9:t*5.4,hit=Math.max(0,Math.sin(bt));sprDraw(g,SPR.drummer,x+14,y,80*s,1,1-hit*.025,(hit-.5)*.04);return;}
+g.save();g.translate(x,y);g.scale(s,s);g.lineWidth=2.5;g.strokeStyle=INK;g.lineJoin='round';
   const bt=fast?t*9:t*5.4;const hit=Math.max(0,Math.sin(bt));
   g.fillStyle='#2c3e6b';g.fillRect(-8,-15,7,15);g.strokeRect(-8,-15,7,15);g.fillRect(2,-15,7,15);g.strokeRect(2,-15,7,15);
   g.fillStyle='#8b1d12';g.fillRect(-13,-42,26,30);g.strokeRect(-13,-42,26,30);
@@ -778,7 +784,8 @@ function drawDrummer(g,x,y,s,t,fast){g.save();g.translate(x,y);g.scale(s,s);g.li
   g.strokeStyle='#7a1f1a';g.lineWidth=1.5;for(let i=-12;i<=12;i+=6){g.beginPath();g.moveTo(8,-28+i);g.lineTo(17,-28-i*.5);g.stroke();}
   g.strokeStyle=INK;g.lineWidth=2.5;g.save();g.translate(8,-38);g.rotate(-1.2+hit*1.1);g.fillStyle='#8b1d12';g.fillRect(0,-3,14,7);g.strokeRect(0,-3,14,7);g.strokeStyle='#5e3512';g.lineWidth=3;g.beginPath();g.moveTo(14,0);g.lineTo(28,0);g.stroke();g.fillStyle='#5e3512';g.beginPath();g.arc(29,0,3.5,0,7);g.fill();g.restore();
   g.restore();}
-function drawDefender(g,b){const d=b.gd,t=time+d.ph,sc=balls.length>0;g.save();g.translate(b.position.x,b.position.y);g.rotate(b.angle);g.translate(0,19);g.scale(-1,1);
+function drawDefender(g,b){if(SPR.defender.ok){const d=b.gd,t=time+d.ph,sc=balls.length>0;g.save();g.translate(b.position.x,b.position.y);g.rotate(b.angle);g.translate(0,19);const bob=sc?Math.sin(t*30)*.8:Math.sin(t*2.4)*.6;sprDraw(g,SPR.defender,0,bob,66,1,1,sc?Math.sin(t*24)*.03:0);if(d.hitT>0){g.globalAlpha=Math.min(1,d.hitT*6);g.globalCompositeOperation='lighter';sprDraw(g,SPR.defender,0,bob,66);g.globalCompositeOperation='source-over';g.globalAlpha=1;}g.restore();return;}
+const d=b.gd,t=time+d.ph,sc=balls.length>0;g.save();g.translate(b.position.x,b.position.y);g.rotate(b.angle);g.translate(0,19);g.scale(-1,1);
   g.lineWidth=2;g.strokeStyle=INK;g.lineJoin='round';g.lineCap='round';const bob=sc?Math.sin(t*30)*.8:Math.sin(t*2.4)*.6;g.translate(0,bob);
   g.strokeStyle='#5e3512';g.lineWidth=2.5;g.beginPath();g.moveTo(9,0);g.lineTo(9,-44);g.stroke();
   g.strokeStyle=INK;g.lineWidth=1.8;g.fillStyle='#d8dde2';g.beginPath();g.moveTo(6,-44);g.lineTo(9,-53);g.lineTo(12,-44);g.closePath();g.fill();g.stroke();
