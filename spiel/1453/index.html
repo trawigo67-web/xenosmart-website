@@ -1313,5 +1313,6 @@ function boot(){if(typeof Matter==='undefined'){$('loading').textContent='Fizik 
   requestAnimationFrame(loop);}
 if(document.readyState==='complete')boot();else addEventListener('load',boot);
 </script>
+<script id="bukoSW">if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(()=>{});</script>
 </body>
 </html>
