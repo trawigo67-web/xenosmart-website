@@ -76,10 +76,10 @@ h3{margin:12px 0 6px;font-size:14px;letter-spacing:2px;opacity:.8;text-transform
 'use strict';
 /* ================= Ayarlar / Settings ================= */
 // Kahramanın görünümü – oğlunun fotoğrafına göre buradan değiştirilebilir
-const HERO0={hair:'#3a2214',skin:'#f3c9a2',shirt:'#e8463c',shirt2:'#ffd23f',pants:'#2d5fa8',pants2:'#21467f',shoes:'#ffffff',shoeStripe:'#ff5f7a',eye:'#3b2a1a',acc:''};
+const HERO0={hair:'#2b1d15',skin:'#f6d3bb',shirt:'#4b5341',shirt2:'#ffd23f',pants:'#1c1c22',pants2:'#121216',shoes:'#ffffff',shoeStripe:'#2b2b33',eye:'#3a2414',acc:''};
 const HERO=Object.assign({},HERO0);
 const SKINS=[
- {at:1,c:{}},
+ {at:1,hoodie:true,c:{}},
  {at:4,acc:'ninja',c:{shirt:'#2b2b3a',shirt2:'#e8463c',pants:'#1c1c28',pants2:'#121219',shoes:'#2b2b3a',shoeStripe:'#e8463c'}},
  {at:8,acc:'astro',c:{shirt:'#f2f4f8',shirt2:'#3fc3ff',pants:'#d5dae4',pants2:'#aab2c2',shoes:'#ff8a3d',shoeStripe:'#ffffff'}},
  {at:13,acc:'cape',c:{shirt:'#2a6fdc',shirt2:'#ffd23f',pants:'#e8463c',pants2:'#b02a2a',shoes:'#e8463c',shoeStripe:'#ffd23f'}},
@@ -87,9 +87,10 @@ const SKINS=[
  {at:31,acc:'dino',c:{shirt:'#5ee36a',shirt2:'#ffe35a',pants:'#2fa83d',pants2:'#1f7a2a',shoes:'#ffffff',shoeStripe:'#5ee36a'}},
  {at:46,acc:'viking',c:{shirt:'#8a5a2c',shirt2:'#c8932f',pants:'#4a3b2a',pants2:'#2f2518',shoes:'#6b4a2a',shoeStripe:'#c8932f'}},
  {at:66,acc:'king',c:{shirt:'#7c3fd6',shirt2:'#ffd23f',pants:'#3a2a6b',pants2:'#271c4a',shoes:'#ffd23f',shoeStripe:'#ffffff'}},
- {at:105,acc:'king',c:{shirt:'#ffd23f',shirt2:'#fff6b0',pants:'#e8a80c',pants2:'#b87d00',shoes:'#fff6b0',shoeStripe:'#ffd23f'}}
+ {at:105,acc:'king',c:{shirt:'#ffd23f',shirt2:'#fff6b0',pants:'#e8a80c',pants2:'#b87d00',shoes:'#fff6b0',shoeStripe:'#ffd23f'}},
+ {at:1,acc:'football',c:{shirt:'#d4202a',shirt2:'#1f8a3a',sleeve:'#16161c',pants:'#16161c',pants2:'#0e0e12',shoes:'#ffffff',shoeStripe:'#16161c'}}
 ];
-function applySkin(i){const k=SKINS[i]||SKINS[0];for(const q in HERO)delete HERO[q];Object.assign(HERO,HERO0,k.c);HERO.acc=k.acc||''}
+function applySkin(i){const k=SKINS[i]||SKINS[0];for(const q in HERO)delete HERO[q];Object.assign(HERO,HERO0,k.c);HERO.acc=k.acc||'';HERO.hoodie=!!k.hoodie}
 const T=36, ROWS=15, VH=ROWS*T, G=2300, STEP=1/120;
 const cv=document.getElementById('c');let ctx=cv.getContext('2d');
 let W=0,H=0,DPR=1,SC=1,VW=640,OY=0,TT=0;
@@ -109,19 +110,19 @@ tr:{title:'ZIPZIP MACERASI',sub:'Koş, zıpla, ateş et!',play:'OYNA',cont:'DEVA
  names:['Yeşil Vadi','Kum Sarayı','Kristal Mağara','Gece Kalesi','Demir Dev’in Fabrikası'],
  complete:'BÖLÜM TAMAM!',next:'SONRAKİ BÖLÜM',menu:'ANA MENÜ',retry:'TEKRAR DENE',over:'OYUN BİTTİ',coins:'Altın',time:'Süre',
  win:'TEBRİKLER!',winTxt:'105 bölümün hepsini bitirdin – gerçek bir kahramansın!',check:'Kontrol noktası!',locked:'Önce boss’u yen!',boss:'DEMİR DEV',bossN:{slimeking:'JÖLE KRAL',scorpion:'KUM AKREBİ',batqueen:'KANAT KRALİÇE',knight:'GECE ŞÖVALYESİ',iron:'DEMİR DEV'},etap:'Etap',etapDone:n=>`Etap ${n} tamamlandı! 🎉`,
- weap:['Köpük Tabancası','Üçlü Atış','Lazer','Konfeti Bombası'],heart:'+1 Can',combo:'SÜPER!',skin:'Kostüm',skinN:['Klasik','Ninja','Astronot','Süper Kahraman','Korsan','Dino','Viking','Kral','Altın Kahraman'],skinAt:n=>`${n}. bölüme gelince açılır`,skinNew:n=>`Yeni kostüm açıldı: ${n}!`,wlv:'SİLAH SV.',wup:n=>`Silahların güçlendi! Silah seviyesi ${n}`,hintT:'⭐ = ATEŞ   ·   ⌃ = ZIPLA (havada 2. kez = ÇİFT ZIPLA)   ·   sol tuş = ZIPLA + ATEŞ',hintK:'J veya X = ATEŞ   ·   BOŞLUK = ZIPLA (2× = ÇİFT ZIPLA)   ·   Q = SİLAH',fire:'ATEŞ',fj:'ZIPLA+ATEŞ',jump:'ZIPLA',swap:'SİLAH',
+ weap:['Köpük Tabancası','Üçlü Atış','Lazer','Konfeti Bombası'],heart:'+1 Can',combo:'SÜPER!',skin:'Kostüm',skinN:['Klasik','Ninja','Astronot','Süper Kahraman','Korsan','Dino','Viking','Kral','Altın Kahraman','Futbolcu'],skinAt:n=>`${n}. bölüme gelince açılır`,skinNew:n=>`Yeni kostüm açıldı: ${n}!`,wlv:'SİLAH SV.',wup:n=>`Silahların güçlendi! Silah seviyesi ${n}`,hintT:'⭐ = ATEŞ   ·   ⌃ = ZIPLA (havada 2. kez = ÇİFT ZIPLA)   ·   sol tuş = ZIPLA + ATEŞ',hintK:'J veya X = ATEŞ   ·   BOŞLUK = ZIPLA (2× = ÇİFT ZIPLA)   ·   Q = SİLAH',fire:'ATEŞ',fj:'ZIPLA+ATEŞ',jump:'ZIPLA',swap:'SİLAH',
  helpT:'Düşmanların kafasına zıpla ya da uzaktan ateş et! Silah kutularını topla.',help:'← → / A D: koş · Boşluk / W: zıpla · J / X: ateş · Q: silah değiştir · Esc: menü',dir:['→ soldan sağa','← sağdan sola']},
 de:{title:'ZIPZIP ABENTEUER',sub:'Lauf, spring, schieß!',play:'SPIELEN',cont:'WEITER',levels:'Level',lv:'Level',
  names:['Grünes Tal','Sandpalast','Kristallhöhle','Nachtburg','Fabrik des Eisenriesen'],
  complete:'LEVEL GESCHAFFT!',next:'NÄCHSTES LEVEL',menu:'HAUPTMENÜ',retry:'NOCHMAL',over:'GAME OVER',coins:'Münzen',time:'Zeit',
  win:'GLÜCKWUNSCH!',winTxt:'Alle 105 Level geschafft – du bist ein echter Held!',check:'Checkpoint!',locked:'Besiege zuerst den Boss!',boss:'EISENRIESE',bossN:{slimeking:'SCHLEIMKÖNIG',scorpion:'SANDSKORPION',batqueen:'FLÜGELKÖNIGIN',knight:'NACHTRITTER',iron:'EISENRIESE'},etap:'Etappe',etapDone:n=>`Etappe ${n} geschafft! 🎉`,
- weap:['Blasenpistole','Dreifachschuss','Laser','Konfettibombe'],heart:'+1 Leben',combo:'SUPER!',skin:'Kostüm',skinN:['Klassisch','Ninja','Astronaut','Superheld','Pirat','Dino','Wikinger','König','Goldheld'],skinAt:n=>`Freigeschaltet ab Level ${n}`,skinNew:n=>`Neues Kostüm freigeschaltet: ${n}!`,wlv:'WAFFEN-STUFE',wup:n=>`Deine Waffen sind stärker! Waffen-Stufe ${n}`,hintT:'⭐ = SCHIESSEN   ·   ⌃ = SPRINGEN (in der Luft nochmal = DOPPELSPRUNG)   ·   linke Taste = SPRUNG + FEUER',hintK:'J oder X = SCHIESSEN   ·   LEERTASTE = SPRINGEN (2× = DOPPELSPRUNG)   ·   Q = WAFFE',fire:'FEUER',fj:'SPRUNG+FEUER',jump:'SPRUNG',swap:'WAFFE',
+ weap:['Blasenpistole','Dreifachschuss','Laser','Konfettibombe'],heart:'+1 Leben',combo:'SUPER!',skin:'Kostüm',skinN:['Klassisch','Ninja','Astronaut','Superheld','Pirat','Dino','Wikinger','König','Goldheld','Fußballer'],skinAt:n=>`Freigeschaltet ab Level ${n}`,skinNew:n=>`Neues Kostüm freigeschaltet: ${n}!`,wlv:'WAFFEN-STUFE',wup:n=>`Deine Waffen sind stärker! Waffen-Stufe ${n}`,hintT:'⭐ = SCHIESSEN   ·   ⌃ = SPRINGEN (in der Luft nochmal = DOPPELSPRUNG)   ·   linke Taste = SPRUNG + FEUER',hintK:'J oder X = SCHIESSEN   ·   LEERTASTE = SPRINGEN (2× = DOPPELSPRUNG)   ·   Q = WAFFE',fire:'FEUER',fj:'SPRUNG+FEUER',jump:'SPRUNG',swap:'WAFFE',
  helpT:'Spring Gegnern auf den Kopf oder schieß aus der Ferne! Sammle Waffenkisten.',help:'← → / A D: laufen · Leertaste / W: springen · J / X: schießen · Q: Waffe wechseln · Esc: Menü',dir:['→ links nach rechts','← rechts nach links']},
 en:{title:'ZIPZIP ADVENTURE',sub:'Run, jump, blast!',play:'PLAY',cont:'CONTINUE',levels:'Levels',lv:'Level',
  names:['Green Valley','Sand Palace','Crystal Cave','Night Castle','Iron Giant’s Factory'],
  complete:'LEVEL CLEAR!',next:'NEXT LEVEL',menu:'MAIN MENU',retry:'TRY AGAIN',over:'GAME OVER',coins:'Coins',time:'Time',
  win:'CONGRATS!',winTxt:'All 105 levels done – you are a true hero!',check:'Checkpoint!',locked:'Beat the boss first!',boss:'IRON GIANT',bossN:{slimeking:'SLIME KING',scorpion:'SAND SCORPION',batqueen:'WING QUEEN',knight:'NIGHT KNIGHT',iron:'IRON GIANT'},etap:'Stage',etapDone:n=>`Stage ${n} complete! 🎉`,
- weap:['Bubble Blaster','Triple Shot','Laser','Confetti Bomb'],heart:'+1 Heart',combo:'SUPER!',skin:'Skin',skinN:['Classic','Ninja','Astronaut','Superhero','Pirate','Dino','Viking','King','Golden Hero'],skinAt:n=>`Unlocks at level ${n}`,skinNew:n=>`New skin unlocked: ${n}!`,wlv:'WEAPON LV',wup:n=>`Your weapons got stronger! Weapon level ${n}`,hintT:'⭐ = SHOOT   ·   ⌃ = JUMP (again in the air = DOUBLE JUMP)   ·   left button = JUMP + FIRE',hintK:'J or X = SHOOT   ·   SPACE = JUMP (2× = DOUBLE JUMP)   ·   Q = WEAPON',fire:'FIRE',fj:'JUMP+FIRE',jump:'JUMP',swap:'WEAPON',
+ weap:['Bubble Blaster','Triple Shot','Laser','Confetti Bomb'],heart:'+1 Heart',combo:'SUPER!',skin:'Skin',skinN:['Classic','Ninja','Astronaut','Superhero','Pirate','Dino','Viking','King','Golden Hero','Footballer'],skinAt:n=>`Unlocks at level ${n}`,skinNew:n=>`New skin unlocked: ${n}!`,wlv:'WEAPON LV',wup:n=>`Your weapons got stronger! Weapon level ${n}`,hintT:'⭐ = SHOOT   ·   ⌃ = JUMP (again in the air = DOUBLE JUMP)   ·   left button = JUMP + FIRE',hintK:'J or X = SHOOT   ·   SPACE = JUMP (2× = DOUBLE JUMP)   ·   Q = WEAPON',fire:'FIRE',fj:'JUMP+FIRE',jump:'JUMP',swap:'WEAPON',
  helpT:'Stomp on enemies or blast them from afar! Grab weapon boxes.',help:'← → / A D: run · Space / W: jump · J / X: shoot · Q: switch weapon · Esc: menu',dir:['→ left to right','← right to left']}
 };
 const S=()=>STR[save.lang]||STR.tr;
@@ -543,38 +544,40 @@ function step(dt){
 /* ================= Çizim: Kahraman ================= */
 function drawKid(g,x,y,face,st){
  g.save();g.translate(x,y);g.scale(face,1);if(st.sq)g.scale(1+.22*st.sq,1-.22*st.sq);if(st.rot)g.rotate(st.rot);if(st.spin){g.translate(0,-26);g.rotate(st.spin);g.translate(0,26)}
- if(st.hang){g.fillStyle=HERO.shirt;rr(g,1,-58,5,26,2.5);g.fill();rr(g,9,-58,5,26,2.5);g.fill();g.fillStyle=HERO.skin;circ(3.5,-58,3.2);circ(11.5,-58,3.2)}
+ if(st.hang){g.fillStyle=HERO.sleeve||HERO.shirt;rr(g,1,-58,5,26,2.5);g.fill();rr(g,9,-58,5,26,2.5);g.fill();g.fillStyle=HERO.skin;circ(3.5,-58,3.2);circ(11.5,-58,3.2)}
  const ph=st.ph||0,air=st.air||st.hang,bob=air?0:-Math.abs(Math.sin(ph))*1.6;
  const la=air?-.55:Math.sin(ph)*.65,lb=air?.45:-Math.sin(ph)*.65;
  const leg=(ox,a,col)=>{g.save();g.translate(ox,-13);g.rotate(a);g.fillStyle=col;g.fillRect(-3.2,0,6.4,9);g.fillStyle=HERO.shoes;rr(g,-4,7.5,11,5.5,2.5);g.fill();g.fillStyle=HERO.shoeStripe;g.fillRect(-2,9.2,6,1.6);g.restore()};
  if(HERO.acc==='cape'){const sw=Math.sin(TT*6)*3+(air?6:Math.abs(Math.sin(ph))*4);g.fillStyle='#e8463c';g.beginPath();g.moveTo(-8,-29+bob);g.lineTo(5,-29+bob);g.quadraticCurveTo(-6,-14,-14-sw,-3);g.lineTo(-24-sw,-9);g.closePath();g.fill();g.fillStyle='#b02a2a';g.beginPath();g.moveTo(-8,-29+bob);g.quadraticCurveTo(-14,-18,-24-sw,-9);g.lineTo(-19-sw,-6);g.closePath();g.fill()}
  leg(-3,lb,HERO.pants2);
  // arka kol
- g.fillStyle=HERO.shirt;g.save();g.translate(-6,-24+bob);g.rotate(air?-.8:-Math.sin(ph)*.6);rr(g,-2.5,0,5,10,2.5);g.fill();g.fillStyle=HERO.skin;circ(0,10,2.6);g.restore();
+ g.fillStyle=HERO.sleeve||HERO.shirt;g.save();g.translate(-6,-24+bob);g.rotate(air?-.8:-Math.sin(ph)*.6);rr(g,-2.5,0,5,10,2.5);g.fill();g.fillStyle=HERO.skin;circ(0,10,2.6);g.restore();
  // gövde (kapüşonlu)
  g.fillStyle=HERO.shirt;rr(g,-10,-29+bob,20,18,7);g.fill();g.fillStyle='rgba(0,0,0,.18)';rr(g,-10,-17+bob,20,6,4);g.fill();g.fillStyle='rgba(255,255,255,.25)';rr(g,-8,-27+bob,6,8,3);g.fill();
- g.fillStyle=HERO.shirt2;g.beginPath();g.moveTo(1,-24+bob);g.lineTo(3,-20+bob);g.lineTo(7,-20+bob);g.lineTo(4,-17+bob);g.lineTo(5.5,-13+bob);g.lineTo(1,-15.5+bob);g.lineTo(-3.5,-13+bob);g.lineTo(-2,-17+bob);g.lineTo(-5,-20+bob);g.lineTo(-1,-20+bob);g.closePath();g.fill();
+ if(HERO.hoodie){g.fillStyle='rgba(0,0,0,.22)';rr(g,-7,-19+bob,14,6,3);g.fill();g.strokeStyle='#e9e4d6';g.lineWidth=1.3;g.beginPath();g.moveTo(1,-28+bob);g.lineTo(0,-22+bob);g.moveTo(5,-28+bob);g.lineTo(5.5,-22.5+bob);g.stroke();g.fillStyle='#3d4434';g.beginPath();g.ellipse(-3,-29+bob,9,4,0,0,Math.PI*2);g.fill()}
+ else if(HERO.acc==='football'){g.fillStyle=HERO.shirt2;g.beginPath();g.moveTo(-2,-29+bob);g.lineTo(3,-24+bob);g.lineTo(8,-29+bob);g.lineTo(6,-29+bob);g.lineTo(3,-26+bob);g.lineTo(0,-29+bob);g.closePath();g.fill();g.fillRect(-10,-14+bob,20,2);g.fillStyle='#ffd23f';circ(5,-21+bob,2.6);g.fillStyle='#1f8a3a';circ(5,-21+bob,1.3);
+  g.fillStyle=HERO.shirt2;rr(g,-10,-12.5,20,6,2.5);g.fill()}
+ else{g.fillStyle=HERO.shirt2;g.beginPath();g.moveTo(1,-24+bob);g.lineTo(3,-20+bob);g.lineTo(7,-20+bob);g.lineTo(4,-17+bob);g.lineTo(5.5,-13+bob);g.lineTo(1,-15.5+bob);g.lineTo(-3.5,-13+bob);g.lineTo(-2,-17+bob);g.lineTo(-5,-20+bob);g.lineTo(-1,-20+bob);g.closePath();g.fill();}
  leg(3,la,HERO.pants);
  // baş
  const hy=-41+bob;
- g.fillStyle=HERO.skin;circ(0,hy,13.5);circ(-9,hy+2,3.4);g.fillStyle='rgba(160,80,60,.18)';g.beginPath();g.arc(0,hy,13.5,.2*Math.PI,.95*Math.PI);g.fill();g.fillStyle='rgba(255,255,255,.35)';ell(-4,hy-4,4,3);
- // saç
- g.fillStyle=HERO.hair;g.beginPath();g.ellipse(-1,hy-5,14.5,10,0,Math.PI*.98,Math.PI*2.02);g.fill();
- g.beginPath();g.moveTo(-14,hy-3);g.quadraticCurveTo(-16,hy+6,-10,hy+5);g.lineTo(-8,hy-4);g.fill();
- g.beginPath();g.moveTo(3,hy-9);g.lineTo(14,hy-4);g.lineTo(9,hy-12);g.fill();
- g.beginPath();g.moveTo(-3,hy-14);g.quadraticCurveTo(-1,hy-23,6,hy-21);g.quadraticCurveTo(1,hy-19,2,hy-13);g.fill();
+ g.fillStyle=HERO.skin;circ(0,hy,13.5);circ(-10,hy+2,4.2);g.fillStyle='rgba(200,120,100,.35)';circ(-10,hy+2,2);g.fillStyle=HERO.skin;g.fillStyle='rgba(160,80,60,.18)';g.beginPath();g.arc(0,hy,13.5,.2*Math.PI,.95*Math.PI);g.fill();g.fillStyle='rgba(255,255,255,.35)';ell(-4,hy-4,4,3);
+ // saç (kısa yanlar, yana taranmış üst)
+ g.fillStyle=HERO.hair;g.globalAlpha=.5;g.beginPath();g.moveTo(-14,hy-4);g.quadraticCurveTo(-15.5,hy+4,-11.5,hy+6);g.lineTo(-8,hy-4);g.closePath();g.fill();g.beginPath();g.moveTo(10,hy-7);g.lineTo(13.6,hy-5);g.lineTo(13.4,hy);g.lineTo(11,hy-3);g.fill();g.globalAlpha=1;
+ g.beginPath();g.moveTo(-14,hy-3);g.quadraticCurveTo(-16,hy-16,-6,hy-20);g.quadraticCurveTo(4,hy-26,12,hy-21);g.quadraticCurveTo(17,hy-17,15,hy-9);g.quadraticCurveTo(12,hy-12,7,hy-11);g.quadraticCurveTo(0,hy-10,-4,hy-8);g.quadraticCurveTo(-9,hy-7,-10,hy-3);g.closePath();g.fill();
+ g.strokeStyle='rgba(255,255,255,.22)';g.lineWidth=1.3;g.lineCap='round';g.beginPath();g.moveTo(-7,hy-15);g.quadraticCurveTo(2,hy-22,11,hy-18);g.moveTo(-3,hy-11);g.quadraticCurveTo(4,hy-15,12,hy-13);g.stroke();
  if(HERO.acc==='cape'){g.fillStyle='#1b3a8a';rr(g,-3,hy-3.5,17,9,4);g.fill()}
  // gözler
  const blink=st.blink?1:5.2;
  g.fillStyle='#fff';g.beginPath();g.ellipse(2.5,hy+1,3.6,blink,0,0,Math.PI*2);g.ellipse(9.8,hy+1,3.2,blink*.95,0,0,Math.PI*2);g.fill();
  if(!st.blink){g.fillStyle=st.dead?'#000':HERO.eye;circ(3.8,hy+1.6,2.2);circ(10.8,hy+1.6,2);g.fillStyle='#fff';circ(4.6,hy,.9);circ(11.5,hy,.8)}
  g.fillStyle='rgba(255,110,130,.45)';circ(9,hy+7.5,2.8);circ(-1,hy+7.5,2.4);
- g.strokeStyle='#7a2b1e';g.lineWidth=1.6;g.lineCap='round';g.beginPath();if(st.dead){g.arc(7,hy+10,2.5,Math.PI,0)}else g.arc(7,hy+6.5,3,.15*Math.PI,.85*Math.PI);g.stroke();
+ if(st.dead){g.strokeStyle='#7a2b1e';g.lineWidth=1.6;g.lineCap='round';g.beginPath();g.arc(7,hy+10,2.5,Math.PI,0);g.stroke()}else{g.fillStyle='#6e2418';g.beginPath();g.moveTo(1.5,hy+5.5);g.quadraticCurveTo(7.5,hy+14,13.5,hy+5);g.quadraticCurveTo(7.5,hy+6.8,1.5,hy+5.5);g.fill();g.fillStyle='#fff';g.beginPath();g.moveTo(2.6,hy+5.8);g.lineTo(6.2,hy+6.3);g.lineTo(6.1,hy+8.2);g.lineTo(3.6,hy+7.6);g.fill();g.beginPath();g.moveTo(8.6,hy+6.3);g.lineTo(12.6,hy+5.5);g.lineTo(11.6,hy+7.7);g.lineTo(8.7,hy+8.2);g.fill();g.fillStyle='#ff8a9a';ell(7.8,hy+10.6,2.6,1.3)}
  drawAcc(g,hy);
  // ön kol + oyuncak silah
  if(st.hang){g.restore();return}
  const rc=st.shoot?-2.5:0;
- g.fillStyle=HERO.shirt;g.save();g.translate(3,-24+bob);g.rotate(-1.35);rr(g,-2.5,-1,5,11,2.5);g.fill();g.restore();
+ g.fillStyle=HERO.sleeve||HERO.shirt;g.save();g.translate(3,-24+bob);g.rotate(-1.35);rr(g,-2.5,-1,5,11,2.5);g.fill();g.restore();
  g.fillStyle=HERO.skin;circ(12+rc,-21+bob,2.7);
  const wc=st.wcol||WEAP[0].col;g.fillStyle=wc;rr(g,9+rc,-26+bob,15,7.5,3.5);g.fill();
  g.fillStyle='rgba(0,0,0,.25)';rr(g,11+rc,-20+bob,4.5,6,2);g.fill();
