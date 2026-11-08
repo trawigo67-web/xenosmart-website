@@ -237,7 +237,7 @@ play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l1
     $('shr').onclick=e=>{ if (navigator.share && !inApp){ e.preventDefault(); navigator.share({text:t.shareText}).catch(()=>{}); } };
   }
   if(location.protocol==='file:'){$('g1453').href='https://xenosmart.de/spiel/1453/';$('gzip').href='https://xenosmart.de/spiel/zipzip/';}
-  function offDone(){try{return localStorage.getItem('bukoOffline')==='buko-v42'}catch(e){return false}}
+  function offDone(){try{return localStorage.getItem('bukoOffline')==='buko-v43'}catch(e){return false}}
   async function saveOffline(t){const b=$('offB');if(!b||b.disabled)return;b.disabled=true;
    try{const lst=await (await fetch('offline-files.json',{cache:'no-store'})).json();const c=await caches.open(lst.v);let n=0,bad=0;
     for(const f of lst.files){try{const r=await fetch(f,{cache:'reload'});if(r.ok)await c.put(new Request(new URL(f,location.href).href),r);else bad++}catch(e){bad++}n++;b.textContent=t.offP(Math.round(n/lst.files.length*100))}
