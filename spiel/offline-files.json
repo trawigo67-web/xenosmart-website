@@ -1,5 +1,5 @@
 {
-"v": "buko-v34",
+"v": "buko-v35",
 "files": [
 "./",
 "1453/",
@@ -247,6 +247,8 @@
 "musa/selim_walk.webp",
 "musa/selim_win.webp",
 "musa/rap3.mp3",
-"musa/rap4.mp3"
+"musa/rap4.mp3",
+"musa/vc_mustafa.mp3",
+"musa/vc_cevat.mp3"
 ]
 }

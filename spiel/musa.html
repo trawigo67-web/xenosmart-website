@@ -490,7 +490,7 @@ function update(f,inp,pin,o){
   else if(f.buf&&f.buf.k==='kick'){f.buf=null;startAtk(f,'kick')}
   else if(inp.tag&&!pin.tag&&game.team&&doTag(f)){}
   else if(inp.assist&&!pin.assist&&!f.jokerUsed&&JOKER.includes(f.look.kind)){f.jokerUsed=1;proj.push({x:f.x-f.facing*300,y:GROUND-80,vx:f.facing*17,owner:f,kind:'taxi',t:0,taxi:1,joker:1});sfx('honk');banner={txt:T().jokerCall,t:50,c:'#ffd21a'};const j=document.getElementById('jk'+P.indexOf(f));j&&j.classList.add('used')}
-  else if(inp.special&&!pin.special&&f.meter>=100&&onG){f.meter=0;if(f===P[0]&&REC())stAdd('sp');if(f.look.kind==='buko')bukoCopy(f,o);startAtk(f,'special');sfx('special');banner={txt:f.look.sp+'!',t:55,c:f.look.bar};if(f.look.kind==='abdullah'){apoVoice(f,1)}else if(f.look.shout){f.say=f.look.shout[Math.random()*f.look.shout.length|0];f.sayT=80}}
+  else if(inp.special&&!pin.special&&f.meter>=100&&onG){f.meter=0;if(f===P[0]&&REC())stAdd('sp');if(f.look.kind==='buko')bukoCopy(f,o);startAtk(f,'special');sfx('special');banner={txt:f.look.sp+'!',t:55,c:f.look.bar};if(f.look.kind==='abdullah'){apoVoice(f,1)}else if(f.look.shout){f.say=f.look.shout[Math.random()*f.look.shout.length|0];f.sayT=80;charVoice(f,f.say)}else charVoice(f,f.look.sp+'!')}
   if(!f.atk)f.state=!onG?'jump':(mv?'walk':'idle');
   if(f.state==='walk')f.walk+=0.28;
  }
@@ -860,6 +860,16 @@ function draw(){
 
 
 
+
+/* ---------- Character voices ---------- */
+const VCF={mustafa:'vc_mustafa.mp3',cevat:'vc_cevat.mp3'},VCA={};
+const VCP={musa:[.8,1],cevat:[.7,.9],dursun:[.45,.85],kemal:[.6,.95],mevlut:[.75,1.05],timur:[1,1.08],nazif:[1,1.1],yusuf:[.9,1.12],soner:[1.15,1.18],sinasi:[1.25,.88],storm:[.2,.78],mustafa:[.85,1.05],buko:[1.9,1.2],muaz:[2,1.15],selim:[1.7,1.15]};
+function charVoice(f,txt){if(MUTE||(game.online&&NET&&NET.role==='guest'))return;const k=f.look.kind;
+ if(NET&&NET.role==='host'&&game.online)NET.ev.push(['c',k,txt]);_charVoice(k,txt)}
+function _charVoice(k,txt){if(MUTE)return;
+ if(LANG==='tr'&&VCF[k]){try{const a=VCA[k]||(VCA[k]=new Audio('musa/'+VCF[k]));a.currentTime=0;a.volume=1;a.play().catch(()=>{})}catch(e){}return}
+ try{if(!window.speechSynthesis)return;const u=new SpeechSynthesisUtterance(String(txt).replace(/[^\p{L}\p{N}\s!?,.'’]/gu,''));u.lang={tr:'tr-TR',de:'de-DE',en:'en-US'}[LANG];const p=VCP[k]||[1,1];u.pitch=p[0];u.rate=p[1];u.volume=1;
+  const vs=speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith(u.lang.slice(0,2)));if(vs.length)u.voice=vs[0];speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 /* ---------- Tag team ---------- */
 let TP=[[],[]];
 function doTag(f,forced){const i=P.indexOf(f);if(i<0||!game.team)return false;const nb=game.team[i].find(x=>x!==f&&x.hp>0);if(!nb)return false;
@@ -935,7 +945,7 @@ function netApply(){const s=NET.snap;if(!s||s===NET.applied)return;NET.applied=s
  proj=s.proj.map(p=>({...p,owner:P[p.owner]}));parts=s.parts;texts=s.texts;banner=s.banner;shake=s.shake;time=s.time;puddles=s.puddles.map(q=>({...q,own:P[q.own]}));HZ={t:s.HZ.t,items:s.HZ.items.map(z=>({...z,hit:z.hit?z.hit.map(i=>P[i]):undefined}))};
  game.team=s.TM?s.TM.map((tm,i)=>tm.map(b=>b===-1?P[i]:b)):null;
  const g=s.g;game.timer=g.timer;game.round=g.round;game.msg=g.msg;game.msg2=g.msg2;game.msgT=g.msgT;game.cz=g.cz;game.cam=g.cam;game.need=g.need;
- for(const e of s.ev){if(e[0]==='s')_sfx(e[1]);else if(e[0]==='v')_voice(e[1])}
+ for(const e of s.ev){if(e[0]==='s')_sfx(e[1]);else if(e[0]==='v')_voice(e[1]);else if(e[0]==='c')_charVoice(e[1],e[2])}
  if(g.state==='over'&&game.state!=='over'){game.state='over';const w=P[0].wins>=P[1].wins?P[0]:P[1];overlay.classList.remove('hidden');document.body.classList.add('menu');card.innerHTML=`<h1 style="font-size:clamp(28px,8vw,54px)">${w.look.name}<br>${T().won}</h1><img src="musa/${w.look.kind}_win.webp" style="height:min(28vh,190px)" alt=""><h2>${T().onHostPick.replace('…','')}</h2><button class="big" id="r2">${T().menu}</button>`;document.getElementById('r2').onclick=()=>{netClose();P=[];menu()}}
  else if(g.state!=='over'){if(game.state==='over'){overlay.classList.add('hidden');document.body.classList.remove('menu')}game.state=g.state==='vs'?'intro':g.state}}
 function netGuestInput(){const o={};const a=keyIn[0],b=keyIn[1],c=touchIn[NET.side||0];for(const n in a)o[n]=a[n]||b[n]||c[n];const j=JSON.stringify(o);NET.inT=(NET.inT||0)+1;if(j!==NET.last||NET.inT%15===0){NET.last=j;netSend({t:'in',i:o})}}
