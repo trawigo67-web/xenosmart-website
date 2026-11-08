@@ -47,7 +47,7 @@
   };
   var EMO={'\uD83D\uDD0A':'sound','\uD83D\uDD09':'sound','\uD83D\uDD08':'sound','\uD83D\uDD07':'mute','\u23F8':'pause','\u23F8\uFE0F':'pause','\u25B6':'play','\u25B6\uFE0F':'play','\u21BB':'restart','\u21BA':'restart','\uD83D\uDD04':'restart','\u2B05':'back','\u2B05\uFE0F':'back'};
   window.BukoIcons=IC;
-  var MASCOT=base+'buko.svg';
+  var MASCOT=base+'buko.webp', MINI=base+'buko-mini.webp';
 
   function candy(el, icon, kind){
     if (!el) return;
@@ -69,7 +69,7 @@
       var parts=t.nodeValue.split(/(🏠|🦎)/), frag=document.createDocumentFragment();
       parts.forEach(function(s){
         if (s==='🏠'){ var sp=document.createElement('span'); sp.innerHTML=IC.home; frag.appendChild(sp.firstChild); }
-        else if (s==='🦎'){ var im=document.createElement('img'); im.src=MASCOT; im.alt=''; im.className='bk-mini'; frag.appendChild(im); }
+        else if (s==='🦎'){ var im=document.createElement('img'); im.src=MINI; im.alt=''; im.className='bk-mini'; frag.appendChild(im); }
         else if (s) frag.appendChild(document.createTextNode(s));
       });
       p.replaceChild(frag, t);
@@ -151,7 +151,7 @@
     addLock();
     // Oyun seçici başlığı
     var pk=document.querySelectorAll('#picker .pk > div:first-child');
-    for (var i=0;i<pk.length;i++){ if (!pk[i].querySelector('img.bk-mini') && /BUKO GAMES/.test(pk[i].textContent)){ pk[i].innerHTML='<img class="bk-mini" src="'+MASCOT+'" alt="" style="height:30px">BUKO GAMES'; pk[i].classList.add('bk-brand'); pk[i].__bk=1; } }
+    for (var i=0;i<pk.length;i++){ if (!pk[i].querySelector('img.bk-mini') && /BUKO GAMES/.test(pk[i].textContent)){ pk[i].innerHTML='<img class="bk-mini" src="'+MINI+'" alt="" style="height:30px">BUKO GAMES'; pk[i].classList.add('bk-brand'); pk[i].__bk=1; } }
     var pkh=document.querySelectorAll('#picker a.pkh');
     for (var j=0;j<pkh.length;j++){ var sv=pkh[j].querySelector('svg'); if (sv && !sv.classList.contains('bk-ic')){ var d=document.createElement('span'); d.innerHTML=IC.home; pkh[j].replaceChild(d.firstChild, sv); } }
     if (roots) roots.forEach(swapEmoji); else swapEmoji(document.body);
