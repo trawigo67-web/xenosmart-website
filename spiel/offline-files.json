@@ -1,5 +1,5 @@
 {
- "v": "buko-v11",
+ "v": "buko-v12",
  "files": [
   "./",
   "1453/",
@@ -194,6 +194,28 @@
   "musa/sinasi_punch.webp",
   "musa/sinasi_special.webp",
   "musa/sinasi_walk.webp",
-  "musa/sinasi_win.webp"
+  "musa/sinasi_win.webp",
+  "musa/apo_1.mp3",
+  "musa/apo_2.mp3",
+  "musa/apo_3.mp3",
+  "musa/apo_4.mp3",
+  "musa/apo_5.mp3",
+  "musa/bg_bartin.jpg",
+  "musa/bg_bartin_t.jpg",
+  "musa/bg_fightclub.jpg",
+  "musa/bg_fightclub_t.jpg",
+  "musa/bg_filyos_t.jpg",
+  "musa/bg_imamlar.jpg",
+  "musa/bg_imamlar_t.jpg",
+  "musa/bg_kisla.jpg",
+  "musa/bg_kisla_t.jpg",
+  "musa/bg_meydan2_t.jpg",
+  "musa/bg_meydan_t.jpg",
+  "musa/bg_saltukova.jpg",
+  "musa/bg_saltukova_t.jpg",
+  "musa/bg_yenikoy.jpg",
+  "musa/bg_yenikoy_t.jpg",
+  "musa/bg_zonguldak.jpg",
+  "musa/bg_zonguldak_t.jpg"
  ]
 }
