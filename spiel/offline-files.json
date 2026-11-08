@@ -1,5 +1,5 @@
 {
- "v": "buko-v19",
+ "v": "buko-v20",
  "files": [
   "./",
   "1453/",
@@ -221,6 +221,14 @@
   "musa/bg_zonguldak.jpg",
   "musa/bg_zonguldak_t.jpg",
   "musa/rap1.mp3",
-  "musa/rap2.mp3"
+  "musa/rap2.mp3",
+  "musa/buko_block.webp",
+  "musa/buko_hit.webp",
+  "musa/buko_idle.webp",
+  "musa/buko_kick.webp",
+  "musa/buko_punch.webp",
+  "musa/buko_special.webp",
+  "musa/buko_walk.webp",
+  "musa/buko_win.webp"
  ]
 }
