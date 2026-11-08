@@ -185,6 +185,8 @@ function pop(x,y,txt,c,big){texts.push({x,y,txt,c,life:45,big})}
 
 /* ---------- Sound ---------- */
 let AC=null,MUTE=false;try{MUTE=localStorage.getItem('musaMute')==='1'}catch(e){}
+const VO={};function voice(n){if(MUTE)return;try{const a=VO[n]||(VO[n]=new Audio('musa/vo_'+n+'.mp3'));a.volume=.7;a.currentTime=0;const p=a.play();p&&p.catch(()=>{})}catch(e){}}
+['r1','r2','final','fight','ko','perfect','great','timeup','win','choose'].forEach(n=>{const a=new Audio();a.preload='auto';a.src='musa/vo_'+n+'.mp3';VO[n]=a});
 function sfx(type){
  if(!AC||MUTE)return;
  try{
@@ -215,7 +217,7 @@ function damage(o,d,dir,push,att){
   if(o.hp>0&&att.atk!=='special'&&(o.juggle||(att.atk==='kick'&&att.combo>=3))){o.vy=o.juggle?-8.5:-13.5;o.vx=dir*.6;o.stun=70;o.juggle=1;o.state='hit';if(att.combo<4)pop(o.x,o.y-340,T().air,'#ffcc33',true);shake=10;freeze=7}
  }
  if(game.prac&&o.hp<=0)o.hp=1;
- if(o.hp<=0){o.hp=0;o.state='ko';o.t=0;o.vy=-9;o.vx=dir*6;sfx('ko');shake=14;freeze=18;slow=70;banner={txt:'K.O.!',t:80,c:'#ff4a4a'};endRound(att)}
+ if(o.hp<=0){o.hp=0;o.state='ko';o.t=0;o.vy=-9;o.vx=dir*6;sfx('ko');shake=14;freeze=18;slow=70;game.cam={x:o.x,y:o.y-170,t:110,T:110};voice('ko');banner={txt:'K.O.!',t:80,c:'#ff4a4a'};endRound(att)}
 }
 
 function update(f,inp,pin,o){
@@ -296,12 +298,12 @@ function startRound(){
  P=[newFighter(RK(PICK[0]),240,1),newFighter(RK(PICK[1]),720,-1)];
  P[0].wins=w[0];P[1].wins=w[1];game.msg2='';
  if(game.surv&&game.surv.hp!=null){P[0].hp=P[0].ghost=game.surv.hp}
- proj=[];parts=[];texts=[];banner=null;freeze=slow=0;game.timer=60*60;game.state='intro';game.msg=T().round+' '+game.round;game.arena=T().arenas[(game.round-1)%3];game.msgT=110;
+ proj=[];parts=[];texts=[];banner=null;freeze=slow=0;game.timer=60*60;game.state='intro';game.msg=T().round+' '+game.round;setTimeout(()=>voice(game.round===1?'r1':(P[0].wins===game.need-1&&P[1].wins===game.need-1)?'final':'r2'),350);game.arena=T().arenas[(game.round-1)%3];game.msgT=110;
 }
 function endRound(winner){
  if(game.state!=='fight')return;
  game.state='roundEnd';game.msgT=170;
- if(winner){winner.wins++;game.msg=winner.look.name+' '+T().won;game.msg2=winner.hp>=winner.maxhp-0.01?T().perfect:winner.hp<winner.maxhp*.15?T().great:'';if(winner.state!=='ko'){winner.state='win';winner.atk=null}}
+ if(winner){winner.wins++;game.msg=winner.look.name+' '+T().won;game.msg2=winner.hp>=winner.maxhp-0.01?T().perfect:winner.hp<winner.maxhp*.15?T().great:'';if(game.msg2)setTimeout(()=>voice(game.msg2===T().perfect?'perfect':'great'),1500);if(winner.state!=='ko'){winner.state='win';winner.atk=null}}
  else game.msg=T().draw;
 }
 function step(){
@@ -319,11 +321,11 @@ function step(){
   for(const n in inputs[0])inputs[0][n]=inputs[0][n]||inputs[1][n];
   if(game.prac){inputs[1]=mkIn()}else{runAI();inputs[1]={...ai.hold}}
  }
- if(game.state==='intro'){game.msgT--;if(game.msgT===35)game.msg=T().fight;if(game.msgT<=0)game.state='fight'}
+ if(game.state==='intro'){game.msgT--;if(game.msgT===35){game.msg=T().fight;voice('fight')}if(game.msgT<=0)game.state='fight'}
  if(game.state==='fight'){
   game.timer--;
   if(game.prac)game.timer=60*60;
-  if(game.timer<=0){game.timer=0;banner={txt:T().timeup,t:70,c:'#ffd84a'};const w=P[0].hp===P[1].hp?null:(P[0].hp>P[1].hp?P[0]:P[1]);endRound(w)}
+  if(game.timer<=0){game.timer=0;banner={txt:T().timeup,t:70,c:'#ffd84a'};voice('timeup');const w=P[0].hp===P[1].hp?null:(P[0].hp>P[1].hp?P[0]:P[1]);endRound(w)}
  }
  if(game.state==='roundEnd'){
   game.msgT--;
@@ -487,7 +489,7 @@ function hud(){
  rr(W/2-38,18,76,46,10,'#000a');
  ctx.fillStyle=game.timer<600?'#ff6a6a':'#fff';ctx.font='900 32px system-ui';ctx.textAlign='center';
  ctx.fillText(game.prac?'∞':Math.ceil(game.timer/60),W/2,53);
- if(game.state==='intro'||game.state==='roundEnd'){
+ if(game.state==='intro'||(game.state==='roundEnd'&&!banner)){
   const s=game.state==='intro'&&game.msg===T().fight?1.2:1;
   ctx.save();ctx.translate(W/2,H/2-30);ctx.scale(s,s);
   ctx.font='900 64px system-ui';ctx.lineWidth=10;ctx.strokeStyle='#7a2f00';ctx.strokeText(game.msg,0,0);
@@ -500,6 +502,8 @@ function hud(){
 function draw(){
  ctx.save();
  if(shake)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
+ if(game.cam&&game.cam.t>0){const c=game.cam,k=Math.min(1,c.t/25)*Math.min(1,(c.T-c.t)/12+.0001),z=1+.32*k;c.t--;
+  const hw=W/2/z,hh=H/2/z,cx=Math.max(hw,Math.min(W-hw,W/2+(c.x-W/2)*k*.9)),cy=Math.max(hh,Math.min(H-hh,H/2+(c.y-H/2)*k*.9));ctx.translate(W/2,H/2);ctx.scale(z,z);ctx.translate(-cx,-cy)}
  bg();
  if(P.length){
   const order=P[0].atk?[1,0]:[0,1];
@@ -623,7 +627,7 @@ function mode1(){
  document.getElementById('bk').onclick=menu;
 }
 function pick(slot,title,done,rnd,back){
- card.classList.add('wide');const t=T();
+ card.classList.add('wide');const t=T();if(!slot){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)()}catch(e){}voice('choose')}
  const st=r=>`<span class="st">⚡${Math.round(r.spd*10)} 💪${Math.round(r.pow*10)} ❤️${r.hp}</span>`;
  card.innerHTML=`<h1 style="font-size:clamp(24px,min(7vw,9vh),44px)">${title}</h1>${slot?`<div class="pk">${t.p1is}${RK(PICK[0]).name}</div>`:''}
  <div class="roster">${ROSTER.map(r=>`<button class="rc${slot&&r.kind===PICK[0]?' taken':''}${r.star?' star':''}" data-k="${r.kind}" style="border-color:${r.bar}55">${r.star?`<em class="stb">${t.special}</em>`:''}<img src="musa/${r.kind}_idle.webp" alt="" ${slot?'style="transform:scaleX(-1)"':''}><b style="color:${r.bar}">${r.name}</b><i>${r.tag} · ${r.sp}</i>${st(r)}</button>`).join('')}</div>
@@ -671,6 +675,7 @@ function matchEnd(){
   else{let best=0;try{best=Math.max(sv.n,+localStorage.getItem('musaSurv')||0);localStorage.setItem('musaSurv',best)}catch(e){}
    msg=t.survEnd(sv.n)+' · '+t.survBest(best);btn1=`<button class="big alt" id="r1">${t.again}</button>`}
  }else msg=game.mode===1?(won?t.champ1(w.look.name):t.lose1(w.look.name)):t.champ2(w.look.name);
+ if(won||game.mode===2)voice('win');
  overlay.classList.remove('hidden');document.body.classList.add('menu');
  card.innerHTML=`<h1 style="font-size:clamp(28px,8vw,54px)">${w.look.name}<br>${t.won}</h1><h2>${msg}</h2>${extra}
  <img src="musa/${w.look.kind}_win.webp" style="height:min(28vh,190px);filter:drop-shadow(0 8px 16px #000a)" alt="">${btn1}<button class="big" id="r2">${t.menu}</button><a class="big" style="text-decoration:none;background:#ffffff1a;box-shadow:none" href="index.html">🏠 BUKO GAMES</a>`;

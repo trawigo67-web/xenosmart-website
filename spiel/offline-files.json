@@ -1,5 +1,5 @@
 {
- "v": "buko-v7",
+ "v": "buko-v8",
  "files": [
   "./",
   "1453/",
@@ -159,6 +159,16 @@
   "musa/yusuf_punch.webp",
   "musa/yusuf_special.webp",
   "musa/yusuf_walk.webp",
-  "musa/yusuf_win.webp"
+  "musa/yusuf_win.webp",
+  "musa/vo_choose.mp3",
+  "musa/vo_fight.mp3",
+  "musa/vo_final.mp3",
+  "musa/vo_great.mp3",
+  "musa/vo_ko.mp3",
+  "musa/vo_perfect.mp3",
+  "musa/vo_r1.mp3",
+  "musa/vo_r2.mp3",
+  "musa/vo_timeup.mp3",
+  "musa/vo_win.mp3"
  ]
 }
