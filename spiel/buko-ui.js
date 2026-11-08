@@ -28,6 +28,16 @@
     '.bk-candy.bk-on{background:#7ED957!important}',
     '.bk-lock.bk-float{position:fixed!important;z-index:40;right:calc(10px + env(safe-area-inset-right));top:calc(64px + env(safe-area-inset-top));width:44px;height:44px;padding:0}',
     '#bkToast{position:fixed;left:50%;top:calc(70px + env(safe-area-inset-top));transform:translateX(-50%);z-index:99999;max-width:88vw;text-align:center;font:700 15px/1.35 Fredoka,system-ui,sans-serif;color:#12301E;background:#FFC93C;border:3px solid #12301E;border-radius:16px;box-shadow:0 4px 0 #12301E;padding:9px 14px;pointer-events:none;transition:opacity .3s;opacity:0}',
+    '#bkDock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));width:min(480px,calc(100vw - 32px));z-index:99990;display:none}',
+    '#bkDock.on{display:block}',
+    '#bkDock button{width:100%;min-height:62px;border-radius:20px;border:3px solid #12301E;background:#FFC93C;color:#12301E;box-shadow:0 5px 0 #12301E,0 10px 30px rgba(0,0,0,.35);font:400 24px/1.1 "Lilita One",system-ui,sans-serif;letter-spacing:1px;padding:8px 16px;cursor:pointer;-webkit-tap-highlight-color:transparent}',
+    '#bkDock button:active{transform:translateY(4px);box-shadow:0 1px 0 #12301E}',
+    '@media (max-height:500px){#bkDock{left:auto;right:calc(14px + env(safe-area-inset-right));transform:none;width:300px;bottom:calc(12px + env(safe-area-inset-bottom))}#bkDock button{min-height:52px;font-size:20px}}',
+    'body.bk-dock-on .bk-primary-hidden{display:none!important}',
+    'body.bk-dock-on #card .box,body.bk-dock-on #card2 .box{padding-bottom:96px!important}',
+    'body.bk-dock-on #oStart{padding-bottom:110px!important}',
+    '.bk-rtog{display:inline-flex;align-items:center;gap:6px;margin:8px auto 4px;padding:10px 18px;min-height:44px;border-radius:999px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:inherit;font:600 15px Fredoka,system-ui,sans-serif;cursor:pointer}',
+    '.bk-rules-h{display:none!important}',
     '@keyframes bkIn{from{opacity:0}to{opacity:1}}body{animation:bkIn .22s ease-out}',
     '#bkSheet{position:fixed;inset:0;z-index:100000;display:none;align-items:flex-end;justify-content:center;background:rgba(3,14,16,.55);-webkit-tap-highlight-color:transparent}',
     '#bkSheet.on{display:flex}',
@@ -213,6 +223,62 @@
     sheet.querySelector('.cl').addEventListener('click', closeSheet);
     document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeSheet(); });
   }
+
+  /* ---- Telefonda: ana "Oyna" butonu başparmak bölgesinde (altta), uzun kurallar katlanır ---- */
+  var RT={tr:['📖 Kurallar','▲ Kuralları gizle'],de:['📖 Regeln','▲ Regeln ausblenden'],en:['📖 Rules','▲ Hide rules']};
+  function RL(){ var l; try{ l=window.BK&&BK.lang?BK.lang():((JSON.parse(localStorage.getItem('disfirlat2')||'{}').lang)||(navigator.language||'tr').slice(0,2)); }catch(e){ l='tr'; } return RT[l]||RT.en; }
+  function shown(el){ if(!el) return false; if(el.offsetParent===null && getComputedStyle(el).position!=='fixed') return false;
+    for (var e=el; e && e!==document.body; e=e.parentElement){ var cs=getComputedStyle(e); if (cs.display==='none'||cs.visibility==='hidden'||+cs.opacity<0.05||cs.pointerEvents==='none'&&e!==el&&+cs.opacity<0.5) return false; if (/(^|\s)(hide|hidden|off)(\s|$)/.test(e.className)&&e.id) return false; }
+    var r=el.getBoundingClientRect(); return r.width>0 && r.height>0 && r.bottom>0 && r.top<innerHeight; }
+  function menuRoot(){
+    var c=['#card .box','#card2 .box','#oStart'];
+    for (var i=0;i<c.length;i++){ var e=document.querySelector(c[i]); if (e && shown(e) && (c[i]!=='#card2 .box' || !document.getElementById('card2').classList.contains('hide'))) return e; }
+    return null;
+  }
+  function primaryIn(root){
+    if (root.id==='oStart') return root.querySelector('#bPlay');
+    var b=root.querySelectorAll('button.btn, a.btn');
+    for (var i=0;i<b.length;i++){ var x=b[i]; if (!/ghost|alt|small|sm\b/.test(x.className) && (x.textContent||'').trim().length>1) return x; }
+    return null;
+  }
+  function foldRules(root){
+    if (root.__bkf===root.innerHTML.length) return;
+    var L=RL(), els=root.querySelectorAll('p,div,span'), list=[];
+    for (var i=0;i<els.length;i++){
+      var e=els[i]; if (e.__bkfold || e.querySelector('button,a,input,select,img,svg,canvas')) continue;
+      var t=(e.textContent||'').trim(); if (t.length<160 || e.children.length>8) continue;
+      var up=e.parentElement, inside=false; while(up&&up!==root){ if(up.__bkfold){inside=true;break;} up=up.parentElement; } if(inside) continue;
+      e.__bkfold=1; list.push(e);
+    }
+    if (list.length){
+      list.forEach(function(e){ e.classList.add('bk-rules-h'); });
+      var tg=document.createElement('button'); tg.type='button'; tg.className='bk-rtog'; tg.textContent=L[0];
+      tg.addEventListener('click',function(ev){ ev.stopPropagation(); var h=!list[0].classList.contains('bk-rules-h'); list.forEach(function(e){ e.classList.toggle('bk-rules-h',h); }); tg.textContent=h?L[0]:L[1]; });
+      list[0].parentNode.insertBefore(tg,list[0]);
+    }
+    root.__bkf=root.innerHTML.length;
+  }
+  var dock=null, dockFor=null;
+  function tickDock(){
+    if (!isGame || !isPhone()) return;
+    if (!dock){ dock=document.createElement('div'); dock.id='bkDock'; dock.innerHTML='<button type="button"></button>'; document.body.appendChild(dock);
+      dock.firstChild.addEventListener('click',function(){ var t=dockFor; if(!t) return;
+        try{ t.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,cancelable:true,pointerType:'touch'})); }catch(e){}
+        try{ t.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,cancelable:true,pointerType:'touch'})); }catch(e){}
+        t.click(); }); }
+    var root=menuRoot(), p=root&&primaryIn(root);
+    if (root && document.getElementById('bkSheet') && document.getElementById('bkSheet').classList.contains('on')) p=null;
+    if (p){
+      if (root.id!=='oStart') foldRules(root);
+      if (dockFor!==p){ if(dockFor) dockFor.classList.remove('bk-primary-hidden'); dockFor=p; p.classList.add('bk-primary-hidden'); }
+      var lbl=(p.textContent||'').trim(); if (dock.firstChild.textContent!==lbl) dock.firstChild.textContent=lbl;
+      dock.classList.add('on'); document.body.classList.add('bk-dock-on');
+    } else {
+      if (dockFor) dockFor.classList.remove('bk-primary-hidden'); dockFor=null;
+      dock.classList.remove('on'); document.body.classList.remove('bk-dock-on');
+    }
+  }
+  setInterval(function(){ try{ tickDock(); }catch(e){} }, 250);
   var pend=false, roots=[];
   function later(muts){
     if (muts && muts.forEach) muts.forEach(function(m){ for (var k=0;k<m.addedNodes.length;k++){ var a=m.addedNodes[k]; var r=a.nodeType===3?a.parentNode:a; if (r && r.nodeType===1 && roots.indexOf(r)<0) roots.push(r); } });
