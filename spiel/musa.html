@@ -139,6 +139,14 @@ body:not(.menu) #tb #pse{display:flex}#tb #pse{display:none}
 @media (max-height:520px){.roster{grid-template-columns:repeat(15,minmax(0,1fr));gap:5px}.rc i{display:none}.rc b{font-size:10px;white-space:normal;line-height:1.1}.rc img{height:26vh}.rc .st{display:none}}
 .card h1{margin:0;font-size:clamp(30px,min(9vw,11vh),64px);letter-spacing:3px;color:#ff9a3c;text-shadow:0 4px 0 #7a2f00,0 0 30px #ff8a2a88}
 .card h2{margin:4px 0 18px;font-size:clamp(14px,4vw,20px);font-weight:600;color:#bcd6ff}
+.mtoast{position:fixed;left:50%;top:14px;transform:translate(-50%,-140%);z-index:99;background:linear-gradient(#ffd84a,#d4a017);color:#2a1a00;font-weight:900;padding:10px 18px;border-radius:14px;box-shadow:0 6px 20px #0008;transition:transform .45s cubic-bezier(.2,1.4,.4,1);max-width:90vw;text-align:center;font-size:15px}.mtoast.on{transform:translate(-50%,0)}
+.nbd{display:inline-block;background:#e03a2a;color:#fff;border-radius:99px;min-width:22px;padding:0 6px;font-size:14px;line-height:22px;vertical-align:middle}
+.msg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left}@media (max-width:640px){.msg2{grid-template-columns:1fr}}
+.msb h3{margin:8px 0 6px;font-size:16px;color:#ffd84a}.msr{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;background:#ffffff10;border-radius:12px;padding:7px 9px;margin:5px 0}.msr.dn{background:#2e7d3233}.msr b{font-size:13.5px;display:block}.msr small{font-size:11.5px;color:#ffd84a;display:block}.msr em{font-style:normal;font-weight:800;font-size:13px;opacity:.85}.mic{font-size:22px;text-align:center}
+.msr .sb,.rkr .sb{display:block;height:7px;background:#ffffff22;border-radius:9px;overflow:hidden;margin-top:4px}.msr .sb span,.rkr .sb span{display:block;height:100%;border-radius:9px}
+.rkr{display:grid;grid-template-columns:28px 38px 92px 1fr 34px;gap:6px;align-items:center;margin:4px 0}.rkr img{height:38px;width:38px;object-fit:contain}.rkr b{font-size:13px}.rkr em{font-style:normal;font-weight:900;text-align:right}.rkn{font-size:18px;text-align:center}
+.rcs{display:grid;grid-template-columns:1fr 1fr;gap:6px}.rcs span{background:#ffffff10;border-radius:10px;padding:6px 8px;font-size:12px}.rcs b{display:block;font-size:20px;color:#ffd84a}
+.sks{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.sks button{border:2px solid #ffffff33;background:#ffffff12;color:#fff;border-radius:10px;padding:6px 9px;font-weight:800;font-size:12.5px;cursor:pointer}.sks button.on{border-color:#ffd84a;background:#ffd84a33}.sks button:disabled{opacity:.45;cursor:default}
 .big{display:block;width:100%;margin:10px 0;padding:16px;border:none;border-radius:14px;font-size:19px;font-weight:800;color:#fff;background:linear-gradient(#2a4a9a,#1b2b55);box-shadow:0 4px 0 #0c1530;cursor:pointer}
 .big.alt{background:linear-gradient(#ff9a3c,#d9661a);box-shadow:0 4px 0 #7a2f00}
 .help{margin-top:14px;font-size:13px;line-height:1.6;color:#aab6cc}
@@ -171,7 +179,7 @@ const overlay=document.getElementById('overlay'),card=document.getElementById('c
 
 let LANG='tr';try{const h=JSON.parse(localStorage.getItem('disfirlat2')||'{}');LANG=h.lang||(navigator.language||'tr').slice(0,2)}catch(e){}if(!['tr','de','en'].includes(LANG))LANG='en';
 const TX={
-tr:{round:'RAUND',gold:'ALTIN GÜÇ! ⚡',pause:'⏸ DURAKLATILDI',resume:'▶ DEVAM ET',helpT:'❓ NASIL OYNANIR',quit:'🏠 ANA MENÜ',hTouch:'📱 Dokunmatik ekran',hKeys:'⌨️ Klavye',hJoy:'Joystick: sağa/sola yürü, yukarı = zıpla, aşağı = blok',hPunch:'Büyük düğme: yumruk (karaktere göre: ok, makas, şişe…)',hKick:'Tekme / uzaktan atış',hBlock:'Blok – darbeleri azaltır',hSp:'Özel güç – halka dolunca altın olur, bas!',hJk:'Joker taksi – raund başına 1 kez',hTips:'💡 İpuçları: yumruk-yumruk-tekme rakibi havaya kaldırır, havadayken vurmaya devam et! Düğmeye erken bassan da sıraya alınır. Canın azalınca bazı karakterler sinirlenir ve güçlenir.',p1k:'1. oyuncu',p2k:'2. oyuncu',kMove:'yürü',kJump:'zıpla',kBlock:'blok',kPunch:'yumruk',kKick:'tekme',kSp:'özel',kJk:'joker',kPause:'P / Esc = durdur',sirin:'ŞİRİN! 🐾',copied:'KOPYALADI: ',camo:'KAMUFLAJ! 🦎',storyM:'📜 HİKÂYE MODU',storys:'Musa ile Çaycuma\'yı kurtar',chapters:'BÖLÜMLER',stCont:'▶ DEVAM',retry:'🔁 TEKRAR DENE',theEnd:'SON',locked:'🔒',storyDone:'Hikâye tamamlandı!',enraged:'SİNİRLENDİ! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ SAHNE SEÇ',rndStage:'🎲 RASTGELE SAHNE',glued:'YAPIŞTI! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'KUSTU! 🤢',slip:'KAYDI!',chars:'📖 KARAKTERLER',charsS:'Hikâyeleri ve güçleri',story:'HİKÂYESİ',power:'ÖZEL GÜCÜ',spd:'Hız',pow:'Güç',hp:'Can',playAs:'▶ BU KARAKTERLE OYNA',frozen:'ZAMAN DURDU! ⏸',shaved:'SIFIR NUMARA! ✂️',heroP:'KAHRAMAN GÜCÜ',special:'⭐ ÖZEL' ,fight:'DÖVÜŞ!',won:'KAZANDI!',draw:'BERABERE!',combo:'KOMBO!',blk:'BLOK',ready:'HAZIR!',air:'HAVADA!',perfect:'PERFECT!',great:'GREAT!',timeup:'SÜRE BİTTİ!',fooled:'KANDIRILDI! 🤯',dizzy:'SERSEMLEDİ!',netted:'AĞA DÜŞTÜ!',sp:'ÖZEL',kick:'TEKME',block:'BLOK',punch:'YUMRUK',rot:'Telefonu yan çevir',rot2:'Oyun yatay ekranda oynanır',
+tr:{round:'RAUND',msT:'🏆 GÖREVLER',msTs:'Rozet, kostüm, sıralama',msDaily:'📅 Günlük görevler',msBadge:'🎖️ Rozetler ve ödüller',msRank:'👑 Aile sıralaması (galibiyet)',msRec:'📊 Rekorlar',msNew:'🏆 GÖREV TAMAM: ',msRw:'Ödül: ',skT:'👕 KOSTÜM',skN:['Normal','🦅 Kartal (Siyah-Beyaz)','Bayramlık','Altın Heykel','Gölge','Efsane'],skLock:'🔒 Açmak için: ',rcSurv:'Hayatta kalma rekoru',rcCombo:'En uzun kombo',rcPerf:'Kusursuz raund',rcArc:'Arcade şampiyonluğu',rcFights:'Kazanılan maç',noWins:'Henüz galibiyet yok – hadi dövüş!',gold:'ALTIN GÜÇ! ⚡',pause:'⏸ DURAKLATILDI',resume:'▶ DEVAM ET',helpT:'❓ NASIL OYNANIR',quit:'🏠 ANA MENÜ',hTouch:'📱 Dokunmatik ekran',hKeys:'⌨️ Klavye',hJoy:'Joystick: sağa/sola yürü, yukarı = zıpla, aşağı = blok',hPunch:'Büyük düğme: yumruk (karaktere göre: ok, makas, şişe…)',hKick:'Tekme / uzaktan atış',hBlock:'Blok – darbeleri azaltır',hSp:'Özel güç – halka dolunca altın olur, bas!',hJk:'Joker taksi – raund başına 1 kez',hTips:'💡 İpuçları: yumruk-yumruk-tekme rakibi havaya kaldırır, havadayken vurmaya devam et! Düğmeye erken bassan da sıraya alınır. Canın azalınca bazı karakterler sinirlenir ve güçlenir.',p1k:'1. oyuncu',p2k:'2. oyuncu',kMove:'yürü',kJump:'zıpla',kBlock:'blok',kPunch:'yumruk',kKick:'tekme',kSp:'özel',kJk:'joker',kPause:'P / Esc = durdur',sirin:'ŞİRİN! 🐾',copied:'KOPYALADI: ',camo:'KAMUFLAJ! 🦎',storyM:'📜 HİKÂYE MODU',storys:'Musa ile Çaycuma\'yı kurtar',chapters:'BÖLÜMLER',stCont:'▶ DEVAM',retry:'🔁 TEKRAR DENE',theEnd:'SON',locked:'🔒',storyDone:'Hikâye tamamlandı!',enraged:'SİNİRLENDİ! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ SAHNE SEÇ',rndStage:'🎲 RASTGELE SAHNE',glued:'YAPIŞTI! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'KUSTU! 🤢',slip:'KAYDI!',chars:'📖 KARAKTERLER',charsS:'Hikâyeleri ve güçleri',story:'HİKÂYESİ',power:'ÖZEL GÜCÜ',spd:'Hız',pow:'Güç',hp:'Can',playAs:'▶ BU KARAKTERLE OYNA',frozen:'ZAMAN DURDU! ⏸',shaved:'SIFIR NUMARA! ✂️',heroP:'KAHRAMAN GÜCÜ',special:'⭐ ÖZEL' ,fight:'DÖVÜŞ!',won:'KAZANDI!',draw:'BERABERE!',combo:'KOMBO!',blk:'BLOK',ready:'HAZIR!',air:'HAVADA!',perfect:'PERFECT!',great:'GREAT!',timeup:'SÜRE BİTTİ!',fooled:'KANDIRILDI! 🤯',dizzy:'SERSEMLEDİ!',netted:'AĞA DÜŞTÜ!',sp:'ÖZEL',kick:'TEKME',block:'BLOK',punch:'YUMRUK',rot:'Telefonu yan çevir',rot2:'Oyun yatay ekranda oynanır',
  sub:"Çaycuma'nın Kahramanı – Dövüş Oyunu",p1:'1 OYUNCU',p1s:'Bilgisayara karşı',p2:'2 OYUNCU',p2s:'Aynı cihazda karşılıklı',
  help:'15 karakter: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Apo, Avcı Nazif, Berber Yusuf, Taksici Soner, Kırtasiyeci Şinasi, Muaz, Selim, Buko ve Kara Fırtına! Rakibi vur, <b>güç barını</b> doldur, sonra <b>özel hareketini</b> yap. Kombonun sonunda <b>tekme</b> rakibi havaya kaldırır – havadayken vurmaya devam et!<br>2 raundu kazanan şampiyon olur.<br><b>Klavye</b> – 1. oyuncu: A/D yürü · W zıpla · S blok · F yumruk · G tekme · H özel<br>2. oyuncu: ← → yürü · ↑ zıpla · ↓ blok · K yumruk · L tekme · J özel',
  how:'Nasıl oynamak istersin?',arc:'🏆 ARCADE',arcs:'Sırayla herkesi yen, sonda boss',free:'⚔️ SERBEST DÖVÜŞ',frees:'Kendini ve rakibini sen seç',surv:'❤️ HAYATTA KAL',survs:'Tek can – kaç rakip yenebilirsin?',prac:'🥋 ANTRENMAN',pracs:'Süre yok, rakip karşılık vermez',
@@ -184,7 +192,7 @@ tr:{round:'RAUND',gold:'ALTIN GÜÇ! ⚡',pause:'⏸ DURAKLATILDI',resume:'▶ D
  survNext:'▶ SONRAKİ RAKİP',survEnd:n=>`Hayatta kalma bitti: ${n} rakip yendin!`,survBest:b=>`En iyi rekor: ${b}`,survWin:'Can biraz doldu, devam!',pracEnd:'ANTRENMANI BİTİR',
  lies:['Arkana bak, Musa geliyor!','Yerde 100 lira var!','Annen çağırıyor!','Araban çekiliyor!','Hoca seni arıyor!',"Çaycuma'da kar yağıyor!",'Ben hiç yenilmedim!','Ayakkabının bağı çözülmüş!'],
  arenas:['ÇAYCUMA · CUMHURİYET MEYDANI','FİLYOS SAHİLİ · ÇAYCUMA','ÇAYCUMA · AKŞAM ÜSTÜ']},
-de:{round:'RUNDE',gold:'GOLDKRAFT! ⚡',pause:'⏸ PAUSE',resume:'▶ WEITER',helpT:'❓ SO WIRD GESPIELT',quit:'🏠 HAUPTMENÜ',hTouch:'📱 Touchscreen',hKeys:'⌨️ Tastatur',hJoy:'Joystick: links/rechts laufen, hoch = springen, runter = blocken',hPunch:'Großer Knopf: Schlag (je nach Figur: Pfeil, Schere, Flasche…)',hKick:'Tritt / Fernwurf',hBlock:'Block – verringert Schaden',hSp:'Spezialkraft – Ring voll = gold, drücken!',hJk:'Joker-Taxi – 1× pro Runde',hTips:'💡 Tipps: Schlag-Schlag-Tritt schleudert den Gegner hoch – in der Luft weiterschlagen! Zu früh gedrückte Knöpfe werden vorgemerkt. Mit wenig Leben werden manche Kämpfer wütend und stärker.',p1k:'Spieler 1',p2k:'Spieler 2',kMove:'laufen',kJump:'springen',kBlock:'blocken',kPunch:'Schlag',kKick:'Tritt',kSp:'Spezial',kJk:'Joker',kPause:'P / Esc = Pause',sirin:'ŞİRİN! 🐾',copied:'KOPIERT: ',camo:'TARNUNG! 🦎',storyM:'📜 STORY-MODUS',storys:'Rette Çaycuma mit Musa',chapters:'KAPITEL',stCont:'▶ WEITER',retry:'🔁 NOCHMAL',theEnd:'ENDE',locked:'🔒',storyDone:'Geschichte abgeschlossen!',enraged:'WÜTEND! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ ARENA WÄHLEN',rndStage:'🎲 ZUFÄLLIGE ARENA',glued:'KLEBT FEST! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'KOTZT! 🤢',slip:'AUSGERUTSCHT!',chars:'📖 KÄMPFER',charsS:'Geschichten und Kräfte',story:'GESCHICHTE',power:'SPEZIALKRAFT',spd:'Tempo',pow:'Kraft',hp:'Leben',playAs:'▶ MIT DIESEM KÄMPFER SPIELEN',frozen:'ZEIT GESTOPPT! ⏸',shaved:'NULLER-SCHNITT! ✂️',heroP:'HELDENKRAFT',special:'⭐ SPEZIAL' ,fight:'KAMPF!',won:'GEWINNT!',draw:'UNENTSCHIEDEN!',combo:'COMBO!',blk:'BLOCK',ready:'BEREIT!',air:'IN DER LUFT!',perfect:'PERFECT!',great:'GREAT!',timeup:'ZEIT UM!',fooled:'REINGELEGT! 🤯',dizzy:'BENOMMEN!',netted:'IM NETZ!',sp:'SPEZIAL',kick:'TRITT',block:'BLOCK',punch:'SCHLAG',rot:'Handy quer halten',rot2:'Das Spiel läuft im Querformat',
+de:{round:'RUNDE',msT:'🏆 MISSIONEN',msTs:'Abzeichen, Kostüme, Rangliste',msDaily:'📅 Tagesmissionen',msBadge:'🎖️ Abzeichen & Belohnungen',msRank:'👑 Familien-Rangliste (Siege)',msRec:'📊 Rekorde',msNew:'🏆 MISSION GESCHAFFT: ',msRw:'Belohnung: ',skT:'👕 KOSTÜM',skN:['Normal','🦅 Adler (Schwarz-Weiß)','Festtagskleidung','Goldstatue','Schatten','Legende'],skLock:'🔒 Freischalten: ',rcSurv:'Überlebensrekord',rcCombo:'Längste Kombo',rcPerf:'Perfekte Runden',rcArc:'Arcade-Titel',rcFights:'Gewonnene Kämpfe',noWins:'Noch keine Siege – los, kämpf!',gold:'GOLDKRAFT! ⚡',pause:'⏸ PAUSE',resume:'▶ WEITER',helpT:'❓ SO WIRD GESPIELT',quit:'🏠 HAUPTMENÜ',hTouch:'📱 Touchscreen',hKeys:'⌨️ Tastatur',hJoy:'Joystick: links/rechts laufen, hoch = springen, runter = blocken',hPunch:'Großer Knopf: Schlag (je nach Figur: Pfeil, Schere, Flasche…)',hKick:'Tritt / Fernwurf',hBlock:'Block – verringert Schaden',hSp:'Spezialkraft – Ring voll = gold, drücken!',hJk:'Joker-Taxi – 1× pro Runde',hTips:'💡 Tipps: Schlag-Schlag-Tritt schleudert den Gegner hoch – in der Luft weiterschlagen! Zu früh gedrückte Knöpfe werden vorgemerkt. Mit wenig Leben werden manche Kämpfer wütend und stärker.',p1k:'Spieler 1',p2k:'Spieler 2',kMove:'laufen',kJump:'springen',kBlock:'blocken',kPunch:'Schlag',kKick:'Tritt',kSp:'Spezial',kJk:'Joker',kPause:'P / Esc = Pause',sirin:'ŞİRİN! 🐾',copied:'KOPIERT: ',camo:'TARNUNG! 🦎',storyM:'📜 STORY-MODUS',storys:'Rette Çaycuma mit Musa',chapters:'KAPITEL',stCont:'▶ WEITER',retry:'🔁 NOCHMAL',theEnd:'ENDE',locked:'🔒',storyDone:'Geschichte abgeschlossen!',enraged:'WÜTEND! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ ARENA WÄHLEN',rndStage:'🎲 ZUFÄLLIGE ARENA',glued:'KLEBT FEST! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'KOTZT! 🤢',slip:'AUSGERUTSCHT!',chars:'📖 KÄMPFER',charsS:'Geschichten und Kräfte',story:'GESCHICHTE',power:'SPEZIALKRAFT',spd:'Tempo',pow:'Kraft',hp:'Leben',playAs:'▶ MIT DIESEM KÄMPFER SPIELEN',frozen:'ZEIT GESTOPPT! ⏸',shaved:'NULLER-SCHNITT! ✂️',heroP:'HELDENKRAFT',special:'⭐ SPEZIAL' ,fight:'KAMPF!',won:'GEWINNT!',draw:'UNENTSCHIEDEN!',combo:'COMBO!',blk:'BLOCK',ready:'BEREIT!',air:'IN DER LUFT!',perfect:'PERFECT!',great:'GREAT!',timeup:'ZEIT UM!',fooled:'REINGELEGT! 🤯',dizzy:'BENOMMEN!',netted:'IM NETZ!',sp:'SPEZIAL',kick:'TRITT',block:'BLOCK',punch:'SCHLAG',rot:'Handy quer halten',rot2:'Das Spiel läuft im Querformat',
  sub:'Der Held von Çaycuma – Kampfspiel',p1:'1 SPIELER',p1s:'Gegen den Computer',p2:'2 SPIELER',p2s:'Gegeneinander am selben Gerät',
  help:'15 Kämpfer: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Apo, Avcı Nazif, Berber Yusuf, Taksici Soner, Kırtasiyeci Şinasi, Muaz, Selim, Buko und Kara Fırtına! Triff den Gegner, füll die <b>Kraftleiste</b> und mach deinen <b>Spezialangriff</b>. Ein <b>Tritt</b> am Ende einer Combo schleudert den Gegner hoch – schlag in der Luft weiter!<br>Wer 2 Runden gewinnt, ist Champion.<br><b>Tastatur</b> – Spieler 1: A/D laufen · W springen · S blocken · F Schlag · G Tritt · H Spezial<br>Spieler 2: ← → laufen · ↑ springen · ↓ blocken · K Schlag · L Tritt · J Spezial',
  how:'Wie willst du spielen?',arc:'🏆 ARCADE',arcs:'Besiege alle nacheinander, am Ende der Boss',free:'⚔️ FREIER KAMPF',frees:'Wähle dich und deinen Gegner',surv:'❤️ ÜBERLEBEN',survs:'Ein Leben – wie viele schaffst du?',prac:'🥋 TRAINING',pracs:'Keine Zeit, Gegner wehrt sich nicht',
@@ -197,7 +205,7 @@ de:{round:'RUNDE',gold:'GOLDKRAFT! ⚡',pause:'⏸ PAUSE',resume:'▶ WEITER',he
  survNext:'▶ NÄCHSTER GEGNER',survEnd:n=>`Überleben vorbei: ${n} Gegner besiegt!`,survBest:b=>`Rekord: ${b}`,survWin:'Etwas Leben zurück, weiter!',pracEnd:'TRAINING BEENDEN',
  lies:['Schau hinter dich, Musa kommt!','Da liegen 100 Lira!','Deine Mutter ruft!','Dein Auto wird abgeschleppt!','Der Hoca sucht dich!','In Çaycuma schneit es!','Ich hab noch nie verloren!','Dein Schuh ist offen!'],
  arenas:['ÇAYCUMA · REPUBLIKPLATZ','FİLYOS-STRAND · ÇAYCUMA','ÇAYCUMA · AM ABEND']},
-en:{round:'ROUND',gold:'GOLDEN POWER! ⚡',pause:'⏸ PAUSED',resume:'▶ RESUME',helpT:'❓ HOW TO PLAY',quit:'🏠 MAIN MENU',hTouch:'📱 Touch screen',hKeys:'⌨️ Keyboard',hJoy:'Joystick: walk left/right, up = jump, down = block',hPunch:'Big button: punch (per fighter: arrow, scissors, bottle…)',hKick:'Kick / ranged throw',hBlock:'Block – reduces damage',hSp:'Special – ring turns gold when full, press it!',hJk:'Joker taxi – once per round',hTips:'💡 Tips: punch-punch-kick launches the rival – keep hitting in the air! Buttons pressed early are buffered. On low health some fighters get angry and stronger.',p1k:'Player 1',p2k:'Player 2',kMove:'walk',kJump:'jump',kBlock:'block',kPunch:'punch',kKick:'kick',kSp:'special',kJk:'joker',kPause:'P / Esc = pause',sirin:'ŞİRİN! 🐾',copied:'COPIED: ',camo:'CAMOUFLAGE! 🦎',storyM:'📜 STORY MODE',storys:'Save Çaycuma with Musa',chapters:'CHAPTERS',stCont:'▶ CONTINUE',retry:'🔁 TRY AGAIN',theEnd:'THE END',locked:'🔒',storyDone:'Story complete!',enraged:'ENRAGED! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ CHOOSE STAGE',rndStage:'🎲 RANDOM STAGE',glued:'STUCK! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'THREW UP! 🤢',slip:'SLIPPED!',chars:'📖 FIGHTERS',charsS:'Stories and powers',story:'STORY',power:'SPECIAL POWER',spd:'Speed',pow:'Power',hp:'Health',playAs:'▶ PLAY AS THIS FIGHTER',frozen:'TIME STOPPED! ⏸',shaved:'ZERO CUT! ✂️',heroP:'HERO POWER',special:'⭐ SPECIAL' ,fight:'FIGHT!',won:'WINS!',draw:'DRAW!',combo:'COMBO!',blk:'BLOCK',ready:'READY!',air:'AIRBORNE!',perfect:'PERFECT!',great:'GREAT!',timeup:'TIME UP!',fooled:'FOOLED! 🤯',dizzy:'DIZZY!',netted:'NETTED!',sp:'SPECIAL',kick:'KICK',block:'BLOCK',punch:'PUNCH',rot:'Turn your phone sideways',rot2:'The game is played in landscape',
+en:{round:'ROUND',msT:'🏆 MISSIONS',msTs:'Badges, costumes, ranking',msDaily:'📅 Daily missions',msBadge:'🎖️ Badges & rewards',msRank:'👑 Family ranking (wins)',msRec:'📊 Records',msNew:'🏆 MISSION DONE: ',msRw:'Reward: ',skT:'👕 COSTUME',skN:['Normal','🦅 Eagle (black & white)','Holiday outfit','Gold statue','Shadow','Legend'],skLock:'🔒 Unlock: ',rcSurv:'Survival record',rcCombo:'Longest combo',rcPerf:'Perfect rounds',rcArc:'Arcade titles',rcFights:'Matches won',noWins:'No wins yet – go fight!',gold:'GOLDEN POWER! ⚡',pause:'⏸ PAUSED',resume:'▶ RESUME',helpT:'❓ HOW TO PLAY',quit:'🏠 MAIN MENU',hTouch:'📱 Touch screen',hKeys:'⌨️ Keyboard',hJoy:'Joystick: walk left/right, up = jump, down = block',hPunch:'Big button: punch (per fighter: arrow, scissors, bottle…)',hKick:'Kick / ranged throw',hBlock:'Block – reduces damage',hSp:'Special – ring turns gold when full, press it!',hJk:'Joker taxi – once per round',hTips:'💡 Tips: punch-punch-kick launches the rival – keep hitting in the air! Buttons pressed early are buffered. On low health some fighters get angry and stronger.',p1k:'Player 1',p2k:'Player 2',kMove:'walk',kJump:'jump',kBlock:'block',kPunch:'punch',kKick:'kick',kSp:'special',kJk:'joker',kPause:'P / Esc = pause',sirin:'ŞİRİN! 🐾',copied:'COPIED: ',camo:'CAMOUFLAGE! 🦎',storyM:'📜 STORY MODE',storys:'Save Çaycuma with Musa',chapters:'CHAPTERS',stCont:'▶ CONTINUE',retry:'🔁 TRY AGAIN',theEnd:'THE END',locked:'🔒',storyDone:'Story complete!',enraged:'ENRAGED! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ CHOOSE STAGE',rndStage:'🎲 RANDOM STAGE',glued:'STUCK! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'THREW UP! 🤢',slip:'SLIPPED!',chars:'📖 FIGHTERS',charsS:'Stories and powers',story:'STORY',power:'SPECIAL POWER',spd:'Speed',pow:'Power',hp:'Health',playAs:'▶ PLAY AS THIS FIGHTER',frozen:'TIME STOPPED! ⏸',shaved:'ZERO CUT! ✂️',heroP:'HERO POWER',special:'⭐ SPECIAL' ,fight:'FIGHT!',won:'WINS!',draw:'DRAW!',combo:'COMBO!',blk:'BLOCK',ready:'READY!',air:'AIRBORNE!',perfect:'PERFECT!',great:'GREAT!',timeup:'TIME UP!',fooled:'FOOLED! 🤯',dizzy:'DIZZY!',netted:'NETTED!',sp:'SPECIAL',kick:'KICK',block:'BLOCK',punch:'PUNCH',rot:'Turn your phone sideways',rot2:'The game is played in landscape',
  sub:'The Hero of Çaycuma – Fighting Game',p1:'1 PLAYER',p1s:'Against the computer',p2:'2 PLAYERS',p2s:'Face to face on one device',
  help:'15 fighters: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Apo, Avcı Nazif, Berber Yusuf, Taksici Soner, Kırtasiyeci Şinasi, Muaz, Selim, Buko and Kara Fırtına! Hit your rival, fill the <b>power bar</b>, then use your <b>special move</b>. A <b>kick</b> at the end of a combo launches the rival – keep hitting in the air!<br>Win 2 rounds to become champion.<br><b>Keyboard</b> – Player 1: A/D walk · W jump · S block · F punch · G kick · H special<br>Player 2: ← → walk · ↑ jump · ↓ block · K punch · L kick · J special',
  how:'How do you want to play?',arc:'🏆 ARCADE',arcs:'Beat everyone in a row, boss at the end',free:'⚔️ FREE FIGHT',frees:'Choose yourself and your rival',surv:'❤️ SURVIVAL',survs:'One life – how many can you beat?',prac:'🥋 PRACTICE',pracs:'No timer, rival does not fight back',
@@ -402,7 +410,7 @@ function sfx(type){
 }
 
 /* ---------- Fighters ---------- */
-function newFighter(look,x,facing){return{look,x,y:GROUND,vx:0,vy:0,facing,hp:look.hp,maxhp:look.hp,meter:0,state:'idle',t:0,atk:null,atkT:0,hitDone:false,stun:0,walk:0,wins:0,flash:0,ghost:look.hp,ghostT:0,combo:0,comboT:0}}
+function newFighter(look,x,facing){return{look,x,y:GROUND,vx:0,vy:0,facing,hp:look.hp,maxhp:look.hp,meter:0,state:'idle',t:0,atk:null,atkT:0,hitDone:false,stun:0,walk:0,wins:0,flash:0,ghost:look.hp,ghostT:0,combo:0,comboT:0,skin:skinOf(look.kind)}}
 
 function startAtk(f,type){const mv=MV(f,type);if(mv&&mv.shot&&f.cd>0)return;f.atk=type;f.atkT=0;f.hitDone=false;f.state=type;if(type!=='special')sfx('whoosh')}
 
@@ -413,12 +421,12 @@ function damage(o,d,dir,push,att){
  if(blocked){
   o.hp-=d*0.2;o.ghostT=30;o.x+=dir*push;pop(o.x,o.y-280,T().blk,'#9fd8ff');spark(o.x-dir*20,o.y-120,'#9fd8ff',8);sfx('block');o.meter=Math.min(100,o.meter+3);
  }else{
-  const chain=o.stun>0||o.state==='hit';att.combo=chain?att.combo+1:1;att.comboT=70;if(att.combo>=2)pop(att.x,att.y-310,att.combo+' '+T().combo,'#ffcc33',true);
+  const chain=o.stun>0||o.state==='hit';att.combo=chain?att.combo+1:1;att.comboT=70;if(att===P[0]&&REC()){stMax('comboMax',att.combo);if(att.combo===4)stAdd('combo4')}if(att.combo>=2)pop(att.x,att.y-310,att.combo+' '+T().combo,'#ffcc33',true);
   o.hp-=d;o.ghostT=30;pop(o.x+(Math.random()-.5)*30,o.y-280,'-'+Math.round(d),'#ff6a4a');freeze=d>=10?6:4;o.state='hit';o.stun=19;o.vx=dir*push*(chain?.3:1);o.atk=null;o.flash=8;
   att.meter=Math.min(100,att.meter+9);o.meter=Math.min(100,o.meter+5);
   if(o.look.vomit&&o.hp>0){o.hrN=(o.hrN||0)+1;o.hrT=150;if(o.hrN>=5){o.hrN=0;o.vomitT=70;o.stun=Math.max(o.stun,55);puddles.push({x:o.x+o.facing*80,t:480,own:o});pop(o.x,o.y-330,T().vomit,'#9be35b',true)}}
   spark(o.x-dir*30,o.y-180,'#fff3a0',14);shake=7;sfx('hit');
-  if(o.hp>0&&att.atk!=='special'&&(o.juggle||(att.atk==='kick'&&att.combo>=3))){o.vy=o.juggle?-8.5:-13.5;o.vx=dir*.6;o.stun=70;o.juggle=1;o.state='hit';if(att.combo<4)pop(o.x,o.y-340,T().air,'#ffcc33',true);shake=10;freeze=7}
+  if(o.hp>0&&att.atk!=='special'&&(o.juggle||(att.atk==='kick'&&att.combo>=3))){if(!o.juggle&&att===P[0]&&REC())stAdd('launch');o.vy=o.juggle?-8.5:-13.5;o.vx=dir*.6;o.stun=70;o.juggle=1;o.state='hit';if(att.combo<4)pop(o.x,o.y-340,T().air,'#ffcc33',true);shake=10;freeze=7}
  }
  if(game.prac&&o.hp<=0)o.hp=1;
  if(o.hp>0&&!o.enraged&&['musa','abdullah'].includes(o.look.kind)&&o.hp<o.maxhp*.35){o.enraged=1;o.rageT=60;pop(o.x,o.y-350,T().enraged,'#ff4a4a',true);shake=10;sfx('special')}
@@ -472,7 +480,7 @@ function update(f,inp,pin,o){
   if(f.buf&&f.buf.k==='punch'){f.buf=null;startAtk(f,'punch')}
   else if(f.buf&&f.buf.k==='kick'){f.buf=null;startAtk(f,'kick')}
   else if(inp.assist&&!pin.assist&&!f.jokerUsed&&JOKER.includes(f.look.kind)){f.jokerUsed=1;proj.push({x:f.x-f.facing*300,y:GROUND-80,vx:f.facing*17,owner:f,kind:'taxi',t:0,taxi:1,joker:1});sfx('honk');banner={txt:T().jokerCall,t:50,c:'#ffd21a'};const j=document.getElementById('jk'+P.indexOf(f));j&&j.classList.add('used')}
-  else if(inp.special&&!pin.special&&f.meter>=100&&onG){f.meter=0;if(f.look.kind==='buko')bukoCopy(f,o);startAtk(f,'special');sfx('special');banner={txt:f.look.sp+'!',t:55,c:f.look.bar};if(f.look.kind==='abdullah'){apoVoice(f,1)}else if(f.look.shout){f.say=f.look.shout[Math.random()*f.look.shout.length|0];f.sayT=80}}
+  else if(inp.special&&!pin.special&&f.meter>=100&&onG){f.meter=0;if(f===P[0]&&REC())stAdd('sp');if(f.look.kind==='buko')bukoCopy(f,o);startAtk(f,'special');sfx('special');banner={txt:f.look.sp+'!',t:55,c:f.look.bar};if(f.look.kind==='abdullah'){apoVoice(f,1)}else if(f.look.shout){f.say=f.look.shout[Math.random()*f.look.shout.length|0];f.sayT=80}}
   if(!f.atk)f.state=!onG?'jump':(mv?'walk':'idle');
   if(f.state==='walk')f.walk+=0.28;
  }
@@ -534,7 +542,7 @@ function startRound(){
 function endRound(winner){
  if(game.state!=='fight')return;
  game.state='roundEnd';game.msgT=170;
- if(winner){winner.wins++;game.msg=winner.look.name+' '+T().won;game.msg2=winner.hp>=winner.maxhp-0.01?T().perfect:winner.hp<winner.maxhp*.15?T().great:'';if(game.msg2)setTimeout(()=>voice(game.msg2===T().perfect?'perfect':'great'),1500);if(winner.state!=='ko'){winner.state='win';winner.atk=null}}
+ if(winner){winner.wins++;game.msg=winner.look.name+' '+T().won;game.msg2=winner.hp>=winner.maxhp-0.01?T().perfect:winner.hp<winner.maxhp*.15?T().great:'';if(game.msg2===T().perfect&&winner===P[0]&&REC())stAdd('perfect');if(game.msg2)setTimeout(()=>voice(game.msg2===T().perfect?'perfect':'great'),1500);if(winner.state!=='ko'){winner.state='win';winner.atk=null}}
  else game.msg=T().draw;
 }
 function step(){
@@ -654,8 +662,9 @@ function poseOf(f){
  if(st==='jump')return 'walk';
  return 'idle';
 }
+function SPR(f,p){const a=IMG[f.look.kind+'_'+p];if(!f.skin||!SKINS[f.skin].spr)return a;const k=f.look.kind+'_'+f.skin+'_'+p,b=IMG[k]||li(k,k+'.webp');return ok(b)?b:a}
 function drawFighter(f){
- const ch=f.look.kind,pose=poseOf(f),im=IMG[ch+'_'+pose],m=META[ch][pose];
+ const ch=f.look.kind,pose=poseOf(f),im=SPR(f,pose),m=META[ch][pose];
  const air=GROUND-f.y;
  ctx.fillStyle='rgba(0,0,0,.38)';ctx.beginPath();ctx.ellipse(f.x,GROUND+3,72*(1-Math.min(.6,air/300)),12*(1-Math.min(.6,air/300)),0,0,7);ctx.fill();
  // companion
@@ -696,8 +705,9 @@ function drawFighter(f){
  if(f.y<GROUND&&f.state!=='ko')ctx.rotate(-.08);
  if(f.look.kind==='buko'){ctx.globalAlpha=f.camo?.22+.08*Math.sin(time*.2):1;ctx.filter='hue-rotate('+(f.look.copyOf?(time*6)%360:Math.sin(time*.03)*25)+'deg) saturate(1.15)'}
  if(f.frozen>0)ctx.filter='grayscale(.8) brightness(1.25) hue-rotate(170deg) saturate(2.2)';else if(f.eyes>0&&f.eyes%6<3)ctx.filter='sepia(1) saturate(4) hue-rotate(-30deg) brightness(1.05)';else if(f.gold>0)ctx.filter='sepia(.35) saturate(1.6) brightness(1.12)';else if(f.enraged)ctx.filter='saturate(1.3) contrast(1.05)';
+ if(f.skin&&SKINS[f.skin].f&&(ctx.filter==='none'||!ctx.filter))ctx.filter=SKINS[f.skin].f;
  if(f.lp!==pose){f.pp=f.lp;f.pf=5;f.lp=pose}
- if(f.pf>0&&f.pp){const pi=IMG[ch+'_'+f.pp],pm=META[ch][f.pp];if(ok(pi)&&pm){const ga=ctx.globalAlpha;ctx.globalAlpha=ga*(f.pf/5)*.55;ctx.drawImage(pi,-pm.ax*K,-pm.h*K,pm.w*K,pm.h*K);ctx.globalAlpha=ga}f.pf--}
+ if(f.pf>0&&f.pp){const pi=SPR(f,f.pp),pm=META[ch][f.pp];if(ok(pi)&&pm){const ga=ctx.globalAlpha;ctx.globalAlpha=ga*(f.pf/5)*.55;ctx.drawImage(pi,-pm.ax*K,-pm.h*K,pm.w*K,pm.h*K);ctx.globalAlpha=ga}f.pf--}
  if((f.atk==='special'||Math.abs(f.vx)>9)&&time%2===0){(f.trail=f.trail||[]).push({x:f.x,y:f.y});if(f.trail.length>4)f.trail.shift()}else if(f.trail&&f.trail.length&&time%2===0)f.trail.shift();
  if(f.trail&&f.trail.length){const ga=ctx.globalAlpha;f.trail.forEach((tr,i)=>{ctx.globalAlpha=ga*.12*(i+1);ctx.drawImage(im,-m.ax*K+(tr.x-f.x)*f.facing,-h+(tr.y-f.y),w,h)});ctx.globalAlpha=ga}
  ctx.drawImage(im,-m.ax*K,-h,w,h);ctx.filter='none';ctx.globalAlpha=1;
@@ -903,6 +913,62 @@ async function goLandscape(){
 }
 addEventListener('resize',layout);addEventListener('orientationchange',()=>setTimeout(layout,250));
 
+
+/* ---------- Missions / stats / costumes ---------- */
+let ST={};try{ST=JSON.parse(localStorage.getItem('musaStats')||'{}')}catch(e){}
+ST.w=ST.w||{};ST.n=ST.n||{};ST.got=ST.got||[];ST.fam=ST.fam||[];ST.skin=ST.skin||{};
+const LI=()=>({tr:0,de:1,en:2})[LANG];
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
+function stSave(){try{localStorage.setItem('musaStats',JSON.stringify(ST))}catch(e){}}
+const REC=()=>game.mode===1&&!game.prac;
+const MS=[
+ {id:'win1',ic:'🥊',k:'wins',g:1,n:['İlk zafer: 1 maç kazan','Erster Sieg: gewinne 1 Kampf','First victory: win 1 match']},
+ {id:'win10',ic:'🔥',k:'wins',g:10,rw:'b',n:['10 maç kazan','Gewinne 10 Kämpfe','Win 10 matches']},
+ {id:'perf1',ic:'💯',k:'perfect',g:1,n:['Hiç hasar almadan raund kazan','Gewinne eine Runde ohne Schaden','Win a round without taking damage']},
+ {id:'perf3',ic:'✨',k:'perfect',g:3,rw:'gold',n:['3 kusursuz raund','3 perfekte Runden','3 perfect rounds']},
+ {id:'combo5',ic:'⚡',k:'comboMax',g:5,n:['5 vuruşluk kombo yap','Schaffe eine 5er-Kombo','Land a 5-hit combo']},
+ {id:'launch3',ic:'🚀',k:'launch',g:3,n:['3 vuruşla rakibi havaya kaldır (3 kez)','Wirf den Gegner mit 3 Treffern hoch (3×)','Launch the rival with a 3-hit string (3×)']},
+ {id:'sp20',ic:'💥',k:'sp',g:20,n:['20 özel güç kullan','Setze 20 Spezialkräfte ein','Use 20 special moves']},
+ {id:'arc1',ic:'🏆',k:'arc',g:1,rw:'shadow',n:['Arcade modunu bitir','Schaffe den Arcade-Modus','Beat Arcade mode']},
+ {id:'surv5',ic:'🛡️',k:'survMax',g:5,n:['Hayatta kalmada 5 rakip yen','Besiege 5 Gegner im Überleben','Beat 5 rivals in Survival']},
+ {id:'fam8',ic:'👨‍👩‍👧‍👦',k:'famN',g:8,n:['8 farklı karakterle kazan','Gewinne mit 8 verschiedenen Figuren','Win with 8 different fighters']},
+ {id:'story',ic:'📖',k:'story',g:1,rw:'legend',n:['Hikâye modunu bitir','Schließe den Story-Modus ab','Finish Story mode']},
+ {id:'daily3',ic:'📅',k:'dailyDone',g:3,n:['3 günlük görev tamamla','Schließe 3 Tagesmissionen ab','Complete 3 daily missions']}];
+const DPOOL=[
+ {id:'d_win',ic:'🥊',k:'wins',g:3,n:['Bugün 3 maç kazan','Gewinne heute 3 Kämpfe','Win 3 matches today']},
+ {id:'d_perf',ic:'💯',k:'perfect',g:1,n:['Bugün 1 kusursuz raund','Heute 1 perfekte Runde','1 perfect round today']},
+ {id:'d_sp',ic:'💥',k:'sp',g:5,n:['Bugün 5 özel güç kullan','Heute 5 Spezialkräfte','Use 5 specials today']},
+ {id:'d_launch',ic:'🚀',k:'launch',g:3,n:['Bugün rakibi 3 kez havaya kaldır','Heute 3× Gegner hochwerfen','Launch rivals 3 times today']},
+ {id:'d_kid',ic:'🧸',k:'kidwin',g:1,n:['Selim veya Muaz ile kazan','Gewinne mit Selim oder Muaz','Win with Selim or Muaz']},
+ {id:'d_c4',ic:'⚡',k:'combo4',g:2,n:['Bugün 2 kez 4\'lü kombo','Heute 2× eine 4er-Kombo','Land 4-hit combos twice today']},
+ {id:'d_team',ic:'🤝',k:'teamwin',g:2,n:['Musa, Timur, Apo, Nazif veya Selim ile 2 galibiyet','2 Siege mit Musa, Timur, Apo, Nazif oder Selim','2 wins with Musa, Timur, Apo, Nazif or Selim']}];
+const SKINS={k:{spr:1},b:{m:'win10',spr:1},gold:{m:'perf3',f:'sepia(.8) saturate(2.3) brightness(1.08) contrast(1.12)'},shadow:{m:'arc1',f:'grayscale(.5) brightness(.6) contrast(1.45) hue-rotate(230deg) saturate(2.4)'},legend:{m:'story',f:'hue-rotate(200deg) saturate(1.8) contrast(1.12)',only:['storm','buko']}};
+const SKI=['','k','b','gold','shadow','legend'];
+function skinOK(kind,s){const k=SKINS[s];return !s||(k&&(!k.m||ST.got.includes(k.m))&&(!k.only||k.only.includes(kind)))}
+function skinOf(kind){const s=ST.skin[kind]||'';return skinOK(kind,s)?s:''}
+function skinImg(kind,pose){const s=skinOf(kind);return {src:'musa/'+kind+(s&&SKINS[s].spr?'_'+s+'_':'_')+pose+'.webp',st:s&&SKINS[s].f?'filter:'+SKINS[s].f+';':''}}
+function daily(){const d=today();if(!ST.day||ST.day.d!==d){let h=0;for(const c of d)h=(h*31+c.charCodeAt(0))>>>0;const p=[...DPOOL],o=[];while(o.length<3){h=(h*1103515245+12345)>>>0;o.push(p.splice(h%p.length,1)[0].id)}ST.day={d,c:{},ids:o,done:[]}}return ST.day}
+function msVal(m,day){if(day)return daily().c[m.k]||0;if(m.k==='famN')return ST.fam.length;return ST.n[m.k]||0}
+function msToast(txt){const d=document.createElement('div');d.className='mtoast';d.textContent=txt;document.body.appendChild(d);setTimeout(()=>d.classList.add('on'),30);setTimeout(()=>{d.classList.remove('on');setTimeout(()=>d.remove(),500)},3200)}
+function checkMs(){const L=LI(),dd=daily();let q=0;
+ for(const id of dd.ids){const m=DPOOL.find(x=>x.id===id);if(!dd.done.includes(id)&&msVal(m,1)>=m.g){dd.done.push(id);ST.n.dailyDone=(ST.n.dailyDone||0)+1;setTimeout(()=>msToast(T().msNew+m.n[L]),q++*900)}}
+ for(const m of MS)if(!ST.got.includes(m.id)&&msVal(m)>=m.g){ST.got.push(m.id);setTimeout(()=>msToast(T().msNew+m.n[L]+(m.rw?' 👕':'')),q++*900)}
+ stSave()}
+function stAdd(k,v=1){ST.n[k]=(ST.n[k]||0)+v;const d=daily();d.c[k]=(d.c[k]||0)+v;checkMs()}
+function stMax(k,v){if(v>(ST.n[k]||0)){ST.n[k]=v;checkMs()}}
+function recMatch(w,won,kids){ if(game.prac)return;ST.w[w.look.kind]=(ST.w[w.look.kind]||0)+1;
+ if(game.mode===1&&won){const k=P[0].look.kind;if(!ST.fam.includes(k))ST.fam.push(k);if(P[0].look.kid)stAdd('kidwin');if(['musa','timur','abdullah','nazif','selim'].includes(k))stAdd('teamwin');stAdd('wins')}else{stSave()}}
+function missions(){const t=T(),L=LI(),dd=daily();card.classList.add('wide');
+ const bar=(v,g)=>`<span class="sb"><span style="width:${Math.min(100,v/g*100)}%;background:${v>=g?'#7dff8a':'#ffcc33'}"></span></span>`;
+ const row=(m,day)=>{const v=msVal(m,day),done=day?dd.done.includes(m.id):ST.got.includes(m.id);return `<div class="msr${done?' dn':''}"><span class="mic">${done?'✅':m.ic}</span><div><b>${m.n[L]}</b>${m.rw?`<small>${t.msRw}👕 ${t.skN[SKI.indexOf(m.rw)]}${m.rw==='legend'?' (Kara Fırtına, Buko)':''}</small>`:''}${bar(v,m.g)}</div><em>${Math.min(v,m.g)}/${m.g}</em></div>`};
+ const rk=Object.entries(ST.w).sort((a,b)=>b[1]-a[1]),mx=rk.length?rk[0][1]:1;
+ card.innerHTML=`<h1 style="font-size:clamp(22px,min(6vw,8vh),40px);margin:0 0 6px">${t.msT}</h1>
+ <div class="msg2"><div class="msb"><h3>${t.msDaily}</h3>${dd.ids.map(id=>row(DPOOL.find(x=>x.id===id),1)).join('')}
+ <h3>${t.msRank}</h3>${rk.length?rk.map(([k,n],i)=>{const r=RK(k);return r?`<div class="rkr"><span class="rkn">${['🥇','🥈','🥉'][i]||i+1}</span><img src="musa/${k}_idle.webp" alt=""><b style="color:${r.bar}">${r.name}</b><span class="sb"><span style="width:${n/mx*100}%;background:${r.bar}"></span></span><em>${n}</em></div>`:''}).join(''):`<p>${t.noWins}</p>`}
+ <h3>${t.msRec}</h3><div class="rcs"><span>🥊 ${t.rcFights}<b>${ST.n.wins||0}</b></span><span>🛡️ ${t.rcSurv}<b>${ST.n.survMax||0}</b></span><span>⚡ ${t.rcCombo}<b>${ST.n.comboMax||0}</b></span><span>💯 ${t.rcPerf}<b>${ST.n.perfect||0}</b></span><span>🏆 ${t.rcArc}<b>${ST.n.arc||0}</b></span></div></div>
+ <div class="msb"><h3>${t.msBadge} (${ST.got.length}/${MS.length})</h3>${MS.map(m=>row(m)).join('')}</div></div>
+ <button class="big" style="background:#ffffff1a;box-shadow:none;padding:10px" id="bk">${t.back}</button>`;
+ document.getElementById('bk').onclick=()=>{card.classList.remove('wide');menu()};overlay.scrollTop=0}
 /* ---------- Menus ---------- */
 const FLAGS={
  tr:`<rect width="60" height="40" fill="#e30a17"/><circle cx="22" cy="20" r="10" fill="#fff"/><circle cx="24.6" cy="20" r="8" fill="#e30a17"/><polygon fill="#fff" points="31.5,20 40.9,16.9 35.1,24.9 35.1,15.1 40.9,23.1"/>`,
@@ -918,10 +984,11 @@ function menu(){
  <div id="ov2"><button class="big alt" id="m1">${t.p1}<br><small style="font-weight:600;font-size:13px">${t.p1s}</small></button>
  <button class="big" id="m2">${t.p2}<br><small style="font-weight:600;font-size:13px">${t.p2s}</small></button></div>
  <div id="ov2"><button class="big" id="m3" style="background:linear-gradient(#5b3a8e,#2d1b4e)">${t.chars}<br><small style="font-weight:600;font-size:13px">${t.charsS}</small></button><button class="big" id="m4" style="background:linear-gradient(#3a6fd8,#1d3c7a)">${t.helpT}</button></div>
+ <button class="big" id="m5" style="background:linear-gradient(#d4a017,#7a5200)">${t.msT}${(()=>{const d=daily();const n=d.ids.length-d.done.length;return n?` <span class="nbd">${n}</span>`:''})()}<br><small style="font-weight:600;font-size:13px">${t.msTs}</small></button>
  <div class="help">${t.help}</div>
  <a class="big" style="text-decoration:none;background:#ffffff1a;box-shadow:none" href="index.html">🏠 BUKO GAMES</a>`;
  card.querySelectorAll('.lg').forEach(b=>b.onclick=()=>{setLang(b.dataset.l);menu()});
- document.getElementById('m1').onclick=mode1;document.getElementById('m3').onclick=()=>gallery();document.getElementById('m4').onclick=()=>helpScreen(menu);
+ document.getElementById('m1').onclick=mode1;document.getElementById('m3').onclick=()=>gallery();document.getElementById('m4').onclick=()=>helpScreen(menu);document.getElementById('m5').onclick=missions;
  document.getElementById('m2').onclick=()=>pick(0,t.pick1,k=>{PICK[0]=k;pick(1,t.pick2,k2=>{PICK[1]=k2;stageSel(()=>start(2),menu)},false,menu)});
 }
 function gallery(sel){
@@ -929,13 +996,14 @@ function gallery(sel){
  const r=RK(sel),b=BIO[LANG][sel],bar=(v,mx,c)=>`<span class="sb"><span style="width:${Math.min(100,v/mx*100)}%;background:${c}"></span></span>`;
  card.innerHTML=`<h1 style="font-size:clamp(22px,min(6vw,8vh),40px);margin:0 0 6px">${t.chars}</h1>
  <div class="gal">${ROSTER.map(x=>`<button class="gt${x.kind===sel?' on':''}${x.star?' star':''}" data-g="${x.kind}" style="--c:${x.bar}"><img src="musa/${x.kind}_idle.webp" alt=""><b>${x.name}</b></button>`).join('')}</div>
- <div class="bio" style="--c:${r.bar}"><div class="bimg"><img src="musa/${r.kind}_win.webp" alt=""><span class="bem">${SPI[r.kind]}</span></div>
+ <div class="bio" style="--c:${r.bar}"><div class="bimg"><img src="${skinImg(r.kind,'win').src}" style="${skinImg(r.kind,'win').st}" alt=""><span class="bem">${SPI[r.kind]}</span></div>
  <div class="btx"><h3 style="color:${r.bar}">${r.name}${r.star?` <em class="stb2">${t.special}</em>`:''}</h3><div class="btag">${r.tag}</div>
  <div class="bh">${t.story}</div><p>${b[0]}</p>
  <div class="bmv"><span>${(MOVES[sel].punch).ic} ${MVN(sel,'punch')}</span><span>${(MOVES[sel].kick).ic} ${MVN(sel,'kick')}</span><span>${SPI[sel]} ${r.sp}</span></div><div class="bh">${t.power}: <span style="color:${r.bar}">${r.sp}</span></div><p>${b[1]}</p>
+ <div class="bh">${t.skT}</div><div class="sks">${SKI.filter(x=>!x||!SKINS[x].only||SKINS[x].only.includes(sel)).map(x=>{const okk=skinOK(sel,x),m=x&&MS.find(q=>q.id===SKINS[x].m);return `<button data-sk="${x}" class="${skinOf(sel)===x?'on':''}" ${okk?'':'disabled'} title="${okk?'':t.skLock+m.n[LI()]}">${okk?'':'🔒 '}${t.skN[SKI.indexOf(x)]}</button>`}).join('')}</div>${SKI.some(x=>x&&!skinOK(sel,x)&&(!SKINS[x].only||SKINS[x].only.includes(sel)))?`<p style="font-size:11.5px;opacity:.75;margin:0 0 6px">${t.skLock}${t.msT}</p>`:''}
  <div class="bst"><label>⚡ ${t.spd}</label>${bar(r.spd,1.25,'#5fd0ff')}<label>💪 ${t.pow}</label>${bar(r.pow,1.3,'#ff7a4a')}<label>❤️ ${t.hp}</label>${bar(r.hp,120,'#7dff8a')}</div></div></div>
  <button class="big alt" id="gp" style="padding:10px">${t.playAs}</button><button class="big" style="background:#ffffff1a;box-shadow:none;padding:10px" id="bk">${t.back}</button>`;
- card.querySelectorAll('.gt').forEach(x=>x.onclick=()=>{sfx('whoosh');gallery(x.dataset.g)});
+ card.querySelectorAll('.gt').forEach(x=>x.onclick=()=>{sfx('whoosh');gallery(x.dataset.g)});card.querySelectorAll('[data-sk]').forEach(x=>x.onclick=()=>{ST.skin[sel]=x.dataset.sk;stSave();sfx('whoosh');gallery(sel)});
  document.getElementById('gp').onclick=()=>{PICK[0]=sel;pick(1,t.pickOpp,k2=>{PICK[1]=k2;game.arc=game.surv=null;game.prac=false;diff()},true,()=>gallery(sel))};
  document.getElementById('bk').onclick=()=>{card.classList.remove('wide');menu()};
  overlay.scrollTop=0;
@@ -1000,7 +1068,7 @@ function pick(slot,title,done,rnd,back){
  card.classList.add('wide');const t=T();if(!slot){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)()}catch(e){}voice('choose')}
  const st=r=>`<span class="st">⚡${Math.round(r.spd*10)} 💪${Math.round(r.pow*10)} ❤️${r.hp}</span>`;
  card.innerHTML=`<h1 style="font-size:clamp(24px,min(7vw,9vh),44px)">${title}</h1>${slot?`<div class="pk">${t.p1is}${RK(PICK[0]).name}</div>`:''}
- <div class="roster">${ROSTER.map(r=>`<button class="rc${slot&&r.kind===PICK[0]?' taken':''}${r.star?' star':''}" data-k="${r.kind}" style="border-color:${r.bar}55">${r.star?`<em class="stb">${t.special}</em>`:''}<img src="musa/${r.kind}_idle.webp" alt="" ${slot?'style="transform:scaleX(-1)"':''}><b style="color:${r.bar}">${r.name}</b><i>${r.tag} · ${r.sp}</i>${st(r)}</button>`).join('')}</div>
+ <div class="roster">${ROSTER.map(r=>`<button class="rc${slot&&r.kind===PICK[0]?' taken':''}${r.star?' star':''}" data-k="${r.kind}" style="border-color:${r.bar}55">${r.star?`<em class="stb">${t.special}</em>`:''}<img src="${skinImg(r.kind,'idle').src}" alt="" style="${skinImg(r.kind,'idle').st}${slot?'transform:scaleX(-1)':''}"><b style="color:${r.bar}">${r.name}</b><i>${r.tag} · ${r.sp}</i>${st(r)}</button>`).join('')}</div>
  ${rnd?`<button class="big alt" id="rnd" style="padding:10px">${t.rnd}</button>`:''}<button class="big" style="background:#ffffff1a;box-shadow:none;padding:10px" id="bk">${t.back}</button>`;
  card.querySelectorAll('.rc').forEach(b=>b.onclick=()=>{sfx('whoosh');done(b.dataset.k)});
  if(rnd)document.getElementById('rnd').onclick=()=>{const o=ROSTER.filter(r=>r.kind!==PICK[0]);done(o[Math.random()*o.length|0].kind)};
@@ -1046,6 +1114,7 @@ function matchEnd(){
  game.state='over';const t=T();
  const w=P[0].wins>=game.need?P[0]:P[1],won=w===P[0];
  const ar=game.arc,sv=game.surv,last=ar&&ar.i===ar.list.length-1,arcNext=ar&&won&&!last;
+ recMatch(w,won);if(ar&&won&&last)stAdd('arc');if(sv&&won)stMax('survMax',sv.n+1);if(game.story&&won&&game.story.i===STORY.length-1)stAdd('story');
  let btn1=`<button class="big alt" id="r1">${t.again}</button>`,msg,extra='';
  if(game.story){const si=game.story.i,last=si===STORY.length-1;
   if(won){try{localStorage.setItem('musaStory',Math.max(storyProg(),si+1))}catch(e){}}
