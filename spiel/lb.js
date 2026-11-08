@@ -3,7 +3,7 @@
    Oyunlar:   '1453' · 'disfirlat' · 'blok' · 'batak'                       */
 (function(){
   const CFG = window.BUKO_LB_CFG || { url: 'https://itrdtnftppscgusugmfy.supabase.co', key: 'sb_publishable_5meGoR4G9XMFPWiNOXXTZg_o8cyFkfJ' };
-  const NAMES = { '1453':'1453 Surları Yık', disfirlat:'Diş Fırlat', blok:'Neon Blok', batak:'Neon Batak' };
+  const NAMES = { '1453':'1453 Surları Yık', disfirlat:'Diş Fırlat', blok:'Neon Blok', batak:'Neon Batak', caycumarun:'Çaycuma Run' };
   const L = {
     tr:{title:'PUAN TABLOSU', week:'Bu hafta', all:'Tüm zamanlar', you:'Senin rekorun', name:'Takma adın', send:'Tabloya yaz', sent:'Kaydedildi! Sıran: ', empty:'Henüz kimse yok – ilk sen ol!', err:'Bağlantı yok, sonra tekrar dene.', bad:'Bu isim kullanılamaz.', short:'En az 2 harf yaz.', close:'Kapat', none:'Önce bir puan kazan!', note:'Sadece takma ad ve puan kaydedilir.', wait:'Biraz bekle, sonra tekrar dene.', me:'SEN'},
     de:{title:'BESTENLISTE', week:'Diese Woche', all:'Alle Zeiten', you:'Dein Rekord', name:'Spitzname', send:'Eintragen', sent:'Gespeichert! Platz: ', empty:'Noch niemand – sei der Erste!', err:'Keine Verbindung, bitte später erneut.', bad:'Dieser Name ist nicht erlaubt.', short:'Mindestens 2 Zeichen.', close:'Schließen', none:'Hol dir zuerst Punkte!', note:'Gespeichert werden nur Spitzname und Punkte.', wait:'Kurz warten, dann erneut versuchen.', me:'DU'},
