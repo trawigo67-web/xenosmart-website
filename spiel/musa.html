@@ -427,8 +427,9 @@ function update(f,inp,pin,o){
  if(f.state==='ko'||f.state==='win'){f.t++;phys(f,true);return}
  if(game.state!=='fight'){f.vx=0;f.state=onG?'idle':'jump';phys(f);return}
  if(f.stun>0){f.stun--;if(f.dizzy>0)f.dizzy--;if(f.netted>0)f.netted--;phys(f,true);if(!f.stun){f.state='idle';f.dizzy=0}return}
- if(f.atk&&f.atk!=='special'&&f.hitDone&&f.atkT>ATK[f.atk].start+ATK[f.atk].active-1){/* Tekken-style string cancel */
-  if(inp.punch&&!pin.punch){startAtk(f,'punch')}else if(inp.kick&&!pin.kick){startAtk(f,'kick')}}
+ if(inp.punch&&!pin.punch)f.buf={k:'punch',t:10};else if(inp.kick&&!pin.kick)f.buf={k:'kick',t:10};if(f.buf&&--f.buf.t<=0)f.buf=null;
+ if(f.atk&&f.atk!=='special'&&f.hitDone&&f.atkT>ATK[f.atk].start+ATK[f.atk].active-1&&f.buf){/* Tekken-style string cancel */
+  const k=f.buf.k;f.buf=null;startAtk(f,k)}
  if(f.atk){
   const a=ATK[f.atk];f.atkT++;
   const mv=f.atk!=='special'?MV(f,f.atk):null;
@@ -450,10 +451,10 @@ function update(f,inp,pin,o){
  else{
   const mv=(inp.right?1:0)-(inp.left?1:0);
   if(f.glued>0)f.glued--;
-  if(onG)f.vx=f.glued>0?0:mv*4.8*f.look.spd;
-  if(inp.up&&!pin.up&&onG&&!(f.glued>0)){f.vy=-17.5}
-  if(inp.punch&&!pin.punch){startAtk(f,'punch')}
-  else if(inp.kick&&!pin.kick){startAtk(f,'kick')}
+  {const tv=f.glued>0?0:mv*4.8*f.look.spd;if(onG)f.vx+=(tv-f.vx)*(mv?.34:.42);else f.vx+=(mv*3.6*f.look.spd-f.vx)*.04}
+  if(inp.up&&!pin.up&&onG&&!(f.glued>0)){f.vy=-17.5;f.sq=-6;for(let k=0;k<6;k++)parts.push({x:f.x+(Math.random()-.5)*40,y:GROUND-4,vx:(Math.random()-.5)*3,vy:-Math.random()*2,life:16,c:'#cbb89a'})}
+  if(f.buf&&f.buf.k==='punch'){f.buf=null;startAtk(f,'punch')}
+  else if(f.buf&&f.buf.k==='kick'){f.buf=null;startAtk(f,'kick')}
   else if(inp.assist&&!pin.assist&&!f.jokerUsed&&JOKER.includes(f.look.kind)){f.jokerUsed=1;proj.push({x:f.x-f.facing*300,y:GROUND-80,vx:f.facing*17,owner:f,kind:'taxi',t:0,taxi:1,joker:1});sfx('honk');banner={txt:T().jokerCall,t:50,c:'#ffd21a'};const j=document.getElementById('jk'+P.indexOf(f));j&&j.classList.add('used')}
   else if(inp.special&&!pin.special&&f.meter>=100&&onG){f.meter=0;if(f.look.kind==='buko')bukoCopy(f,o);startAtk(f,'special');sfx('special');banner={txt:f.look.sp+'!',t:55,c:f.look.bar};if(f.look.kind==='abdullah'){apoVoice(f,1)}else if(f.look.shout){f.say=f.look.shout[Math.random()*f.look.shout.length|0];f.sayT=80}}
   if(!f.atk)f.state=!onG?'jump':(mv?'walk':'idle');
@@ -464,8 +465,11 @@ function update(f,inp,pin,o){
 function phys(f,fric){
  f.x+=f.vx;if(fric)f.vx*=0.86;
  const wasAir=f.y<GROUND;f.vy+=0.9;f.y+=f.vy;
- if(f.y>=GROUND){f.y=GROUND;f.vy=0;if(f.juggle&&wasAir){f.juggle=0;f.stun=Math.min(f.stun,26);shake=8;spark(f.x,GROUND-10,'#d8c7a0',12)}if(f.state==='ko')f.vx*=0.8}
+ if(f.y>=GROUND){if(wasAir&&f.vy>4){f.sq=Math.min(9,f.vy*.5);for(let k=0;k<8;k++)parts.push({x:f.x+(Math.random()-.5)*60,y:GROUND-4,vx:(Math.random()-.5)*5,vy:-Math.random()*2.5,life:18,c:'#cbb89a'})}f.y=GROUND;f.vy=0;if(f.juggle&&wasAir){f.juggle=0;f.stun=Math.min(f.stun,26);shake=8;spark(f.x,GROUND-10,'#d8c7a0',12)}if(f.state==='ko')f.vx*=0.8}
+ if((f.x<85||f.x>W-85)&&f.juggle&&Math.abs(f.vx)>1){f.vx=-f.vx*.8;f.vy=Math.min(f.vy,-4);shake=6;spark(f.x<85?90:W-90,f.y-150,'#fff3a0',12)}
  f.x=Math.max(85,Math.min(W-85,f.x));
+ if(f.sq)f.sq+=f.sq>0?-1:1;
+ if(f.y>=GROUND&&Math.abs(f.vx)>4.5&&time%7===0)parts.push({x:f.x-Math.sign(f.vx)*30,y:GROUND-3,vx:-f.vx*.15,vy:-1,life:12,c:'#cbb89a'});
 }
 function bukoCopy(f,o){const base=RK('buko'),src=(o&&o.look.kind!=='buko')?o.look:RK('musa');
  const c={...base};['spType','proj','pw','spDmg','stunHit','unblock','heal','freeze','multi','sp','comp','flip'].forEach(k=>{if(src[k]!==undefined)c[k]=src[k]});c.spark=src.spark||base.spark;c.copyOf=src.kind;c.shout=null;
@@ -516,6 +520,7 @@ function endRound(winner){
  else game.msg=T().draw;
 }
 function step(){
+ for(const f of P){f.px=f.x;f.py=f.y}
  time++;
  if(banner&&--banner.t<=0)banner=null;
  for(const x of texts){x.y-=1.1;x.life--}texts=texts.filter(x=>x.life>0);
@@ -661,12 +666,19 @@ function drawFighter(f){
  ctx.scale(f.facing,1);
  {const gs=f.enraged?1.12+(f.rageT>0?Math.sin(f.rageT*.5)*.04:0):1;ctx.scale(gs*(f.look.kind==='timur'?1.13:1),gs)}
  if(f.state==='hit')ctx.translate(-6,0);
+ if(f.state==='walk')ctx.rotate(.035*Math.sign(f.vx)*f.facing);
+ if(f.atk&&f.atk!=='special'){const a=ATK[f.atk];ctx.translate(f.atkT<a.start?-7*f.atkT/a.start:f.atkT<=a.start+a.active?9:9*Math.max(0,1-(f.atkT-a.start-a.active)/a.rec),0)}
+ if(f.sq){const q=f.sq;ctx.scale(1+.013*q,1-.016*q)}
  const br=(pose==='idle'&&f.state==='idle')?1+Math.sin(time*.12)*.012:1;
  const w=m.w*K,h=m.h*K;
  ctx.scale(1,br);
  if(f.y<GROUND&&f.state!=='ko')ctx.rotate(-.08);
  if(f.look.kind==='buko'){ctx.globalAlpha=f.camo?.22+.08*Math.sin(time*.2):1;ctx.filter='hue-rotate('+(f.look.copyOf?(time*6)%360:Math.sin(time*.03)*25)+'deg) saturate(1.15)'}
  if(f.frozen>0)ctx.filter='grayscale(.8) brightness(1.25) hue-rotate(170deg) saturate(2.2)';else if(f.eyes>0&&f.eyes%6<3)ctx.filter='sepia(1) saturate(4) hue-rotate(-30deg) brightness(1.05)';else if(f.enraged)ctx.filter='saturate(1.3) contrast(1.05)';
+ if(f.lp!==pose){f.pp=f.lp;f.pf=5;f.lp=pose}
+ if(f.pf>0&&f.pp){const pi=IMG[ch+'_'+f.pp],pm=META[ch][f.pp];if(ok(pi)&&pm){const ga=ctx.globalAlpha;ctx.globalAlpha=ga*(f.pf/5)*.55;ctx.drawImage(pi,-pm.ax*K,-pm.h*K,pm.w*K,pm.h*K);ctx.globalAlpha=ga}f.pf--}
+ if((f.atk==='special'||Math.abs(f.vx)>9)&&time%2===0){(f.trail=f.trail||[]).push({x:f.x,y:f.y});if(f.trail.length>4)f.trail.shift()}else if(f.trail&&f.trail.length&&time%2===0)f.trail.shift();
+ if(f.trail&&f.trail.length){const ga=ctx.globalAlpha;f.trail.forEach((tr,i)=>{ctx.globalAlpha=ga*.12*(i+1);ctx.drawImage(im,-m.ax*K+(tr.x-f.x)*f.facing,-h+(tr.y-f.y),w,h)});ctx.globalAlpha=ga}
  ctx.drawImage(im,-m.ax*K,-h,w,h);ctx.filter='none';ctx.globalAlpha=1;
  if(f.look.kind==='buko'&&f.atk==='punch'){const a=ATK.punch,t=f.atkT-a.start,ext=t<0?0:t<=a.active?t/a.active:Math.max(0,1-(t-a.active)/a.rec);if(ext>0){const mx=w*.38,my=-h*.45,L=(MOVES.buko.punch.range-mx)*ext;ctx.strokeStyle='#ff6f91';ctx.lineWidth=9;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(mx,my);ctx.quadraticCurveTo(mx+L*.5,my-14*Math.sin(ext*3),mx+L,my+4);ctx.stroke();ctx.fillStyle='#ff4f7b';ctx.beginPath();ctx.arc(mx+L,my+4,11,0,7);ctx.fill()}}
  if(f.look.kind==='buko'&&f.atk==='kick'&&f.atkT>ATK.kick.start&&f.atkT<=ATK.kick.start+ATK.kick.active+4){ctx.strokeStyle='rgba(200,255,122,.8)';ctx.lineWidth=6;ctx.beginPath();ctx.arc(-w*.1,-h*.3,w*.45,-.6,.9);ctx.stroke()}
@@ -759,13 +771,14 @@ function hud(){
 function draw(){
  ctx.save();
  if(shake)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
+ if(!(game.cam&&game.cam.t>0)&&P.length===2&&game.state!=='menu'){const d=Math.abs(P[0].x-P[1].x),tz=1+Math.max(0,Math.min(1,(460-d)/360))*.09,mx=(P[0].x+P[1].x)/2;game.cz=(game.cz||1)+(tz-(game.cz||1))*.06;game.cmx=(game.cmx||W/2)+(mx-(game.cmx||W/2))*.08;const z=game.cz;if(z>1.001){const hw=W/2/z,hh=H/2/z,cx=Math.max(hw,Math.min(W-hw,game.cmx)),cy=H-hh;ctx.translate(W/2,H/2);ctx.scale(z,z);ctx.translate(-cx,-cy)}}
  if(game.cam&&game.cam.t>0){const c=game.cam,k=Math.min(1,c.t/25)*Math.min(1,(c.T-c.t)/12+.0001),z=1+.32*k;c.t--;
   const hw=W/2/z,hh=H/2/z,cx=Math.max(hw,Math.min(W-hw,W/2+(c.x-W/2)*k*.9)),cy=Math.max(hh,Math.min(H-hh,H/2+(c.y-H/2)*k*.9));ctx.translate(W/2,H/2);ctx.scale(z,z);ctx.translate(-cx,-cy)}
  bg();
  if(P.length){
   for(const q of puddles){ctx.save();ctx.globalAlpha=Math.min(1,q.t/40)*.85;ctx.fillStyle='#8cc63f';ctx.beginPath();ctx.ellipse(q.x,GROUND+4,54,11,0,0,7);ctx.fill();ctx.fillStyle='#b5e061';ctx.beginPath();ctx.ellipse(q.x-14,GROUND+1,20,5,0,0,7);ctx.fill();if(time%20<10){ctx.fillStyle='#d8f59a';ctx.beginPath();ctx.arc(q.x+18,GROUND-2+Math.sin(time*.2)*2,4,0,7);ctx.fill()}ctx.restore()}
   const order=P[0].atk?[1,0]:[0,1];
-  for(const i of order)drawFighter(P[i]);
+  for(const i of order){const f=P[i],ox=f.x,oy=f.y;if(f.px!=null&&!freeze){f.x=f.px+(ox-f.px)*ALPHA;f.y=f.py+(oy-f.py)*ALPHA}drawFighter(f);f.x=ox;f.y=oy}
   for(const p of proj)drawProj(p);
   for(const s of parts){ctx.globalAlpha=Math.min(1,s.life/15);circ(s.x,s.y,3,s.c)}
   ctx.globalAlpha=1;
@@ -776,11 +789,12 @@ function draw(){
 }
 
 /* ---------- Loop ---------- */
-let last=performance.now(),acc=0;
+let last=performance.now(),acc=0,ALPHA=1;
 function loop(now){
  acc+=Math.min(100,now-last);last=now;
  const rotOn=!document.getElementById('rot').classList.contains('hidden');
  while(acc>=1000/60){if(game.state!=='menu'&&game.state!=='over'&&game.state!=='vs'&&!rotOn)step();else time++;acc-=1000/60}
+ ALPHA=Math.max(0,Math.min(1,acc/(1000/60)));
  draw();requestAnimationFrame(loop);
 }
 
