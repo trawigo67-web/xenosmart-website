@@ -1226,7 +1226,7 @@ let MUSIC_OFF=false;try{MUSIC_OFF=localStorage.getItem('musaMusicOff')==='1'}cat
 const snd=document.getElementById('snd'),mus=document.getElementById('mus');const si=()=>{snd.textContent=MUTE?'🔇':'🔊';mus.classList.toggle('off',MUSIC_OFF)};si();
 const bgm=document.getElementById('bgm');bgm.volume=0.12;
 window.musaMusic=()=>{if(MUSIC_OFF){bgm.pause();return}const pr=bgm.play();pr&&pr.catch(()=>{})};
-const RAPS=['rap3.mp3','rap1.mp3','rap2.mp3'];let rapI=Math.random()*RAPS.length|0;let RAP=RAPS[rapI],userTap=false;
+const RAPS=['rap3.mp3','rap4.mp3','rap1.mp3','rap2.mp3'];let rapI=Math.random()*RAPS.length|0;let RAP=RAPS[rapI],userTap=false;
 bgm.loop=false;bgm.addEventListener('ended',()=>{rapI=(rapI+1)%RAPS.length;RAP=RAPS[rapI];bgm.src='musa/'+RAP;window.musaMusic()});
 window.setTrack=(f,vol)=>{if(!/rap\d\.mp3$/.test(bgm.src)){bgm.src='musa/'+RAP}bgm.volume=vol;if(userTap)window.musaMusic()};
 addEventListener('pointerdown',()=>{if(userTap)return;userTap=true;if(game.state==='menu'||game.state==='over')window.setTrack(RAP,.15);window.musaMusic()},{once:true});
