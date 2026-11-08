@@ -1,5 +1,5 @@
 {
- "v": "buko-v21",
+ "v": "buko-v22",
  "files": [
   "./",
   "1453/",
@@ -229,6 +229,22 @@
   "musa/buko_punch.webp",
   "musa/buko_special.webp",
   "musa/buko_walk.webp",
-  "musa/buko_win.webp"
+  "musa/buko_win.webp",
+  "musa/muaz_block.webp",
+  "musa/muaz_hit.webp",
+  "musa/muaz_idle.webp",
+  "musa/muaz_kick.webp",
+  "musa/muaz_punch.webp",
+  "musa/muaz_special.webp",
+  "musa/muaz_walk.webp",
+  "musa/muaz_win.webp",
+  "musa/selim_block.webp",
+  "musa/selim_hit.webp",
+  "musa/selim_idle.webp",
+  "musa/selim_kick.webp",
+  "musa/selim_punch.webp",
+  "musa/selim_special.webp",
+  "musa/selim_walk.webp",
+  "musa/selim_win.webp"
  ]
 }
