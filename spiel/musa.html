@@ -100,6 +100,18 @@ body.land .joy,.joy{background:radial-gradient(circle,rgba(12,16,32,.28) 0 52%,r
 .joy::before{inset:6px!important;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='white' stroke-opacity='.55' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M43 12l7-7 7 7M43 88l7 7 7-7M12 43l-7 7 7 7M88 43l7 7-7 7'/%3E%3C/svg%3E") center/100% 100% no-repeat!important}
 .joy .knob{width:calc(var(--J)*.4)!important;height:calc(var(--J)*.4)!important;margin:calc(var(--J)*-.2) 0 0 calc(var(--J)*-.2)!important;background:radial-gradient(circle at 40% 32%,#ffffff,#dfe6ff 35%,#8d9bd0 78%,#5c6aa3)!important;box-shadow:0 6px 14px rgba(0,0,0,.45),inset 0 -3px 6px rgba(0,0,0,.25),0 0 0 3px rgba(255,255,255,.18)!important;transition:transform .05s}
 .joy.on{border-color:#ffcc33!important;box-shadow:0 0 20px rgba(255,204,51,.35),0 8px 22px rgba(0,0,0,.4)!important}
+.chs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:6px 0 8px}
+.ch{position:relative;border:2px solid #ffffff22;border-radius:12px;overflow:hidden;padding:0;background:#000;cursor:pointer;aspect-ratio:16/10;color:#fff}
+.ch>img{width:100%;height:100%;object-fit:cover;display:block;opacity:.85}.ch .cho{position:absolute;right:2px;bottom:16px;height:72%}.ch .cho img{height:100%}
+.ch b{position:absolute;left:0;right:0;bottom:0;padding:12px 4px 4px;font:900 clamp(8px,1.5vh,11px) system-ui;background:linear-gradient(transparent,#000e);text-align:left;line-height:1.1}
+.ch i{position:absolute;top:4px;left:6px;font-style:normal;font-weight:900;color:#7dff8a;text-shadow:0 1px 3px #000}
+.ch.lk{filter:grayscale(1) brightness(.45);cursor:default}.ch.dn{border-color:#7dff8a88}.ch.leg{border-color:#ffcc33aa;box-shadow:0 0 10px #ffcc3355}
+.stc{display:flex;gap:12px;text-align:left;border:2px solid color-mix(in srgb,var(--c) 55%,transparent);border-radius:18px;padding:14px;background-size:cover;background-position:center;margin-bottom:8px}
+.stx{flex:1}.stt{margin:2px 0 6px!important;font:900 clamp(18px,4vh,28px) system-ui;color:#ffcc33}.stx p{margin:0;font-size:clamp(13px,2.4vh,16px);line-height:1.5;color:#e6ecf8}
+.sti{flex:0 0 36%;display:flex;align-items:flex-end;justify-content:center;position:relative}.sti img{height:min(34vh,200px);filter:drop-shadow(0 6px 12px #000c)}.sti .vs{font:900 26px system-ui;color:#ffcc33;align-self:center;text-shadow:0 3px 0 #7a2f00}
+.sti b{position:absolute;bottom:-4px;right:0;font:900 13px system-ui;text-shadow:0 2px 3px #000}
+.sten{font-size:clamp(14px,2.6vh,18px);line-height:1.6;color:#e6ecf8;max-width:640px;margin:8px auto}
+@media (max-width:640px){.chs{grid-template-columns:repeat(2,1fr)}.stc{flex-direction:column}}
 /*lang*/.lgs{display:flex;justify-content:center;gap:14px;margin-bottom:8px}
 .lg{border:none;background:none;padding:0;cursor:pointer;width:clamp(50px,8vh,66px);aspect-ratio:3/2;transform:perspective(200px) rotateY(-8deg);filter:drop-shadow(0 4px 6px #000a) saturate(.75) brightness(.8);opacity:.75;transition:transform .2s,filter .2s,opacity .2s;position:relative}
 .lg .fw{display:flex;width:100%;height:100%;border-radius:4px}
@@ -155,7 +167,7 @@ const overlay=document.getElementById('overlay'),card=document.getElementById('c
 
 let LANG='tr';try{const h=JSON.parse(localStorage.getItem('disfirlat2')||'{}');LANG=h.lang||(navigator.language||'tr').slice(0,2)}catch(e){}if(!['tr','de','en'].includes(LANG))LANG='en';
 const TX={
-tr:{round:'RAUND',enraged:'SİNİRLENDİ! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ SAHNE SEÇ',rndStage:'🎲 RASTGELE SAHNE',glued:'YAPIŞTI! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'KUSTU! 🤢',slip:'KAYDI!',chars:'📖 KARAKTERLER',charsS:'Hikâyeleri ve güçleri',story:'HİKÂYESİ',power:'ÖZEL GÜCÜ',spd:'Hız',pow:'Güç',hp:'Can',playAs:'▶ BU KARAKTERLE OYNA',frozen:'ZAMAN DURDU! ⏸',shaved:'SIFIR NUMARA! ✂️',heroP:'KAHRAMAN GÜCÜ',special:'⭐ ÖZEL' ,fight:'DÖVÜŞ!',won:'KAZANDI!',draw:'BERABERE!',combo:'KOMBO!',blk:'BLOK',ready:'HAZIR!',air:'HAVADA!',perfect:'PERFECT!',great:'GREAT!',timeup:'SÜRE BİTTİ!',fooled:'KANDIRILDI! 🤯',dizzy:'SERSEMLEDİ!',netted:'AĞA DÜŞTÜ!',sp:'ÖZEL',kick:'TEKME',block:'BLOK',punch:'YUMRUK',rot:'Telefonu yan çevir',rot2:'Oyun yatay ekranda oynanır',
+tr:{round:'RAUND',storyM:'📜 HİKÂYE MODU',storys:'Musa ile Çaycuma\'yı kurtar',chapters:'BÖLÜMLER',stCont:'▶ DEVAM',retry:'🔁 TEKRAR DENE',theEnd:'SON',locked:'🔒',storyDone:'Hikâye tamamlandı!',enraged:'SİNİRLENDİ! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ SAHNE SEÇ',rndStage:'🎲 RASTGELE SAHNE',glued:'YAPIŞTI! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'KUSTU! 🤢',slip:'KAYDI!',chars:'📖 KARAKTERLER',charsS:'Hikâyeleri ve güçleri',story:'HİKÂYESİ',power:'ÖZEL GÜCÜ',spd:'Hız',pow:'Güç',hp:'Can',playAs:'▶ BU KARAKTERLE OYNA',frozen:'ZAMAN DURDU! ⏸',shaved:'SIFIR NUMARA! ✂️',heroP:'KAHRAMAN GÜCÜ',special:'⭐ ÖZEL' ,fight:'DÖVÜŞ!',won:'KAZANDI!',draw:'BERABERE!',combo:'KOMBO!',blk:'BLOK',ready:'HAZIR!',air:'HAVADA!',perfect:'PERFECT!',great:'GREAT!',timeup:'SÜRE BİTTİ!',fooled:'KANDIRILDI! 🤯',dizzy:'SERSEMLEDİ!',netted:'AĞA DÜŞTÜ!',sp:'ÖZEL',kick:'TEKME',block:'BLOK',punch:'YUMRUK',rot:'Telefonu yan çevir',rot2:'Oyun yatay ekranda oynanır',
  sub:"Çaycuma'nın Kahramanı – Dövüş Oyunu",p1:'1 OYUNCU',p1s:'Bilgisayara karşı',p2:'2 OYUNCU',p2s:'Aynı cihazda karşılıklı',
  help:'12 karakter: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Apo, Avcı Nazif, Berber Yusuf, Taksici Soner, Kırtasiyeci Şinasi ve Kara Fırtına! Rakibi vur, <b>güç barını</b> doldur, sonra <b>özel hareketini</b> yap. Kombonun sonunda <b>tekme</b> rakibi havaya kaldırır – havadayken vurmaya devam et!<br>2 raundu kazanan şampiyon olur.<br><b>Klavye</b> – 1. oyuncu: A/D yürü · W zıpla · S blok · F yumruk · G tekme · H özel<br>2. oyuncu: ← → yürü · ↑ zıpla · ↓ blok · K yumruk · L tekme · J özel',
  how:'Nasıl oynamak istersin?',arc:'🏆 ARCADE',arcs:'Sırayla herkesi yen, sonda boss',free:'⚔️ SERBEST DÖVÜŞ',frees:'Kendini ve rakibini sen seç',surv:'❤️ HAYATTA KAL',survs:'Tek can – kaç rakip yenebilirsin?',prac:'🥋 ANTRENMAN',pracs:'Süre yok, rakip karşılık vermez',
@@ -168,7 +180,7 @@ tr:{round:'RAUND',enraged:'SİNİRLENDİ! 💢',jarvisHelp:'JARVIS! 🤖',pandaH
  survNext:'▶ SONRAKİ RAKİP',survEnd:n=>`Hayatta kalma bitti: ${n} rakip yendin!`,survBest:b=>`En iyi rekor: ${b}`,survWin:'Can biraz doldu, devam!',pracEnd:'ANTRENMANI BİTİR',
  lies:['Arkana bak, Musa geliyor!','Yerde 100 lira var!','Annen çağırıyor!','Araban çekiliyor!','Hoca seni arıyor!',"Çaycuma'da kar yağıyor!",'Ben hiç yenilmedim!','Ayakkabının bağı çözülmüş!'],
  arenas:['ÇAYCUMA · CUMHURİYET MEYDANI','FİLYOS SAHİLİ · ÇAYCUMA','ÇAYCUMA · AKŞAM ÜSTÜ']},
-de:{round:'RUNDE',enraged:'WÜTEND! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ ARENA WÄHLEN',rndStage:'🎲 ZUFÄLLIGE ARENA',glued:'KLEBT FEST! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'KOTZT! 🤢',slip:'AUSGERUTSCHT!',chars:'📖 KÄMPFER',charsS:'Geschichten und Kräfte',story:'GESCHICHTE',power:'SPEZIALKRAFT',spd:'Tempo',pow:'Kraft',hp:'Leben',playAs:'▶ MIT DIESEM KÄMPFER SPIELEN',frozen:'ZEIT GESTOPPT! ⏸',shaved:'NULLER-SCHNITT! ✂️',heroP:'HELDENKRAFT',special:'⭐ SPEZIAL' ,fight:'KAMPF!',won:'GEWINNT!',draw:'UNENTSCHIEDEN!',combo:'COMBO!',blk:'BLOCK',ready:'BEREIT!',air:'IN DER LUFT!',perfect:'PERFECT!',great:'GREAT!',timeup:'ZEIT UM!',fooled:'REINGELEGT! 🤯',dizzy:'BENOMMEN!',netted:'IM NETZ!',sp:'SPEZIAL',kick:'TRITT',block:'BLOCK',punch:'SCHLAG',rot:'Handy quer halten',rot2:'Das Spiel läuft im Querformat',
+de:{round:'RUNDE',storyM:'📜 STORY-MODUS',storys:'Rette Çaycuma mit Musa',chapters:'KAPITEL',stCont:'▶ WEITER',retry:'🔁 NOCHMAL',theEnd:'ENDE',locked:'🔒',storyDone:'Geschichte abgeschlossen!',enraged:'WÜTEND! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ ARENA WÄHLEN',rndStage:'🎲 ZUFÄLLIGE ARENA',glued:'KLEBT FEST! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'KOTZT! 🤢',slip:'AUSGERUTSCHT!',chars:'📖 KÄMPFER',charsS:'Geschichten und Kräfte',story:'GESCHICHTE',power:'SPEZIALKRAFT',spd:'Tempo',pow:'Kraft',hp:'Leben',playAs:'▶ MIT DIESEM KÄMPFER SPIELEN',frozen:'ZEIT GESTOPPT! ⏸',shaved:'NULLER-SCHNITT! ✂️',heroP:'HELDENKRAFT',special:'⭐ SPEZIAL' ,fight:'KAMPF!',won:'GEWINNT!',draw:'UNENTSCHIEDEN!',combo:'COMBO!',blk:'BLOCK',ready:'BEREIT!',air:'IN DER LUFT!',perfect:'PERFECT!',great:'GREAT!',timeup:'ZEIT UM!',fooled:'REINGELEGT! 🤯',dizzy:'BENOMMEN!',netted:'IM NETZ!',sp:'SPEZIAL',kick:'TRITT',block:'BLOCK',punch:'SCHLAG',rot:'Handy quer halten',rot2:'Das Spiel läuft im Querformat',
  sub:'Der Held von Çaycuma – Kampfspiel',p1:'1 SPIELER',p1s:'Gegen den Computer',p2:'2 SPIELER',p2s:'Gegeneinander am selben Gerät',
  help:'12 Kämpfer: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Apo, Avcı Nazif, Berber Yusuf, Taksici Soner, Kırtasiyeci Şinasi und Kara Fırtına! Triff den Gegner, füll die <b>Kraftleiste</b> und mach deinen <b>Spezialangriff</b>. Ein <b>Tritt</b> am Ende einer Combo schleudert den Gegner hoch – schlag in der Luft weiter!<br>Wer 2 Runden gewinnt, ist Champion.<br><b>Tastatur</b> – Spieler 1: A/D laufen · W springen · S blocken · F Schlag · G Tritt · H Spezial<br>Spieler 2: ← → laufen · ↑ springen · ↓ blocken · K Schlag · L Tritt · J Spezial',
  how:'Wie willst du spielen?',arc:'🏆 ARCADE',arcs:'Besiege alle nacheinander, am Ende der Boss',free:'⚔️ FREIER KAMPF',frees:'Wähle dich und deinen Gegner',surv:'❤️ ÜBERLEBEN',survs:'Ein Leben – wie viele schaffst du?',prac:'🥋 TRAINING',pracs:'Keine Zeit, Gegner wehrt sich nicht',
@@ -181,7 +193,7 @@ de:{round:'RUNDE',enraged:'WÜTEND! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'P
  survNext:'▶ NÄCHSTER GEGNER',survEnd:n=>`Überleben vorbei: ${n} Gegner besiegt!`,survBest:b=>`Rekord: ${b}`,survWin:'Etwas Leben zurück, weiter!',pracEnd:'TRAINING BEENDEN',
  lies:['Schau hinter dich, Musa kommt!','Da liegen 100 Lira!','Deine Mutter ruft!','Dein Auto wird abgeschleppt!','Der Hoca sucht dich!','In Çaycuma schneit es!','Ich hab noch nie verloren!','Dein Schuh ist offen!'],
  arenas:['ÇAYCUMA · REPUBLIKPLATZ','FİLYOS-STRAND · ÇAYCUMA','ÇAYCUMA · AM ABEND']},
-en:{round:'ROUND',enraged:'ENRAGED! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ CHOOSE STAGE',rndStage:'🎲 RANDOM STAGE',glued:'STUCK! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'THREW UP! 🤢',slip:'SLIPPED!',chars:'📖 FIGHTERS',charsS:'Stories and powers',story:'STORY',power:'SPECIAL POWER',spd:'Speed',pow:'Power',hp:'Health',playAs:'▶ PLAY AS THIS FIGHTER',frozen:'TIME STOPPED! ⏸',shaved:'ZERO CUT! ✂️',heroP:'HERO POWER',special:'⭐ SPECIAL' ,fight:'FIGHT!',won:'WINS!',draw:'DRAW!',combo:'COMBO!',blk:'BLOCK',ready:'READY!',air:'AIRBORNE!',perfect:'PERFECT!',great:'GREAT!',timeup:'TIME UP!',fooled:'FOOLED! 🤯',dizzy:'DIZZY!',netted:'NETTED!',sp:'SPECIAL',kick:'KICK',block:'BLOCK',punch:'PUNCH',rot:'Turn your phone sideways',rot2:'The game is played in landscape',
+en:{round:'ROUND',storyM:'📜 STORY MODE',storys:'Save Çaycuma with Musa',chapters:'CHAPTERS',stCont:'▶ CONTINUE',retry:'🔁 TRY AGAIN',theEnd:'THE END',locked:'🔒',storyDone:'Story complete!',enraged:'ENRAGED! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'PANDA! 🐼',stage:'🗺️ CHOOSE STAGE',rndStage:'🎲 RANDOM STAGE',glued:'STUCK! 🧴',joker:'JOKER',jokerCall:'JOKER: SONER! 🚕',vomit:'THREW UP! 🤢',slip:'SLIPPED!',chars:'📖 FIGHTERS',charsS:'Stories and powers',story:'STORY',power:'SPECIAL POWER',spd:'Speed',pow:'Power',hp:'Health',playAs:'▶ PLAY AS THIS FIGHTER',frozen:'TIME STOPPED! ⏸',shaved:'ZERO CUT! ✂️',heroP:'HERO POWER',special:'⭐ SPECIAL' ,fight:'FIGHT!',won:'WINS!',draw:'DRAW!',combo:'COMBO!',blk:'BLOCK',ready:'READY!',air:'AIRBORNE!',perfect:'PERFECT!',great:'GREAT!',timeup:'TIME UP!',fooled:'FOOLED! 🤯',dizzy:'DIZZY!',netted:'NETTED!',sp:'SPECIAL',kick:'KICK',block:'BLOCK',punch:'PUNCH',rot:'Turn your phone sideways',rot2:'The game is played in landscape',
  sub:'The Hero of Çaycuma – Fighting Game',p1:'1 PLAYER',p1s:'Against the computer',p2:'2 PLAYERS',p2s:'Face to face on one device',
  help:'12 fighters: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Apo, Avcı Nazif, Berber Yusuf, Taksici Soner, Kırtasiyeci Şinasi and Kara Fırtına! Hit your rival, fill the <b>power bar</b>, then use your <b>special move</b>. A <b>kick</b> at the end of a combo launches the rival – keep hitting in the air!<br>Win 2 rounds to become champion.<br><b>Keyboard</b> – Player 1: A/D walk · W jump · S block · F punch · G kick · H special<br>Player 2: ← → walk · ↑ jump · ↓ block · K punch · L kick · J special',
  how:'How do you want to play?',arc:'🏆 ARCADE',arcs:'Beat everyone in a row, boss at the end',free:'⚔️ FREE FIGHT',frees:'Choose yourself and your rival',surv:'❤️ SURVIVAL',survs:'One life – how many can you beat?',prac:'🥋 PRACTICE',pracs:'No timer, rival does not fight back',
@@ -195,6 +207,66 @@ en:{round:'ROUND',enraged:'ENRAGED! 💢',jarvisHelp:'JARVIS! 🤖',pandaHelp:'P
  lies:['Look behind you, Musa is coming!','There are 100 lira on the floor!','Your mum is calling!','Your car is being towed!','The Hoca is looking for you!',"It's snowing in Çaycuma!","I've never lost!",'Your shoelace is untied!'],
  arenas:['ÇAYCUMA · REPUBLIC SQUARE','FİLYOS BEACH · ÇAYCUMA','ÇAYCUMA · EVENING']}};
 const T=()=>TX[LANG];
+const STORY=[
+ {opp:'abdullah',st:'imamlar',d:'kolay',
+  t:['1. BÖLÜM · YALANIN İZİ','KAPITEL 1 · DIE SPUR DER LÜGE','CHAPTER 1 · THE TRAIL OF LIES'],
+  x:["Bir sabah Çaycuma'nın üstüne kara bulutlar çöker. Kara Fırtına geri dönmüştür! Musa pandasıyla yola çıkar. İmamlar Köyü'nde Apo karşısına çıkar: 'Fırtınayı ben gördüm abi, Bartın'a gitti!' Musa bunun yalan olduğunu bilir…",
+     "Eines Morgens ziehen schwarze Wolken über Çaycuma auf. Kara Fırtına ist zurück! Musa macht sich mit seinem Panda auf den Weg. Im Dorf İmamlar stellt sich ihm Apo in den Weg: 'Ich hab den Sturm gesehen, Abi, er ist nach Bartın!' Musa weiß, dass das gelogen ist…",
+     "One morning black clouds roll over Çaycuma. Kara Fırtına is back! Musa sets out with his panda. In İmamlar village, Apo blocks his way: 'I saw the storm, bro, it went to Bartın!' Musa knows it's a lie…"]},
+ {opp:'nazif',st:'kisla',d:'kolay',
+  t:['2. BÖLÜM · AVCININ SINAVI','KAPITEL 2 · DIE PRÜFUNG DES JÄGERS','CHAPTER 2 · THE HUNTER\'S TEST'],
+  x:["Kışla Köyü'nde sis var. Avcı Nazif fırtınanın izlerini çoktan bulmuştur ama bir şartı vardır: 'İzleri sana göstereyim – önce beni geç!' Köpeği havlar, ağ hazırdır.",
+     "Im Dorf Kışla liegt Nebel. Jäger Nazif hat die Spuren des Sturms längst gefunden, aber er hat eine Bedingung: 'Ich zeig dir die Spuren – aber erst musst du an mir vorbei!' Sein Hund bellt, das Netz ist bereit.",
+     "Fog lies over Kışla village. Hunter Nazif has already found the storm's tracks, but on one condition: 'I'll show you the trail – but first you have to get past me!' His dog barks, the net is ready."]},
+ {opp:'soner',st:'yenikoy',d:'kolay',
+  t:['3. BÖLÜM · TAKSİ 67T3011','KAPITEL 3 · TAXI 67T3011','CHAPTER 3 · TAXI 67T3011'],
+  x:["İzler Yeniköy'e çıkar. Kahvehanenin önünde sarı taksisiyle Soner bekliyor: 'Fırtınanın peşindeysen seni götürürüm abi… ama önce bir el dövüşelim!'",
+     "Die Spuren führen nach Yeniköy. Vor dem Teehaus wartet Soner mit seinem gelben Taxi: 'Wenn du hinter dem Sturm her bist, fahr ich dich, Abi… aber erst ein Kampf!'",
+     "The trail leads to Yeniköy. In front of the teahouse, Soner waits with his yellow taxi: 'If you're chasing the storm, I'll drive you, bro… but first, let's fight!'"]},
+ {opp:'sinasi',st:'meydan2',d:'orta',
+  t:['4. BÖLÜM · ESKİ HARİTA','KAPITEL 4 · DIE ALTE KARTE','CHAPTER 4 · THE OLD MAP'],
+  x:["Akşam Çaycuma merkezinde kırtasiyeci Şinasi dükkânını kapatıyor. Elinde eski bir harita var: fırtınanın saklandığı yer. 'Pardon efendim, ama haritayı hak etmeniz lazım!'",
+     "Abends schließt Schreibwarenhändler Şinasi im Zentrum von Çaycuma seinen Laden. In der Hand hält er eine alte Karte: das Versteck des Sturms. 'Verzeihung, mein Herr, aber die Karte müssen Sie sich verdienen!'",
+     "In the evening, stationer Şinasi is closing his shop in central Çaycuma. In his hand: an old map showing where the storm hides. 'Pardon me, sir, but you'll have to earn this map!'"]},
+ {opp:'yusuf',st:'saltukova',d:'orta',
+  t:['5. BÖLÜM · SIFIR NUMARA','KAPITEL 5 · NULLERSCHNITT','CHAPTER 5 · ZERO CUT'],
+  x:["Harita Saltukova Havalimanı'nı gösteriyor. Pistin ortasında Berber Yusuf, makası elinde: 'Fırtınayla dövüşeceksen önce bir tıraş olman lazım!'",
+     "Die Karte zeigt auf den Flughafen Saltukova. Mitten auf dem Rollfeld: Barbier Yusuf, die Schere in der Hand. 'Wenn du gegen den Sturm kämpfen willst, brauchst du erst einen Haarschnitt!'",
+     "The map points to Saltukova Airport. In the middle of the runway stands Barber Yusuf, scissors in hand: 'If you want to fight the storm, you need a haircut first!'"]},
+ {opp:'timur',st:'filyos',d:'orta',
+  t:['6. BÖLÜM · JARVIS HESAPLIYOR','KAPITEL 6 · JARVIS RECHNET','CHAPTER 6 · JARVIS CALCULATES'],
+  x:["Filyos sahilinde Timur ve robotu Jarvis fırtınanın yerini hesaplıyor. 'Koordinatları vereceğim Musa – ama önce bakalım hazır mısın!' Jarvis'in gözleri parlar.",
+     "Am Strand von Filyos berechnen Timur und sein Roboter Jarvis den Ort des Sturms. 'Ich geb dir die Koordinaten, Musa – aber erst zeig mir, ob du bereit bist!' Jarvis' Augen leuchten.",
+     "On Filyos beach, Timur and his robot Jarvis are calculating the storm's location. 'I'll give you the coordinates, Musa – but first let's see if you're ready!' Jarvis's eyes light up."]},
+ {opp:'mevlut',st:'bartin',d:'orta',
+  t:['7. BÖLÜM · DEMİR KAFA','KAPITEL 7 · EISENSCHÄDEL','CHAPTER 7 · IRON HEAD'],
+  x:["Jarvis'in hesabı Bartın'ı gösteriyor. Irmak kıyısında Mevlüt bekliyor – Apo'nun babası. 'Oğlumu yenmişsin… bakalım beni de geçebilecek misin?'",
+     "Jarvis' Berechnung zeigt nach Bartın. Am Fluss wartet Mevlüt – Apos Vater. 'Du hast meinen Sohn besiegt… mal sehen, ob du auch an mir vorbeikommst!'",
+     "Jarvis's calculation points to Bartın. By the river waits Mevlüt – Apo's father. 'You beat my son… let's see if you can get past me too!'"]},
+ {opp:'cevat',st:'imamlar',d:'orta',
+  t:['8. BÖLÜM · HOCANIN DUASI','KAPITEL 8 · DAS GEBET DES HOCA','CHAPTER 8 · THE HOCA\'S PRAYER'],
+  x:["Musa yorgun düşüp İmamlar Köyü'ne döner. Cevat Hoca onu camide bekliyordur: 'Kara Fırtına'ya yalnız kuvvetle gidilmez evlat, yürek de lazım. Göster bana yüreğini!'",
+     "Erschöpft kehrt Musa ins Dorf İmamlar zurück. Cevat Hoca erwartet ihn an der Moschee: 'Gegen Kara Fırtına reicht Kraft allein nicht, mein Sohn – du brauchst auch Herz. Zeig mir dein Herz!'",
+     "Exhausted, Musa returns to İmamlar village. Cevat Hoca is waiting for him at the mosque: 'Strength alone won't beat Kara Fırtına, my son – you need heart too. Show me your heart!'"]},
+ {opp:'storm',st:'zonguldak',d:'zor',
+  t:['9. BÖLÜM · MADENDEKİ FIRTINA','KAPITEL 9 · DER STURM IM BERGWERK','CHAPTER 9 · THE STORM IN THE MINE'],
+  x:["Hocanın duasını alan Musa Zonguldak'a gider. Maden kulesinin tepesinde şimşekler çakar: Kara Fırtına oradadır! 'Çaycuma artık benim!' Musa yumruklarını sıkar.",
+     "Mit dem Segen des Hoca zieht Musa nach Zonguldak. Über dem Förderturm zucken Blitze: Kara Fırtına ist da! 'Çaycuma gehört jetzt mir!' Musa ballt die Fäuste.",
+     "With the Hoca's blessing, Musa heads to Zonguldak. Lightning flashes above the mine tower: Kara Fırtına is there! 'Çaycuma is mine now!' Musa clenches his fists."]},
+ {opp:'kemal',st:'kisla',d:'zor',
+  t:['10. BÖLÜM · RÜYADAKİ ASLAN','KAPITEL 10 · DER LÖWE IM TRAUM','CHAPTER 10 · THE LION IN THE DREAM'],
+  x:["Fırtına dağılır, Çaycuma'ya güneş doğar. O gece Musa bir rüya görür: sisli Kışla Köyü'nde, kasketiyle gülümseyen Kürt Kemal. 'Aferin oğlum… ama sana son bir dersim var.'",
+     "Der Sturm verzieht sich, über Çaycuma geht die Sonne auf. In dieser Nacht hat Musa einen Traum: im nebligen Dorf Kışla, mit Schiebermütze und Lächeln – Kürt Kemal. 'Gut gemacht, mein Sohn… aber eine letzte Lektion habe ich noch für dich.'",
+     "The storm breaks up, the sun rises over Çaycuma. That night Musa has a dream: in misty Kışla village, smiling under his flat cap – Kürt Kemal. 'Well done, my son… but I have one last lesson for you.'"]},
+ {opp:'dursun',st:'imamlar',d:'zor',
+  t:['SON BÖLÜM · DEDENİN HAKKI','LETZTES KAPITEL · DER SEGEN DES GROSSVATERS','FINAL CHAPTER · GRANDPA\'S BLESSING'],
+  x:["Rüya devam eder. İmamlar Köyü'nde gün batarken Kel Dursun belirir – dev dede. Yere bir vurur, bütün köy sallanır: 'Bakalım torunlarım bu memleketi korumaya hazır mı?'",
+     "Der Traum geht weiter. Im Dorf İmamlar erscheint bei Sonnenuntergang Kel Dursun – der Riesen-Opa. Er schlägt auf den Boden und das ganze Dorf bebt: 'Mal sehen, ob meine Enkel bereit sind, diese Heimat zu beschützen!'",
+     "The dream continues. As the sun sets over İmamlar village, Kel Dursun appears – the giant grandpa. He strikes the ground and the whole village shakes: 'Let's see if my grandchildren are ready to protect this homeland!'"]}];
+const STORY_END=["Dursun dede gülümser, Musa'nın omzuna elini koyar: 'Hakkım helal olsun evlat. Çaycuma artık sana emanet.' Musa uyandığında güneş Çaycuma'nın üstünde parlıyordur.\n\nRahmetli Kürt Kemal ve Kel Dursun dedenin hatırasına. 🤲",
+ "Opa Dursun lächelt und legt Musa die Hand auf die Schulter: 'Du hast meinen Segen, mein Junge. Çaycuma ist jetzt in deinen Händen.' Als Musa aufwacht, scheint die Sonne über Çaycuma.\n\nIn Erinnerung an Kürt Kemal und Opa Kel Dursun. 🤲",
+ "Grandpa Dursun smiles and puts his hand on Musa's shoulder: 'You have my blessing, my boy. Çaycuma is in your hands now.' When Musa wakes up, the sun is shining over Çaycuma.\n\nIn loving memory of Kürt Kemal and Grandpa Kel Dursun. 🤲"];
+
 const BIO={
 tr:{
  musa:["Çaycuma'nın kahramanı. Mahallede kim zor durumda kalsa ilk koşan odur. Koca yüreği, kocaman yumrukları ve yanından hiç ayrılmayan sevimli pandasıyla meydanı Kara Fırtına'ya karşı korur.","Panda Dalgası blokla durdurulamaz – ve Musa'nın canını 15 doldurur. Bu güç sadece kahramanda var!"],
@@ -776,7 +848,7 @@ const FLAGS={
 function flagSVG(k){const u="url('data:image/svg+xml,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" width="600" height="400">${FLAGS[k]}</svg>`).replace(/'/g,'%27')+"')",N=24;
  return `<span class="fw">${Array.from({length:N},(_,i)=>`<i style="background-image:${u};background-size:${N*100}% 100%;background-position:${i/(N-1)*100}% 0;animation-delay:${(-i*0.065).toFixed(2)}s"></i>`).join('')}</span>`}
 function menu(){
- game.state='menu';window.setTrack&&window.setTrack(RAP,.15);game.arc=game.surv=null;game.prac=false;overlay.classList.remove('hidden');document.body.classList.add('menu');card.classList.remove('wide');setTimeout(layout,0);
+ game.state='menu';window.setTrack&&window.setTrack(RAP,.15);game.arc=game.surv=game.story=null;game.prac=false;overlay.classList.remove('hidden');document.body.classList.add('menu');card.classList.remove('wide');setTimeout(layout,0);
  const t=T(),FN={tr:'Türkçe',de:'Deutsch',en:'English'};
  card.innerHTML=`<div class="lgs">${Object.keys(FN).map(k=>`<button class="lg${k===LANG?' sel':''}" data-l="${k}" title="${FN[k]}" aria-label="${FN[k]}">${flagSVG(k)}</button>`).join('')}</div>
  <div class="hero"><img src="musa/musa_win.webp" alt=""><span class="vs">VS</span><img src="musa/storm_idle.webp" style="transform:scaleX(-1)" alt=""></div><h1>MUSA</h1><h2>${t.sub}</h2>
@@ -805,16 +877,39 @@ function gallery(sel){
  document.getElementById('bk').onclick=()=>{card.classList.remove('wide');menu()};
  overlay.scrollTop=0;
 }
+function storyProg(){try{return +localStorage.getItem('musaStory')||0}catch(e){return 0}}
+function storyMenu(){
+ const t=T(),L=({tr:0,de:1,en:2})[LANG],pr=storyProg();card.classList.add('wide');game.arc=game.surv=null;game.prac=false;
+ card.innerHTML=`<h1 style="font-size:clamp(22px,min(6vw,8vh),40px);margin:0 0 6px">${t.storyM}</h1><div class="chs">${STORY.map((c,i)=>`<button class="ch${i>pr?' lk':''}${i<pr?' dn':''}${i>=9?' leg':''}" data-c="${i}" ${i>pr?'disabled':''}><img src="musa/${STG[c.st].bg}_t.jpg" alt=""><span class="cho"><img src="musa/${c.opp}_idle.webp" style="transform:scaleX(-1)" alt=""></span><b>${i>pr?t.locked+' ':''}${c.t[L]}</b>${i<pr?'<i>✔</i>':''}</button>`).join('')}</div>
+ <button class="big" style="background:#ffffff1a;box-shadow:none;padding:10px" id="bk">${t.back}</button>`;
+ card.querySelectorAll('.ch:not(.lk)').forEach(b=>b.onclick=()=>{sfx('whoosh');storyCard(+b.dataset.c)});
+ document.getElementById('bk').onclick=()=>{card.classList.remove('wide');mode1()};overlay.scrollTop=0;
+}
+function storyCard(i){
+ const t=T(),L=({tr:0,de:1,en:2})[LANG],c=STORY[i],o=RK(c.opp);card.classList.add('wide');
+ card.innerHTML=`<div class="stc" style="--c:${o.bar};background-image:linear-gradient(90deg,#0b0f1ef0 35%,#0b0f1e99),url(musa/${STG[c.st].bg}_t.jpg)"><div class="stx"><div class="bh">📍 ${stName(c.st)}</div><h2 class="stt">${c.t[L]}</h2><p>${c.x[L]}</p></div><div class="sti"><img src="musa/musa_idle.webp" alt=""><span class="vs">VS</span><img src="musa/${c.opp}_idle.webp" style="transform:scaleX(-1)" alt=""><b style="color:${o.bar}">${o.name}</b></div></div>
+ <button class="big alt" id="sgo" style="padding:12px">⚔️ ${t.fight}</button><button class="big" style="background:#ffffff1a;box-shadow:none;padding:10px" id="bk">${t.back}</button>`;
+ document.getElementById('sgo').onclick=()=>{PICK[0]='musa';PICK[1]=c.opp;DIFF=c.d;game.story={i};game.stage=c.st;card.classList.remove('wide');start(1)};
+ document.getElementById('bk').onclick=storyMenu;overlay.scrollTop=0;
+}
+function storyEnd(){
+ const t=T(),L=({tr:0,de:1,en:2})[LANG];card.classList.add('wide');overlay.classList.remove('hidden');document.body.classList.add('menu');window.setTrack&&window.setTrack(RAP,.15);
+ card.innerHTML=`<h1 style="font-size:clamp(28px,8vw,52px)">${t.theEnd}</h1><div class="hero"><img src="musa/kemal_win.webp" alt=""><img src="musa/musa_win.webp" alt=""><img src="musa/dursun_win.webp" alt=""></div><p class="sten">${STORY_END[L].replace(/\n/g,'<br>')}</p>
+ <button class="big alt" id="r2">${t.menu}</button>`;
+ document.getElementById('r2').onclick=()=>{card.classList.remove('wide');menu()};
+}
 function mode1(){
- card.classList.remove('wide');const t=T();
+ game.story=null;card.classList.remove('wide');const t=T();
  const sub=x=>`<br><small style="font-weight:600;font-size:13px">${x}</small>`;
  card.innerHTML=`<h1 style="font-size:clamp(26px,7vw,46px)">${t.p1}</h1><h2>${t.how}</h2>
+ <button class="big" id="mst" style="background:linear-gradient(#d4a017,#7a5200);width:100%">${t.storyM}${sub(t.storys)}</button>
  <div id="ov2"><button class="big" id="ma" style="background:linear-gradient(#c0392b,#7a1d14)">${t.arc}${sub(t.arcs)}</button>
  <button class="big alt" id="mf">${t.free}${sub(t.frees)}</button>
  <button class="big" id="ms" style="background:linear-gradient(#8e44ad,#4a1d6e)">${t.surv}${sub(t.survs)}</button>
  <button class="big" id="mp" style="background:linear-gradient(#27ae60,#145a32)">${t.prac}${sub(t.pracs)}</button></div>
  <button class="big" style="background:#ffffff1a;box-shadow:none" id="bk">${t.back}</button>`;
  const others=k=>ROSTER.map(r=>r.kind).filter(x=>x!==k);
+ document.getElementById('mst').onclick=()=>storyMenu();
  document.getElementById('mf').onclick=()=>pick(0,t.pickMe,k=>{PICK[0]=k;pick(1,t.pickOpp,k2=>{PICK[1]=k2;diff()},true,mode1)},false,mode1);
  document.getElementById('ma').onclick=()=>pick(0,'ARCADE – '+t.pickMe,k=>{PICK[0]=k;
   const boss=k==='storm'?'musa':'storm';const o=others(k).filter(x=>x!==boss).sort(()=>Math.random()-.5);
@@ -838,7 +933,7 @@ function pick(slot,title,done,rnd,back){
 function ladder(){const a=game.arc;if(!a)return'';return `<div class="lad">${a.list.map((k,i)=>`<img src="musa/${k}_idle.webp" class="${i<a.i?'dn':i===a.i?'cu':''}" style="transform:scaleX(-1)" alt="">`).join('')}</div>`}
 function vsScreen(cb){
  const a=RK(PICK[0]),b=RK(PICK[1]),ar=game.arc,t=T();
- const st=ar?(ar.i===ar.list.length-1?t.vsBoss:t.vsArc(ar.i+1,ar.list.length)):game.surv?t.vsSurv(game.surv.n+1):game.prac?t.vsPrac:(game.mode===2?t.vs2:t.vsFree);
+ const st=game.story?STORY[game.story.i].t[({tr:0,de:1,en:2})[LANG]]:ar?(ar.i===ar.list.length-1?t.vsBoss:t.vsArc(ar.i+1,ar.list.length)):game.surv?t.vsSurv(game.surv.n+1):game.prac?t.vsPrac:(game.mode===2?t.vs2:t.vsFree);
  const d=document.createElement('div');d.id='vsx';
  d.innerHTML=`<div class="st">${st}<br><small style="font-size:.6em;opacity:.8">📍 ${stName(game.stage)}</small></div><div class="sd l"><img src="musa/${a.kind}_win.webp" alt=""><b style="color:${a.bar}">${a.name}</b><i>${a.tag}</i></div><div class="v">VS</div><div class="sd r"><img src="musa/${b.kind}_idle.webp" style="transform:scaleX(-1)" alt=""><b style="color:${b.bar}">${b.name}</b><i>${b.tag}</i></div>`;
  document.body.appendChild(d);sfx('special');
@@ -865,7 +960,7 @@ function diff(){
 function start(mode){card.classList.remove('wide');goLandscape();
  try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume()}catch(e){}
  if(mode===2){game.arc=game.surv=null;game.prac=false}
- if(game.arc)game.stage=game.arc.i===game.arc.list.length-1?'fightclub':ARC_ST[game.arc.i%ARC_ST.length];else if(game.surv)game.stage=STK[Math.random()*STK.length|0];
+ if(game.story){}else if(game.arc)game.stage=game.arc.i===game.arc.list.length-1?'fightclub':ARC_ST[game.arc.i%ARC_ST.length];else if(game.surv)game.stage=STK[Math.random()*STK.length|0];
  bgI(STG[game.stage].bg);
  game.mode=mode;game.need=game.surv?1:2;game.round=1;P=[];overlay.classList.add('hidden');document.body.classList.remove('menu');window.setTrack('musa-music.mp3',.12);
  game.state='vs';vsScreen(()=>{buildControls();startRound();layout()});
@@ -875,6 +970,14 @@ function matchEnd(){
  const w=P[0].wins>=game.need?P[0]:P[1],won=w===P[0];
  const ar=game.arc,sv=game.surv,last=ar&&ar.i===ar.list.length-1,arcNext=ar&&won&&!last;
  let btn1=`<button class="big alt" id="r1">${t.again}</button>`,msg,extra='';
+ if(game.story){const si=game.story.i,last=si===STORY.length-1;
+  if(won){try{localStorage.setItem('musaStory',Math.max(storyProg(),si+1))}catch(e){}}
+  if(won&&last){voice('win');storyEnd();return}
+  overlay.classList.remove('hidden');document.body.classList.add('menu');window.setTrack&&window.setTrack(RAP,.15);if(won)voice('win');
+  card.innerHTML=`<h1 style="font-size:clamp(28px,8vw,54px)">${w.look.name}<br>${t.won}</h1><img src="musa/${w.look.kind}_win.webp" style="height:min(28vh,190px);filter:drop-shadow(0 8px 16px #000a)" alt="">
+  <button class="big alt" id="r1">${won?t.stCont:t.retry}</button><button class="big" id="r2">${t.chapters}</button>`;
+  document.getElementById('r1').onclick=()=>{P=[];won?storyCard(si+1):storyCard(si)};
+  document.getElementById('r2').onclick=()=>{P=[];storyMenu()};return}
  if(ar){
   msg=won?(last?t.arcDone(P[0].look.name):t.arcWin):t.arcLose(w.look.name);
   {const li=ar.i;if(won)ar.i++;extra=ladder();ar.i=li}
