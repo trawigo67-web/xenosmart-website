@@ -51,6 +51,18 @@ body.menu #tb{display:none}
 .rc .st{display:flex;gap:3px;margin-top:3px;font-size:9px;opacity:.85}
 .rc.taken{opacity:.45}.rc:active{transform:scale(.96)}
 .pk{font-weight:800;color:#ffcc33;margin:4px 0}
+/*lang*/.lgs{display:flex;justify-content:center;gap:6px;margin-bottom:6px}.lg{border:none;border-radius:999px;padding:5px 11px;font:800 12px system-ui;background:#ffffff1a;color:#fff;cursor:pointer}.lg.sel{background:#ffcc33;color:#3a1a00}
+#vsx{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%,#3a1500,#0b0710 70%);overflow:hidden;cursor:pointer}
+#vsx .sd{position:absolute;top:0;bottom:0;width:50%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:6vh}
+#vsx .l{left:0;background:linear-gradient(100deg,#1f6fd055,transparent 70%);animation:inL .45s ease-out}
+#vsx .r{right:0;background:linear-gradient(260deg,#d0301f55,transparent 70%);animation:inR .45s ease-out}
+#vsx img{height:min(64vh,520px);filter:drop-shadow(0 10px 22px #000c)}
+#vsx b{font:900 clamp(20px,4.6vh,40px) system-ui;letter-spacing:1px;text-shadow:0 3px 0 #000}
+#vsx i{font:700 clamp(12px,2.4vh,18px) system-ui;color:#fff9;font-style:normal}
+#vsx .v{position:relative;z-index:2;font:900 clamp(60px,18vh,150px) system-ui;color:#ffcc33;text-shadow:0 6px 0 #7a2f00,0 0 40px #ff8a00;animation:pop .5s .25s both}
+#vsx .st{position:absolute;top:4vh;left:0;right:0;text-align:center;font:900 clamp(16px,4vh,30px) system-ui;color:#fff;text-shadow:0 2px 0 #000}
+@keyframes inL{from{transform:translateX(-60%);opacity:0}}@keyframes inR{from{transform:translateX(60%);opacity:0}}@keyframes pop{from{transform:scale(3);opacity:0}}
+.lad{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:6px 0}.lad img{height:44px;border-radius:8px;background:#ffffff14;padding:2px}.lad .dn{opacity:.35;filter:grayscale(1)}.lad .cu{outline:3px solid #ffcc33}
 @media (max-height:520px){.roster{grid-template-columns:repeat(9,minmax(0,1fr));gap:5px}.rc i{display:none}.rc b{font-size:10px;white-space:normal;line-height:1.1}.rc img{height:26vh}.rc .st{display:none}}
 .card h1{margin:0;font-size:clamp(30px,min(9vw,11vh),64px);letter-spacing:3px;color:#ff9a3c;text-shadow:0 4px 0 #7a2f00,0 0 30px #ff8a2a88}
 .card h2{margin:4px 0 18px;font-size:clamp(14px,4vw,20px);font-weight:600;color:#bcd6ff}
@@ -83,6 +95,51 @@ const DPR=2;/* Full HD 1920x1080 */cv.width=W*DPR;cv.height=H*DPR;ctx.setTransfo
 const stage=document.getElementById('stage'),controls=document.getElementById('controls');
 const overlay=document.getElementById('overlay'),card=document.getElementById('card');
 
+let LANG='tr';try{const h=JSON.parse(localStorage.getItem('disfirlat2')||'{}');LANG=h.lang||(navigator.language||'tr').slice(0,2)}catch(e){}if(!['tr','de','en'].includes(LANG))LANG='en';
+const TX={
+tr:{round:'RAUND',fight:'DÖVÜŞ!',won:'KAZANDI!',draw:'BERABERE!',combo:'KOMBO!',blk:'BLOK',ready:'HAZIR!',air:'HAVADA!',perfect:'PERFECT!',great:'GREAT!',timeup:'SÜRE BİTTİ!',fooled:'KANDIRILDI! 🤯',dizzy:'SERSEMLEDİ!',netted:'AĞA DÜŞTÜ!',sp:'ÖZEL',kick:'TEKME',block:'BLOK',punch:'YUMRUK',rot:'Telefonu yan çevir',rot2:'Oyun yatay ekranda oynanır',
+ sub:"Çaycuma'nın Kahramanı – Dövüş Oyunu",p1:'1 OYUNCU',p1s:'Bilgisayara karşı',p2:'2 OYUNCU',p2s:'Aynı cihazda karşılıklı',
+ help:'9 karakter: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif ve Kara Fırtına! Rakibi vur, <b>güç barını</b> doldur, sonra <b>özel hareketini</b> yap. Kombonun sonunda <b>tekme</b> rakibi havaya kaldırır – havadayken vurmaya devam et!<br>2 raundu kazanan şampiyon olur.<br><b>Klavye</b> – 1. oyuncu: A/D yürü · W zıpla · S blok · F yumruk · G tekme · H özel<br>2. oyuncu: ← → yürü · ↑ zıpla · ↓ blok · K yumruk · L tekme · J özel',
+ how:'Nasıl oynamak istersin?',arc:'🏆 ARCADE',arcs:'Sırayla herkesi yen, sonda boss',free:'⚔️ SERBEST DÖVÜŞ',frees:'Kendini ve rakibini sen seç',surv:'❤️ HAYATTA KAL',survs:'Tek can – kaç rakip yenebilirsin?',prac:'🥋 ANTRENMAN',pracs:'Süre yok, rakip karşılık vermez',
+ pickMe:'KARAKTERİNİ SEÇ',pickOpp:'RAKİBİNİ SEÇ',pick1:'1. OYUNCU SEÇSİN',pick2:'2. OYUNCU SEÇSİN',p1is:'1. oyuncu: ',rnd:'🎲 RASTGELE RAKİP',back:'← GERİ',
+ diff:'ZORLUK',diffQ:'bilgisayar ne kadar güçlü olsun?',easy:'🙂 KOLAY',mid:'😤 ORTA',hard:'🔥 ZOR',ladderTxt:n=>n+' rakibi sırayla yen!',
+ vsBoss:'⚠️ SON DÖVÜŞ – BOSS ⚠️',vsArc:(i,n)=>`ARCADE · ${i}. DÖVÜŞ / ${n}`,vsFree:'SERBEST DÖVÜŞ',vs2:'2 OYUNCU',vsSurv:n=>`HAYATTA KAL · ${n}. RAKİP`,vsPrac:'ANTRENMAN',
+ again:'TEKRAR OYNA',menu:'ANA MENÜ',next:'▶ SONRAKİ RAKİP: ',arcAgain:'🏆 YENİDEN ARCADE',cont:'🔁 DEVAM ET (aynı rakip)',
+ arcDone:n=>'🏆 ARCADE BİTTİ! '+n+" herkesi yendi – Çaycuma'nın gerçek şampiyonu!",arcWin:'Rakip yenildi! Sıradaki hazır.',arcLose:n=>n+' seni durdurdu… Devam et ve intikamını al!',
+ champ1:n=>'Tebrikler! '+n+' Çaycuma şampiyonu! 🏆',lose1:n=>n+' bu sefer kazandı… Bir daha dene!',champ2:n=>n+' ailenin şampiyonu! 🏆',
+ survNext:'▶ SONRAKİ RAKİP',survEnd:n=>`Hayatta kalma bitti: ${n} rakip yendin!`,survBest:b=>`En iyi rekor: ${b}`,survWin:'Can biraz doldu, devam!',pracEnd:'ANTRENMANI BİTİR',
+ lies:['Arkana bak, Musa geliyor!','Yerde 100 lira var!','Annen çağırıyor!','Araban çekiliyor!','Hoca seni arıyor!',"Çaycuma'da kar yağıyor!",'Ben hiç yenilmedim!','Ayakkabının bağı çözülmüş!'],
+ arenas:['ÇAYCUMA · CUMHURİYET MEYDANI','FİLYOS SAHİLİ · ÇAYCUMA','ÇAYCUMA · AKŞAM ÜSTÜ']},
+de:{round:'RUNDE',fight:'KAMPF!',won:'GEWINNT!',draw:'UNENTSCHIEDEN!',combo:'COMBO!',blk:'BLOCK',ready:'BEREIT!',air:'IN DER LUFT!',perfect:'PERFECT!',great:'GREAT!',timeup:'ZEIT UM!',fooled:'REINGELEGT! 🤯',dizzy:'BENOMMEN!',netted:'IM NETZ!',sp:'SPEZIAL',kick:'TRITT',block:'BLOCK',punch:'SCHLAG',rot:'Handy quer halten',rot2:'Das Spiel läuft im Querformat',
+ sub:'Der Held von Çaycuma – Kampfspiel',p1:'1 SPIELER',p1s:'Gegen den Computer',p2:'2 SPIELER',p2s:'Gegeneinander am selben Gerät',
+ help:'9 Kämpfer: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif und Kara Fırtına! Triff den Gegner, füll die <b>Kraftleiste</b> und mach deinen <b>Spezialangriff</b>. Ein <b>Tritt</b> am Ende einer Combo schleudert den Gegner hoch – schlag in der Luft weiter!<br>Wer 2 Runden gewinnt, ist Champion.<br><b>Tastatur</b> – Spieler 1: A/D laufen · W springen · S blocken · F Schlag · G Tritt · H Spezial<br>Spieler 2: ← → laufen · ↑ springen · ↓ blocken · K Schlag · L Tritt · J Spezial',
+ how:'Wie willst du spielen?',arc:'🏆 ARCADE',arcs:'Besiege alle nacheinander, am Ende der Boss',free:'⚔️ FREIER KAMPF',frees:'Wähle dich und deinen Gegner',surv:'❤️ ÜBERLEBEN',survs:'Ein Leben – wie viele schaffst du?',prac:'🥋 TRAINING',pracs:'Keine Zeit, Gegner wehrt sich nicht',
+ pickMe:'WÄHLE DEINEN KÄMPFER',pickOpp:'WÄHLE DEINEN GEGNER',pick1:'SPIELER 1 WÄHLT',pick2:'SPIELER 2 WÄHLT',p1is:'Spieler 1: ',rnd:'🎲 ZUFÄLLIGER GEGNER',back:'← ZURÜCK',
+ diff:'SCHWIERIGKEIT',diffQ:'wie stark soll der Computer sein?',easy:'🙂 LEICHT',mid:'😤 MITTEL',hard:'🔥 SCHWER',ladderTxt:n=>'Besiege '+n+' Gegner nacheinander!',
+ vsBoss:'⚠️ LETZTER KAMPF – BOSS ⚠️',vsArc:(i,n)=>`ARCADE · KAMPF ${i} / ${n}`,vsFree:'FREIER KAMPF',vs2:'2 SPIELER',vsSurv:n=>`ÜBERLEBEN · GEGNER ${n}`,vsPrac:'TRAINING',
+ again:'NOCHMAL',menu:'HAUPTMENÜ',next:'▶ NÄCHSTER GEGNER: ',arcAgain:'🏆 ARCADE NEU STARTEN',cont:'🔁 WEITER (gleicher Gegner)',
+ arcDone:n=>'🏆 ARCADE GESCHAFFT! '+n+' hat alle besiegt – der wahre Champion von Çaycuma!',arcWin:'Gegner besiegt! Der Nächste wartet.',arcLose:n=>n+' hat dich gestoppt… Weiter und hol dir die Revanche!',
+ champ1:n=>'Glückwunsch! '+n+' ist Champion von Çaycuma! 🏆',lose1:n=>n+' hat diesmal gewonnen… Versuch es nochmal!',champ2:n=>n+' ist Familien-Champion! 🏆',
+ survNext:'▶ NÄCHSTER GEGNER',survEnd:n=>`Überleben vorbei: ${n} Gegner besiegt!`,survBest:b=>`Rekord: ${b}`,survWin:'Etwas Leben zurück, weiter!',pracEnd:'TRAINING BEENDEN',
+ lies:['Schau hinter dich, Musa kommt!','Da liegen 100 Lira!','Deine Mutter ruft!','Dein Auto wird abgeschleppt!','Der Hoca sucht dich!','In Çaycuma schneit es!','Ich hab noch nie verloren!','Dein Schuh ist offen!'],
+ arenas:['ÇAYCUMA · REPUBLIKPLATZ','FİLYOS-STRAND · ÇAYCUMA','ÇAYCUMA · AM ABEND']},
+en:{round:'ROUND',fight:'FIGHT!',won:'WINS!',draw:'DRAW!',combo:'COMBO!',blk:'BLOCK',ready:'READY!',air:'AIRBORNE!',perfect:'PERFECT!',great:'GREAT!',timeup:'TIME UP!',fooled:'FOOLED! 🤯',dizzy:'DIZZY!',netted:'NETTED!',sp:'SPECIAL',kick:'KICK',block:'BLOCK',punch:'PUNCH',rot:'Turn your phone sideways',rot2:'The game is played in landscape',
+ sub:'The Hero of Çaycuma – Fighting Game',p1:'1 PLAYER',p1s:'Against the computer',p2:'2 PLAYERS',p2s:'Face to face on one device',
+ help:'9 fighters: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif and Kara Fırtına! Hit your rival, fill the <b>power bar</b>, then use your <b>special move</b>. A <b>kick</b> at the end of a combo launches the rival – keep hitting in the air!<br>Win 2 rounds to become champion.<br><b>Keyboard</b> – Player 1: A/D walk · W jump · S block · F punch · G kick · H special<br>Player 2: ← → walk · ↑ jump · ↓ block · K punch · L kick · J special',
+ how:'How do you want to play?',arc:'🏆 ARCADE',arcs:'Beat everyone in a row, boss at the end',free:'⚔️ FREE FIGHT',frees:'Choose yourself and your rival',surv:'❤️ SURVIVAL',survs:'One life – how many can you beat?',prac:'🥋 PRACTICE',pracs:'No timer, rival does not fight back',
+ pickMe:'CHOOSE YOUR FIGHTER',pickOpp:'CHOOSE YOUR RIVAL',pick1:'PLAYER 1 CHOOSES',pick2:'PLAYER 2 CHOOSES',p1is:'Player 1: ',rnd:'🎲 RANDOM RIVAL',back:'← BACK',
+ diff:'DIFFICULTY',diffQ:'how strong should the computer be?',easy:'🙂 EASY',mid:'😤 MEDIUM',hard:'🔥 HARD',ladderTxt:n=>'Beat '+n+' rivals in a row!',
+ vsBoss:'⚠️ FINAL FIGHT – BOSS ⚠️',vsArc:(i,n)=>`ARCADE · FIGHT ${i} / ${n}`,vsFree:'FREE FIGHT',vs2:'2 PLAYERS',vsSurv:n=>`SURVIVAL · RIVAL ${n}`,vsPrac:'PRACTICE',
+ again:'PLAY AGAIN',menu:'MAIN MENU',next:'▶ NEXT RIVAL: ',arcAgain:'🏆 ARCADE AGAIN',cont:'🔁 CONTINUE (same rival)',
+ arcDone:n=>'🏆 ARCADE CLEARED! '+n+' beat everyone – the true champion of Çaycuma!',arcWin:'Rival defeated! The next one is waiting.',arcLose:n=>n+' stopped you… Continue and take revenge!',
+ champ1:n=>'Congratulations! '+n+' is the champion of Çaycuma! 🏆',lose1:n=>n+' won this time… Try again!',champ2:n=>n+' is the family champion! 🏆',
+ survNext:'▶ NEXT RIVAL',survEnd:n=>`Survival over: you beat ${n} rivals!`,survBest:b=>`Best: ${b}`,survWin:'Some health restored, keep going!',pracEnd:'END PRACTICE',
+ lies:['Look behind you, Musa is coming!','There are 100 lira on the floor!','Your mum is calling!','Your car is being towed!','The Hoca is looking for you!',"It's snowing in Çaycuma!","I've never lost!",'Your shoelace is untied!'],
+ arenas:['ÇAYCUMA · REPUBLIC SQUARE','FİLYOS BEACH · ÇAYCUMA','ÇAYCUMA · EVENING']}};
+const T=()=>TX[LANG];
+const RTX={de:{musa:['Wächter von Çaycuma','PANDA-WELLE'],cevat:['Hoca','ALLAHU EKBER'],dursun:['Riesen-Opa','OPA-BEBEN'],kemal:['Berglöwe','BERGFAUST'],mevlut:['Eisenschädel','EISENSCHÄDEL'],timur:['Technik-Meister','JARVIS-LASER'],nazif:['Meisterjäger','JAGDNETZ'],abdullah:['Meister der Lügen','LÜGEN-ATTACKE'],storm:['Sturm-Kapitän','BLITZ']},
+ en:{musa:['Guardian of Çaycuma','PANDA WAVE'],cevat:['Hoca','ALLAHU EKBER'],dursun:['Giant Grandpa','GRANDPA QUAKE'],kemal:['Mountain Lion','MOUNTAIN FIST'],mevlut:['Iron Head','IRON HEAD'],timur:['Tech Master','JARVIS LASER'],nazif:['Master Hunter',"HUNTER'S NET"],abdullah:['Master of Lies','BIG FAT LIE'],storm:['Storm Captain','LIGHTNING']}};
+const STX={de:{nazif:['Die Jagd beginnt!','Du entkommst nicht!'],abdullah:['Vertrau mir, Abi!','Ich schwöre!','Echt wahr!']},en:{nazif:['The hunt begins!',"You can't escape!"],abdullah:['Trust me, bro!','I swear!','Totally true!']}};
 const ROSTER=[
  {kind:'musa',name:'MUSA',tag:"Çaycuma'nın Bekçisi",sp:'PANDA DALGASI',spType:'proj',proj:'fx_wave',pw:120,bar:'#3aa0ff',comp:'fx_panda',spd:1,pow:1,hp:100,spark:'#7fd0ff'},
  {kind:'cevat',name:'CEVAT HOCA',tag:'Hoca',sp:'ALLAHU EKBER',shout:['Sübhanallah!','Allahu Ekber!'],spType:'proj',proj:'fx_orb',pw:130,bar:'#ffd86b',spd:.95,pow:.95,hp:100,spark:'#fff1b0',spDmg:24,stunHit:110},
@@ -95,6 +152,11 @@ const ROSTER=[
  {kind:'storm',name:'KARA FIRTINA',tag:'Fırtına Kaptanı',sp:'ŞİMŞEK',spType:'proj',proj:'fx_bolt',pw:170,flip:true,bar:'#ffd84a',comp:'fx_cloud',spd:1,pow:1,hp:100,spark:'#ffe066'}
 ];
 const RK=k=>ROSTER.find(r=>r.kind===k);
+ROSTER.forEach(r=>r.tr={tag:r.tag,sp:r.sp,shout:r.shout});
+function applyLang(){ROSTER.forEach(r=>{const x=RTX[LANG]&&RTX[LANG][r.kind];r.tag=x?x[0]:r.tr.tag;r.sp=x?x[1]:r.tr.sp;const sh=STX[LANG]&&STX[LANG][r.kind];r.shout=sh||r.tr.shout});document.documentElement.lang=LANG;
+ const ro=document.getElementById('rot');if(ro)ro.innerHTML=`<div class="ph">📱</div>${T().rot}<small style="font-weight:600;font-size:14px;opacity:.75">${T().rot2}</small>`}
+function setLang(l){LANG=l;try{const h=JSON.parse(localStorage.getItem('disfirlat2')||'{}');h.lang=l;localStorage.setItem('disfirlat2',JSON.stringify(h))}catch(e){}applyLang()}
+applyLang();
 let PICK=['musa','storm'];
 const SPI={musa:'🐼',cevat:'🔮',dursun:'🔨',kemal:'⛰️',mevlut:'💥',timur:'🤖',nazif:'🏹',abdullah:'🤥',storm:'⚡'};
 const ATK={
@@ -134,13 +196,15 @@ function damage(o,d,dir,push,att){
  if(o.state==='ko'||game.state!=='fight')return;
  const blocked=o.state==='block';
  if(blocked){
-  o.hp-=d*0.2;o.ghostT=30;o.x+=dir*push;pop(o.x,o.y-280,'BLOK','#9fd8ff');spark(o.x-dir*20,o.y-120,'#9fd8ff',8);sfx('block');o.meter=Math.min(100,o.meter+3);
+  o.hp-=d*0.2;o.ghostT=30;o.x+=dir*push;pop(o.x,o.y-280,T().blk,'#9fd8ff');spark(o.x-dir*20,o.y-120,'#9fd8ff',8);sfx('block');o.meter=Math.min(100,o.meter+3);
  }else{
-  const chain=o.stun>0||o.state==='hit';att.combo=chain?att.combo+1:1;att.comboT=70;if(att.combo>=2)pop(att.x,att.y-310,att.combo+' KOMBO!','#ffcc33',true);
-  o.hp-=d;o.ghostT=30;pop(o.x+(Math.random()-.5)*30,o.y-280,'-'+Math.round(d),'#ff6a4a');freeze=d>=10?6:4;o.state='hit';o.stun=14;o.vx=dir*push;o.atk=null;o.flash=8;
+  const chain=o.stun>0||o.state==='hit';att.combo=chain?att.combo+1:1;att.comboT=70;if(att.combo>=2)pop(att.x,att.y-310,att.combo+' '+T().combo,'#ffcc33',true);
+  o.hp-=d;o.ghostT=30;pop(o.x+(Math.random()-.5)*30,o.y-280,'-'+Math.round(d),'#ff6a4a');freeze=d>=10?6:4;o.state='hit';o.stun=19;o.vx=dir*push*(chain?.3:1);o.atk=null;o.flash=8;
   att.meter=Math.min(100,att.meter+9);o.meter=Math.min(100,o.meter+5);
   spark(o.x-dir*30,o.y-180,'#fff3a0',14);shake=7;sfx('hit');
+  if(o.hp>0&&att.atk!=='special'&&(o.juggle||(att.atk==='kick'&&att.combo>=3))){o.vy=o.juggle?-8.5:-13.5;o.vx=dir*.6;o.stun=70;o.juggle=1;o.state='hit';if(att.combo<4)pop(o.x,o.y-340,T().air,'#ffcc33',true);shake=10;freeze=7}
  }
+ if(game.prac&&o.hp<=0)o.hp=1;
  if(o.hp<=0){o.hp=0;o.state='ko';o.t=0;o.vy=-9;o.vx=dir*6;sfx('ko');shake=14;freeze=18;slow=70;banner={txt:'K.O.!',t:80,c:'#ff4a4a'};endRound(att)}
 }
 
@@ -151,6 +215,8 @@ function update(f,inp,pin,o){
  if(f.state==='ko'||f.state==='win'){f.t++;phys(f,true);return}
  if(game.state!=='fight'){f.vx=0;f.state=onG?'idle':'jump';phys(f);return}
  if(f.stun>0){f.stun--;if(f.dizzy>0)f.dizzy--;if(f.netted>0)f.netted--;phys(f,true);if(!f.stun){f.state='idle';f.dizzy=0}return}
+ if(f.atk&&f.atk!=='special'&&f.hitDone&&f.atkT>ATK[f.atk].start+ATK[f.atk].active-1){/* Tekken-style string cancel */
+  if(inp.punch&&!pin.punch){startAtk(f,'punch')}else if(inp.kick&&!pin.kick){startAtk(f,'kick')}}
  if(f.atk){
   const a=ATK[f.atk];f.atkT++;
   if(f.atk!=='special'&&!f.hitDone&&f.atkT>a.start&&f.atkT<=a.start+a.active){
@@ -179,14 +245,14 @@ function update(f,inp,pin,o){
 }
 function phys(f,fric){
  f.x+=f.vx;if(fric)f.vx*=0.86;
- f.vy+=0.9;f.y+=f.vy;
- if(f.y>=GROUND){f.y=GROUND;f.vy=0;if(f.state==='ko')f.vx*=0.8}
+ const wasAir=f.y<GROUND;f.vy+=0.9;f.y+=f.vy;
+ if(f.y>=GROUND){f.y=GROUND;f.vy=0;if(f.juggle&&wasAir){f.juggle=0;f.stun=Math.min(f.stun,26);shake=8;spark(f.x,GROUND-10,'#d8c7a0',12)}if(f.state==='ko')f.vx*=0.8}
  f.x=Math.max(85,Math.min(W-85,f.x));
 }
 function fire(f){
  const L=f.look;
  if(L.spType==='net'){proj.push({x:f.x+f.facing*110,y:f.y-170,vx:f.facing*10,owner:f,kind:L.kind,t:0,net:1});return}
- if(L.spType==='lie'){const LIES=['Arkana bak, Musa geliyor!','Yerde 100 lira var!','Annen çağırıyor!','Araban çekiliyor!','Hoca seni arıyor!','Çaycuma\'da kar yağıyor!','Ben hiç yenilmedim!','Ayakkabının bağı çözülmüş!'];proj.push({x:f.x+f.facing*100,y:f.y-200,vx:f.facing*8,owner:f,kind:L.kind,t:0,txt:LIES[Math.random()*LIES.length|0]});return}
+ if(L.spType==='lie'){const LIES=T().lies;proj.push({x:f.x+f.facing*100,y:f.y-200,vx:f.facing*8,owner:f,kind:L.kind,t:0,txt:LIES[Math.random()*LIES.length|0]});return}
  if(L.spType==='quake'){proj.push({x:f.x+f.facing*120,y:GROUND-45,vx:f.facing*10,owner:f,kind:L.kind,t:0,ground:1});shake=12;return}
  proj.push({x:f.x+f.facing*110,y:f.y-150,vx:f.facing*(L.kind==='timur'?13:9),owner:f,kind:L.kind,t:0});
 }
@@ -213,14 +279,15 @@ function runAI(){
 function startRound(){
  const w=[P[0]?P[0].wins:0,P[1]?P[1].wins:0];
  P=[newFighter(RK(PICK[0]),240,1),newFighter(RK(PICK[1]),720,-1)];
- P[0].wins=w[0];P[1].wins=w[1];
- proj=[];parts=[];texts=[];banner=null;freeze=slow=0;game.timer=60*60;game.state='intro';game.msg='RAUND '+game.round;game.arena=arena().name;game.msgT=110;
+ P[0].wins=w[0];P[1].wins=w[1];game.msg2='';
+ if(game.surv&&game.surv.hp!=null){P[0].hp=P[0].ghost=game.surv.hp}
+ proj=[];parts=[];texts=[];banner=null;freeze=slow=0;game.timer=60*60;game.state='intro';game.msg=T().round+' '+game.round;game.arena=T().arenas[(game.round-1)%3];game.msgT=110;
 }
 function endRound(winner){
  if(game.state!=='fight')return;
  game.state='roundEnd';game.msgT=170;
- if(winner){winner.wins++;game.msg=winner.look.name+' KAZANDI!';if(winner.state!=='ko'){winner.state='win';winner.atk=null}}
- else game.msg='BERABERE!';
+ if(winner){winner.wins++;game.msg=winner.look.name+' '+T().won;game.msg2=winner.hp>=winner.maxhp-0.01?T().perfect:winner.hp<winner.maxhp*.15?T().great:'';if(winner.state!=='ko'){winner.state='win';winner.atk=null}}
+ else game.msg=T().draw;
 }
 function step(){
  time++;
@@ -231,20 +298,22 @@ function step(){
  for(const f of P){if(f.ghostT>0)f.ghostT--;else if(f.ghost>f.hp)f.ghost=Math.max(f.hp,f.ghost-0.7);if(f.comboT>0&&--f.comboT===0)f.combo=0}
  // inputs
  for(let i=0;i<2;i++){const k=keyIn[i],t=touchIn[i],o={};for(const n in k)o[n]=k[n]||t[n];inputs[i]=o}
+ if(game.prac&&P.length){const d=P[1];if(d.hp<d.maxhp*.3){d.hp=d.ghost=d.maxhp}P[0].meter=Math.min(100,P[0].meter+.35);if(P[0].hp<P[0].maxhp*.3)P[0].hp=P[0].maxhp}
  if(game.mode===1){
   // 1P: P2 keys also control P1
   for(const n in inputs[0])inputs[0][n]=inputs[0][n]||inputs[1][n];
-  runAI();inputs[1]={...ai.hold};
+  if(game.prac){inputs[1]=mkIn()}else{runAI();inputs[1]={...ai.hold}}
  }
- if(game.state==='intro'){game.msgT--;if(game.msgT===35)game.msg='DÖVÜŞ!';if(game.msgT<=0)game.state='fight'}
+ if(game.state==='intro'){game.msgT--;if(game.msgT===35)game.msg=T().fight;if(game.msgT<=0)game.state='fight'}
  if(game.state==='fight'){
   game.timer--;
-  if(game.timer<=0){game.timer=0;const w=P[0].hp===P[1].hp?null:(P[0].hp>P[1].hp?P[0]:P[1]);endRound(w)}
+  if(game.prac)game.timer=60*60;
+  if(game.timer<=0){game.timer=0;banner={txt:T().timeup,t:70,c:'#ffd84a'};const w=P[0].hp===P[1].hp?null:(P[0].hp>P[1].hp?P[0]:P[1]);endRound(w)}
  }
  if(game.state==='roundEnd'){
   game.msgT--;
   if(game.msgT<=0){
-   if(P[0].wins>=2||P[1].wins>=2){matchEnd();return}
+   if(P[0].wins>=game.need||P[1].wins>=game.need){matchEnd();return}
    game.round++;startRound();
   }
  }
@@ -260,9 +329,9 @@ function step(){
  for(const p of proj){
   p.x+=p.vx;p.t++;
   const o=p.owner===P[0]?P[1]:P[0];
-  if(!p.dead&&Math.abs(p.x-o.x)<60&&o.y>GROUND-(p.ground?35:80)&&o.state!=='ko'){p.dead=1;{const wasBlk=o.state==='block';damage(o,(p.owner.look.spDmg||18)*(p.ground?1.1:1),Math.sign(p.vx),11,p.owner);if(p.owner.look.spType==='net'&&!wasBlk){o.stun=110;o.netted=110;pop(o.x,o.y-330,'AĞA DÜŞTÜ!','#a8d66b',true)}
-if(p.owner.look.spType==='lie'&&!wasBlk){o.confused=150;pop(o.x,o.y-330,'KANDIRILDI! 🤯','#7fd8ff',true)}
-if(p.owner.look.stunHit&&!wasBlk&&o.state==='hit'){o.stun=p.owner.look.stunHit;o.dizzy=p.owner.look.stunHit;o.vx*=.3;pop(o.x,o.y-330,'SERSEMLEDİ!','#ffd86b',true)}}spark(p.x,p.y,p.owner.look.spark,22)}
+  if(!p.dead&&Math.abs(p.x-o.x)<60&&o.y>GROUND-(p.ground?35:80)&&o.state!=='ko'){p.dead=1;{const wasBlk=o.state==='block';damage(o,(p.owner.look.spDmg||18)*(p.ground?1.1:1),Math.sign(p.vx),11,p.owner);if(p.owner.look.spType==='net'&&!wasBlk){o.stun=110;o.netted=110;pop(o.x,o.y-330,T().netted,'#a8d66b',true)}
+if(p.owner.look.spType==='lie'&&!wasBlk){o.confused=150;pop(o.x,o.y-330,T().fooled,'#7fd8ff',true)}
+if(p.owner.look.stunHit&&!wasBlk&&o.state==='hit'){o.stun=p.owner.look.stunHit;o.dizzy=p.owner.look.stunHit;o.vx*=.3;pop(o.x,o.y-330,T().dizzy,'#ffd86b',true)}}spark(p.x,p.y,p.owner.look.spark,22)}
   if(p.ground&&time%3===0)parts.push({x:p.x,y:GROUND-10,vx:(Math.random()-.5)*4,vy:-3-Math.random()*4,life:20,c:'#b08860'});
   if(p.x<-80||p.x>W+80)p.dead=1;
  }
@@ -387,7 +456,7 @@ function hud(){
   const mx=i?x+bw-bw*0.6:x,mw=bw*0.6*f.meter/100;
   ctx.fillStyle=f.meter>=100&&time%20<10?'#fff':L.bar;
   if(i)ctx.fillRect(mx+bw*0.6-mw,90,mw,10);else ctx.fillRect(mx,90,mw,10);
-  if(f.meter>=100){ctx.font='800 12px system-ui';ctx.fillStyle=L.bar;ctx.fillText(L.sp+' HAZIR!',i?x+bw:x,120)}
+  if(f.meter>=100){ctx.font='800 12px system-ui';ctx.fillStyle=L.bar;ctx.fillText(L.sp+' '+T().ready,i?x+bw:x,120)}
  }
  for(const x of texts){ctx.globalAlpha=Math.min(1,x.life/20);ctx.font=(x.big?'900 30px':'900 24px')+' system-ui';ctx.textAlign='center';ctx.lineWidth=5;ctx.strokeStyle='#000a';ctx.strokeText(x.txt,x.x,x.y);ctx.fillStyle=x.c;ctx.fillText(x.txt,x.x,x.y)}ctx.globalAlpha=1;
  if(banner){const k=banner.t;ctx.fillStyle='rgba(255,255,255,'+Math.max(0,(k-45)/30)+')';ctx.fillRect(0,0,W,H);
@@ -395,12 +464,13 @@ function hud(){
   ctx.fillStyle='#000a';ctx.fillRect(-W,-38,W*2,60);ctx.font='900 46px system-ui';ctx.textAlign='center';ctx.lineWidth=8;ctx.strokeStyle='#000';ctx.strokeText(banner.txt,0,8);ctx.fillStyle=banner.c;ctx.fillText(banner.txt,0,8);ctx.restore();ctx.globalAlpha=1}
  rr(W/2-38,18,76,46,10,'#000a');
  ctx.fillStyle=game.timer<600?'#ff6a6a':'#fff';ctx.font='900 32px system-ui';ctx.textAlign='center';
- ctx.fillText(Math.ceil(game.timer/60),W/2,53);
+ ctx.fillText(game.prac?'∞':Math.ceil(game.timer/60),W/2,53);
  if(game.state==='intro'||game.state==='roundEnd'){
-  const s=game.state==='intro'&&game.msg==='DÖVÜŞ!'?1.2:1;
+  const s=game.state==='intro'&&game.msg===T().fight?1.2:1;
   ctx.save();ctx.translate(W/2,H/2-30);ctx.scale(s,s);
   ctx.font='900 64px system-ui';ctx.lineWidth=10;ctx.strokeStyle='#7a2f00';ctx.strokeText(game.msg,0,0);
   ctx.fillStyle='#ffb347';ctx.fillText(game.msg,0,0);
+  if(game.state==='roundEnd'&&game.msg2){ctx.font='900 46px system-ui';ctx.lineWidth=8;ctx.strokeStyle='#000';ctx.strokeText(game.msg2,0,62);ctx.fillStyle=game.msg2===T().perfect?'#7dff8a':'#7fd8ff';ctx.fillText(game.msg2,0,62)}
   if(game.state==='intro'){ctx.font='800 20px system-ui';ctx.lineWidth=5;ctx.strokeText(game.arena,0,40);ctx.fillStyle='#fff';ctx.fillText(game.arena,0,40)}ctx.restore();
  }
 }
@@ -425,7 +495,7 @@ let last=performance.now(),acc=0;
 function loop(now){
  acc+=Math.min(100,now-last);last=now;
  const rotOn=!document.getElementById('rot').classList.contains('hidden');
- while(acc>=1000/60){if(game.state!=='menu'&&game.state!=='over'&&!rotOn)step();else time++;acc-=1000/60}
+ while(acc>=1000/60){if(game.state!=='menu'&&game.state!=='over'&&game.state!=='vs'&&!rotOn)step();else time++;acc-=1000/60}
  draw();requestAnimationFrame(loop);
 }
 
@@ -459,7 +529,7 @@ function joy(p){
 }
 function cluster(p){
  const c=document.createElement('div');c.className='clu';
- [btn(p,'special',SPI[PICK[p]],'sp','ÖZEL'),btn(p,'kick','🦵','atk','TEKME'),btn(p,'block','🛡','', 'BLOK'),btn(p,'punch','👊','atk big','YUMRUK')].forEach(b=>c.appendChild(b));
+ [btn(p,'special',SPI[PICK[p]],'sp',T().sp),btn(p,'kick','🦵','atk',T().kick),btn(p,'block','🛡','',T().block),btn(p,'punch','👊','atk big',T().punch)].forEach(b=>c.appendChild(b));
  return c;
 }
 function buildControls(){
@@ -493,46 +563,93 @@ addEventListener('resize',layout);addEventListener('orientationchange',()=>setTi
 
 /* ---------- Menus ---------- */
 function menu(){
- game.state='menu';overlay.classList.remove('hidden');document.body.classList.add('menu');setTimeout(layout,0);
- card.innerHTML=`<div class="hero"><img src="musa/musa_win.webp" alt=""><span class="vs">VS</span><img src="musa/storm_idle.webp" style="transform:scaleX(-1)" alt=""></div><h1>MUSA</h1><h2>Çaycuma'nın Kahramanı – Dövüş Oyunu</h2>
- <div id="ov2"><button class="big alt" id="m1">1 OYUNCU<br><small style="font-weight:600;font-size:13px">Bilgisayara karşı</small></button>
- <button class="big" id="m2">2 OYUNCU<br><small style="font-weight:600;font-size:13px">Aynı cihazda karşılıklı</small></button></div>
- <div class="help">9 karakter: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif ve Kara Fırtına! Rakibi vur, <b>güç barını</b> doldur, sonra <b>özel hareketini</b> yap.<br>2 raundu kazanan şampiyon olur.<br>
- <b>Klavye</b> – 1. oyuncu: A/D yürü · W zıpla · S blok · F yumruk · G tekme · H özel<br>2. oyuncu: ← → yürü · ↑ zıpla · ↓ blok · K yumruk · L tekme · J özel</div>
+ game.state='menu';game.arc=game.surv=null;game.prac=false;overlay.classList.remove('hidden');document.body.classList.add('menu');card.classList.remove('wide');setTimeout(layout,0);
+ const t=T(),FL={tr:'🇹🇷 TR',de:'🇩🇪 DE',en:'🇬🇧 EN'};
+ card.innerHTML=`<div class="lgs">${Object.keys(FL).map(k=>`<button class="lg${k===LANG?' sel':''}" data-l="${k}">${FL[k]}</button>`).join('')}</div>
+ <div class="hero"><img src="musa/musa_win.webp" alt=""><span class="vs">VS</span><img src="musa/storm_idle.webp" style="transform:scaleX(-1)" alt=""></div><h1>MUSA</h1><h2>${t.sub}</h2>
+ <div id="ov2"><button class="big alt" id="m1">${t.p1}<br><small style="font-weight:600;font-size:13px">${t.p1s}</small></button>
+ <button class="big" id="m2">${t.p2}<br><small style="font-weight:600;font-size:13px">${t.p2s}</small></button></div>
+ <div class="help">${t.help}</div>
  <a class="big" style="text-decoration:none;background:#ffffff1a;box-shadow:none" href="index.html">🏠 BUKO GAMES</a>`;
- document.getElementById('m1').onclick=()=>pick(0,'KARAKTERİNİ SEÇ',k=>{PICK[0]=k;pick(1,'RAKİBİNİ SEÇ (bilgisayar)',k2=>{PICK[1]=k2;diff()},true)});
- document.getElementById('m2').onclick=()=>pick(0,'1. OYUNCU SEÇSİN',k=>{PICK[0]=k;pick(1,'2. OYUNCU SEÇSİN',k2=>{PICK[1]=k2;start(2)})});
+ card.querySelectorAll('.lg').forEach(b=>b.onclick=()=>{setLang(b.dataset.l);menu()});
+ document.getElementById('m1').onclick=mode1;
+ document.getElementById('m2').onclick=()=>pick(0,t.pick1,k=>{PICK[0]=k;pick(1,t.pick2,k2=>{PICK[1]=k2;start(2)},false,menu)});
 }
-function pick(slot,title,done,rnd){
- card.classList.add('wide');
+function mode1(){
+ card.classList.remove('wide');const t=T();
+ const sub=x=>`<br><small style="font-weight:600;font-size:13px">${x}</small>`;
+ card.innerHTML=`<h1 style="font-size:clamp(26px,7vw,46px)">${t.p1}</h1><h2>${t.how}</h2>
+ <div id="ov2"><button class="big" id="ma" style="background:linear-gradient(#c0392b,#7a1d14)">${t.arc}${sub(t.arcs)}</button>
+ <button class="big alt" id="mf">${t.free}${sub(t.frees)}</button>
+ <button class="big" id="ms" style="background:linear-gradient(#8e44ad,#4a1d6e)">${t.surv}${sub(t.survs)}</button>
+ <button class="big" id="mp" style="background:linear-gradient(#27ae60,#145a32)">${t.prac}${sub(t.pracs)}</button></div>
+ <button class="big" style="background:#ffffff1a;box-shadow:none" id="bk">${t.back}</button>`;
+ const others=k=>ROSTER.map(r=>r.kind).filter(x=>x!==k);
+ document.getElementById('mf').onclick=()=>pick(0,t.pickMe,k=>{PICK[0]=k;pick(1,t.pickOpp,k2=>{PICK[1]=k2;diff()},true,mode1)},false,mode1);
+ document.getElementById('ma').onclick=()=>pick(0,'ARCADE – '+t.pickMe,k=>{PICK[0]=k;
+  const boss=k==='storm'?'musa':'storm';const o=others(k).filter(x=>x!==boss).sort(()=>Math.random()-.5);
+  game.arc={list:[...o,boss],i:0};PICK[1]=game.arc.list[0];diff()},false,mode1);
+ document.getElementById('ms').onclick=()=>pick(0,t.surv+' – '+t.pickMe,k=>{PICK[0]=k;const o=others(k);
+  game.surv={n:0,hp:null,pool:o};PICK[1]=o[Math.random()*o.length|0];diff()},false,mode1);
+ document.getElementById('mp').onclick=()=>pick(0,t.prac+' – '+t.pickMe,k=>{PICK[0]=k;pick(1,t.pickOpp,k2=>{PICK[1]=k2;game.prac=true;start(1)},false,mode1)},false,mode1);
+ document.getElementById('bk').onclick=menu;
+}
+function pick(slot,title,done,rnd,back){
+ card.classList.add('wide');const t=T();
  const st=r=>`<span class="st">⚡${Math.round(r.spd*10)} 💪${Math.round(r.pow*10)} ❤️${r.hp}</span>`;
- card.innerHTML=`<h1 style="font-size:clamp(24px,min(7vw,9vh),44px)">${title}</h1>${slot?`<div class="pk">1. oyuncu: ${RK(PICK[0]).name}</div>`:''}
+ card.innerHTML=`<h1 style="font-size:clamp(24px,min(7vw,9vh),44px)">${title}</h1>${slot?`<div class="pk">${t.p1is}${RK(PICK[0]).name}</div>`:''}
  <div class="roster">${ROSTER.map(r=>`<button class="rc${slot&&r.kind===PICK[0]?' taken':''}" data-k="${r.kind}" style="border-color:${r.bar}55"><img src="musa/${r.kind}_idle.webp" alt="" ${slot?'style="transform:scaleX(-1)"':''}><b style="color:${r.bar}">${r.name}</b><i>${r.tag} · ${r.sp}</i>${st(r)}</button>`).join('')}</div>
- ${rnd?'<button class="big alt" id="rnd" style="padding:10px">🎲 RASTGELE RAKİP</button>':''}<button class="big" style="background:#ffffff1a;box-shadow:none;padding:10px" id="bk">← GERİ</button>`;
- card.querySelectorAll('.rc').forEach(b=>b.onclick=()=>done(b.dataset.k));
+ ${rnd?`<button class="big alt" id="rnd" style="padding:10px">${t.rnd}</button>`:''}<button class="big" style="background:#ffffff1a;box-shadow:none;padding:10px" id="bk">${t.back}</button>`;
+ card.querySelectorAll('.rc').forEach(b=>b.onclick=()=>{sfx('whoosh');done(b.dataset.k)});
  if(rnd)document.getElementById('rnd').onclick=()=>{const o=ROSTER.filter(r=>r.kind!==PICK[0]);done(o[Math.random()*o.length|0].kind)};
- document.getElementById('bk').onclick=()=>{card.classList.remove('wide');menu()};
+ document.getElementById('bk').onclick=()=>{card.classList.remove('wide');game.arc=game.surv=null;game.prac=false;(back||menu)()};
  overlay.scrollTop=0;
 }
+function ladder(){const a=game.arc;if(!a)return'';return `<div class="lad">${a.list.map((k,i)=>`<img src="musa/${k}_idle.webp" class="${i<a.i?'dn':i===a.i?'cu':''}" style="transform:scaleX(-1)" alt="">`).join('')}</div>`}
+function vsScreen(cb){
+ const a=RK(PICK[0]),b=RK(PICK[1]),ar=game.arc,t=T();
+ const st=ar?(ar.i===ar.list.length-1?t.vsBoss:t.vsArc(ar.i+1,ar.list.length)):game.surv?t.vsSurv(game.surv.n+1):game.prac?t.vsPrac:(game.mode===2?t.vs2:t.vsFree);
+ const d=document.createElement('div');d.id='vsx';
+ d.innerHTML=`<div class="st">${st}</div><div class="sd l"><img src="musa/${a.kind}_win.webp" alt=""><b style="color:${a.bar}">${a.name}</b><i>${a.tag}</i></div><div class="v">VS</div><div class="sd r"><img src="musa/${b.kind}_idle.webp" style="transform:scaleX(-1)" alt=""><b style="color:${b.bar}">${b.name}</b><i>${b.tag}</i></div>`;
+ document.body.appendChild(d);sfx('special');
+ let done=false;const go=()=>{if(done)return;done=true;d.remove();cb()};
+ d.onclick=go;setTimeout(go,2600);
+}
 function diff(){
- card.classList.remove('wide');
- card.innerHTML=`<h1 style="font-size:clamp(28px,8vw,48px)">ZORLUK</h1><h2>${RK(PICK[0]).name} vs ${RK(PICK[1]).name} – bilgisayar ne kadar güçlü olsun?</h2>
-  <div id="ov2"><button class="big" data-d="kolay">🙂 KOLAY</button><button class="big alt" data-d="orta">😤 ORTA</button></div><button class="big" data-d="zor" style="background:linear-gradient(#c0392b,#7a1d14)">🔥 ZOR</button><button class="big" style="background:#ffffff1a;box-shadow:none" id="bk">← GERİ</button>`;
- card.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{DIFF=b.dataset.d;start(1)});document.getElementById('bk').onclick=menu;
+ card.classList.remove('wide');const t=T();
+ const h=game.arc?RK(PICK[0]).name+' – '+t.ladderTxt(game.arc.list.length):game.surv?RK(PICK[0]).name+' – '+t.survs:RK(PICK[0]).name+' vs '+RK(PICK[1]).name;
+ card.innerHTML=`<h1 style="font-size:clamp(28px,8vw,48px)">${t.diff}</h1><h2>${h} – ${t.diffQ}</h2>${ladder()}
+  <div id="ov2"><button class="big" data-d="kolay">${t.easy}</button><button class="big alt" data-d="orta">${t.mid}</button></div><button class="big" data-d="zor" style="background:linear-gradient(#c0392b,#7a1d14)">${t.hard}</button><button class="big" style="background:#ffffff1a;box-shadow:none" id="bk">${t.back}</button>`;
+ card.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{DIFF=b.dataset.d;start(1)});document.getElementById('bk').onclick=mode1;
 }
 function start(mode){card.classList.remove('wide');goLandscape();
  try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume()}catch(e){}
- game.mode=mode;game.round=1;P=[];overlay.classList.add('hidden');document.body.classList.remove('menu');window.musaMusic&&window.musaMusic();
- buildControls();startRound();layout();
+ if(mode===2){game.arc=game.surv=null;game.prac=false}
+ game.mode=mode;game.need=game.surv?1:2;game.round=1;P=[];overlay.classList.add('hidden');document.body.classList.remove('menu');window.musaMusic&&window.musaMusic();
+ game.state='vs';vsScreen(()=>{buildControls();startRound();layout()});
 }
 function matchEnd(){
- game.state='over';
- const w=P[0].wins>=2?P[0]:P[1];
- const winMsg=game.mode===1?(w===P[0]?'Tebrikler! '+w.look.name+' Çaycuma şampiyonu! 🏆':w.look.name+' bu sefer kazandı… Bir daha dene!'):(w.look.name+' ailenin şampiyonu! 🏆');
+ game.state='over';const t=T();
+ const w=P[0].wins>=game.need?P[0]:P[1],won=w===P[0];
+ const ar=game.arc,sv=game.surv,last=ar&&ar.i===ar.list.length-1,arcNext=ar&&won&&!last;
+ let btn1=`<button class="big alt" id="r1">${t.again}</button>`,msg,extra='';
+ if(ar){
+  msg=won?(last?t.arcDone(P[0].look.name):t.arcWin):t.arcLose(w.look.name);
+  {const li=ar.i;if(won)ar.i++;extra=ladder();ar.i=li}
+  btn1=`<button class="big alt" id="r1">${arcNext?t.next+RK(ar.list[ar.i+1]).name:won?t.arcAgain:t.cont}</button>`;
+  if(won&&last){ar.i=-1;const boss=PICK[0]==='storm'?'musa':'storm';ar.list=ar.list.filter(x=>x!==boss).sort(()=>Math.random()-.5).concat(boss)}
+ }else if(sv){
+  if(won){sv.n++;sv.hp=Math.min(P[0].maxhp,P[0].hp+P[0].maxhp*.3);msg=t.survWin+' ('+sv.n+')';btn1=`<button class="big alt" id="r1">${t.survNext}</button>`}
+  else{let best=0;try{best=Math.max(sv.n,+localStorage.getItem('musaSurv')||0);localStorage.setItem('musaSurv',best)}catch(e){}
+   msg=t.survEnd(sv.n)+' · '+t.survBest(best);btn1=`<button class="big alt" id="r1">${t.again}</button>`}
+ }else msg=game.mode===1?(won?t.champ1(w.look.name):t.lose1(w.look.name)):t.champ2(w.look.name);
  overlay.classList.remove('hidden');document.body.classList.add('menu');
- card.innerHTML=`<h1 style="font-size:clamp(28px,8vw,54px)">${w.look.name}<br>KAZANDI!</h1><h2>${winMsg}</h2>
- <img src="musa/${w.look.kind}_win.webp" style="height:min(28vh,190px);filter:drop-shadow(0 8px 16px #000a)" alt=""><button class="big alt" id="r1">TEKRAR OYNA</button><button class="big" id="r2">ANA MENÜ</button><a class="big" style="text-decoration:none;background:#ffffff1a;box-shadow:none" href="index.html">🏠 BUKO GAMES</a>`;
- document.getElementById('r1').onclick=()=>{P=[];start(game.mode)};
+ card.innerHTML=`<h1 style="font-size:clamp(28px,8vw,54px)">${w.look.name}<br>${t.won}</h1><h2>${msg}</h2>${extra}
+ <img src="musa/${w.look.kind}_win.webp" style="height:min(28vh,190px);filter:drop-shadow(0 8px 16px #000a)" alt="">${btn1}<button class="big" id="r2">${t.menu}</button><a class="big" style="text-decoration:none;background:#ffffff1a;box-shadow:none" href="index.html">🏠 BUKO GAMES</a>`;
+ document.getElementById('r1').onclick=()=>{P=[];
+  if(arcNext){ar.i++;PICK[1]=ar.list[ar.i]}else if(ar&&won&&last){ar.i=0;PICK[1]=ar.list[0]}
+  else if(sv){if(!won){sv.n=0;sv.hp=null}const o=sv.pool.filter(x=>x!==PICK[1]);PICK[1]=o[Math.random()*o.length|0]}
+  start(game.mode)};
  document.getElementById('r2').onclick=()=>{P=[];menu()};
 }
 
