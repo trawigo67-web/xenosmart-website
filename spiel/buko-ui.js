@@ -68,7 +68,7 @@
     var h=q('#home'); if (h && (h.tagName==='A' || /zipzip/.test(path))) candy(h,'home');
     // MechaBlock
     candy(q('#bBack'),'back'); candy(q('#bRestart'),'restart');
-    var hb=q('a.homeb#bHome'); if (hb) candyText(hb,'Buko Games');
+    var hb=q('a.homeb#bHome'); if (hb){ candy(hb,'home'); hb.setAttribute('aria-label','Buko Games'); }
     var mc=q('.mascot'); if (mc && !mc.__bk){ mc.innerHTML='<img class="bk-mascot" src="'+MASCOT+'" alt="Buko">'; mc.__bk=1; }
     // MUSA
     candy(q('#tb a[href="index.html"]'),'home');
