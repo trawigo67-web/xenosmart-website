@@ -1,5 +1,5 @@
 {
- "v": "buko-v11",
+ "v": "buko-v12",
  "files": [
   "./",
   "1453/",
@@ -194,6 +194,9 @@
   "musa/sinasi_punch.webp",
   "musa/sinasi_special.webp",
   "musa/sinasi_walk.webp",
-  "musa/sinasi_win.webp"
+  "musa/sinasi_win.webp",
+  "buko.webp",
+  "buko-mini.webp",
+  "buko.png"
  ]
 }
