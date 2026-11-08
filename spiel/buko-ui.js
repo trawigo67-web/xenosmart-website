@@ -28,6 +28,23 @@
     '.bk-candy.bk-on{background:#7ED957!important}',
     '.bk-lock.bk-float{position:fixed!important;z-index:40;right:calc(10px + env(safe-area-inset-right));top:calc(64px + env(safe-area-inset-top));width:44px;height:44px;padding:0}',
     '#bkToast{position:fixed;left:50%;top:calc(70px + env(safe-area-inset-top));transform:translateX(-50%);z-index:99999;max-width:88vw;text-align:center;font:700 15px/1.35 Fredoka,system-ui,sans-serif;color:#12301E;background:#FFC93C;border:3px solid #12301E;border-radius:16px;box-shadow:0 4px 0 #12301E;padding:9px 14px;pointer-events:none;transition:opacity .3s;opacity:0}',
+    '@keyframes bkIn{from{opacity:0}to{opacity:1}}body{animation:bkIn .22s ease-out}',
+    '#bkSheet{position:fixed;inset:0;z-index:100000;display:none;align-items:flex-end;justify-content:center;background:rgba(3,14,16,.55);-webkit-tap-highlight-color:transparent}',
+    '#bkSheet.on{display:flex}',
+    '#bkSheet .pn{width:100%;max-width:520px;background:#0E3434;border:3px solid #12301E;border-bottom:0;border-radius:26px 26px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.45);padding:10px 18px calc(18px + env(safe-area-inset-bottom));font-family:Fredoka,system-ui,sans-serif;color:#fff;transform:translateY(0);animation:bkUp .22s ease-out}',
+    '@keyframes bkUp{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}',
+    '#bkSheet .hd{width:44px;height:5px;border-radius:9px;background:rgba(255,255,255,.3);margin:2px auto 10px}',
+    '#bkSheet h3{margin:0 0 14px;text-align:center;font:400 24px/1 "Lilita One",system-ui,sans-serif;letter-spacing:1px;color:#7ED957;-webkit-text-stroke:3px #12301E;paint-order:stroke fill}',
+    '#bkSheet .gr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px}',
+    '#bkSheet .tl{display:flex;flex-direction:column;align-items:center;gap:7px;font-weight:600;font-size:14px;line-height:1.15;text-align:center;color:#E6FFF4}',
+    '#bkSheet .tl>.bk-candy,#bkSheet .tl>button,#bkSheet .tl>a{width:60px!important;height:60px!important;min-width:60px!important;border-radius:18px!important;font-size:24px!important;padding:0!important;position:relative!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important}',
+    '#bkSheet .tl svg{width:28px!important;height:28px!important}',
+    '#bkSheet .cl{display:block;width:100%;margin-top:18px;height:54px;border-radius:16px;border:3px solid #12301E;background:#7ED957;color:#12301E;font:400 20px "Lilita One",system-ui,sans-serif;letter-spacing:1px;box-shadow:0 4px 0 #12301E;cursor:pointer}',
+    '#bkSheet .cl:active{transform:translateY(3px);box-shadow:0 1px 0 #12301E}',
+    '.lft.bk-compact{gap:8px!important}.lft.bk-compact>#home,.lft.bk-compact>#bkMenu{min-width:44px!important;width:44px!important;height:44px!important;padding:0!important;flex:none}',
+    '.lft.bk-compact>#home svg.bk-ic,.lft.bk-compact>#bkMenu svg.bk-ic{width:24px!important;height:24px!important}',
+    '@media (min-width:700px) and (min-height:500px){#top .lft>.bk-candy{min-width:48px!important;min-height:44px!important}}',
+    '@media (min-width:700px) and (min-height:500px){#bkSheet{align-items:center}#bkSheet .pn{border-radius:26px;border-bottom:3px solid #12301E;padding-bottom:20px}}',
     'body[data-device=tablet] .bk-candy.bk-sq{min-width:48px!important;min-height:48px!important}',
     'body[data-device=tablet] .bk-candy.bk-sq>svg.bk-ic{width:28px;height:28px}'
   ].join('\n');
@@ -42,6 +59,7 @@
     play:'<svg class="bk-ic" viewBox="0 0 24 24" '+P+'><path d="M8 5.5l11 6.5-11 6.5z" fill="currentColor"/></svg>',
     sound:'<svg class="bk-ic" viewBox="0 0 24 24" '+P+'><path d="M4 9.3v5.4h3.6l4.9 4V5.3l-4.9 4z" fill="currentColor"/><path d="M16 9a4.2 4.2 0 0 1 0 6"/><path d="M18.6 6.4a8 8 0 0 1 0 11.2"/></svg>',
     mute:'<svg class="bk-ic" viewBox="0 0 24 24" '+P+'><path d="M4 9.3v5.4h3.6l4.9 4V5.3l-4.9 4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
+    more:'<svg class="bk-ic" viewBox="0 0 24 24" '+P+'><circle cx="5.5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="18.5" cy="12" r="1.6" fill="currentColor"/></svg>',
     rot:'<svg class="bk-ic" viewBox="0 0 24 24" '+P+'><rect x="4" y="7" width="10" height="14" rx="2"/><path d="M13 3.2a8 8 0 0 1 7.6 7.4"/><path d="M21.2 7.2l-.6 3.4-3.2-1.2"/></svg>',
     lock:'<svg class="bk-ic" viewBox="0 0 24 24" '+P+'><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="currentColor" fill-opacity=".2"/><path d="M8.2 10.5V8a3.8 3.8 0 0 1 7.6 0v2.5"/></svg>'
   };
@@ -153,13 +171,47 @@
     fitAll('#top .lft .ib:not(#home)'); fit(q('#pz')); fit(q('#bPause'));
     fitAll('#tb button'); fitAll('.hbtns .ibtn:not(#hHome)');
     if (/zipzip/.test(path)) fit(q('#snd'));
-    addLock();
+    addLock(); compactBar();
     // Oyun seçici başlığı
     var pk=document.querySelectorAll('#picker .pk > div:first-child');
     for (var i=0;i<pk.length;i++){ if (!pk[i].querySelector('img.bk-mini') && /BUKO GAMES/.test(pk[i].textContent)){ pk[i].innerHTML='<img class="bk-mini" src="'+MINI+'" alt="" style="height:30px">BUKO GAMES'; pk[i].classList.add('bk-brand'); pk[i].__bk=1; } }
     var pkh=document.querySelectorAll('#picker a.pkh');
     for (var j=0;j<pkh.length;j++){ var sv=pkh[j].querySelector('svg'); if (sv && !sv.classList.contains('bk-ic')){ var d=document.createElement('span'); d.innerHTML=IC.home; pkh[j].replaceChild(d.firstChild, sv); } }
     if (roots) roots.forEach(swapEmoji); else swapEmoji(document.body);
+  }
+
+  /* ---- Telefonda üst çubuğu sadeleştir: Ana sayfa + "Menü"; diğerleri alttan açılan pencerede ---- */
+  var NAMES={tr:{lbb:'Puan tablosu',sw:'Oyunlar',mus:'Müzik',vol:'Ses',lock:'Ekran kilidi',menu:'Menü',close:'Kapat'},
+             de:{lbb:'Bestenliste',sw:'Spiele',mus:'Musik',vol:'Ton',lock:'Bildschirm fixieren',menu:'Menü',close:'Schließen'},
+             en:{lbb:'Leaderboard',sw:'Games',mus:'Music',vol:'Sound',lock:'Lock rotation',menu:'Menu',close:'Close'}};
+  function NL(){ var l; try{ l=window.BK&&BK.lang?BK.lang():((JSON.parse(localStorage.getItem('disfirlat2')||'{}').lang)||(navigator.language||'tr').slice(0,2)); }catch(e){ l='tr'; } return NAMES[l]||NAMES.en; }
+  function isPhone(){ return Math.min(screen.width||innerWidth, screen.height||innerHeight) < 600 || Math.min(innerWidth,innerHeight) < 500; }
+  var sheet=null;
+  function openSheet(){ if(!sheet) return; var n=NL(); sheet.querySelector('h3').textContent=n.menu; sheet.querySelector('.cl').textContent=n.close;
+    var tl=sheet.querySelectorAll('.tl'); for(var i=0;i<tl.length;i++){ var k=tl[i].getAttribute('data-k'); tl[i].querySelector('span.lb').textContent=n[k]||''; }
+    sheet.classList.add('on'); }
+  function closeSheet(){ if(sheet) sheet.classList.remove('on'); }
+  function compactBar(){
+    var lft=document.querySelector('#top .lft'); if(!lft || lft.__bkc || !isPhone()) return;
+    var home=lft.querySelector('#home'); if(!home) return;
+    lft.__bkc=1; lft.classList.add('bk-compact');
+    sheet=document.createElement('div'); sheet.id='bkSheet'; sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-modal','true');
+    sheet.innerHTML='<div class="pn"><div class="hd"></div><h3></h3><div class="gr"></div><button type="button" class="cl"></button></div>';
+    document.body.appendChild(sheet);
+    var gr=sheet.querySelector('.gr');
+    var kids=[].slice.call(lft.children).filter(function(c){ return c!==home; });
+    kids.forEach(function(c){
+      var k=c.classList.contains('bk-lock')?'lock':(c.id||'');
+      var t=document.createElement('div'); t.className='tl'; t.setAttribute('data-k',k);
+      t.appendChild(c); var sp=document.createElement('span'); sp.className='lb'; t.appendChild(sp); gr.appendChild(t);
+      if (k==='lbb'||k==='sw'){ c.addEventListener('click', function(){ setTimeout(closeSheet,0); }); c.addEventListener('pointerup', function(){ setTimeout(closeSheet,0); }); }
+    });
+    var m=document.createElement('button'); m.type='button'; m.id='bkMenu'; m.className='pill ib bk-candy bk-fit'; m.innerHTML=IC.more; m.setAttribute('aria-label',NL().menu);
+    m.addEventListener('click', function(e){ e.stopPropagation(); openSheet(); });
+    home.insertAdjacentElement('afterend', m);
+    sheet.addEventListener('click', function(e){ if(e.target===sheet) closeSheet(); });
+    sheet.querySelector('.cl').addEventListener('click', closeSheet);
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeSheet(); });
   }
   var pend=false, roots=[];
   function later(muts){
