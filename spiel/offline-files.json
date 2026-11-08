@@ -1,5 +1,5 @@
 {
- "v": "buko-v9",
+ "v": "buko-v10",
  "files": [
   "./",
   "1453/",
@@ -177,6 +177,15 @@
   "musa/vo_r1.mp3",
   "musa/vo_r2.mp3",
   "musa/vo_timeup.mp3",
-  "musa/vo_win.mp3"
+  "musa/vo_win.mp3",
+  "musa/fx_taxi.webp",
+  "musa/soner_block.webp",
+  "musa/soner_hit.webp",
+  "musa/soner_idle.webp",
+  "musa/soner_kick.webp",
+  "musa/soner_punch.webp",
+  "musa/soner_special.webp",
+  "musa/soner_walk.webp",
+  "musa/soner_win.webp"
  ]
 }
