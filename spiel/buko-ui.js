@@ -93,10 +93,15 @@
   function say(msg){ var b=document.getElementById('bkToast'); if(!b){ b=document.createElement('div'); b.id='bkToast'; b.setAttribute('role','status'); document.body.appendChild(b); } b.textContent=msg; b.style.opacity='1'; clearTimeout(tt); tt=setTimeout(function(){ b.style.opacity='0'; },2600); }
   var path=location.pathname;
   var LK='bukoLock', locked=false, isGame=!/\/spiel\/(index\.html)?$/.test(path);
-  var IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1), APP=/BukoGamesApp/.test(navigator.userAgent);
+  var IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1), APP=/BukoGamesApp/.test(navigator.userAgent)||!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform());
   function pref(v){ try{ if(v===undefined) return localStorage.getItem(LK)||''; if(v) localStorage.setItem(LK,v); else localStorage.removeItem(LK); }catch(e){ return ''; } }
   function cur(){ return innerWidth>innerHeight?'landscape':'portrait'; }
-  function nativeLock(t){ try{ if (window.BukoNative && BukoNative.lockOrientation){ BukoNative.lockOrientation(t); return true; } }catch(e){} return false; }
+  function capSO(){ try{ return window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.ScreenOrientation; }catch(e){ return null; } }
+  function nativeLock(t){
+    try{ if (window.BukoNative && BukoNative.lockOrientation){ BukoNative.lockOrientation(t); return true; } }catch(e){}
+    var so=capSO(); if (so){ try{ if (t==='none') so.unlock(); else so.lock({orientation:t}); return true; }catch(e){} }
+    return false;
+  }
   function tryLock(t){
     if (nativeLock(t)) return Promise.resolve(true);
     var de=document.documentElement, wasFs=!!document.fullscreenElement;
