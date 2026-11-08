@@ -1,5 +1,5 @@
 {
- "v": "buko-v10",
+ "v": "buko-v11",
  "files": [
   "./",
   "1453/",
@@ -186,6 +186,14 @@
   "musa/soner_punch.webp",
   "musa/soner_special.webp",
   "musa/soner_walk.webp",
-  "musa/soner_win.webp"
+  "musa/soner_win.webp",
+  "musa/sinasi_block.webp",
+  "musa/sinasi_hit.webp",
+  "musa/sinasi_idle.webp",
+  "musa/sinasi_kick.webp",
+  "musa/sinasi_punch.webp",
+  "musa/sinasi_special.webp",
+  "musa/sinasi_walk.webp",
+  "musa/sinasi_win.webp"
  ]
 }
