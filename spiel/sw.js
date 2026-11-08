@@ -1,5 +1,5 @@
 /* Buko Games – offline cache (network-first, cache fallback) */
-const C='buko-v37';
+const C='buko-v38';
 const BASE=['./','index.html','offline-files.json','manifest.webmanifest','icon-192.png','buko-core.js','buko-ui.js','buko.svg','buko.webp','buko-mini.webp'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>Promise.all(BASE.map(u=>c.add(u).catch(()=>{})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('buko-')&&k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
