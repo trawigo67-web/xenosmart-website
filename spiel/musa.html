@@ -20,7 +20,7 @@ body.land #controls{position:fixed;left:0;right:0;bottom:0;padding:0 max(16px,en
 .joy.on{box-shadow:inset 0 0 0 3px #ff8a2a,0 4px 18px #0006}
 .clu{pointer-events:auto;display:grid;grid-template-columns:var(--B) var(--B);grid-template-rows:var(--B) var(--B);gap:calc(var(--B)*.18)}
 .clu .btn{width:var(--B)!important;height:var(--B)!important;font-size:calc(var(--B)*.4)!important}
-.clu .btn small{font-size:max(8px,calc(var(--B)*.14))!important}
+.clu .btn small{font-size:max(7px,calc(var(--B)*.12))!important;line-height:1.05;max-width:94%;white-space:normal;text-align:center;letter-spacing:0}
 body.land .pad{pointer-events:auto}
 body.land .btn{background:#ffffff22;backdrop-filter:blur(2px)}
 body.land .btn.atk{background:#ff8a2a44}body.land .btn.sp{background:#3aa0ff44}
@@ -52,6 +52,21 @@ body.menu #tb{display:none}
 .rc.taken{opacity:.45}.rc:active{transform:scale(.96)}
 .pk{font-weight:800;color:#ffcc33;margin:4px 0}
 .rc.star{border-color:#ffcc33!important;box-shadow:0 0 14px #ffcc3388,inset 0 0 18px #ffcc3333;position:relative}.stb{position:absolute;top:4px;right:4px;font:900 10px system-ui;font-style:normal;background:#ffcc33;color:#3a1a00;border-radius:6px;padding:2px 5px}
+.gal{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none}.gal::-webkit-scrollbar{display:none}
+.gt{flex:0 0 auto;width:64px;border:2px solid #ffffff22;border-radius:12px;background:#ffffff10;padding:4px 2px;color:#fff;cursor:pointer;transition:transform .15s}
+.gt img{height:52px;display:block;margin:0 auto}.gt b{display:block;font:800 8.5px system-ui;line-height:1.1;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gt.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 25%,transparent);transform:translateY(-3px)}.gt.star{box-shadow:0 0 8px #ffcc3377}
+.bio{display:flex;gap:14px;align-items:stretch;text-align:left;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 22%,#0b0f1e),#0b0f1ecc);border:2px solid color-mix(in srgb,var(--c) 55%,transparent);border-radius:18px;padding:12px;margin:4px 0 8px}
+.bimg{flex:0 0 34%;position:relative;display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(circle at 50% 70%,color-mix(in srgb,var(--c) 45%,transparent),transparent 70%)}
+.bimg img{max-height:min(52vh,330px);max-width:100%;filter:drop-shadow(0 8px 14px #000b)}.bem{position:absolute;top:0;left:0;font-size:28px}
+.btx h3{margin:0;font:900 clamp(20px,4.5vh,30px) system-ui;letter-spacing:1px}.btag{font:700 13px system-ui;opacity:.75;margin-bottom:6px}
+.bmv{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 2px}.bmv span{font:800 11px system-ui;background:#ffffff14;border:1px solid #ffffff22;border-radius:999px;padding:3px 9px}
+.bh{font:900 12px system-ui;letter-spacing:1.5px;color:#ffcc33;margin-top:6px}.btx p{margin:3px 0;font-size:14px;line-height:1.45;color:#dbe3f2}
+.bst{display:grid;grid-template-columns:auto 1fr;gap:4px 8px;align-items:center;margin-top:8px;font:800 12px system-ui}
+.sb{height:9px;border-radius:5px;background:#ffffff18;overflow:hidden}.sb span{display:block;height:100%;border-radius:5px}
+.stb2{font:900 11px system-ui;font-style:normal;background:#ffcc33;color:#3a1a00;border-radius:6px;padding:2px 6px;vertical-align:middle}
+@media (max-height:520px){.bio{padding:8px;gap:10px}.btx p{font-size:12px;line-height:1.35}.bimg img{max-height:48vh}.gt{width:56px}.gt img{height:40px}}
+@media (max-width:560px){.bio{flex-direction:column}.bimg{flex-basis:auto}.bimg img{max-height:30vh}}
 /*lang*/.lgs{display:flex;justify-content:center;gap:14px;margin-bottom:8px}
 .lg{border:none;background:none;padding:0;cursor:pointer;width:clamp(50px,8vh,66px);aspect-ratio:3/2;transform:perspective(200px) rotateY(-8deg);filter:drop-shadow(0 4px 6px #000a) saturate(.75) brightness(.8);opacity:.75;transition:transform .2s,filter .2s,opacity .2s;position:relative}
 .lg .fw{display:flex;width:100%;height:100%;border-radius:4px}
@@ -106,7 +121,7 @@ const overlay=document.getElementById('overlay'),card=document.getElementById('c
 
 let LANG='tr';try{const h=JSON.parse(localStorage.getItem('disfirlat2')||'{}');LANG=h.lang||(navigator.language||'tr').slice(0,2)}catch(e){}if(!['tr','de','en'].includes(LANG))LANG='en';
 const TX={
-tr:{round:'RAUND',frozen:'ZAMAN DURDU! ⏸',shaved:'SIFIR NUMARA! ✂️',heroP:'KAHRAMAN GÜCÜ',special:'⭐ ÖZEL' ,fight:'DÖVÜŞ!',won:'KAZANDI!',draw:'BERABERE!',combo:'KOMBO!',blk:'BLOK',ready:'HAZIR!',air:'HAVADA!',perfect:'PERFECT!',great:'GREAT!',timeup:'SÜRE BİTTİ!',fooled:'KANDIRILDI! 🤯',dizzy:'SERSEMLEDİ!',netted:'AĞA DÜŞTÜ!',sp:'ÖZEL',kick:'TEKME',block:'BLOK',punch:'YUMRUK',rot:'Telefonu yan çevir',rot2:'Oyun yatay ekranda oynanır',
+tr:{round:'RAUND',chars:'📖 KARAKTERLER',charsS:'Hikâyeleri ve güçleri',story:'HİKÂYESİ',power:'ÖZEL GÜCÜ',spd:'Hız',pow:'Güç',hp:'Can',playAs:'▶ BU KARAKTERLE OYNA',frozen:'ZAMAN DURDU! ⏸',shaved:'SIFIR NUMARA! ✂️',heroP:'KAHRAMAN GÜCÜ',special:'⭐ ÖZEL' ,fight:'DÖVÜŞ!',won:'KAZANDI!',draw:'BERABERE!',combo:'KOMBO!',blk:'BLOK',ready:'HAZIR!',air:'HAVADA!',perfect:'PERFECT!',great:'GREAT!',timeup:'SÜRE BİTTİ!',fooled:'KANDIRILDI! 🤯',dizzy:'SERSEMLEDİ!',netted:'AĞA DÜŞTÜ!',sp:'ÖZEL',kick:'TEKME',block:'BLOK',punch:'YUMRUK',rot:'Telefonu yan çevir',rot2:'Oyun yatay ekranda oynanır',
  sub:"Çaycuma'nın Kahramanı – Dövüş Oyunu",p1:'1 OYUNCU',p1s:'Bilgisayara karşı',p2:'2 OYUNCU',p2s:'Aynı cihazda karşılıklı',
  help:'10 karakter: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif, Berber Yusuf ve Kara Fırtına! Rakibi vur, <b>güç barını</b> doldur, sonra <b>özel hareketini</b> yap. Kombonun sonunda <b>tekme</b> rakibi havaya kaldırır – havadayken vurmaya devam et!<br>2 raundu kazanan şampiyon olur.<br><b>Klavye</b> – 1. oyuncu: A/D yürü · W zıpla · S blok · F yumruk · G tekme · H özel<br>2. oyuncu: ← → yürü · ↑ zıpla · ↓ blok · K yumruk · L tekme · J özel',
  how:'Nasıl oynamak istersin?',arc:'🏆 ARCADE',arcs:'Sırayla herkesi yen, sonda boss',free:'⚔️ SERBEST DÖVÜŞ',frees:'Kendini ve rakibini sen seç',surv:'❤️ HAYATTA KAL',survs:'Tek can – kaç rakip yenebilirsin?',prac:'🥋 ANTRENMAN',pracs:'Süre yok, rakip karşılık vermez',
@@ -119,7 +134,7 @@ tr:{round:'RAUND',frozen:'ZAMAN DURDU! ⏸',shaved:'SIFIR NUMARA! ✂️',heroP:
  survNext:'▶ SONRAKİ RAKİP',survEnd:n=>`Hayatta kalma bitti: ${n} rakip yendin!`,survBest:b=>`En iyi rekor: ${b}`,survWin:'Can biraz doldu, devam!',pracEnd:'ANTRENMANI BİTİR',
  lies:['Arkana bak, Musa geliyor!','Yerde 100 lira var!','Annen çağırıyor!','Araban çekiliyor!','Hoca seni arıyor!',"Çaycuma'da kar yağıyor!",'Ben hiç yenilmedim!','Ayakkabının bağı çözülmüş!'],
  arenas:['ÇAYCUMA · CUMHURİYET MEYDANI','FİLYOS SAHİLİ · ÇAYCUMA','ÇAYCUMA · AKŞAM ÜSTÜ']},
-de:{round:'RUNDE',frozen:'ZEIT GESTOPPT! ⏸',shaved:'NULLER-SCHNITT! ✂️',heroP:'HELDENKRAFT',special:'⭐ SPEZIAL' ,fight:'KAMPF!',won:'GEWINNT!',draw:'UNENTSCHIEDEN!',combo:'COMBO!',blk:'BLOCK',ready:'BEREIT!',air:'IN DER LUFT!',perfect:'PERFECT!',great:'GREAT!',timeup:'ZEIT UM!',fooled:'REINGELEGT! 🤯',dizzy:'BENOMMEN!',netted:'IM NETZ!',sp:'SPEZIAL',kick:'TRITT',block:'BLOCK',punch:'SCHLAG',rot:'Handy quer halten',rot2:'Das Spiel läuft im Querformat',
+de:{round:'RUNDE',chars:'📖 KÄMPFER',charsS:'Geschichten und Kräfte',story:'GESCHICHTE',power:'SPEZIALKRAFT',spd:'Tempo',pow:'Kraft',hp:'Leben',playAs:'▶ MIT DIESEM KÄMPFER SPIELEN',frozen:'ZEIT GESTOPPT! ⏸',shaved:'NULLER-SCHNITT! ✂️',heroP:'HELDENKRAFT',special:'⭐ SPEZIAL' ,fight:'KAMPF!',won:'GEWINNT!',draw:'UNENTSCHIEDEN!',combo:'COMBO!',blk:'BLOCK',ready:'BEREIT!',air:'IN DER LUFT!',perfect:'PERFECT!',great:'GREAT!',timeup:'ZEIT UM!',fooled:'REINGELEGT! 🤯',dizzy:'BENOMMEN!',netted:'IM NETZ!',sp:'SPEZIAL',kick:'TRITT',block:'BLOCK',punch:'SCHLAG',rot:'Handy quer halten',rot2:'Das Spiel läuft im Querformat',
  sub:'Der Held von Çaycuma – Kampfspiel',p1:'1 SPIELER',p1s:'Gegen den Computer',p2:'2 SPIELER',p2s:'Gegeneinander am selben Gerät',
  help:'10 Kämpfer: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif, Berber Yusuf und Kara Fırtına! Triff den Gegner, füll die <b>Kraftleiste</b> und mach deinen <b>Spezialangriff</b>. Ein <b>Tritt</b> am Ende einer Combo schleudert den Gegner hoch – schlag in der Luft weiter!<br>Wer 2 Runden gewinnt, ist Champion.<br><b>Tastatur</b> – Spieler 1: A/D laufen · W springen · S blocken · F Schlag · G Tritt · H Spezial<br>Spieler 2: ← → laufen · ↑ springen · ↓ blocken · K Schlag · L Tritt · J Spezial',
  how:'Wie willst du spielen?',arc:'🏆 ARCADE',arcs:'Besiege alle nacheinander, am Ende der Boss',free:'⚔️ FREIER KAMPF',frees:'Wähle dich und deinen Gegner',surv:'❤️ ÜBERLEBEN',survs:'Ein Leben – wie viele schaffst du?',prac:'🥋 TRAINING',pracs:'Keine Zeit, Gegner wehrt sich nicht',
@@ -132,7 +147,7 @@ de:{round:'RUNDE',frozen:'ZEIT GESTOPPT! ⏸',shaved:'NULLER-SCHNITT! ✂️',he
  survNext:'▶ NÄCHSTER GEGNER',survEnd:n=>`Überleben vorbei: ${n} Gegner besiegt!`,survBest:b=>`Rekord: ${b}`,survWin:'Etwas Leben zurück, weiter!',pracEnd:'TRAINING BEENDEN',
  lies:['Schau hinter dich, Musa kommt!','Da liegen 100 Lira!','Deine Mutter ruft!','Dein Auto wird abgeschleppt!','Der Hoca sucht dich!','In Çaycuma schneit es!','Ich hab noch nie verloren!','Dein Schuh ist offen!'],
  arenas:['ÇAYCUMA · REPUBLIKPLATZ','FİLYOS-STRAND · ÇAYCUMA','ÇAYCUMA · AM ABEND']},
-en:{round:'ROUND',frozen:'TIME STOPPED! ⏸',shaved:'ZERO CUT! ✂️',heroP:'HERO POWER',special:'⭐ SPECIAL' ,fight:'FIGHT!',won:'WINS!',draw:'DRAW!',combo:'COMBO!',blk:'BLOCK',ready:'READY!',air:'AIRBORNE!',perfect:'PERFECT!',great:'GREAT!',timeup:'TIME UP!',fooled:'FOOLED! 🤯',dizzy:'DIZZY!',netted:'NETTED!',sp:'SPECIAL',kick:'KICK',block:'BLOCK',punch:'PUNCH',rot:'Turn your phone sideways',rot2:'The game is played in landscape',
+en:{round:'ROUND',chars:'📖 FIGHTERS',charsS:'Stories and powers',story:'STORY',power:'SPECIAL POWER',spd:'Speed',pow:'Power',hp:'Health',playAs:'▶ PLAY AS THIS FIGHTER',frozen:'TIME STOPPED! ⏸',shaved:'ZERO CUT! ✂️',heroP:'HERO POWER',special:'⭐ SPECIAL' ,fight:'FIGHT!',won:'WINS!',draw:'DRAW!',combo:'COMBO!',blk:'BLOCK',ready:'READY!',air:'AIRBORNE!',perfect:'PERFECT!',great:'GREAT!',timeup:'TIME UP!',fooled:'FOOLED! 🤯',dizzy:'DIZZY!',netted:'NETTED!',sp:'SPECIAL',kick:'KICK',block:'BLOCK',punch:'PUNCH',rot:'Turn your phone sideways',rot2:'The game is played in landscape',
  sub:'The Hero of Çaycuma – Fighting Game',p1:'1 PLAYER',p1s:'Against the computer',p2:'2 PLAYERS',p2s:'Face to face on one device',
  help:'10 fighters: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif, Berber Yusuf and Kara Fırtına! Hit your rival, fill the <b>power bar</b>, then use your <b>special move</b>. A <b>kick</b> at the end of a combo launches the rival – keep hitting in the air!<br>Win 2 rounds to become champion.<br><b>Keyboard</b> – Player 1: A/D walk · W jump · S block · F punch · G kick · H special<br>Player 2: ← → walk · ↑ jump · ↓ block · K punch · L kick · J special',
  how:'How do you want to play?',arc:'🏆 ARCADE',arcs:'Beat everyone in a row, boss at the end',free:'⚔️ FREE FIGHT',frees:'Choose yourself and your rival',surv:'❤️ SURVIVAL',survs:'One life – how many can you beat?',prac:'🥋 PRACTICE',pracs:'No timer, rival does not fight back',
@@ -146,6 +161,41 @@ en:{round:'ROUND',frozen:'TIME STOPPED! ⏸',shaved:'ZERO CUT! ✂️',heroP:'HE
  lies:['Look behind you, Musa is coming!','There are 100 lira on the floor!','Your mum is calling!','Your car is being towed!','The Hoca is looking for you!',"It's snowing in Çaycuma!","I've never lost!",'Your shoelace is untied!'],
  arenas:['ÇAYCUMA · REPUBLIC SQUARE','FİLYOS BEACH · ÇAYCUMA','ÇAYCUMA · EVENING']}};
 const T=()=>TX[LANG];
+const BIO={
+tr:{
+ musa:["Çaycuma'nın kahramanı. Mahallede kim zor durumda kalsa ilk koşan odur. Koca yüreği, kocaman yumrukları ve yanından hiç ayrılmayan sevimli pandasıyla meydanı Kara Fırtına'ya karşı korur.","Panda Dalgası blokla durdurulamaz – ve Musa'nın canını 15 doldurur. Bu güç sadece kahramanda var!"],
+ cevat:["Ailenin büyüklerinden, herkesin saygı duyduğu Hoca. Sakin görünür ama dua okumaya başladığında meydanı altın bir ışık kaplar. Tecrübesi en büyük silahıdır.","'Sübhanallah! Allahu Ekber!' – ışık küresi rakibi uzun süre sersemletir, kafası döner, yıldızlar uçuşur."],
+ dursun:["Timur'un büyük babası, ailenin dev dedesi. Yaşına bakmayın: yere bir vurdu mu bütün Çaycuma sallanır. Yavaştır ama vuruşları en ağır olandır.","Dede Depremi: yerden kayalar fırlatır. Zıplayan rakibe işlemez – ama yerdekini fena sarsar."],
+ kemal:["Musa amcanın babası, dağların aslanı. Sert, inatçı ve çok güçlü. Bir kere hızlandı mı önünde kimse duramaz.","Dağ Yumruğu: rakibin üstüne fırtına gibi atılır, tek darbede büyük hasar verir."],
+ mevlut:["Affan ve Abdullah'ın babası. Kafası kel ama demir gibi sert – kafa atışından kimse kaçamaz. Sakin adamdır, sinirlenince dikkat!","Demir Kafa: havaya sıçrayıp kafasıyla rakibe dalar."],
+ timur:["Ailenin teknoloji ustası. Yanında uçan robotu Jarvis, kolunda neon ışıklar. Kaba kuvvet yerine aklını kullanır – ve kimsede olmayan bir gücü var.","Jarvis: Zaman Durdur – rakip donar ve maviye kesilir, Timur o sırada lazerle vurur. Bu güç sadece Timur'da var!"],
+ nazif:["Çaycuma'nın en usta avcısı. Sadık av köpeği hep yanında, yayı hep hazır. Sabırlıdır, avını kollar ve doğru anda tuzağı kurar.","Av Tuzağı: fırlattığı ağ rakibi yakalar, rakip bir süre kıpırdayamaz."],
+ abdullah:["Mevlüt'ün oğlu, Affan'ın kardeşi. Ailenin en tatlı dili, en büyük yalancısı! Öyle güzel yalan atar ki herkes inanır. 'Valla doğru abi!'","Yalan Atma: rakip yalana inanır, kafası karışır – sağ ve sol tuşları bir süre ters çalışır!"],
+ yusuf:["Çaycuma'nın usta berberi – özel karakter! Kel kafası parlar, gözlükleri hiç düşmez. Makası ve tıraş makinesi elinden eksik olmaz; koltuğa oturan sıfır numara kalkar.","Sıfır Numara: makaslarla 5 kez art arda vurur. Ayrıca yumruk atarken bazen Permatik fırlatır!"],
+ storm:["Gizemli kötü adam. Kara bulutlarla gelir, Çaycuma'yı karanlığa boğmak ister. Arcade modunun son boss'u – onu yenen gerçek şampiyondur.","Şimşek: gökten yıldırım indirir, uzaktan büyük hasar verir."]},
+de:{
+ musa:["Der Held von Çaycuma. Wenn jemand in Not ist, ist er als Erster da. Mit großem Herz, großen Fäusten und seinem treuen Panda beschützt er den Marktplatz vor Kara Fırtına.","Die Panda-Welle kann nicht geblockt werden – und heilt Musa um 15. Diese Kraft hat nur der Held!"],
+ cevat:["Der weise Hoca der Familie, von allen respektiert. Er wirkt ruhig, doch wenn er betet, erfüllt goldenes Licht den Platz. Erfahrung ist seine stärkste Waffe.","'Sübhanallah! Allahu Ekber!' – die Lichtkugel macht den Gegner lange benommen, Sterne kreisen um seinen Kopf."],
+ dursun:["Timurs Großvater, der Riesen-Opa der Familie. Lass dich vom Alter nicht täuschen: Schlägt er auf den Boden, bebt ganz Çaycuma. Langsam, aber mit den härtesten Schlägen.","Opa-Beben: schleudert Felsen über den Boden. Trifft keine springenden Gegner – aber alle am Boden."],
+ kemal:["Der Vater von Onkel Musa, der Löwe der Berge. Hart, stur und sehr stark. Wenn er einmal Anlauf nimmt, hält ihn niemand auf.","Bergfaust: stürmt wie ein Orkan auf den Gegner zu, riesiger Schaden mit einem Schlag."],
+ mevlut:["Vater von Affan und Abdullah. Glatze, aber hart wie Eisen – seinem Kopfstoß entkommt keiner. Ein ruhiger Mann – aber Vorsicht, wenn er wütend wird!","Eisenschädel: springt hoch und rammt den Gegner mit dem Kopf."],
+ timur:["Der Technik-Meister der Familie. Neben ihm schwebt sein Roboter Jarvis, an den Armen leuchten Neonlichter. Er nutzt Köpfchen statt Muskeln – und hat eine Kraft, die sonst niemand hat.","Jarvis-Zeitstopp: der Gegner erstarrt und wird blau, Timur trifft ihn mit dem Laser. Diese Kraft hat nur Timur!"],
+ nazif:["Der beste Jäger von Çaycuma. Sein treuer Jagdhund ist immer dabei, der Bogen immer bereit. Er ist geduldig, beobachtet seine Beute und stellt im richtigen Moment die Falle.","Jagdnetz: das Netz fängt den Gegner, der sich eine Weile nicht bewegen kann."],
+ abdullah:["Mevlüts Sohn, Affans Bruder. Der Charmeur der Familie – und der größte Lügner! Er lügt so gut, dass ihm jeder glaubt. 'Echt wahr, Abi!'","Lügen-Attacke: der Gegner glaubt die Lüge und ist verwirrt – links und rechts sind eine Weile vertauscht!"],
+ yusuf:["Der Meisterbarbier von Çaycuma – Spezialfigur! Die Glatze glänzt, die Brille sitzt immer. Schere und Haarschneider hat er immer in der Hand; wer sich in seinen Stuhl setzt, steht mit Nullerschnitt auf.","Nullerschnitt: 5 schnelle Treffer mit der Schere. Beim Schlagen wirft er manchmal eine Rasierklinge (Permatik)!"],
+ storm:["Der geheimnisvolle Bösewicht. Er kommt mit schwarzen Wolken und will Çaycuma in Dunkelheit stürzen. Endboss des Arcade-Modus – wer ihn besiegt, ist der wahre Champion.","Blitz: schleudert Blitze vom Himmel und trifft aus der Ferne."]},
+en:{
+ musa:["The hero of Çaycuma. Whenever someone is in trouble, he is the first to run in. With a big heart, big fists and his loyal panda, he protects the town square from Kara Fırtına.","The Panda Wave can't be blocked – and heals Musa by 15. Only the hero has this power!"],
+ cevat:["The family's wise Hoca, respected by everyone. He looks calm, but when he starts to pray, golden light fills the square. Experience is his strongest weapon.","'Sübhanallah! Allahu Ekber!' – the orb of light leaves the rival dizzy for a long time, stars spinning around his head."],
+ dursun:["Timur's grandfather, the family's giant grandpa. Don't be fooled by his age: when he hits the ground, all of Çaycuma shakes. Slow, but with the heaviest blows.","Grandpa Quake: sends rocks along the ground. Misses jumping rivals – but rocks anyone standing."],
+ kemal:["Uncle Musa's father, the lion of the mountains. Tough, stubborn and very strong. Once he gets going, nobody can stop him.","Mountain Fist: charges at the rival like a storm, huge damage in one hit."],
+ mevlut:["Father of Affan and Abdullah. Bald, but hard as iron – nobody escapes his headbutt. A calm man – but watch out when he gets angry!","Iron Head: leaps up and rams the rival head first."],
+ timur:["The family's tech master. His flying robot Jarvis hovers beside him, neon lights glow on his arms. He uses brains instead of brawn – and has a power nobody else has.","Jarvis Time Stop: the rival freezes and turns blue while Timur blasts him with the laser. Only Timur has this power!"],
+ nazif:["The best hunter in Çaycuma. His loyal hunting dog is always by his side, his bow always ready. Patient, he watches his prey and sets the trap at the perfect moment.","Hunter's Net: the net catches the rival, who can't move for a while."],
+ abdullah:["Mevlüt's son, Affan's brother. The family's smooth talker – and its biggest liar! He lies so well that everyone believes him. 'Totally true, bro!'","Big Fat Lie: the rival believes the lie and gets confused – left and right are swapped for a while!"],
+ yusuf:["Çaycuma's master barber – special character! His bald head shines, his glasses never slip. Scissors and clippers always in hand; whoever sits in his chair leaves with a zero cut.","Zero Cut: 5 rapid hits with the scissors. When punching he sometimes throws a razor blade (Permatik)!"],
+ storm:["The mysterious villain. He arrives with black clouds and wants to plunge Çaycuma into darkness. Final boss of Arcade mode – whoever beats him is the true champion.","Lightning: calls down bolts from the sky and hits from afar."]}};
+
 const RTX={de:{musa:['Held von Çaycuma','PANDA-WELLE'],cevat:['Hoca','ALLAHU EKBER'],dursun:['Riesen-Opa','OPA-BEBEN'],kemal:['Berglöwe','BERGFAUST'],mevlut:['Eisenschädel','EISENSCHÄDEL'],timur:['Technik-Meister','JARVIS-ZEITSTOPP'],nazif:['Meisterjäger','JAGDNETZ'],abdullah:['Meister der Lügen','LÜGEN-ATTACKE'],yusuf:['Meisterbarbier','NULLER-SCHNITT'],storm:['Sturm-Kapitän','BLITZ']},
  en:{musa:['Hero of Çaycuma','PANDA WAVE'],cevat:['Hoca','ALLAHU EKBER'],dursun:['Giant Grandpa','GRANDPA QUAKE'],kemal:['Mountain Lion','MOUNTAIN FIST'],mevlut:['Iron Head','IRON HEAD'],timur:['Tech Master','JARVIS TIME STOP'],nazif:['Master Hunter',"HUNTER'S NET"],abdullah:['Master of Lies','BIG FAT LIE'],yusuf:['Master Barber','ZERO CUT'],storm:['Storm Captain','LIGHTNING']}};
 const STX={de:{nazif:['Die Jagd beginnt!','Du entkommst nicht!'],abdullah:['Vertrau mir, Abi!','Ich schwöre!','Echt wahr!'],yusuf:['Nullerschnitt kommt!','Setz dich in den Stuhl!']},en:{nazif:['The hunt begins!',"You can't escape!"],abdullah:['Trust me, bro!','I swear!','Totally true!'],yusuf:['Zero cut incoming!','Take a seat!']}};
@@ -158,9 +208,22 @@ const ROSTER=[
  {kind:'timur',name:'TİMUR',tag:'Teknoloji Ustası',sp:'JARVIS: ZAMAN DURDUR',spType:'proj',proj:'fx_laser',freeze:130,pw:170,bar:'#2fe6ff',spd:1.15,pow:.95,hp:96,spark:'#9ff6ff'},
   {kind:'nazif',name:'AVCI NAZİF',tag:'Usta Avcı',sp:'AV TUZAĞI',spType:'net',bar:'#a8d66b',spd:1.1,pow:1,hp:102,spark:'#e8f5c8',spDmg:12,shout:['Av başladı!','Kaçamazsın!']},
  {kind:'abdullah',name:'ABDULLAH',tag:'Yalan Ustası',sp:'YALAN ATMA',spType:'lie',bar:'#7fd8ff',spd:1.2,pow:.92,hp:95,spark:'#c8f2ff',spDmg:10,shout:['Bana güven abi!','Yemin ederim!','Valla doğru!']},
- {kind:'yusuf',name:'BERBER YUSUF',tag:'Usta Berber',sp:'SIFIR NUMARA',spType:'dash',multi:5,star:1,razor:.3,bar:'#e6e6e6',spd:1.12,pow:1.08,hp:108,spark:'#ffffff',shout:['Sıfır numara geliyor!','Otur bakalım koltuğa!']},
+ {kind:'yusuf',name:'BERBER YUSUF',tag:'Usta Berber',sp:'SIFIR NUMARA',spType:'dash',multi:5,star:1,bar:'#e6e6e6',spd:1.12,pow:1.08,hp:108,spark:'#ffffff',shout:['Sıfır numara geliyor!','Otur bakalım koltuğa!']},
  {kind:'storm',name:'KARA FIRTINA',tag:'Fırtına Kaptanı',sp:'ŞİMŞEK',spType:'proj',proj:'fx_bolt',pw:170,flip:true,bar:'#ffd84a',comp:'fx_cloud',spd:1,pow:1,hp:100,spark:'#ffe066'}
 ];
+const MOVES={
+ musa:{punch:{ic:'🐼',n:['PANDA PENÇESİ','PANDA-PRANKE','PANDA PAW'],dmg:7},kick:{ic:'🌊',n:['DALGA TEKME','WELLENTRITT','WAVE KICK'],dmg:11}},
+ cevat:{punch:{ic:'🪄',n:['ASA','STAB','STAFF'],range:185,dmg:7},kick:{ic:'✨',n:['NUR TOPU','LICHTKUGEL','LIGHT ORB'],shot:'orb',dmg:6}},
+ dursun:{punch:{ic:'🔨',n:['ÇEKİÇ','HAMMER','HAMMER'],range:175,dmg:9},kick:{ic:'🦶',n:['DEV ADIM','RIESENTRITT','GIANT STOMP'],dmg:12}},
+ kemal:{punch:{ic:'🦁',n:['ASLAN PENÇESİ','LÖWENPRANKE','LION CLAW'],dmg:8},kick:{ic:'⛰️',n:['DAĞ TEKMESİ','BERGTRITT','MOUNTAIN KICK'],dmg:12}},
+ mevlut:{punch:{ic:'👊',n:['DEMİR YUMRUK','EISENFAUST','IRON FIST'],dmg:7},kick:{ic:'💥',n:['KAFA ATMA','KOPFSTOSS','HEADBUTT'],range:150,dmg:12}},
+ timur:{punch:{ic:'⚡',n:['NEON YUMRUK','NEON-FAUST','NEON PUNCH'],range:185,dmg:6},kick:{ic:'🤖',n:['JARVIS ATIŞI','JARVIS-SCHUSS','JARVIS SHOT'],shot:'bolt',dmg:6}},
+ nazif:{punch:{ic:'🏹',n:['OK AT','PFEIL','ARROW'],shot:'arrow',dmg:7},kick:{ic:'🐕',n:['AV TEKMESİ','JAGDTRITT','HUNTER KICK'],dmg:10}},
+ abdullah:{punch:{ic:'🤜',n:['HIZLI YUMRUK','SCHNELLE FAUST','QUICK JAB'],dmg:6},kick:{ic:'🌪️',n:['KASIRGA TEKME','WIRBELTRITT','WHIRL KICK'],range:185,dmg:10}},
+ yusuf:{punch:{ic:'✂️',n:['MAKAS','SCHERE','SCISSORS'],range:180,dmg:7},kick:{ic:'🪒',n:['PERMATİK','RASIERKLINGE','RAZOR'],shot:'razor',dmg:6}},
+ storm:{punch:{ic:'⚡',n:['ŞİMŞEK ELİ','BLITZHAND','THUNDER HAND'],range:170,dmg:7},kick:{ic:'🌩️',n:['FIRTINA TEKME','STURMTRITT','STORM KICK'],dmg:11}}};
+const MV=(f,t)=>MOVES[f.look.kind]&&MOVES[f.look.kind][t];
+const MVN=(k,t)=>{const m=MOVES[k]&&MOVES[k][t];return m?m.n[{tr:0,de:1,en:2}[LANG]]:T()[t]};
 const RK=k=>ROSTER.find(r=>r.kind===k);
 ROSTER.forEach(r=>r.tr={tag:r.tag,sp:r.sp,shout:r.shout});
 function applyLang(){ROSTER.forEach(r=>{const x=RTX[LANG]&&RTX[LANG][r.kind];r.tag=x?x[0]:r.tr.tag;r.sp=x?x[1]:r.tr.sp;const sh=STX[LANG]&&STX[LANG][r.kind];r.shout=sh||r.tr.shout});document.documentElement.lang=LANG;
@@ -202,7 +265,7 @@ function sfx(type){
 /* ---------- Fighters ---------- */
 function newFighter(look,x,facing){return{look,x,y:GROUND,vx:0,vy:0,facing,hp:look.hp,maxhp:look.hp,meter:0,state:'idle',t:0,atk:null,atkT:0,hitDone:false,stun:0,walk:0,wins:0,flash:0,ghost:look.hp,ghostT:0,combo:0,comboT:0}}
 
-function startAtk(f,type){f.atk=type;f.atkT=0;f.hitDone=false;f.state=type;if(type!=='special')sfx('whoosh')}
+function startAtk(f,type){const mv=MV(f,type);if(mv&&mv.shot&&f.cd>0)return;f.atk=type;f.atkT=0;f.hitDone=false;f.state=type;if(type!=='special')sfx('whoosh')}
 
 function damage(o,d,dir,push,att){
  if(o.state==='ko'||game.state!=='fight')return;
@@ -221,6 +284,7 @@ function damage(o,d,dir,push,att){
 }
 
 function update(f,inp,pin,o){
+ if(f.cd>0)f.cd--;
  if(f.frozen>0){f.frozen--;if(f.flash>0)f.flash--;return}
  if(f.confused>0){f.confused--;inp={...inp,left:inp.right,right:inp.left}}
  const onG=f.y>=GROUND;
@@ -232,9 +296,11 @@ function update(f,inp,pin,o){
   if(inp.punch&&!pin.punch){startAtk(f,'punch')}else if(inp.kick&&!pin.kick){startAtk(f,'kick')}}
  if(f.atk){
   const a=ATK[f.atk];f.atkT++;
+  const mv=f.atk!=='special'?MV(f,f.atk):null;
+  if(mv&&mv.shot&&f.atkT===a.start){f.hitDone=true;f.cd=42;proj.push({x:f.x+f.facing*95,y:f.y-(mv.shot==='arrow'?190:mv.shot==='bolt'?250:200),vx:f.facing*(mv.shot==='arrow'?16:13),owner:f,kind:mv.shot,t:0,razor:1,shot:mv.shot,dmg:mv.dmg*f.look.pow});sfx('whoosh')}
   if(f.atk!=='special'&&!f.hitDone&&f.atkT>a.start&&f.atkT<=a.start+a.active){
-   const dx=(o.x-f.x)*f.facing,dy=Math.abs(o.y-f.y);
-   if(dx>0&&dx<a.range&&dy<115){f.hitDone=true;damage(o,a.dmg*f.look.pow,f.facing,a.push,f);spark(f.x+f.facing*a.range*.8,f.y-(f.atk==='kick'?170:185),'#fff3a0',10)}
+   const dx=(o.x-f.x)*f.facing,dy=Math.abs(o.y-f.y),rg=(mv&&mv.range)||a.range;
+   if(dx>0&&dx<rg&&dy<115){f.hitDone=true;damage(o,((mv&&mv.dmg)||a.dmg)*f.look.pow,f.facing,a.push,f);spark(f.x+f.facing*rg*.8,f.y-(f.atk==='kick'?170:185),mv&&mv.ic==='⚡'?'#7ff6ff':'#fff3a0',mv&&mv.range?16:10)}
   }
   if(f.atk==='special'&&f.atkT===a.start&&f.look.spType!=='dash')fire(f);
   if(f.atk==='punch'&&f.atkT===a.start&&f.look.razor&&Math.random()<f.look.razor){proj.push({x:f.x+f.facing*90,y:f.y-195,vx:f.facing*12,owner:f,kind:'razor',t:0,razor:1,dmg:5});pop(f.x,f.y-330,'PERMATİK!','#dfe6ee',true)}
@@ -438,6 +504,10 @@ function drawFighter(f){
 }
 function drawProj(p){
  const L=p.owner.look;
+ if(p.shot==='arrow'){ctx.save();ctx.translate(p.x,p.y);ctx.scale(Math.sign(p.vx),1);ctx.strokeStyle='#6b4423';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-46,0);ctx.lineTo(18,0);ctx.stroke();
+  ctx.fillStyle='#cfd6dd';ctx.beginPath();ctx.moveTo(30,0);ctx.lineTo(16,-7);ctx.lineTo(16,7);ctx.fill();ctx.fillStyle='#d94a3a';ctx.beginPath();ctx.moveTo(-46,0);ctx.lineTo(-58,-8);ctx.lineTo(-40,0);ctx.lineTo(-58,8);ctx.fill();ctx.restore();return}
+ if(p.shot==='bolt'){ctx.save();ctx.shadowColor='#2fe6ff';ctx.shadowBlur=16;ctx.strokeStyle='#bffaff';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(p.x-Math.sign(p.vx)*40,p.y);ctx.lineTo(p.x+Math.sign(p.vx)*10,p.y);ctx.stroke();ctx.restore();circ(p.x,p.y,6,'#e8feff');return}
+ if(p.shot==='orb'){ctx.save();const g=ctx.createRadialGradient(p.x,p.y,2,p.x,p.y,24);g.addColorStop(0,'#fffbe0');g.addColorStop(.5,'#ffd86baa');g.addColorStop(1,'#ffd86b00');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,24+Math.sin(p.t*.5)*3,0,7);ctx.fill();ctx.restore();return}
  if(p.razor){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.t*.55);ctx.shadowColor='#fff';ctx.shadowBlur=10;
   const g=ctx.createLinearGradient(-22,-12,22,12);g.addColorStop(0,'#f4f7fb');g.addColorStop(.5,'#9aa6b4');g.addColorStop(1,'#e8edf3');
   ctx.fillStyle=g;rr(-22,-11,44,22,3,g);ctx.fillStyle='#2d3440';rr(-12,-3,24,6,3,'#2d3440');ctx.fillRect(-3,-7,6,14);
@@ -555,7 +625,7 @@ function joy(p){
 }
 function cluster(p){
  const c=document.createElement('div');c.className='clu';
- [btn(p,'special',SPI[PICK[p]],'sp',T().sp),btn(p,'kick','🦵','atk',T().kick),btn(p,'block','🛡','',T().block),btn(p,'punch','👊','atk big',T().punch)].forEach(b=>c.appendChild(b));
+ [btn(p,'special',SPI[PICK[p]],'sp',T().sp),btn(p,'kick',(MV({look:RK(PICK[p])},'kick')||{ic:'🦵'}).ic,'atk',MVN(PICK[p],'kick')),btn(p,'block','🛡','',T().block),btn(p,'punch',(MV({look:RK(PICK[p])},'punch')||{ic:'👊'}).ic,'atk big',MVN(PICK[p],'punch'))].forEach(b=>c.appendChild(b));
  return c;
 }
 function buildControls(){
@@ -601,11 +671,28 @@ function menu(){
  <div class="hero"><img src="musa/musa_win.webp" alt=""><span class="vs">VS</span><img src="musa/storm_idle.webp" style="transform:scaleX(-1)" alt=""></div><h1>MUSA</h1><h2>${t.sub}</h2>
  <div id="ov2"><button class="big alt" id="m1">${t.p1}<br><small style="font-weight:600;font-size:13px">${t.p1s}</small></button>
  <button class="big" id="m2">${t.p2}<br><small style="font-weight:600;font-size:13px">${t.p2s}</small></button></div>
+ <button class="big" id="m3" style="background:linear-gradient(#5b3a8e,#2d1b4e)">${t.chars}<br><small style="font-weight:600;font-size:13px">${t.charsS}</small></button>
  <div class="help">${t.help}</div>
  <a class="big" style="text-decoration:none;background:#ffffff1a;box-shadow:none" href="index.html">🏠 BUKO GAMES</a>`;
  card.querySelectorAll('.lg').forEach(b=>b.onclick=()=>{setLang(b.dataset.l);menu()});
- document.getElementById('m1').onclick=mode1;
+ document.getElementById('m1').onclick=mode1;document.getElementById('m3').onclick=()=>gallery();
  document.getElementById('m2').onclick=()=>pick(0,t.pick1,k=>{PICK[0]=k;pick(1,t.pick2,k2=>{PICK[1]=k2;start(2)},false,menu)});
+}
+function gallery(sel){
+ const t=T();card.classList.add('wide');sel=sel||'musa';
+ const r=RK(sel),b=BIO[LANG][sel],bar=(v,mx,c)=>`<span class="sb"><span style="width:${Math.min(100,v/mx*100)}%;background:${c}"></span></span>`;
+ card.innerHTML=`<h1 style="font-size:clamp(22px,min(6vw,8vh),40px);margin:0 0 6px">${t.chars}</h1>
+ <div class="gal">${ROSTER.map(x=>`<button class="gt${x.kind===sel?' on':''}${x.star?' star':''}" data-g="${x.kind}" style="--c:${x.bar}"><img src="musa/${x.kind}_idle.webp" alt=""><b>${x.name}</b></button>`).join('')}</div>
+ <div class="bio" style="--c:${r.bar}"><div class="bimg"><img src="musa/${r.kind}_win.webp" alt=""><span class="bem">${SPI[r.kind]}</span></div>
+ <div class="btx"><h3 style="color:${r.bar}">${r.name}${r.star?` <em class="stb2">${t.special}</em>`:''}</h3><div class="btag">${r.tag}</div>
+ <div class="bh">${t.story}</div><p>${b[0]}</p>
+ <div class="bmv"><span>${(MOVES[sel].punch).ic} ${MVN(sel,'punch')}</span><span>${(MOVES[sel].kick).ic} ${MVN(sel,'kick')}</span><span>${SPI[sel]} ${r.sp}</span></div><div class="bh">${t.power}: <span style="color:${r.bar}">${r.sp}</span></div><p>${b[1]}</p>
+ <div class="bst"><label>⚡ ${t.spd}</label>${bar(r.spd,1.25,'#5fd0ff')}<label>💪 ${t.pow}</label>${bar(r.pow,1.3,'#ff7a4a')}<label>❤️ ${t.hp}</label>${bar(r.hp,120,'#7dff8a')}</div></div></div>
+ <button class="big alt" id="gp" style="padding:10px">${t.playAs}</button><button class="big" style="background:#ffffff1a;box-shadow:none;padding:10px" id="bk">${t.back}</button>`;
+ card.querySelectorAll('.gt').forEach(x=>x.onclick=()=>{sfx('whoosh');gallery(x.dataset.g)});
+ document.getElementById('gp').onclick=()=>{PICK[0]=sel;pick(1,t.pickOpp,k2=>{PICK[1]=k2;game.arc=game.surv=null;game.prac=false;diff()},true,()=>gallery(sel))};
+ document.getElementById('bk').onclick=()=>{card.classList.remove('wide');menu()};
+ overlay.scrollTop=0;
 }
 function mode1(){
  card.classList.remove('wide');const t=T();
