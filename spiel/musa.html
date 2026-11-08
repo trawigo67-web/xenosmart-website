@@ -719,7 +719,7 @@ const FLAGS={
 function flagSVG(k){const u="url('data:image/svg+xml,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" width="600" height="400">${FLAGS[k]}</svg>`).replace(/'/g,'%27')+"')",N=24;
  return `<span class="fw">${Array.from({length:N},(_,i)=>`<i style="background-image:${u};background-size:${N*100}% 100%;background-position:${i/(N-1)*100}% 0;animation-delay:${(-i*0.065).toFixed(2)}s"></i>`).join('')}</span>`}
 function menu(){
- game.state='menu';game.arc=game.surv=null;game.prac=false;overlay.classList.remove('hidden');document.body.classList.add('menu');card.classList.remove('wide');setTimeout(layout,0);
+ game.state='menu';window.setTrack&&window.setTrack(RAP,.34);game.arc=game.surv=null;game.prac=false;overlay.classList.remove('hidden');document.body.classList.add('menu');card.classList.remove('wide');setTimeout(layout,0);
  const t=T(),FN={tr:'Türkçe',de:'Deutsch',en:'English'};
  card.innerHTML=`<div class="lgs">${Object.keys(FN).map(k=>`<button class="lg${k===LANG?' sel':''}" data-l="${k}" title="${FN[k]}" aria-label="${FN[k]}">${flagSVG(k)}</button>`).join('')}</div>
  <div class="hero"><img src="musa/musa_win.webp" alt=""><span class="vs">VS</span><img src="musa/storm_idle.webp" style="transform:scaleX(-1)" alt=""></div><h1>MUSA</h1><h2>${t.sub}</h2>
@@ -810,7 +810,7 @@ function start(mode){card.classList.remove('wide');goLandscape();
  if(mode===2){game.arc=game.surv=null;game.prac=false}
  if(game.arc)game.stage=game.arc.i===game.arc.list.length-1?'fightclub':ARC_ST[game.arc.i%ARC_ST.length];else if(game.surv)game.stage=STK[Math.random()*STK.length|0];
  bgI(STG[game.stage].bg);
- game.mode=mode;game.need=game.surv?1:2;game.round=1;P=[];overlay.classList.add('hidden');document.body.classList.remove('menu');window.musaMusic&&window.musaMusic();
+ game.mode=mode;game.need=game.surv?1:2;game.round=1;P=[];overlay.classList.add('hidden');document.body.classList.remove('menu');window.setTrack('musa-music.mp3',.28);
  game.state='vs';vsScreen(()=>{buildControls();startRound();layout()});
 }
 function matchEnd(){
@@ -842,6 +842,9 @@ function matchEnd(){
 const snd=document.getElementById('snd');const si=()=>snd.textContent=MUTE?'🔇':'🔊';si();
 const bgm=document.getElementById('bgm');bgm.volume=0.28;
 window.musaMusic=()=>{if(MUTE){bgm.pause();return}const pr=bgm.play();pr&&pr.catch(()=>{})};
+let RAP='rap'+(1+(Math.random()*2|0))+'.mp3',userTap=false;
+window.setTrack=(f,vol)=>{if(!bgm.src.endsWith('musa/'+f)){bgm.src='musa/'+f;}bgm.volume=vol;if(userTap)window.musaMusic()};
+addEventListener('pointerdown',()=>{if(userTap)return;userTap=true;if(game.state==='menu'||game.state==='over')window.setTrack(RAP,.34);window.musaMusic()},{once:true});
 snd.onclick=()=>{MUTE=!MUTE;try{localStorage.setItem('musaMute',MUTE?'1':'0')}catch(e){}si();window.musaMusic()};
 menu();layout();requestAnimationFrame(loop);
 })();

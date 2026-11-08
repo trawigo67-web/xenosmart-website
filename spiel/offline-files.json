@@ -1,5 +1,5 @@
 {
- "v": "buko-v14",
+ "v": "buko-v15",
  "files": [
   "./",
   "1453/",
@@ -219,6 +219,8 @@
   "musa/bg_yenikoy.jpg",
   "musa/bg_yenikoy_t.jpg",
   "musa/bg_zonguldak.jpg",
-  "musa/bg_zonguldak_t.jpg"
+  "musa/bg_zonguldak_t.jpg",
+  "musa/rap1.mp3",
+  "musa/rap2.mp3"
  ]
 }
