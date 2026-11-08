@@ -1,5 +1,5 @@
 {
- "v": "buko-v5",
+ "v": "buko-v6",
  "files": [
   "./",
   "1453/",
@@ -128,6 +128,14 @@
   "musa/timur_punch.webp",
   "musa/timur_special.webp",
   "musa/timur_walk.webp",
-  "musa/timur_win.webp"
+  "musa/timur_win.webp",
+  "musa/yusuf_block.webp",
+  "musa/yusuf_hit.webp",
+  "musa/yusuf_idle.webp",
+  "musa/yusuf_kick.webp",
+  "musa/yusuf_punch.webp",
+  "musa/yusuf_special.webp",
+  "musa/yusuf_walk.webp",
+  "musa/yusuf_win.webp"
  ]
 }

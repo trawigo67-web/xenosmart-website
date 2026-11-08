@@ -44,14 +44,23 @@ canvas{display:block;width:100%;height:100%}
 .card{max-width:520px;width:100%;text-align:center;margin:auto}
 body.menu #tb{display:none}
 .card.wide{max-width:760px}
-.roster{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}@media (min-width:700px){.roster{grid-template-columns:repeat(5,1fr)}}
+.roster{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}@media (min-width:700px){.roster{grid-template-columns:repeat(5,1fr)}}@media (max-height:520px){.stb{font-size:8px;padding:1px 3px}}
 .rc{min-width:0;position:relative;background:linear-gradient(#ffffff1c,#ffffff08);border:2px solid #ffffff22;border-radius:14px;padding:6px 4px 6px;cursor:pointer;color:#fff;font:inherit;display:flex;flex-direction:column;align-items:center}
 .rc img{height:min(16vh,110px);width:100%;object-fit:contain;filter:drop-shadow(0 4px 8px #000a)}
 .rc b{font-size:12px;letter-spacing:.5px;margin-top:3px;white-space:nowrap}.rc i{font-size:10px;opacity:.75;font-style:normal}
 .rc .st{display:flex;gap:3px;margin-top:3px;font-size:9px;opacity:.85}
 .rc.taken{opacity:.45}.rc:active{transform:scale(.96)}
 .pk{font-weight:800;color:#ffcc33;margin:4px 0}
-/*lang*/.lgs{display:flex;justify-content:center;gap:6px;margin-bottom:6px}.lg{border:none;border-radius:999px;padding:5px 11px;font:800 12px system-ui;background:#ffffff1a;color:#fff;cursor:pointer}.lg.sel{background:#ffcc33;color:#3a1a00}
+.rc.star{border-color:#ffcc33!important;box-shadow:0 0 14px #ffcc3388,inset 0 0 18px #ffcc3333;position:relative}.stb{position:absolute;top:4px;right:4px;font:900 10px system-ui;font-style:normal;background:#ffcc33;color:#3a1a00;border-radius:6px;padding:2px 5px}
+/*lang*/.lgs{display:flex;justify-content:center;gap:14px;margin-bottom:8px}
+.lg{border:none;background:none;padding:0;cursor:pointer;width:clamp(50px,8vh,66px);aspect-ratio:3/2;transform:perspective(200px) rotateY(-8deg);filter:drop-shadow(0 4px 6px #000a) saturate(.75) brightness(.8);opacity:.75;transition:transform .2s,filter .2s,opacity .2s;position:relative}
+.lg .fw{display:flex;width:100%;height:100%;border-radius:4px}
+.lg .fw i{flex:1;height:100%;background-repeat:no-repeat;animation:fwave 1.6s ease-in-out infinite;will-change:transform}
+.lg .fw i:first-child{border-radius:4px 0 0 4px}.lg .fw i:last-child{border-radius:0 4px 4px 0}
+@keyframes fwave{0%,100%{transform:translateY(-2.5px) scaleY(1.02);filter:brightness(1.12)}50%{transform:translateY(2.5px) scaleY(.97);filter:brightness(.82)}}
+.lg.sel{opacity:1;filter:drop-shadow(0 0 7px #ffcc33) drop-shadow(0 4px 6px #000a);transform:perspective(200px) rotateY(-8deg) scale(1.18)}
+.lg.sel::after{content:'';position:absolute;left:20%;right:20%;bottom:-7px;height:3px;border-radius:2px;background:#ffcc33}
+.lg:active{transform:scale(.92)}
 #vsx{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%,#3a1500,#0b0710 70%);overflow:hidden;cursor:pointer}
 #vsx .sd{position:absolute;top:0;bottom:0;width:50%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:6vh}
 #vsx .l{left:0;background:linear-gradient(100deg,#1f6fd055,transparent 70%);animation:inL .45s ease-out}
@@ -63,7 +72,7 @@ body.menu #tb{display:none}
 #vsx .st{position:absolute;top:4vh;left:0;right:0;text-align:center;font:900 clamp(16px,4vh,30px) system-ui;color:#fff;text-shadow:0 2px 0 #000}
 @keyframes inL{from{transform:translateX(-60%);opacity:0}}@keyframes inR{from{transform:translateX(60%);opacity:0}}@keyframes pop{from{transform:scale(3);opacity:0}}
 .lad{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin:6px 0}.lad img{height:44px;border-radius:8px;background:#ffffff14;padding:2px}.lad .dn{opacity:.35;filter:grayscale(1)}.lad .cu{outline:3px solid #ffcc33}
-@media (max-height:520px){.roster{grid-template-columns:repeat(9,minmax(0,1fr));gap:5px}.rc i{display:none}.rc b{font-size:10px;white-space:normal;line-height:1.1}.rc img{height:26vh}.rc .st{display:none}}
+@media (max-height:520px){.roster{grid-template-columns:repeat(10,minmax(0,1fr));gap:5px}.rc i{display:none}.rc b{font-size:10px;white-space:normal;line-height:1.1}.rc img{height:26vh}.rc .st{display:none}}
 .card h1{margin:0;font-size:clamp(30px,min(9vw,11vh),64px);letter-spacing:3px;color:#ff9a3c;text-shadow:0 4px 0 #7a2f00,0 0 30px #ff8a2a88}
 .card h2{margin:4px 0 18px;font-size:clamp(14px,4vw,20px);font-weight:600;color:#bcd6ff}
 .big{display:block;width:100%;margin:10px 0;padding:16px;border:none;border-radius:14px;font-size:19px;font-weight:800;color:#fff;background:linear-gradient(#2a4a9a,#1b2b55);box-shadow:0 4px 0 #0c1530;cursor:pointer}
@@ -97,9 +106,9 @@ const overlay=document.getElementById('overlay'),card=document.getElementById('c
 
 let LANG='tr';try{const h=JSON.parse(localStorage.getItem('disfirlat2')||'{}');LANG=h.lang||(navigator.language||'tr').slice(0,2)}catch(e){}if(!['tr','de','en'].includes(LANG))LANG='en';
 const TX={
-tr:{round:'RAUND',fight:'DÖVÜŞ!',won:'KAZANDI!',draw:'BERABERE!',combo:'KOMBO!',blk:'BLOK',ready:'HAZIR!',air:'HAVADA!',perfect:'PERFECT!',great:'GREAT!',timeup:'SÜRE BİTTİ!',fooled:'KANDIRILDI! 🤯',dizzy:'SERSEMLEDİ!',netted:'AĞA DÜŞTÜ!',sp:'ÖZEL',kick:'TEKME',block:'BLOK',punch:'YUMRUK',rot:'Telefonu yan çevir',rot2:'Oyun yatay ekranda oynanır',
+tr:{round:'RAUND',frozen:'ZAMAN DURDU! ⏸',shaved:'SIFIR NUMARA! ✂️',heroP:'KAHRAMAN GÜCÜ',special:'⭐ ÖZEL' ,fight:'DÖVÜŞ!',won:'KAZANDI!',draw:'BERABERE!',combo:'KOMBO!',blk:'BLOK',ready:'HAZIR!',air:'HAVADA!',perfect:'PERFECT!',great:'GREAT!',timeup:'SÜRE BİTTİ!',fooled:'KANDIRILDI! 🤯',dizzy:'SERSEMLEDİ!',netted:'AĞA DÜŞTÜ!',sp:'ÖZEL',kick:'TEKME',block:'BLOK',punch:'YUMRUK',rot:'Telefonu yan çevir',rot2:'Oyun yatay ekranda oynanır',
  sub:"Çaycuma'nın Kahramanı – Dövüş Oyunu",p1:'1 OYUNCU',p1s:'Bilgisayara karşı',p2:'2 OYUNCU',p2s:'Aynı cihazda karşılıklı',
- help:'9 karakter: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif ve Kara Fırtına! Rakibi vur, <b>güç barını</b> doldur, sonra <b>özel hareketini</b> yap. Kombonun sonunda <b>tekme</b> rakibi havaya kaldırır – havadayken vurmaya devam et!<br>2 raundu kazanan şampiyon olur.<br><b>Klavye</b> – 1. oyuncu: A/D yürü · W zıpla · S blok · F yumruk · G tekme · H özel<br>2. oyuncu: ← → yürü · ↑ zıpla · ↓ blok · K yumruk · L tekme · J özel',
+ help:'10 karakter: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif, Berber Yusuf ve Kara Fırtına! Rakibi vur, <b>güç barını</b> doldur, sonra <b>özel hareketini</b> yap. Kombonun sonunda <b>tekme</b> rakibi havaya kaldırır – havadayken vurmaya devam et!<br>2 raundu kazanan şampiyon olur.<br><b>Klavye</b> – 1. oyuncu: A/D yürü · W zıpla · S blok · F yumruk · G tekme · H özel<br>2. oyuncu: ← → yürü · ↑ zıpla · ↓ blok · K yumruk · L tekme · J özel',
  how:'Nasıl oynamak istersin?',arc:'🏆 ARCADE',arcs:'Sırayla herkesi yen, sonda boss',free:'⚔️ SERBEST DÖVÜŞ',frees:'Kendini ve rakibini sen seç',surv:'❤️ HAYATTA KAL',survs:'Tek can – kaç rakip yenebilirsin?',prac:'🥋 ANTRENMAN',pracs:'Süre yok, rakip karşılık vermez',
  pickMe:'KARAKTERİNİ SEÇ',pickOpp:'RAKİBİNİ SEÇ',pick1:'1. OYUNCU SEÇSİN',pick2:'2. OYUNCU SEÇSİN',p1is:'1. oyuncu: ',rnd:'🎲 RASTGELE RAKİP',back:'← GERİ',
  diff:'ZORLUK',diffQ:'bilgisayar ne kadar güçlü olsun?',easy:'🙂 KOLAY',mid:'😤 ORTA',hard:'🔥 ZOR',ladderTxt:n=>n+' rakibi sırayla yen!',
@@ -110,9 +119,9 @@ tr:{round:'RAUND',fight:'DÖVÜŞ!',won:'KAZANDI!',draw:'BERABERE!',combo:'KOMBO
  survNext:'▶ SONRAKİ RAKİP',survEnd:n=>`Hayatta kalma bitti: ${n} rakip yendin!`,survBest:b=>`En iyi rekor: ${b}`,survWin:'Can biraz doldu, devam!',pracEnd:'ANTRENMANI BİTİR',
  lies:['Arkana bak, Musa geliyor!','Yerde 100 lira var!','Annen çağırıyor!','Araban çekiliyor!','Hoca seni arıyor!',"Çaycuma'da kar yağıyor!",'Ben hiç yenilmedim!','Ayakkabının bağı çözülmüş!'],
  arenas:['ÇAYCUMA · CUMHURİYET MEYDANI','FİLYOS SAHİLİ · ÇAYCUMA','ÇAYCUMA · AKŞAM ÜSTÜ']},
-de:{round:'RUNDE',fight:'KAMPF!',won:'GEWINNT!',draw:'UNENTSCHIEDEN!',combo:'COMBO!',blk:'BLOCK',ready:'BEREIT!',air:'IN DER LUFT!',perfect:'PERFECT!',great:'GREAT!',timeup:'ZEIT UM!',fooled:'REINGELEGT! 🤯',dizzy:'BENOMMEN!',netted:'IM NETZ!',sp:'SPEZIAL',kick:'TRITT',block:'BLOCK',punch:'SCHLAG',rot:'Handy quer halten',rot2:'Das Spiel läuft im Querformat',
+de:{round:'RUNDE',frozen:'ZEIT GESTOPPT! ⏸',shaved:'NULLER-SCHNITT! ✂️',heroP:'HELDENKRAFT',special:'⭐ SPEZIAL' ,fight:'KAMPF!',won:'GEWINNT!',draw:'UNENTSCHIEDEN!',combo:'COMBO!',blk:'BLOCK',ready:'BEREIT!',air:'IN DER LUFT!',perfect:'PERFECT!',great:'GREAT!',timeup:'ZEIT UM!',fooled:'REINGELEGT! 🤯',dizzy:'BENOMMEN!',netted:'IM NETZ!',sp:'SPEZIAL',kick:'TRITT',block:'BLOCK',punch:'SCHLAG',rot:'Handy quer halten',rot2:'Das Spiel läuft im Querformat',
  sub:'Der Held von Çaycuma – Kampfspiel',p1:'1 SPIELER',p1s:'Gegen den Computer',p2:'2 SPIELER',p2s:'Gegeneinander am selben Gerät',
- help:'9 Kämpfer: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif und Kara Fırtına! Triff den Gegner, füll die <b>Kraftleiste</b> und mach deinen <b>Spezialangriff</b>. Ein <b>Tritt</b> am Ende einer Combo schleudert den Gegner hoch – schlag in der Luft weiter!<br>Wer 2 Runden gewinnt, ist Champion.<br><b>Tastatur</b> – Spieler 1: A/D laufen · W springen · S blocken · F Schlag · G Tritt · H Spezial<br>Spieler 2: ← → laufen · ↑ springen · ↓ blocken · K Schlag · L Tritt · J Spezial',
+ help:'10 Kämpfer: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif, Berber Yusuf und Kara Fırtına! Triff den Gegner, füll die <b>Kraftleiste</b> und mach deinen <b>Spezialangriff</b>. Ein <b>Tritt</b> am Ende einer Combo schleudert den Gegner hoch – schlag in der Luft weiter!<br>Wer 2 Runden gewinnt, ist Champion.<br><b>Tastatur</b> – Spieler 1: A/D laufen · W springen · S blocken · F Schlag · G Tritt · H Spezial<br>Spieler 2: ← → laufen · ↑ springen · ↓ blocken · K Schlag · L Tritt · J Spezial',
  how:'Wie willst du spielen?',arc:'🏆 ARCADE',arcs:'Besiege alle nacheinander, am Ende der Boss',free:'⚔️ FREIER KAMPF',frees:'Wähle dich und deinen Gegner',surv:'❤️ ÜBERLEBEN',survs:'Ein Leben – wie viele schaffst du?',prac:'🥋 TRAINING',pracs:'Keine Zeit, Gegner wehrt sich nicht',
  pickMe:'WÄHLE DEINEN KÄMPFER',pickOpp:'WÄHLE DEINEN GEGNER',pick1:'SPIELER 1 WÄHLT',pick2:'SPIELER 2 WÄHLT',p1is:'Spieler 1: ',rnd:'🎲 ZUFÄLLIGER GEGNER',back:'← ZURÜCK',
  diff:'SCHWIERIGKEIT',diffQ:'wie stark soll der Computer sein?',easy:'🙂 LEICHT',mid:'😤 MITTEL',hard:'🔥 SCHWER',ladderTxt:n=>'Besiege '+n+' Gegner nacheinander!',
@@ -123,9 +132,9 @@ de:{round:'RUNDE',fight:'KAMPF!',won:'GEWINNT!',draw:'UNENTSCHIEDEN!',combo:'COM
  survNext:'▶ NÄCHSTER GEGNER',survEnd:n=>`Überleben vorbei: ${n} Gegner besiegt!`,survBest:b=>`Rekord: ${b}`,survWin:'Etwas Leben zurück, weiter!',pracEnd:'TRAINING BEENDEN',
  lies:['Schau hinter dich, Musa kommt!','Da liegen 100 Lira!','Deine Mutter ruft!','Dein Auto wird abgeschleppt!','Der Hoca sucht dich!','In Çaycuma schneit es!','Ich hab noch nie verloren!','Dein Schuh ist offen!'],
  arenas:['ÇAYCUMA · REPUBLIKPLATZ','FİLYOS-STRAND · ÇAYCUMA','ÇAYCUMA · AM ABEND']},
-en:{round:'ROUND',fight:'FIGHT!',won:'WINS!',draw:'DRAW!',combo:'COMBO!',blk:'BLOCK',ready:'READY!',air:'AIRBORNE!',perfect:'PERFECT!',great:'GREAT!',timeup:'TIME UP!',fooled:'FOOLED! 🤯',dizzy:'DIZZY!',netted:'NETTED!',sp:'SPECIAL',kick:'KICK',block:'BLOCK',punch:'PUNCH',rot:'Turn your phone sideways',rot2:'The game is played in landscape',
+en:{round:'ROUND',frozen:'TIME STOPPED! ⏸',shaved:'ZERO CUT! ✂️',heroP:'HERO POWER',special:'⭐ SPECIAL' ,fight:'FIGHT!',won:'WINS!',draw:'DRAW!',combo:'COMBO!',blk:'BLOCK',ready:'READY!',air:'AIRBORNE!',perfect:'PERFECT!',great:'GREAT!',timeup:'TIME UP!',fooled:'FOOLED! 🤯',dizzy:'DIZZY!',netted:'NETTED!',sp:'SPECIAL',kick:'KICK',block:'BLOCK',punch:'PUNCH',rot:'Turn your phone sideways',rot2:'The game is played in landscape',
  sub:'The Hero of Çaycuma – Fighting Game',p1:'1 PLAYER',p1s:'Against the computer',p2:'2 PLAYERS',p2s:'Face to face on one device',
- help:'9 fighters: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif and Kara Fırtına! Hit your rival, fill the <b>power bar</b>, then use your <b>special move</b>. A <b>kick</b> at the end of a combo launches the rival – keep hitting in the air!<br>Win 2 rounds to become champion.<br><b>Keyboard</b> – Player 1: A/D walk · W jump · S block · F punch · G kick · H special<br>Player 2: ← → walk · ↑ jump · ↓ block · K punch · L kick · J special',
+ help:'10 fighters: Musa, Cevat Hoca, Kel Dursun, Kürt Kemal, Mevlüt, Timur, Abdullah, Avcı Nazif, Berber Yusuf and Kara Fırtına! Hit your rival, fill the <b>power bar</b>, then use your <b>special move</b>. A <b>kick</b> at the end of a combo launches the rival – keep hitting in the air!<br>Win 2 rounds to become champion.<br><b>Keyboard</b> – Player 1: A/D walk · W jump · S block · F punch · G kick · H special<br>Player 2: ← → walk · ↑ jump · ↓ block · K punch · L kick · J special',
  how:'How do you want to play?',arc:'🏆 ARCADE',arcs:'Beat everyone in a row, boss at the end',free:'⚔️ FREE FIGHT',frees:'Choose yourself and your rival',surv:'❤️ SURVIVAL',survs:'One life – how many can you beat?',prac:'🥋 PRACTICE',pracs:'No timer, rival does not fight back',
  pickMe:'CHOOSE YOUR FIGHTER',pickOpp:'CHOOSE YOUR RIVAL',pick1:'PLAYER 1 CHOOSES',pick2:'PLAYER 2 CHOOSES',p1is:'Player 1: ',rnd:'🎲 RANDOM RIVAL',back:'← BACK',
  diff:'DIFFICULTY',diffQ:'how strong should the computer be?',easy:'🙂 EASY',mid:'😤 MEDIUM',hard:'🔥 HARD',ladderTxt:n=>'Beat '+n+' rivals in a row!',
@@ -137,18 +146,19 @@ en:{round:'ROUND',fight:'FIGHT!',won:'WINS!',draw:'DRAW!',combo:'COMBO!',blk:'BL
  lies:['Look behind you, Musa is coming!','There are 100 lira on the floor!','Your mum is calling!','Your car is being towed!','The Hoca is looking for you!',"It's snowing in Çaycuma!","I've never lost!",'Your shoelace is untied!'],
  arenas:['ÇAYCUMA · REPUBLIC SQUARE','FİLYOS BEACH · ÇAYCUMA','ÇAYCUMA · EVENING']}};
 const T=()=>TX[LANG];
-const RTX={de:{musa:['Wächter von Çaycuma','PANDA-WELLE'],cevat:['Hoca','ALLAHU EKBER'],dursun:['Riesen-Opa','OPA-BEBEN'],kemal:['Berglöwe','BERGFAUST'],mevlut:['Eisenschädel','EISENSCHÄDEL'],timur:['Technik-Meister','JARVIS-LASER'],nazif:['Meisterjäger','JAGDNETZ'],abdullah:['Meister der Lügen','LÜGEN-ATTACKE'],storm:['Sturm-Kapitän','BLITZ']},
- en:{musa:['Guardian of Çaycuma','PANDA WAVE'],cevat:['Hoca','ALLAHU EKBER'],dursun:['Giant Grandpa','GRANDPA QUAKE'],kemal:['Mountain Lion','MOUNTAIN FIST'],mevlut:['Iron Head','IRON HEAD'],timur:['Tech Master','JARVIS LASER'],nazif:['Master Hunter',"HUNTER'S NET"],abdullah:['Master of Lies','BIG FAT LIE'],storm:['Storm Captain','LIGHTNING']}};
-const STX={de:{nazif:['Die Jagd beginnt!','Du entkommst nicht!'],abdullah:['Vertrau mir, Abi!','Ich schwöre!','Echt wahr!']},en:{nazif:['The hunt begins!',"You can't escape!"],abdullah:['Trust me, bro!','I swear!','Totally true!']}};
+const RTX={de:{musa:['Held von Çaycuma','PANDA-WELLE'],cevat:['Hoca','ALLAHU EKBER'],dursun:['Riesen-Opa','OPA-BEBEN'],kemal:['Berglöwe','BERGFAUST'],mevlut:['Eisenschädel','EISENSCHÄDEL'],timur:['Technik-Meister','JARVIS-ZEITSTOPP'],nazif:['Meisterjäger','JAGDNETZ'],abdullah:['Meister der Lügen','LÜGEN-ATTACKE'],yusuf:['Meisterbarbier','NULLER-SCHNITT'],storm:['Sturm-Kapitän','BLITZ']},
+ en:{musa:['Hero of Çaycuma','PANDA WAVE'],cevat:['Hoca','ALLAHU EKBER'],dursun:['Giant Grandpa','GRANDPA QUAKE'],kemal:['Mountain Lion','MOUNTAIN FIST'],mevlut:['Iron Head','IRON HEAD'],timur:['Tech Master','JARVIS TIME STOP'],nazif:['Master Hunter',"HUNTER'S NET"],abdullah:['Master of Lies','BIG FAT LIE'],yusuf:['Master Barber','ZERO CUT'],storm:['Storm Captain','LIGHTNING']}};
+const STX={de:{nazif:['Die Jagd beginnt!','Du entkommst nicht!'],abdullah:['Vertrau mir, Abi!','Ich schwöre!','Echt wahr!'],yusuf:['Nullerschnitt kommt!','Setz dich in den Stuhl!']},en:{nazif:['The hunt begins!',"You can't escape!"],abdullah:['Trust me, bro!','I swear!','Totally true!'],yusuf:['Zero cut incoming!','Take a seat!']}};
 const ROSTER=[
- {kind:'musa',name:'MUSA',tag:"Çaycuma'nın Bekçisi",sp:'PANDA DALGASI',spType:'proj',proj:'fx_wave',pw:120,bar:'#3aa0ff',comp:'fx_panda',spd:1,pow:1,hp:100,spark:'#7fd0ff'},
+ {kind:'musa',name:'MUSA',tag:"Çaycuma'nın Kahramanı",sp:'PANDA DALGASI',spType:'proj',proj:'fx_wave',pw:150,unblock:1,heal:15,bar:'#3aa0ff',comp:'fx_panda',spd:1,pow:1,hp:100,spark:'#7fd0ff'},
  {kind:'cevat',name:'CEVAT HOCA',tag:'Hoca',sp:'ALLAHU EKBER',shout:['Sübhanallah!','Allahu Ekber!'],spType:'proj',proj:'fx_orb',pw:130,bar:'#ffd86b',spd:.95,pow:.95,hp:100,spark:'#fff1b0',spDmg:24,stunHit:110},
  {kind:'dursun',name:'KEL DURSUN',tag:'Dev Dede',sp:'DEDE DEPREMİ',spType:'quake',proj:'fx_rocks',pw:130,bar:'#d99a4a',spd:.78,pow:1.25,hp:118,spark:'#e8c08a'},
  {kind:'kemal',name:'KÜRT KEMAL',tag:'Dağ Aslanı',sp:'DAĞ YUMRUĞU',spType:'dash',bar:'#ff7a2a',spd:.84,pow:1.2,hp:115,spark:'#ffb070'},
  {kind:'mevlut',name:'MEVLÜT',tag:'Demir Kafa',sp:'DEMİR KAFA',spType:'dash',bar:'#c9d3e0',spd:1,pow:1.08,hp:105,spark:'#ffffff'},
- {kind:'timur',name:'TİMUR',tag:'Teknoloji Ustası',sp:'JARVIS LAZERİ',spType:'proj',proj:'fx_laser',pw:170,bar:'#2fe6ff',spd:1.15,pow:.95,hp:96,spark:'#9ff6ff'},
+ {kind:'timur',name:'TİMUR',tag:'Teknoloji Ustası',sp:'JARVIS: ZAMAN DURDUR',spType:'proj',proj:'fx_laser',freeze:130,pw:170,bar:'#2fe6ff',spd:1.15,pow:.95,hp:96,spark:'#9ff6ff'},
   {kind:'nazif',name:'AVCI NAZİF',tag:'Usta Avcı',sp:'AV TUZAĞI',spType:'net',bar:'#a8d66b',spd:1.1,pow:1,hp:102,spark:'#e8f5c8',spDmg:12,shout:['Av başladı!','Kaçamazsın!']},
  {kind:'abdullah',name:'ABDULLAH',tag:'Yalan Ustası',sp:'YALAN ATMA',spType:'lie',bar:'#7fd8ff',spd:1.2,pow:.92,hp:95,spark:'#c8f2ff',spDmg:10,shout:['Bana güven abi!','Yemin ederim!','Valla doğru!']},
+ {kind:'yusuf',name:'BERBER YUSUF',tag:'Usta Berber',sp:'SIFIR NUMARA',spType:'dash',multi:5,star:1,razor:.3,bar:'#e6e6e6',spd:1.12,pow:1.08,hp:108,spark:'#ffffff',shout:['Sıfır numara geliyor!','Otur bakalım koltuğa!']},
  {kind:'storm',name:'KARA FIRTINA',tag:'Fırtına Kaptanı',sp:'ŞİMŞEK',spType:'proj',proj:'fx_bolt',pw:170,flip:true,bar:'#ffd84a',comp:'fx_cloud',spd:1,pow:1,hp:100,spark:'#ffe066'}
 ];
 const RK=k=>ROSTER.find(r=>r.kind===k);
@@ -158,7 +168,7 @@ function applyLang(){ROSTER.forEach(r=>{const x=RTX[LANG]&&RTX[LANG][r.kind];r.t
 function setLang(l){LANG=l;try{const h=JSON.parse(localStorage.getItem('disfirlat2')||'{}');h.lang=l;localStorage.setItem('disfirlat2',JSON.stringify(h))}catch(e){}applyLang()}
 applyLang();
 let PICK=['musa','storm'];
-const SPI={musa:'🐼',cevat:'🔮',dursun:'🔨',kemal:'⛰️',mevlut:'💥',timur:'🤖',nazif:'🏹',abdullah:'🤥',storm:'⚡'};
+const SPI={musa:'🐼',cevat:'🔮',dursun:'🔨',kemal:'⛰️',mevlut:'💥',timur:'🤖',nazif:'🏹',abdullah:'🤥',yusuf:'✂️',storm:'⚡'};
 const ATK={
  punch:{start:5,active:5,rec:9,range:150,dmg:6,push:4},
  kick:{start:9,active:6,rec:14,range:170,dmg:10,push:7},
@@ -209,6 +219,7 @@ function damage(o,d,dir,push,att){
 }
 
 function update(f,inp,pin,o){
+ if(f.frozen>0){f.frozen--;if(f.flash>0)f.flash--;return}
  if(f.confused>0){f.confused--;inp={...inp,left:inp.right,right:inp.left}}
  const onG=f.y>=GROUND;
  if(f.flash>0)f.flash--;if(f.sayT>0)f.sayT--;
@@ -224,7 +235,9 @@ function update(f,inp,pin,o){
    if(dx>0&&dx<a.range&&dy<115){f.hitDone=true;damage(o,a.dmg*f.look.pow,f.facing,a.push,f);spark(f.x+f.facing*a.range*.8,f.y-(f.atk==='kick'?170:185),'#fff3a0',10)}
   }
   if(f.atk==='special'&&f.atkT===a.start&&f.look.spType!=='dash')fire(f);
-  if(f.atk==='special'&&f.look.spType==='dash'&&f.atkT>a.start&&f.atkT<=a.start+16){f.vx=f.facing*15;if(!f.hitDone){const dx=(o.x-f.x)*f.facing;if(dx>0&&dx<150&&Math.abs(o.y-f.y)<120){f.hitDone=true;damage(o,20*f.look.pow,f.facing,16,f);spark(o.x,o.y-170,f.look.spark,26);shake=10}}if(time%2)parts.push({x:f.x-f.facing*40,y:f.y-60-Math.random()*120,vx:-f.facing*3,vy:0,life:14,c:f.look.bar})}
+  if(f.atk==='punch'&&f.atkT===a.start&&f.look.razor&&Math.random()<f.look.razor){proj.push({x:f.x+f.facing*90,y:f.y-195,vx:f.facing*12,owner:f,kind:'razor',t:0,razor:1,dmg:5});pop(f.x,f.y-330,'PERMATİK!','#dfe6ee',true)}
+  if(f.atk==='special'&&f.look.spType==='dash'&&f.atkT>a.start&&f.atkT<=a.start+16){f.vx=f.facing*15;if(f.look.multi){const dx=(o.x-f.x)*f.facing;if(f.atkT===a.start+1)f.mh=0;if(dx>-20&&dx<160&&Math.abs(o.y-f.y)<120&&f.mh<f.look.multi&&f.atkT%3===0){f.mh++;f.vx=f.facing*4;damage(o,6*f.look.pow,f.facing,2,f);o.stun=Math.max(o.stun,24);spark(o.x,o.y-200,'#ffffff',14);for(let k=0;k<6;k++)parts.push({x:o.x,y:o.y-260,vx:(Math.random()-.5)*7,vy:-Math.random()*4,life:28,c:'#3a2a1a'});if(f.mh===f.look.multi){pop(o.x,o.y-340,T().shaved,'#ffffff',true);shake=12}}}
+  else if(!f.hitDone){const dx=(o.x-f.x)*f.facing;if(dx>0&&dx<150&&Math.abs(o.y-f.y)<120){f.hitDone=true;damage(o,20*f.look.pow,f.facing,16,f);spark(o.x,o.y-170,f.look.spark,26);shake=10}}if(time%2)parts.push({x:f.x-f.facing*40,y:f.y-60-Math.random()*120,vx:-f.facing*3,vy:0,life:14,c:f.look.bar})}
   if(f.atkT>=a.start+a.active+a.rec){f.atk=null;f.state='idle'}
   if(onG&&!(f.atk==='special'&&f.look.spType==='dash'&&f.atkT<=ATK.special.start+16))f.vx=0;
   phys(f);return;
@@ -250,7 +263,9 @@ function phys(f,fric){
  f.x=Math.max(85,Math.min(W-85,f.x));
 }
 function fire(f){
- const L=f.look;
+ const L=f.look,opp=f===P[0]?P[1]:P[0];
+ if(L.heal){f.hp=Math.min(f.maxhp,f.hp+L.heal);f.ghost=Math.max(f.ghost,f.hp);pop(f.x,f.y-320,'+'+L.heal+' ❤️ '+T().heroP,'#7dff8a',true);spark(f.x,f.y-150,'#7dff8a',24)}
+ if(L.freeze&&opp&&opp.state!=='ko'){opp.frozen=L.freeze;opp.atk=null;pop(opp.x,opp.y-330,T().frozen,'#2fe6ff',true);shake=8}
  if(L.spType==='net'){proj.push({x:f.x+f.facing*110,y:f.y-170,vx:f.facing*10,owner:f,kind:L.kind,t:0,net:1});return}
  if(L.spType==='lie'){const LIES=T().lies;proj.push({x:f.x+f.facing*100,y:f.y-200,vx:f.facing*8,owner:f,kind:L.kind,t:0,txt:LIES[Math.random()*LIES.length|0]});return}
  if(L.spType==='quake'){proj.push({x:f.x+f.facing*120,y:GROUND-45,vx:f.facing*10,owner:f,kind:L.kind,t:0,ground:1});shake=12;return}
@@ -329,7 +344,7 @@ function step(){
  for(const p of proj){
   p.x+=p.vx;p.t++;
   const o=p.owner===P[0]?P[1]:P[0];
-  if(!p.dead&&Math.abs(p.x-o.x)<60&&o.y>GROUND-(p.ground?35:80)&&o.state!=='ko'){p.dead=1;{const wasBlk=o.state==='block';damage(o,(p.owner.look.spDmg||18)*(p.ground?1.1:1),Math.sign(p.vx),11,p.owner);if(p.owner.look.spType==='net'&&!wasBlk){o.stun=110;o.netted=110;pop(o.x,o.y-330,T().netted,'#a8d66b',true)}
+  if(!p.dead&&Math.abs(p.x-o.x)<60&&o.y>GROUND-(p.ground?35:80)&&o.state!=='ko'){p.dead=1;{if(p.owner.look.unblock&&o.state==='block')o.state='idle';const wasBlk=o.state==='block';damage(o,(p.dmg||p.owner.look.spDmg||18)*(p.ground?1.1:1),Math.sign(p.vx),11,p.owner);if(!p.razor&&p.owner.look.spType==='net'&&!wasBlk){o.stun=110;o.netted=110;pop(o.x,o.y-330,T().netted,'#a8d66b',true)}
 if(p.owner.look.spType==='lie'&&!wasBlk){o.confused=150;pop(o.x,o.y-330,T().fooled,'#7fd8ff',true)}
 if(p.owner.look.stunHit&&!wasBlk&&o.state==='hit'){o.stun=p.owner.look.stunHit;o.dizzy=p.owner.look.stunHit;o.vx*=.3;pop(o.x,o.y-330,T().dizzy,'#ffd86b',true)}}spark(p.x,p.y,p.owner.look.spark,22)}
   if(p.ground&&time%3===0)parts.push({x:p.x,y:GROUND-10,vx:(Math.random()-.5)*4,vy:-3-Math.random()*4,life:20,c:'#b08860'});
@@ -355,7 +370,7 @@ function prog(f){
  if(t<=a.start)return t/a.start;if(t<=a.start+a.active)return 1;return Math.max(0,1-(t-a.start-a.active)/a.rec);
 }
 
-const META={"musa":{"idle":{"w":266,"h":342,"ax":115.0},"walk":{"w":251,"h":345,"ax":116.0},"punch":{"w":332,"h":339,"ax":141.0},"kick":{"w":311,"h":343,"ax":132.0},"block":{"w":231,"h":342,"ax":107.0},"hit":{"w":290,"h":342,"ax":124.0},"special":{"w":374,"h":345,"ax":158.0},"win":{"w":230,"h":380,"ax":94.0},"head":[84,1,88,88]},"storm":{"idle":{"w":247,"h":360,"ax":104.0},"walk":{"w":217,"h":373,"ax":97.0},"punch":{"w":305,"h":365,"ax":108.0},"kick":{"w":306,"h":357,"ax":128.0},"block":{"w":204,"h":361,"ax":87.0},"hit":{"w":212,"h":357,"ax":99.0},"special":{"w":323,"h":360,"ax":90.0},"win":{"w":141,"h":379,"ax":74.0},"head":[97,0,93,93]},"fx":{"panda":{"w":308,"h":244,"ax":158.5},"wave":{"w":253,"h":259,"ax":59.0},"bolt":{"w":285,"h":124,"ax":150.0},"cloud":{"w":212,"h":177,"ax":106.0},"orb":{"w":276,"h":180,"ax":144.0},"laser":{"w":282,"h":75,"ax":148.0},"glass":{"w":227,"h":145,"ax":122.0},"rocks":{"w":297,"h":240,"ax":144.0}},"cevat":{"idle":{"w":276,"h":346,"ax":112.0},"walk":{"w":256,"h":345,"ax":121.0},"punch":{"w":356,"h":341,"ax":131.0},"kick":{"w":307,"h":343,"ax":138.0},"block":{"w":308,"h":344,"ax":121.0},"hit":{"w":280,"h":340,"ax":118.0},"special":{"w":381,"h":337,"ax":113.0},"win":{"w":239,"h":386,"ax":113.0},"head":[77,3,89,89]},"mevlut":{"idle":{"w":263,"h":332,"ax":115.0},"walk":{"w":248,"h":337,"ax":118.0},"punch":{"w":321,"h":331,"ax":142.0},"kick":{"w":310,"h":335,"ax":131.0},"block":{"w":229,"h":335,"ax":107.0},"hit":{"w":287,"h":329,"ax":126.0},"special":{"w":362,"h":227,"ax":191.0},"win":{"w":222,"h":381,"ax":92.0},"head":[82,0,86,86]},"dursun":{"idle":{"w":273,"h":358,"ax":105.0},"walk":{"w":280,"h":340,"ax":142.0},"punch":{"w":323,"h":334,"ax":135.0},"kick":{"w":313,"h":338,"ax":160.0},"block":{"w":287,"h":349,"ax":131.0},"hit":{"w":280,"h":338,"ax":135.0},"special":{"w":387,"h":322,"ax":143.0},"win":{"w":290,"h":371,"ax":189.0},"head":[93,18,93,93]},"kemal":{"idle":{"w":268,"h":334,"ax":114.0},"walk":{"w":246,"h":343,"ax":118.0},"punch":{"w":330,"h":334,"ax":143.0},"kick":{"w":313,"h":338,"ax":134.0},"block":{"w":250,"h":336,"ax":110.0},"hit":{"w":288,"h":334,"ax":124.0},"special":{"w":377,"h":319,"ax":143.0},"win":{"w":191,"h":351,"ax":94.0},"head":[80,0,86,86]},"nazif":{"idle":{"w":298,"h":342,"ax":111.0},"walk":{"w":288,"h":342,"ax":109.0},"punch":{"w":326,"h":364,"ax":169.0},"kick":{"w":314,"h":343,"ax":132.0},"block":{"w":295,"h":356,"ax":138.0},"hit":{"w":321,"h":341,"ax":141.0},"special":{"w":396,"h":344,"ax":162.0},"win":{"w":258,"h":390,"ax":110.0},"head":[92,4,88,88]},"timur":{"idle":{"w":192,"h":344,"ax":82.0},"walk":{"w":167,"h":351,"ax":84.0},"punch":{"w":315,"h":343,"ax":102.0},"kick":{"w":270,"h":334,"ax":98.0},"block":{"w":260,"h":345,"ax":94.0},"hit":{"w":251,"h":327,"ax":96.0},"special":{"w":422,"h":347,"ax":82.0},"win":{"w":202,"h":355,"ax":77.0},"head":[62,2,90,90]},"abdullah":{"idle":{"w":198,"h":337,"ax":91.0},"walk":{"w":268,"h":330,"ax":145.0},"punch":{"w":287,"h":337,"ax":106.0},"kick":{"w":309,"h":342,"ax":107.0},"block":{"w":176,"h":342,"ax":75.0},"hit":{"w":251,"h":331,"ax":100.0},"special":{"w":324,"h":331,"ax":129.0},"win":{"w":186,"h":375,"ax":88.0},"head":[62,0,90,90]}};
+const META={"musa":{"idle":{"w":266,"h":342,"ax":115.0},"walk":{"w":251,"h":345,"ax":116.0},"punch":{"w":332,"h":339,"ax":141.0},"kick":{"w":311,"h":343,"ax":132.0},"block":{"w":231,"h":342,"ax":107.0},"hit":{"w":290,"h":342,"ax":124.0},"special":{"w":374,"h":345,"ax":158.0},"win":{"w":230,"h":380,"ax":94.0},"head":[84,1,88,88]},"storm":{"idle":{"w":247,"h":360,"ax":104.0},"walk":{"w":217,"h":373,"ax":97.0},"punch":{"w":305,"h":365,"ax":108.0},"kick":{"w":306,"h":357,"ax":128.0},"block":{"w":204,"h":361,"ax":87.0},"hit":{"w":212,"h":357,"ax":99.0},"special":{"w":323,"h":360,"ax":90.0},"win":{"w":141,"h":379,"ax":74.0},"head":[97,0,93,93]},"fx":{"panda":{"w":308,"h":244,"ax":158.5},"wave":{"w":253,"h":259,"ax":59.0},"bolt":{"w":285,"h":124,"ax":150.0},"cloud":{"w":212,"h":177,"ax":106.0},"orb":{"w":276,"h":180,"ax":144.0},"laser":{"w":282,"h":75,"ax":148.0},"glass":{"w":227,"h":145,"ax":122.0},"rocks":{"w":297,"h":240,"ax":144.0}},"cevat":{"idle":{"w":276,"h":346,"ax":112.0},"walk":{"w":256,"h":345,"ax":121.0},"punch":{"w":356,"h":341,"ax":131.0},"kick":{"w":307,"h":343,"ax":138.0},"block":{"w":308,"h":344,"ax":121.0},"hit":{"w":280,"h":340,"ax":118.0},"special":{"w":381,"h":337,"ax":113.0},"win":{"w":239,"h":386,"ax":113.0},"head":[77,3,89,89]},"mevlut":{"idle":{"w":263,"h":332,"ax":115.0},"walk":{"w":248,"h":337,"ax":118.0},"punch":{"w":321,"h":331,"ax":142.0},"kick":{"w":310,"h":335,"ax":131.0},"block":{"w":229,"h":335,"ax":107.0},"hit":{"w":287,"h":329,"ax":126.0},"special":{"w":362,"h":227,"ax":191.0},"win":{"w":222,"h":381,"ax":92.0},"head":[82,0,86,86]},"dursun":{"idle":{"w":273,"h":358,"ax":105.0},"walk":{"w":280,"h":340,"ax":142.0},"punch":{"w":323,"h":334,"ax":135.0},"kick":{"w":313,"h":338,"ax":160.0},"block":{"w":287,"h":349,"ax":131.0},"hit":{"w":280,"h":338,"ax":135.0},"special":{"w":387,"h":322,"ax":143.0},"win":{"w":290,"h":371,"ax":189.0},"head":[93,18,93,93]},"kemal":{"idle":{"w":268,"h":334,"ax":114.0},"walk":{"w":246,"h":343,"ax":118.0},"punch":{"w":330,"h":334,"ax":143.0},"kick":{"w":313,"h":338,"ax":134.0},"block":{"w":250,"h":336,"ax":110.0},"hit":{"w":288,"h":334,"ax":124.0},"special":{"w":377,"h":319,"ax":143.0},"win":{"w":191,"h":351,"ax":94.0},"head":[80,0,86,86]},"nazif":{"idle":{"w":298,"h":342,"ax":111.0},"walk":{"w":288,"h":342,"ax":109.0},"punch":{"w":326,"h":364,"ax":169.0},"kick":{"w":314,"h":343,"ax":132.0},"block":{"w":295,"h":356,"ax":138.0},"hit":{"w":321,"h":341,"ax":141.0},"special":{"w":396,"h":344,"ax":162.0},"win":{"w":258,"h":390,"ax":110.0},"head":[92,4,88,88]},"timur":{"idle":{"w":192,"h":344,"ax":82.0},"walk":{"w":167,"h":351,"ax":84.0},"punch":{"w":315,"h":343,"ax":102.0},"kick":{"w":270,"h":334,"ax":98.0},"block":{"w":260,"h":345,"ax":94.0},"hit":{"w":251,"h":327,"ax":96.0},"special":{"w":422,"h":347,"ax":82.0},"win":{"w":202,"h":355,"ax":77.0},"head":[62,2,90,90]},"abdullah":{"idle":{"w":198,"h":337,"ax":91.0},"walk":{"w":268,"h":330,"ax":145.0},"punch":{"w":287,"h":337,"ax":106.0},"kick":{"w":309,"h":342,"ax":107.0},"block":{"w":176,"h":342,"ax":75.0},"hit":{"w":251,"h":331,"ax":100.0},"special":{"w":324,"h":331,"ax":129.0},"win":{"w":186,"h":375,"ax":88.0},"head":[62,0,90,90]},"yusuf":{"idle":{"w":266,"h":342,"ax":113.0},"walk":{"w":239,"h":347,"ax":118.0},"punch":{"w":368,"h":338,"ax":135.0},"kick":{"w":307,"h":346,"ax":133.0},"block":{"w":226,"h":346,"ax":103.0},"hit":{"w":287,"h":341,"ax":125.0},"special":{"w":380,"h":333,"ax":159.0},"win":{"w":320,"h":350,"ax":194.0},"head":[83,0,92,92]}};
 const IMG={};const BGS=['bg_meydan','bg_filyos','bg_meydan2'];
 function li(n,src){const i=new Image();i.decoding='async';i.src='musa/'+src;IMG[n]=i;return i}
 for(const ch of ROSTER.map(r=>r.kind))for(const p of ['idle','walk','punch','kick','block','hit','special','win'])li(ch+'_'+p,ch+'_'+p+'.webp');
@@ -409,16 +424,23 @@ function drawFighter(f){
  const w=m.w*K,h=m.h*K;
  ctx.scale(1,br);
  if(f.y<GROUND&&f.state!=='ko')ctx.rotate(-.08);
- ctx.drawImage(im,-m.ax*K,-h,w,h);
+ if(f.frozen>0)ctx.filter='grayscale(.8) brightness(1.25) hue-rotate(170deg) saturate(2.2)';
+ ctx.drawImage(im,-m.ax*K,-h,w,h);ctx.filter='none';
  if(f.flash&&f.flash%2){ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.55;ctx.drawImage(im,-m.ax*K,-h,w,h);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1}
  ctx.restore();
  if(f.netted>0){ctx.save();ctx.translate(f.x,f.y-130);ctx.strokeStyle='#d9c28a';ctx.lineWidth=3;const r=110;ctx.globalAlpha=.9;for(let i=-4;i<=4;i++){ctx.beginPath();ctx.moveTo(i*r/4.5-20,-r);ctx.lineTo(i*r/4.5+20,r);ctx.moveTo(-r*.8,i*r/4.5);ctx.lineTo(r*.8,i*r/4.5+10);ctx.stroke()}ctx.restore()}
+ if(f.frozen>0){ctx.font='34px system-ui';ctx.textAlign='center';ctx.globalAlpha=.6+.4*Math.sin(time*.3);ctx.fillText('⏸️',f.x,f.y-300);ctx.globalAlpha=1;ctx.strokeStyle='#2fe6ff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(f.x,f.y-150,150+Math.sin(time*.2)*6,0,7);ctx.stroke()}
  if(f.confused>0){ctx.font='900 30px system-ui';ctx.textAlign='center';ctx.fillStyle='#7fd8ff';ctx.fillText('?',f.x-26+Math.sin(time*.2)*6,f.y-285);ctx.fillText('?',f.x+22+Math.cos(time*.2)*6,f.y-300)}
  if(f.dizzy>0){for(let i=0;i<4;i++){const a=time*.12+i*Math.PI/2;ctx.font='22px system-ui';ctx.textAlign='center';ctx.fillText(i%2?'💫':'⭐',f.x+Math.cos(a)*42,f.y-262+Math.sin(a)*12)}}
  if(f.sayT>0&&f.say){ctx.save();ctx.globalAlpha=Math.min(1,f.sayT/15);ctx.font='900 22px system-ui';const tw=ctx.measureText(f.say).width+28,bx=f.x-tw/2,by=f.y-345;rr(bx,by,tw,40,14,'#fffbe8');ctx.beginPath();ctx.moveTo(f.x-8,by+40);ctx.lineTo(f.x+4,by+54);ctx.lineTo(f.x+10,by+40);ctx.fill();ctx.fillStyle='#5a3a00';ctx.textAlign='center';ctx.fillText(f.say,f.x,by+28);ctx.restore()}
 }
 function drawProj(p){
  const L=p.owner.look;
+ if(p.razor){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.t*.55);ctx.shadowColor='#fff';ctx.shadowBlur=10;
+  const g=ctx.createLinearGradient(-22,-12,22,12);g.addColorStop(0,'#f4f7fb');g.addColorStop(.5,'#9aa6b4');g.addColorStop(1,'#e8edf3');
+  ctx.fillStyle=g;rr(-22,-11,44,22,3,g);ctx.fillStyle='#2d3440';rr(-12,-3,24,6,3,'#2d3440');ctx.fillRect(-3,-7,6,14);
+  ctx.strokeStyle='#ffffff';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(-22,-11);ctx.lineTo(22,-11);ctx.stroke();ctx.restore();
+  if(p.t%2===0)parts.push({x:p.x-Math.sign(p.vx)*14,y:p.y,vx:-p.vx*.1,vy:0,life:10,c:'#dfe6ee'});return}
  if(L.spType==='net'){ctx.save();ctx.translate(p.x,p.y);const r=Math.min(70,20+p.t*3);ctx.strokeStyle='#d9c28a';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.stroke();ctx.lineWidth=2;for(let i=-3;i<=3;i++){ctx.beginPath();ctx.moveTo(i*r/3.5,-r);ctx.lineTo(i*r/3.5,r);ctx.moveTo(-r,i*r/3.5);ctx.lineTo(r,i*r/3.5);ctx.stroke()}ctx.fillStyle='#8a6a3a';for(let a=0;a<6;a++){ctx.beginPath();ctx.arc(Math.cos(a)*r,Math.sin(a)*r,5,0,7);ctx.fill()}ctx.restore();return}
  if(L.spType==='lie'){ctx.save();ctx.font='900 20px system-ui';const tw=ctx.measureText(p.txt).width+30,bx=p.x-tw/2,by=p.y-24+Math.sin(p.t*.3)*4;ctx.shadowColor='#7fd8ff';ctx.shadowBlur=14;rr(bx,by,tw,46,16,'#ffffff');ctx.shadowBlur=0;ctx.fillStyle='#ffffff';ctx.beginPath();ctx.moveTo(p.x-Math.sign(p.vx)*tw/2+Math.sign(p.vx)*14,by+40);ctx.lineTo(p.x-Math.sign(p.vx)*(tw/2+10),by+56);ctx.lineTo(p.x-Math.sign(p.vx)*tw/2+Math.sign(p.vx)*34,by+44);ctx.fill();ctx.fillStyle='#1b2b55';ctx.textAlign='center';ctx.fillText(p.txt,p.x,by+30);ctx.restore();return}
  if(L.kind==='cevat'){ctx.save();ctx.translate(p.x,p.y);const r=46+Math.sin(p.t*.5)*5;ctx.rotate(p.t*.08);for(let i=0;i<12;i++){ctx.rotate(Math.PI/6);ctx.fillStyle='rgba(255,236,150,.35)';ctx.fillRect(0,-3,r*1.6,6)}const g=ctx.createRadialGradient(0,0,4,0,0,r);g.addColorStop(0,'#ffffff');g.addColorStop(.35,'#fff3b0');g.addColorStop(1,'rgba(255,200,60,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fill();ctx.restore();return}
@@ -562,10 +584,16 @@ async function goLandscape(){
 addEventListener('resize',layout);addEventListener('orientationchange',()=>setTimeout(layout,250));
 
 /* ---------- Menus ---------- */
+const FLAGS={
+ tr:`<rect width="60" height="40" fill="#e30a17"/><circle cx="22" cy="20" r="10" fill="#fff"/><circle cx="24.6" cy="20" r="8" fill="#e30a17"/><polygon fill="#fff" points="31.5,20 40.9,16.9 35.1,24.9 35.1,15.1 40.9,23.1"/>`,
+ de:`<rect width="60" height="40" fill="#000"/><rect y="13.33" width="60" height="13.34" fill="#dd0000"/><rect y="26.67" width="60" height="13.33" fill="#ffce00"/>`,
+ en:`<rect width="60" height="40" fill="#fff"/>${[0,2,4,6,8,10,12].map(i=>`<rect y="${i*40/13}" width="60" height="${40/13}" fill="#b22234"/>`).join('')}<rect width="26" height="${40*7/13}" fill="#3c3b6e"/>${[0,1,2,3,4].map(r=>[0,1,2,3,4,5].map(c=>`<circle cx="${2.4+c*4.2+(r%2)*2.1}" cy="${2.4+r*4.2}" r="0.9" fill="#fff"/>`).join('')).join('')}`};
+function flagSVG(k){const u="url('data:image/svg+xml,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" width="600" height="400">${FLAGS[k]}</svg>`).replace(/'/g,'%27')+"')",N=24;
+ return `<span class="fw">${Array.from({length:N},(_,i)=>`<i style="background-image:${u};background-size:${N*100}% 100%;background-position:${i/(N-1)*100}% 0;animation-delay:${(-i*0.065).toFixed(2)}s"></i>`).join('')}</span>`}
 function menu(){
  game.state='menu';game.arc=game.surv=null;game.prac=false;overlay.classList.remove('hidden');document.body.classList.add('menu');card.classList.remove('wide');setTimeout(layout,0);
- const t=T(),FL={tr:'🇹🇷 TR',de:'🇩🇪 DE',en:'🇬🇧 EN'};
- card.innerHTML=`<div class="lgs">${Object.keys(FL).map(k=>`<button class="lg${k===LANG?' sel':''}" data-l="${k}">${FL[k]}</button>`).join('')}</div>
+ const t=T(),FN={tr:'Türkçe',de:'Deutsch',en:'English'};
+ card.innerHTML=`<div class="lgs">${Object.keys(FN).map(k=>`<button class="lg${k===LANG?' sel':''}" data-l="${k}" title="${FN[k]}" aria-label="${FN[k]}">${flagSVG(k)}</button>`).join('')}</div>
  <div class="hero"><img src="musa/musa_win.webp" alt=""><span class="vs">VS</span><img src="musa/storm_idle.webp" style="transform:scaleX(-1)" alt=""></div><h1>MUSA</h1><h2>${t.sub}</h2>
  <div id="ov2"><button class="big alt" id="m1">${t.p1}<br><small style="font-weight:600;font-size:13px">${t.p1s}</small></button>
  <button class="big" id="m2">${t.p2}<br><small style="font-weight:600;font-size:13px">${t.p2s}</small></button></div>
@@ -598,7 +626,7 @@ function pick(slot,title,done,rnd,back){
  card.classList.add('wide');const t=T();
  const st=r=>`<span class="st">⚡${Math.round(r.spd*10)} 💪${Math.round(r.pow*10)} ❤️${r.hp}</span>`;
  card.innerHTML=`<h1 style="font-size:clamp(24px,min(7vw,9vh),44px)">${title}</h1>${slot?`<div class="pk">${t.p1is}${RK(PICK[0]).name}</div>`:''}
- <div class="roster">${ROSTER.map(r=>`<button class="rc${slot&&r.kind===PICK[0]?' taken':''}" data-k="${r.kind}" style="border-color:${r.bar}55"><img src="musa/${r.kind}_idle.webp" alt="" ${slot?'style="transform:scaleX(-1)"':''}><b style="color:${r.bar}">${r.name}</b><i>${r.tag} · ${r.sp}</i>${st(r)}</button>`).join('')}</div>
+ <div class="roster">${ROSTER.map(r=>`<button class="rc${slot&&r.kind===PICK[0]?' taken':''}${r.star?' star':''}" data-k="${r.kind}" style="border-color:${r.bar}55">${r.star?`<em class="stb">${t.special}</em>`:''}<img src="musa/${r.kind}_idle.webp" alt="" ${slot?'style="transform:scaleX(-1)"':''}><b style="color:${r.bar}">${r.name}</b><i>${r.tag} · ${r.sp}</i>${st(r)}</button>`).join('')}</div>
  ${rnd?`<button class="big alt" id="rnd" style="padding:10px">${t.rnd}</button>`:''}<button class="big" style="background:#ffffff1a;box-shadow:none;padding:10px" id="bk">${t.back}</button>`;
  card.querySelectorAll('.rc').forEach(b=>b.onclick=()=>{sfx('whoosh');done(b.dataset.k)});
  if(rnd)document.getElementById('rnd').onclick=()=>{const o=ROSTER.filter(r=>r.kind!==PICK[0]);done(o[Math.random()*o.length|0].kind)};
