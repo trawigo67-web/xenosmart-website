@@ -38,6 +38,10 @@
     'body.bk-dock-on #oStart{padding-bottom:110px!important}',
     '.bk-rtog{display:inline-flex;align-items:center;gap:6px;margin:8px auto 4px;padding:10px 18px;min-height:44px;border-radius:999px;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:inherit;font:600 15px Fredoka,system-ui,sans-serif;cursor:pointer}',
     '.bk-rules-h{display:none!important}',
+    'input,textarea,[contenteditable]{-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default}',
+    'body.bk-cbar #top{z-index:9990!important}',
+    'body.bk-zip #home,body.bk-zip #snd,body.bk-zip .bk-lock{z-index:99980!important}',
+    'body.bk-cbar #card,body.bk-cbar #card2{padding-top:calc(64px + env(safe-area-inset-top))!important;box-sizing:border-box!important}',
     '@keyframes bkIn{from{opacity:0}to{opacity:1}}body{animation:bkIn .22s ease-out}',
     '#bkSheet{position:fixed;inset:0;z-index:100000;display:none;align-items:flex-end;justify-content:center;background:rgba(3,14,16,.55);-webkit-tap-highlight-color:transparent}',
     '#bkSheet.on{display:flex}',
@@ -156,7 +160,8 @@
     if (box){ b.className+=' pill ib'; box.appendChild(b); }
     else if (hb){ b.className+=' ibtn'; hb.appendChild(b); }
     else if (tb){ tb.appendChild(b); }
-    else { b.className+=' bk-float'; if (/zipzip/.test(path)) b.style.top='calc(114px + env(safe-area-inset-top))'; document.body.appendChild(b); }
+    else { b.className+=' bk-float'; document.body.appendChild(b);
+      if (/zipzip/.test(path)){ document.body.classList.add('bk-zip'); var place=function(){ var sn=document.getElementById('snd'); if(sn){ var r=sn.getBoundingClientRect(); if(r.height){ b.style.top=Math.round(r.bottom+10)+'px'; b.style.right=Math.max(6,Math.round(innerWidth-r.right))+'px'; b.style.width=Math.round(r.width)+'px'; b.style.height=Math.round(r.height)+'px'; } } }; place(); setTimeout(place,600); addEventListener('resize',function(){ setTimeout(place,200); }); } }
     b.classList.add('bk-candy','bk-fit');
     b.addEventListener('click', onLockTap); b.addEventListener('pointerdown', function(e){ e.stopPropagation(); });
     paint();
@@ -202,9 +207,9 @@
     sheet.classList.add('on'); }
   function closeSheet(){ if(sheet) sheet.classList.remove('on'); }
   function compactBar(){
-    var lft=document.querySelector('#top .lft'); if(!lft || lft.__bkc || !isPhone()) return;
+    var lft=document.querySelector('#top .lft'); if(lft) document.body.classList.add('bk-cbar'); if(!lft || lft.__bkc || !isPhone()) return;
     var home=lft.querySelector('#home'); if(!home) return;
-    lft.__bkc=1; lft.classList.add('bk-compact');
+    lft.__bkc=1; lft.classList.add('bk-compact'); document.body.classList.add('bk-cbar');
     sheet=document.createElement('div'); sheet.id='bkSheet'; sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-modal','true');
     sheet.innerHTML='<div class="pn"><div class="hd"></div><h3></h3><div class="gr"></div><button type="button" class="cl"></button></div>';
     document.body.appendChild(sheet);
@@ -279,6 +284,10 @@
     }
   }
   setInterval(function(){ try{ tickDock(); }catch(e){} }, 250);
+
+  /* ---- Yazı kutusundayken tuşlar oyuna gitmesin (ör. MUSA'da "A" = sola git, şifreye "a" yazılamıyordu) ---- */
+  function typing(e){ var t=e.target; if(!t||!t.tagName) return false; var n=t.tagName; return n==='INPUT'||n==='TEXTAREA'||n==='SELECT'||t.isContentEditable; }
+  ['keydown','keyup','keypress'].forEach(function(ev){ window.addEventListener(ev, function(e){ if (typing(e)) e.stopPropagation(); }, true); });
   var pend=false, roots=[];
   function later(muts){
     if (muts && muts.forEach) muts.forEach(function(m){ for (var k=0;k<m.addedNodes.length;k++){ var a=m.addedNodes[k]; var r=a.nodeType===3?a.parentNode:a; if (r && r.nodeType===1 && roots.indexOf(r)<0) roots.push(r); } });
