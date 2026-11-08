@@ -1080,5 +1080,6 @@ BI.trophy='<svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor"
 </script>
 <script>document.querySelectorAll("#picker i[data-i]").forEach(i=>{i.outerHTML=BI[i.dataset.i];});document.getElementById("home").innerHTML=BI.home;document.getElementById("lbb").style.display="none";document.getElementById("sw").innerHTML=BI.games;(function(){const m=document.getElementById("mus");if(m&&!m.querySelector("svg"))m.innerHTML=BI.music;const v=document.getElementById("vol");if(v&&!v.querySelector("svg"))v.innerHTML=BI.v1;})();</script>
 <script id="bukoSW">if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{});</script>
+<script src="buko-ui.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 {
- "v": "buko-v8",
+ "v": "buko-v9",
  "files": [
   "./",
   "1453/",
@@ -160,6 +160,14 @@
   "musa/yusuf_special.webp",
   "musa/yusuf_walk.webp",
   "musa/yusuf_win.webp",
+  "buko-ui.js",
+  "buko.svg",
+  "fonts/lilita-one-latin-400-normal.woff2",
+  "fonts/lilita-one-latin-ext-400-normal.woff2",
+  "fonts/fredoka-latin-600-normal.woff2",
+  "fonts/fredoka-latin-ext-600-normal.woff2",
+  "fonts/fredoka-latin-700-normal.woff2",
+  "fonts/fredoka-latin-ext-700-normal.woff2",
   "musa/vo_choose.mp3",
   "musa/vo_fight.mp3",
   "musa/vo_final.mp3",
