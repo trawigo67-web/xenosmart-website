@@ -1,5 +1,5 @@
 {
- "v": "buko-v52",
+ "v": "buko-v53",
  "files": [
   "./",
   "1453/",
@@ -36,6 +36,7 @@
   "mb-music2.mp3",
   "mechablock.html",
   "musa.html",
+  "musa/mqtt.min.js",
   "musa/bg_filyos.jpg",
   "musa/bg_meydan.jpg",
   "musa/bg_meydan2.jpg",
