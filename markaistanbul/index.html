@@ -295,7 +295,9 @@ async function fetchSpot(){
 
 function priceOf(p){
   const fine = p.gram*p.purity*spotG;
-  return { sell: fine*(1+p.satis/100) + (+p.iscilik||0), buy: fine*(1-p.alis/100) };
+  // alisMilyem: Ankauf = Gewicht × Milyem/1000 × Feingoldpreis (z. B. Çeyrek 940)
+  const buy = p.alisMilyem ? p.gram*(p.alisMilyem/1000)*spotG : fine*(1-p.alis/100);
+  return { sell: fine*(1+p.satis/100) + (+p.iscilik||0), buy };
 }
 function braceletPrice(b, g){
   const fine = g*b.purity*spotG;
