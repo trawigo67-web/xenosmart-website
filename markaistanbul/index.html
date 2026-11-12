@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2f4a6e">
+<meta name="description" content="Marka Istanbul Köln – güncel Çeyrek, Yarım, Tam, Gram altın ve bilezik fiyatları. Aktuelle Goldpreise.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Çeyrekmatik">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Marka Istanbul – Çeyrekmatik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Great+Vibes&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf7f1; --card:#ffffff; --card2:#f6f2ea; --line:#e7dfd0;
+  --navy:#2f4a6e; --navy2:#1f3350; --gold:#b8913a; --gold2:#9a7628; --goldbg:#fbf5e6;
+  --text:#1f2a37; --muted:#7a8494; --green:#2e9e6a; --zen:#c8102e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;padding:8px 0 16px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:56px;height:56px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(47,74,110,.12)}
+.logo b{font-family:Cinzel,'Playfair Display',serif;color:var(--navy);font-size:12px;letter-spacing:.5px}
+.logo i{font-family:'Great Vibes',cursive;color:var(--navy);font-size:12px;font-style:normal;margin-top:1px}
+.brand .mk{font-family:Cinzel,serif;font-size:22px;color:var(--navy);letter-spacing:2px;line-height:1}
+.brand .ist{font-family:'Great Vibes',cursive;font-size:20px;color:var(--navy);margin-left:34px;line-height:1}
+.brand small{display:block;color:var(--gold2);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;margin-top:4px;font-weight:600}
+.lang{display:flex;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff}
+.lang button{background:none;border:0;color:var(--muted);padding:6px 11px;font-weight:600;font-size:12px;cursor:pointer}
+.lang button.on{background:var(--navy);color:#fff}
+.spot{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:18px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;color:#fff;box-shadow:0 8px 24px rgba(31,51,80,.18)}
+.spot:after{content:"";position:absolute;right:-50px;top:-50px;width:170px;height:170px;border-radius:50%;background:radial-gradient(#e9c873 0%,transparent 70%);opacity:.35}
+.spot .lbl{color:#c9d4e3;font-size:12px;text-transform:uppercase;letter-spacing:1px}
+.spot .big{font-size:32px;font-weight:700;color:#f1d58a;margin:4px 0;font-family:'Playfair Display',serif}
+.spot .row{display:flex;justify-content:space-between;color:#c9d4e3;font-size:12px;gap:8px;flex-wrap:wrap}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#5fe0a5;margin-right:6px;animation:p 2s infinite}
+.dot.off{background:#f0b429;animation:none}
+@keyframes p{50%{opacity:.35}}
+.tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
+.tabs button{flex:1;white-space:nowrap;background:#fff;border:1px solid var(--line);color:var(--muted);padding:10px 8px;border-radius:12px;font-weight:600;font-size:13px;cursor:pointer}
+.tabs button.on{border-color:var(--navy);color:#fff;background:var(--navy)}
+.list{display:flex;flex-direction:column;gap:8px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;grid-template-columns:1fr auto auto;gap:6px 14px;align-items:center;box-shadow:0 1px 3px rgba(31,42,55,.04)}
+.item .n{font-weight:600;color:var(--navy2)}
+.item .s{color:var(--muted);font-size:12px}
+.item .col{text-align:right}
+.item .col .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.item .col .v{font-weight:700;font-size:16px}
+.v.buy{color:var(--gold2)} .v.sell{color:var(--navy)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.card h3{font-size:17px;margin-bottom:10px;color:var(--navy);font-family:'Playfair Display',serif}
+label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}
+input,select{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--text);padding:12px;border-radius:10px;font-size:16px;font-family:inherit}
+input:focus,select:focus{outline:none;border-color:var(--gold)}
+.res{margin-top:14px;padding:14px;border-radius:12px;background:var(--goldbg);border:1px solid #ead9ac}
+.res .big{font-size:28px;font-weight:700;color:var(--gold2);font-family:'Playfair Display',serif}
+.res .s{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.5}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{background:var(--navy);color:#fff;border:0;padding:12px 16px;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:12px}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--muted)}
+.foot{margin-top:18px;color:var(--muted);font-size:11px;line-height:1.6;text-align:center}
+.foot a{color:var(--navy)}
+.cta{display:flex;gap:8px;margin-top:14px}
+.cta a{flex:1;display:block;text-align:center;text-decoration:none;padding:12px;border-radius:12px;font-weight:600;font-size:13px}
+.cta .wa{background:#1f8a55;color:#fff}.cta .tel{background:#fff;color:var(--navy);border:1px solid var(--navy)}
+.cta .ig{background:linear-gradient(45deg,#f9a825,#e1306c,#833ab4);color:#fff}
+.install{display:none;background:#fff;border:1px solid var(--gold);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.5;align-items:center;gap:10px}
+.install.on{display:flex}
+.install b{color:var(--navy)}
+.install button{background:var(--navy);color:#fff;border:0;border-radius:10px;padding:9px 12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.install .x{background:none;color:var(--muted);padding:4px 6px}
+.adm table{width:100%;border-collapse:collapse;font-size:13px}
+.adm th{text-align:left;color:var(--muted);font-weight:500;font-size:11px;padding:4px}
+.adm td{padding:4px}
+.adm td input{padding:8px;font-size:14px}
+.warn{background:var(--goldbg);border:1px solid #ead9ac;color:var(--gold2);border-radius:10px;padding:10px;font-size:12px;margin-bottom:12px;line-height:1.5}
+.hide{display:none!important}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:20px;font-weight:600;font-size:13px;opacity:0;transition:.3s;pointer-events:none}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <img class="logo" src="icon-192.png" alt="Marka Istanbul">
+      <div><h1 class="mk">MARKA</h1><div class="ist">istanbul</div><small>Çeyrekmatik</small></div>
+    </div>
+    <div class="lang"><button data-l="tr" class="on">TR</button><button data-l="de">DE</button></div>
+  </header>
+
+  <div class="install" id="install">
+    <div style="flex:1" id="installTxt"></div>
+    <button id="installBtn" class="hide" data-t="installBtn"></button>
+    <button class="x" id="installX" aria-label="kapat">✕</button>
+  </div>
+
+  <div class="spot">
+    <div class="lbl" data-t="spotLbl"></div>
+    <div class="big" id="spotG">—</div>
+    <div class="row"><span><span class="dot" id="dot"></span><span id="status"></span></span><span id="spotOz"></span></div>
+  </div>
+
+  <div class="tabs">
+    <button class="on" data-tab="prices" data-t="tPrices"></button>
+    <button data-tab="bilezik" data-t="tBilezik"></button>
+    <button data-tab="budget" data-t="tBudget"></button>
+    <button data-tab="sell" data-t="tSell"></button>
+  </div>
+
+  <section id="prices"><div class="list" id="list"></div></section>
+
+  <section id="bilezik" class="hide">
+    <div class="card">
+      <h3 data-t="bTitle"></h3>
+      <div class="grid2">
+        <div><label data-t="karat"></label><select id="bKarat"></select></div>
+        <div><label data-t="gram"></label><input id="bGram" type="number" inputmode="decimal" value="20" min="0" step="0.1"></div>
+      </div>
+      <label data-t="adet"></label><input id="bAdet" type="number" inputmode="numeric" value="1" min="1" step="1">
+      <div class="res"><div class="s" data-t="approx"></div><div class="big" id="bRes">—</div><div class="s" id="bDet"></div></div>
+    </div>
+  </section>
+
+  <section id="budget" class="hide">
+    <div class="card">
+      <h3 data-t="buTitle"></h3>
+      <label data-t="buAmount"></label><input id="buAmt" type="number" inputmode="decimal" value="2000" min="0" step="50">
+      <div class="list" id="buList" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <section id="sell" class="hide">
+    <div class="card">
+      <h3 data-t="sTitle"></h3>
+      <label data-t="sType"></label><select id="sType"></select>
+      <label id="sQtyLbl" data-t="adet"></label><input id="sQty" type="number" inputmode="decimal" value="1" min="0" step="1">
+      <div class="res"><div class="s" data-t="sGet"></div><div class="big" id="sRes">—</div><div class="s" data-t="sNote"></div></div>
+    </div>
+  </section>
+
+  <div class="cta">
+    <a class="wa hide" id="waLink" href="#" target="_blank" rel="noopener">WhatsApp</a>
+    <a class="tel" id="telLink" href="tel:+4922180039255" data-t="call"></a>
+    <a class="ig" href="https://www.instagram.com/markaistanbuljuwelier/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+
+  <div class="foot">
+    <div data-t="disclaimer"></div>
+    <div style="margin-top:6px">Marka Trauringe &amp; Diamanten · Keupstraße 67 · 51063 Köln<br><span data-t="hours"></span> · 0221 80039255</div>
+    <div style="margin-top:6px"><a href="../impressum.html">Impressum</a> · <a href="../datenschutz.html">Datenschutz</a></div>
+  </div>
+
+  <!-- Yönetici: yalnızca ?admin ile açılır. Değişiklikler sadece önizlemedir; kalıcı olması için config.json güncellenir. -->
+  <section id="adm" class="hide card adm" style="margin-top:14px">
+    <h3 data-t="admTitle"></h3>
+    <div class="warn" data-t="admWarn"></div>
+    <label data-t="manualSpot"></label>
+    <input id="manSpot" type="number" step="0.01" placeholder="örn. 112.00">
+    <table style="margin-top:12px">
+      <thead><tr><th data-t="product"></th><th data-t="mSell"></th><th data-t="mBuy"></th><th data-t="labor"></th></tr></thead>
+      <tbody id="admRows"></tbody>
+    </table>
+    <button class="btn" id="admApply" data-t="apply"></button>
+    <button class="btn ghost" id="admCopy" data-t="copyCfg"></button>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* Fiyat kaynakları (sırayla):
+   1) Canlı: api.gold-api.com (her dakika yenilenir)
+   2) price.json: GitHub her gün otomatik günceller
+   3) Bu cihazda son görülen fiyat
+   4) config.json içindeki yedek fiyat
+   Marjlar / işçilik: config.json */
+const OZ = 31.1034768;
+const T = {
+ tr:{spotLbl:"Has altın · 1 gram (24 ayar)",live:"Canlı fiyat",daily:"Günlük fiyat",offline:"Son bilinen fiyat",manual:"Dükkân fiyatı",ozLbl:"Ons",
+  tPrices:"Fiyatlar",tBilezik:"Bilezik",tBudget:"Bütçem",tSell:"Altınımı sat",
+  buy:"Satış",sell:"Alış",
+  bTitle:"Bilezik / takı hesapla",karat:"Ayar",gram:"Gram",adet:"Adet",approx:"Tahmini satış fiyatı",
+  buTitle:"Bu paraya ne alabilirim?",buAmount:"Bütçe (€)",pieces:"adet",rest:"kalan",
+  sTitle:"Altınımı kaça satarım?",sType:"Ne satıyorsunuz?",sGet:"Tahmini ödeme",sNote:"Kesin fiyat dükkânda tartı ve ayar kontrolünden sonra belirlenir.",
+  disclaimer:"Fiyatlar bilgi amaçlıdır, altın piyasasına göre anlık değişir. Kesin fiyat için dükkânımıza gelin veya bizi arayın.",
+  call:"Ara",hours:"Pzt–Cmt 10:00–19:00",
+  installIos:"<b>Uygulama olarak ekle:</b> Paylaş <span style='font-size:15px'>⎋</span> → „Ana Ekrana Ekle“",installAnd:"<b>Çeyrekmatik'i telefonuna ekle</b> – tek dokunuşla aç.",installBtn:"Ekle",
+  admTitle:"Yönetici (önizleme)",admWarn:"Buradaki değişiklikler yalnızca bu ekranda önizlemedir. Kalıcı olması için ‘Ayarları kopyala’ ile Timur’a gönderin.",
+  manualSpot:"Manuel has gram fiyatı (€) – boş = canlı fiyat",product:"Ürün",mSell:"Satış +%",mBuy:"Alış −%",labor:"İşçilik €",
+  apply:"Önizle",copyCfg:"Ayarları kopyala",copied:"Kopyalandı",perGram:"/ gram işçilik",
+  waMsg:"Merhaba Marka Istanbul, Çeyrekmatik'ten yazıyorum. Fiyat almak istiyorum:"},
+ de:{spotLbl:"Feingold · 1 Gramm (24K)",live:"Live-Kurs",daily:"Tageskurs",offline:"Letzter bekannter Kurs",manual:"Ladenpreis",ozLbl:"Unze",
+  tPrices:"Preise",tBilezik:"Armreif",tBudget:"Budget",tSell:"Gold verkaufen",
+  buy:"Verkauf",sell:"Ankauf",
+  bTitle:"Armreif / Schmuck berechnen",karat:"Legierung",gram:"Gramm",adet:"Stück",approx:"Geschätzter Verkaufspreis",
+  buTitle:"Was bekomme ich für mein Budget?",buAmount:"Budget (€)",pieces:"Stk.",rest:"Rest",
+  sTitle:"Was bekomme ich für mein Gold?",sType:"Was möchten Sie verkaufen?",sGet:"Geschätzte Auszahlung",sNote:"Der genaue Preis wird im Geschäft nach Wiegen und Prüfung festgelegt.",
+  disclaimer:"Alle Preise sind unverbindlich und ändern sich mit dem Goldkurs. Für ein verbindliches Angebot besuchen Sie uns oder rufen Sie an.",
+  call:"Anrufen",hours:"Mo–Sa 10:00–19:00",
+  installIos:"<b>Als App hinzufügen:</b> Teilen <span style='font-size:15px'>⎋</span> → „Zum Home-Bildschirm“",installAnd:"<b>Çeyrekmatik aufs Handy</b> – mit einem Tipp öffnen.",installBtn:"Installieren",
+  admTitle:"Admin (Vorschau)",admWarn:"Änderungen hier sind nur eine Vorschau auf diesem Bildschirm.",
+  manualSpot:"Manueller Feingoldpreis pro Gramm (€) – leer = Live-Kurs",product:"Produkt",mSell:"VK +%",mBuy:"AK −%",labor:"Arbeit €",
+  apply:"Vorschau",copyCfg:"Einstellungen kopieren",copied:"Kopiert",perGram:"/ g Arbeitslohn",
+  waMsg:"Hallo Marka Istanbul, ich schreibe aus dem Çeyrekmatik. Ich möchte ein Angebot:"}
+};
+
+let lang = "tr", cfg = null, spotG = null, src = "offline", priceTime = null;
+const $ = id => document.getElementById(id);
+const t = k => T[lang][k] || k;
+const fmt = v => isFinite(v) ? v.toLocaleString(lang==="tr"?"tr-TR":"de-DE",{style:"currency",currency:"EUR",maximumFractionDigits:2}) : "—";
+const nm = o => o[lang] || o.tr;
+const ls = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} } };
+
+async function getJSON(url, ms=6000){
+  const ctl = new AbortController(); const tm = setTimeout(()=>ctl.abort(), ms);
+  try{ const r = await fetch(url,{signal:ctl.signal, cache:"no-store"}); if(!r.ok) throw 0; return await r.json(); }
+  finally{ clearTimeout(tm); }
+}
+
+async function loadConfig(){
+  try{ cfg = await getJSON("config.json?v="+Date.now()); ls.set("mi_cfg", JSON.stringify(cfg)); }
+  catch(e){ try{ cfg = JSON.parse(ls.get("mi_cfg")); }catch(_){ } }
+  if (!cfg) cfg = {products:[],bracelets:[],fallbackOzEur:3485};
+}
+
+async function fetchSpot(){
+  if (cfg.manualSpot){ spotG = +cfg.manualSpot; src = "manual"; priceTime = new Date(); return renderAll(); }
+  try{
+    const j = await getJSON("https://api.gold-api.com/price/XAU/EUR");
+    if (!j.price) throw 0;
+    spotG = j.price/OZ; src = "live"; priceTime = new Date(j.updatedAt || Date.now());
+  }catch(e){
+    try{
+      const d = await getJSON("price.json?v="+Date.now());
+      if (!d.ozEur) throw 0;
+      spotG = d.ozEur/OZ; src = "daily"; priceTime = new Date(d.updatedAt);
+    }catch(_){
+      let last=null; try{ last = JSON.parse(ls.get("mi_last")); }catch(__){}
+      if (last){ spotG = last.g; priceTime = new Date(last.d); } else { spotG = cfg.fallbackOzEur/OZ; priceTime = null; }
+      src = "offline";
+    }
+  }
+  if (src !== "offline") ls.set("mi_last", JSON.stringify({g:spotG, d:priceTime.toISOString()}));
+  renderAll();
+}
+
+function priceOf(p){
+  const fine = p.gram*p.purity*spotG;
+  return { sell: fine*(1+p.satis/100) + (+p.iscilik||0), buy: fine*(1-p.alis/100) };
+}
+function braceletPrice(b, g){
+  const fine = g*b.purity*spotG;
+  return { sell: fine*(1+b.satis/100) + g*(+b.iscilik||0), buy: fine*(1-b.alis/100) };
+}
+
+function renderTexts(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-t]").forEach(el=>el.textContent = t(el.dataset.t));
+  document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on", b.dataset.l===lang));
+  renderInstall();
+}
+function renderSpot(){
+  $("spotG").textContent = spotG ? fmt(spotG) : "—";
+  $("spotOz").textContent = spotG ? `${t("ozLbl")}: ${fmt(spotG*OZ)}` : "";
+  const loc = lang==="tr"?"tr-TR":"de-DE";
+  let when = "";
+  if (priceTime && !isNaN(priceTime)){
+    const today = priceTime.toDateString() === new Date().toDateString();
+    when = today ? priceTime.toLocaleTimeString(loc,{hour:"2-digit",minute:"2-digit"})
+                 : priceTime.toLocaleDateString(loc) + " " + priceTime.toLocaleTimeString(loc,{hour:"2-digit",minute:"2-digit"});
+  }
+  $("status").textContent = t(src) + (when ? " · " + when : "");
+  $("dot").classList.toggle("off", src!=="live" && src!=="manual");
+}
+function renderList(){
+  $("list").innerHTML = cfg.products.map(p=>{
+    const r = priceOf(p);
+    return `<div class="item"><div><div class="n">${nm(p)}</div><div class="s">${p.gram} g · ${Math.round(p.purity*1000)}</div></div>
+      <div class="col"><div class="k">${t("sell")}</div><div class="v buy">${fmt(r.buy)}</div></div>
+      <div class="col"><div class="k">${t("buy")}</div><div class="v sell">${fmt(r.sell)}</div></div></div>`;
+  }).join("") + cfg.bracelets.map(b=>{
+    const r = braceletPrice(b,1);
+    return `<div class="item"><div><div class="n">${nm(b)}</div><div class="s">1 g + ${fmt(+b.iscilik)} ${t("perGram")}</div></div>
+      <div class="col"><div class="k">${t("sell")}</div><div class="v buy">${fmt(r.buy)}</div></div>
+      <div class="col"><div class="k">${t("buy")}</div><div class="v sell">${fmt(r.sell)}</div></div></div>`;
+  }).join("");
+}
+function renderBilezik(){
+  const sel = $("bKarat"), cur = sel.value;
+  sel.innerHTML = cfg.bracelets.map(b=>`<option value="${b.id}">${nm(b)}</option>`).join("");
+  if (cur) sel.value = cur;
+  const b = cfg.bracelets.find(x=>x.id===sel.value) || cfg.bracelets[0]; if (!b) return;
+  const g = +$("bGram").value||0, n = Math.max(1, +$("bAdet").value||1);
+  const r = braceletPrice(b, g);
+  $("bRes").textContent = fmt(r.sell*n);
+  $("bDet").textContent = `${n} × ${g} g · ${t("sell")}: ${fmt(r.buy*n)}`;
+}
+function renderBudget(){
+  const amt = +$("buAmt").value||0;
+  $("buList").innerHTML = cfg.products.map(p=>{
+    const s = priceOf(p).sell, k = Math.floor(amt/s);
+    return `<div class="item" style="grid-template-columns:1fr auto"><div><div class="n">${nm(p)}</div><div class="s">${fmt(s)} · ${t("rest")}: ${fmt(amt-k*s)}</div></div>
+      <div class="col"><div class="v buy">${k} ${t("pieces")}</div></div></div>`;
+  }).join("");
+}
+function renderSell(){
+  const sel = $("sType"), cur = sel.value;
+  sel.innerHTML = cfg.products.map(p=>`<option value="p:${p.id}">${nm(p)}</option>`).join("") +
+                  cfg.bracelets.map(b=>`<option value="b:${b.id}">${nm(b)} (${t("gram")})</option>`).join("");
+  if (cur) sel.value = cur;
+  const [k,id] = sel.value.split(":"), q = +$("sQty").value||0;
+  $("sQtyLbl").textContent = k==="b" ? t("gram") : t("adet");
+  const o = k==="p" ? cfg.products.find(x=>x.id===id) : cfg.bracelets.find(x=>x.id===id); if (!o) return;
+  $("sRes").textContent = fmt(k==="p" ? priceOf(o).buy*q : braceletPrice(o, q).buy);
+}
+function renderLinks(){
+  const wa = (cfg.whatsapp||"").replace(/\D/g,"");
+  $("waLink").classList.toggle("hide", !wa);
+  $("waLink").href = `https://wa.me/${wa}?text=${encodeURIComponent(t("waMsg"))}`;
+  if (cfg.telefon) $("telLink").href = "tel:" + cfg.telefon;
+}
+function renderAll(){ renderTexts(); renderSpot(); if(spotG && cfg){ renderList(); renderBilezik(); renderBudget(); renderSell(); } renderLinks(); }
+
+/* "Uygulama olarak ekle" */
+let deferredPrompt = null;
+const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+function renderInstall(){
+  const box = $("install");
+  if (standalone || ls.get("mi_noinstall")) return box.classList.remove("on");
+  if (isIos){ $("installTxt").innerHTML = t("installIos"); $("installBtn").classList.add("hide"); box.classList.add("on"); }
+  else if (deferredPrompt){ $("installTxt").innerHTML = t("installAnd"); $("installBtn").classList.remove("hide"); box.classList.add("on"); }
+}
+addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); deferredPrompt = e; renderInstall(); });
+$("installBtn").addEventListener("click", async ()=>{ if(!deferredPrompt) return; deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; $("install").classList.remove("on"); });
+$("installX").addEventListener("click", ()=>{ ls.set("mi_noinstall","1"); $("install").classList.remove("on"); });
+
+/* Yönetici önizleme (?admin) */
+function renderAdm(){
+  const rows = [...cfg.products.map(p=>["products",p]), ...cfg.bracelets.map(b=>["bracelets",b])];
+  $("admRows").innerHTML = rows.map(([g,o])=>`<tr><td style="font-size:12px">${nm(o)}</td>
+    <td><input data-g="${g}" data-id="${o.id}" data-f="satis" type="number" step="0.1" value="${o.satis}"></td>
+    <td><input data-g="${g}" data-id="${o.id}" data-f="alis" type="number" step="0.1" value="${o.alis}"></td>
+    <td><input data-g="${g}" data-id="${o.id}" data-f="iscilik" type="number" step="0.5" value="${o.iscilik}"></td></tr>`).join("");
+  $("manSpot").value = cfg.manualSpot || "";
+}
+function toast(m){ const el=$("toast"); el.textContent=m; el.classList.add("on"); setTimeout(()=>el.classList.remove("on"),1600); }
+$("admApply").addEventListener("click",()=>{
+  document.querySelectorAll("#admRows input").forEach(inp=>{ const o = cfg[inp.dataset.g].find(x=>x.id===inp.dataset.id); o[inp.dataset.f] = +inp.value||0; });
+  cfg.manualSpot = $("manSpot").value ? +$("manSpot").value : null;
+  fetchSpot();
+});
+$("admCopy").addEventListener("click",async()=>{
+  try{ await navigator.clipboard.writeText(JSON.stringify(cfg,null,2)); toast(t("copied")); }catch(e){ toast("—"); }
+});
+
+document.addEventListener("click", e=>{
+  const l = e.target.closest(".lang button"); if (l){ lang=l.dataset.l; ls.set("mi_lang",lang); renderAll(); }
+  const tb = e.target.closest(".tabs button");
+  if (tb){ document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b===tb));
+    ["prices","bilezik","budget","sell"].forEach(id=>$(id).classList.toggle("hide", id!==tb.dataset.tab)); }
+});
+["bKarat","bGram","bAdet"].forEach(id=>$(id).addEventListener("input",renderBilezik));
+$("buAmt").addEventListener("input",renderBudget);
+["sType","sQty"].forEach(id=>$(id).addEventListener("input",renderSell));
+
+(async function start(){
+  lang = ls.get("mi_lang") || "tr";
+  renderTexts();
+  await loadConfig();
+  if (new URLSearchParams(location.search).has("admin")){ $("adm").classList.remove("hide"); renderAdm(); }
+  await fetchSpot();
+  setInterval(fetchSpot, 60000);
+  document.addEventListener("visibilitychange", ()=>{ if (!document.hidden) fetchSpot(); });
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+})();
+</script>
+</body>
+</html>
