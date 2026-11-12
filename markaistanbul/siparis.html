@@ -167,6 +167,13 @@ legend{background:#fff;border:1px solid var(--line);border-radius:20px;padding:3
 .ltabs button.on{background:var(--grad);color:#fff;border-color:transparent}
 .onlyA{}
 body.role-e .onlyA{display:none!important}
+details.more{margin:6px 0 14px;border:1px solid var(--line);border-radius:14px;padding:0 12px;background:#fff}
+details.more>summary{cursor:pointer;padding:14px 2px;font-weight:600;color:var(--cop2);list-style:none}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"▸ ";}
+details.more[open]>summary::before{content:"▾ ";}
+details.more>summary small{font-weight:400;color:var(--muted)}
+details.more fieldset{border-left:0;border-right:0;border-radius:0;margin-left:-12px;margin-right:-12px}
 </style>
 </head>
 <body>
@@ -239,33 +246,7 @@ body.role-e .onlyA{display:none!important}
     </div>
   </fieldset>
 
-  <fieldset><legend>Ürün</legend>
-    <div class="g2">
-      <div><label>Model / kod</label><input id="f_model"></div>
-      <div><label>Tahmini gram</label><input id="f_gram" type="number" step="0.01" inputmode="decimal"></div>
-    </div>
-    <div class="g3">
-      <div><label>Ölçü</label><input id="f_olcu" placeholder="örn. 17 / 6,5 cm"></div>
-      <div><label>Adet</label><input id="f_adet" type="number" min="1" step="1" inputmode="numeric" value="1"></div>
-      <div><label>Renk</label><select id="f_renk"><option value="">–</option><option>Sarı</option><option>Beyaz</option><option>Rose</option><option>Karışık</option></select></div>
-    </div>
-    <div class="g2">
-      <div><label>Taş</label><input id="f_tas" placeholder="örn. zirkon, pırlanta"></div>
-      <div><label>İsim / yazı (gravür)</label><input id="f_yazi"></div>
-    </div>
-    <label>Fotoğraflar</label>
-    <div class="photos" id="f_photos"></div>
-    <label class="upl" id="uplLbl">+ Fotoğraf ekle<input id="f_file" type="file" accept="image/*" multiple style="display:none"></label>
-  </fieldset>
 
-  <fieldset><legend>Toptancı</legend>
-    <label>Kime sipariş edildi?</label><input id="f_toptanci" list="dl_top" placeholder="Toptancı adı">
-    <datalist id="dl_top"></datalist>
-    <div class="g2">
-      <div><label>Toptancıya veriliş</label><input id="f_topTarih" type="date"></div>
-      <div><label>Toptancının sipariş no</label><input id="f_topNo"></div>
-    </div>
-  </fieldset>
 
   <fieldset><legend>Müşteri</legend>
     <label>Ad soyad *</label><input id="f_ad" autocomplete="off">
@@ -282,7 +263,35 @@ body.role-e .onlyA{display:none!important}
     <label>Ödeme şekli</label><div class="seg" id="f_odeme"></div>
   </fieldset>
 
+  <details id="fMore" class="more"><summary>Detaylar <small>(isteğe bağlı – ürün, foto, toptancı, not)</small></summary>
+  <fieldset><legend>Ürün</legend>
+    <div class="g2">
+      <div><label>Model / kod</label><input id="f_model"></div>
+      <div><label>Tahmini gram</label><input id="f_gram" type="number" step="0.01" inputmode="decimal"></div>
+    </div>
+    <div class="g3">
+      <div><label>Ölçü</label><input id="f_olcu" placeholder="örn. 17 / 6,5 cm"></div>
+      <div><label>Adet</label><input id="f_adet" type="number" min="1" step="1" inputmode="numeric" value="1"></div>
+      <div><label>Renk</label><select id="f_renk"><option value="">–</option><option>Sarı</option><option>Beyaz</option><option>Rose</option><option>Karışık</option></select></div>
+    </div>
+    <div class="g2">
+      <div><label>Taş</label><input id="f_tas" placeholder="örn. zirkon, pırlanta"></div>
+      <div><label>İsim / yazı (gravür)</label><input id="f_yazi"></div>
+    </div>
+    <label>Fotoğraflar <small style="color:var(--muted)">(en fazla 2 · teslimde silinir)</small></label>
+    <div class="photos" id="f_photos"></div>
+    <label class="upl" id="uplLbl">+ Fotoğraf ekle<input id="f_file" type="file" accept="image/*" multiple style="display:none"></label>
+  </fieldset>
+  <fieldset><legend>Toptancı</legend>
+    <label>Kime sipariş edildi?</label><input id="f_toptanci" list="dl_top" placeholder="Toptancı adı">
+    <datalist id="dl_top"></datalist>
+    <div class="g2">
+      <div><label>Toptancıya veriliş</label><input id="f_topTarih" type="date"></div>
+      <div><label>Toptancının sipariş no</label><input id="f_topNo"></div>
+    </div>
+  </fieldset>
   <fieldset><legend>Notlar</legend><textarea id="f_not"></textarea></fieldset>
+  </details>
   <div class="err" id="fErr"></div>
 </div></div>
 
@@ -325,6 +334,18 @@ body.role-e .onlyA{display:none!important}
   <fieldset class="onlyA"><legend>WhatsApp mesajı – imza</legend>
     <label>Mesajların sonuna eklenecek</label><input id="s_imza">
     <button class="btn" id="s_save" style="width:100%;margin-top:12px">Kaydet</button>
+  </fieldset>
+  <fieldset class="onlyA"><legend>Veri saklama</legend>
+    <p class="note">Teslim edilen / iptal olan siparişlerde müşteri adı, telefon, notlar ve fotoğraflar bu süre sonra otomatik silinir. Sipariş no, çeşit, tarih ve tutarlar kalır. Toplam süre dolunca sipariş tamamen silinir. Fotoğraflar zaten teslimde silinir.</p>
+    <div class="g2">
+      <div><label>Kişisel bilgiler silinsin (gün)</label><input id="sk_anon" type="number" min="1" inputmode="numeric"></div>
+      <div><label>Sipariş tamamen silinsin (gün)</label><input id="sk_sil" type="number" min="1" inputmode="numeric"></div>
+    </div>
+    <button class="btn" id="sk_save" style="width:100%;margin-top:12px">Süreleri kaydet</button>
+  </fieldset>
+  <fieldset class="onlyA"><legend>Dışa aktar (Excel)</legend>
+    <p class="note">Bu dükkânın tüm siparişlerini Excel'de açılan CSV dosyası olarak indirir. Silmeden önce yedek almak için.</p>
+    <button class="btn ghost" id="csvGo" style="width:100%">⬇︎ CSV indir</button>
   </fieldset>
   <fieldset class="onlyA"><legend>Yönetici şifresi</legend>
     <label>Mevcut şifre</label><input id="pwOld" type="password" autocomplete="current-password">
@@ -433,6 +454,7 @@ function openForm(o){
   seg($("f_odeme"), ODEME, formState.odeme, v=>formState.odeme=v);
   seg($("f_dil"), DIL_L, DIL_LBL[formState.dil], v=>formState.dil=DIL_K[DIL_L.indexOf(v)]);
   updCesit(); updKalan(); renderPhotos(); $("fErr").textContent="";
+  $("fMore").open = !!(o && (o.model||o.gram||o.olcu||o.renk||o.tas||o.yazi||o.toptanci||o.notlar||(o.fotos||[]).length));
   $("uplLbl").style.display = assets ? "" : "none";
   show("form"); $("bar").classList.add("on");
 }
@@ -457,20 +479,22 @@ $("ns_ok").onclick = ()=>{
 };
 const kisa = a => { const m=String(a||"").match(/\(([^)]+)\)\s*$/); return m ? m[1] : (a||""); };
 function renderPhotos(){
+  $("uplLbl").style.display = (assets && formState.fotos.length<2) ? "" : "none";
   $("f_photos").innerHTML = formState.fotos.map((id,i)=>`<div class="ph"><img src="${PH(id)}" alt=""><button type="button" data-rm="${i}">×</button></div>`).join("");
   $("f_photos").querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{ formState.fotos.splice(+b.dataset.rm,1); renderPhotos(); });
 }
 async function shrink(file){
   try{
-    const bmp = await createImageBitmap(file); const s = Math.min(1, 1600/Math.max(bmp.width,bmp.height));
+    const bmp = await createImageBitmap(file); const s = Math.min(1, 1000/Math.max(bmp.width,bmp.height));
     const c = document.createElement("canvas"); c.width=Math.round(bmp.width*s); c.height=Math.round(bmp.height*s);
     c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
-    return await new Promise(r=>c.toBlob(r,"image/jpeg",0.82));
+    return await new Promise(r=>c.toBlob(r,"image/jpeg",0.75));
   }catch(e){ return file; }
 }
 $("f_file").addEventListener("change", async e=>{
   if (!assets) return;
   for (const f of [...e.target.files]){
+    if (formState.fotos.length>=2){ toast("En fazla 2 fotoğraf"); break; }
     toast("Fotoğraf yükleniyor…");
     try{ const r = await assets.upload(await shrink(f)); formState.fotos.push(r.id); renderPhotos(); }
     catch(err){ toast("Fotoğraf yüklenemedi"); }
@@ -628,12 +652,26 @@ function renderSettings(){
   const L=(arr,id,key)=>{ $(id).innerHTML = arr.map((v,i)=>`<span>${esc(v)}<button data-k="${key}" data-i="${i}">×</button></span>`).join("") || `<span style="color:var(--muted)">–</span>`; };
   L(settings.toptanci,"s_topList","toptanci"); L(settings.personel,"s_perList","personel");
   $("s_imza").value = settings.imza||"";
+  const sk = settings.saklama||{}; $("sk_anon").value = sk.anon||30; $("sk_sil").value = sk.sil||365;
   $("ot_yeb").value = (settings.onayTel||{}).yeb||""; $("ot_yo").value = (settings.onayTel||{}).yo||"";
   $("msgEdit").innerHTML = Object.keys(MSG_DEF).map(k=>`<label>${MSG_LBL[k]}</label><textarea data-msg="${k}" rows="4">${esc((settings.mesaj||{})[k]||MSG_DEF[k])}</textarea>`).join("") + `<button type="button" class="x" id="msgReset" style="margin-top:8px">Varsayılan metinlere dön</button>`;
   $("msgEdit").insertAdjacentHTML("beforeend", `<h4 style="margin:18px 0 4px;font-size:12px;letter-spacing:2px;color:var(--cop2)">🇩🇪 ALMANCA METİNLER (MÜŞTERİYE)</h4>` + Object.keys(MSG_DEF_DE).map(k=>`<label>${MSG_LBL[k]} – Deutsch</label><textarea data-msgde="${k}" rows="4">${esc((settings.mesajDe||{})[k]||MSG_DEF_DE[k])}</textarea>`).join(""));
   $("msgReset").onclick = ()=>{ document.querySelectorAll("[data-msg]").forEach(t=>t.value=MSG_DEF[t.dataset.msg]); document.querySelectorAll("[data-msgde]").forEach(t=>t.value=MSG_DEF_DE[t.dataset.msgde]); };
   document.querySelectorAll("#set [data-k]").forEach(b=>b.onclick=()=>{ settings[b.dataset.k].splice(+b.dataset.i,1); renderSettings(); saveSettings(); });
 }
+$("sk_save").onclick = ()=>{
+  const a=Math.max(1,parseInt($("sk_anon").value)||30), d=Math.max(a,parseInt($("sk_sil").value)||365);
+  settings.saklama={anon:a, sil:d}; $("sk_anon").value=a; $("sk_sil").value=d; saveSettings();
+};
+$("csvGo").onclick = ()=>{
+  const cols=[["no","Sipariş no"],["durum","Durum"],["cesit","Çeşit"],["alt","Tür"],["tarih","Alınış"],["teslimTarih","Söz verilen teslim"],["alan","Alan"],["musteri","Müşteri"],["tel","Telefon"],["model","Model"],["gram","Gram"],["olcu","Ölçü"],["adet","Adet"],["renk","Renk"],["tas","Taş"],["toptanci","Toptancı"],["topNo","Toptancı no"],["fiyat","Toplam €"],["kapora","Kapora €"],["kalan","Kalan €"],["odeme","Ödeme"],["onaylayan","Onaylayan"],["kapanis","Kapanış"],["notlar","Notlar"]];
+  const q=v=>{ if(v==null) return ""; if(typeof v==="number") return String(v).replace(".",","); const t=String(v); return /[;"\n]/.test(t)?'"'+t.replace(/"/g,'""')+'"':t; };
+  const rows=[...(orders[shop]||[])].sort((a,b)=>String(a.no).localeCompare(String(b.no)));
+  const csv="\ufeff"+cols.map(c=>c[1]).join(";")+"\n"+rows.map(o=>cols.map(([k])=>q(k==="durum"?(STN[o.durum]||o.durum):o[k])).join(";")).join("\n");
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  a.download=`siparisler-${SHOPS[shop].name.replace(/\s+/g,"-")}-${today()}.csv`; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+  toast(rows.length+" sipariş indirildi");
+};
 async function saveSettings(silent){
   try{ await db.doc("ayarlar/genel").set(settings); if(!silent) toast("Ayarlar kaydedildi ✔"); }catch(e){ if(!silent) toast("Kaydedilemedi"); }
 }
@@ -741,7 +779,7 @@ async function start(){
       if ($("det").classList.contains("on") && editing && k===shop && !$("form").classList.contains("on")){ const o=orders[k].find(x=>x.no===editing.no); if (o && o.guncelleme!==editing.guncelleme) openDetail(o.no); }
     }, ()=>{ $("conn").textContent = "Bağlantı hatası – internet bağlantısını kontrol edin."; });
   }
-  db.doc("ayarlar/genel").onSnapshot(s=>{ if (s.exists){ const d=s.data(); settings={toptanci:[...(d.toptanci||[])], personel:(d.personel&&d.personel.length)?[...d.personel]:settings.personel, imza:d.imza??settings.imza, mesaj:d.mesaj||{}, mesajDe:d.mesajDe||{}, onayTel:d.onayTel||{}}; if ($("form").classList.contains("on") && !$("f_alan").matches(":focus")) fillAlan($("f_alan").value); } });
+  db.doc("ayarlar/genel").onSnapshot(s=>{ if (s.exists){ const d=s.data(); settings={toptanci:[...(d.toptanci||[])], personel:(d.personel&&d.personel.length)?[...d.personel]:settings.personel, imza:d.imza??settings.imza, mesaj:d.mesaj||{}, mesajDe:d.mesajDe||{}, onayTel:d.onayTel||{}, saklama:d.saklama||{}}; if ($("form").classList.contains("on") && !$("f_alan").matches(":focus")) fillAlan($("f_alan").value); } });
 }
 (async ()=>{
   try{ const s=localStorage.getItem("mi_shop"); if (SHOPS[s]){ shop=s; document.querySelectorAll(".shops button").forEach(x=>x.classList.toggle("on",x.dataset.shop===s)); } }catch(e){}
