@@ -6,7 +6,13 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="robots" content="noindex, nofollow">
 <title>Yönetici – Çeyrekmatik</title>
-<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="icon" type="image/png" href="icon-admin-192.png">
+<link rel="manifest" href="admin.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-admin.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ç. Yönetici">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link href="fonts/fonts.css" rel="stylesheet">
 <style>
 :root{--cop:#c4702a;--cop2:#a85a1c;--line:#ead7c3;--bg2:#fbf6f0;--muted:#8a8178;--grad:linear-gradient(135deg,#a85a1c 0%,#e3a15a 45%,#c4702a 70%,#8f4a14 100%)}
@@ -49,6 +55,7 @@ input:focus{outline:none;border-color:var(--cop)}
 .q h3{font-size:15px;letter-spacing:3px;text-transform:uppercase;color:var(--cop2);margin-bottom:4px}
 .q .sub{font-size:12px;color:var(--muted);margin-bottom:10px}
 .qin{display:grid;grid-template-columns:52px 52px 1fr 52px 52px;gap:6px;align-items:center}
+@media (max-width:380px){.qin{grid-template-columns:46px 42px 1fr 42px 46px;gap:5px}.qin button{font-size:15px}.qin input{font-size:23px}.wrap{padding-left:12px;padding-right:12px}.q{padding:14px 12px}}
 .qin button{height:52px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:17px;font-weight:700;color:var(--cop2);cursor:pointer}
 .qin input{height:52px;text-align:center;font-size:26px;font-weight:700;padding:4px;color:#1d1d1f}
 .marj{text-align:center;font-size:13px;margin-top:6px;color:var(--muted)}
@@ -97,6 +104,8 @@ details.adv summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:
       <button class="btn" id="go">Giriş</button>
       <div class="err" id="lErr"></div>
     </div>
+    <button class="btn" id="instBtn" style="display:none">📲 Uygulamayı telefona yükle</button>
+    <p class="note" id="instHint" style="text-align:center">📲 Telefona uygulama olarak ekleyin: iPhone'da Paylaş → „Ana Ekrana Ekle“, Android'de menü ⋮ → „Uygulamayı yükle“.</p>
   </section>
 
   <!-- Düzenleme -->
@@ -151,9 +160,9 @@ details.adv summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:
       </div>
     </div>
 
-    <div class="bar">
-      <button class="btn" id="save">Kaydet ve yayınla</button>
-      <button class="btn ghost" id="logout">Çıkış</button>
+    <div class="bar" style="display:flex;gap:8px">
+      <button class="btn" id="save" style="margin-top:0;flex:1">Kaydet ve yayınla</button>
+      <button class="btn ghost" id="logout" style="margin-top:0;width:auto;padding:13px 14px">Çıkış</button>
     </div>
     <p class="note" style="text-align:center">Kaydettikten sonra yeni fiyatlar yaklaşık 1 dakika içinde tüm telefonlarda görünür.</p>
   </section>
@@ -453,10 +462,17 @@ $("save").onclick = async ()=>{
 
 /* ---------- Başlangıç ---------- */
 (async ()=>{
+  try{ if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) $("instHint").remove(); }catch(e){}
   try{ token = sessionStorage.getItem("ck_tok"); }catch(e){}
   if (token){ try{ await openEditor(); return; }catch(e){ token = null; } }
   const k = await readKeyFile();
   $(k ? "login" : "setup").classList.remove("hide");
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+})();
+let instEv = null;
+addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); instEv = e; const b=$("instBtn"); if (b){ b.style.display="block"; } const h=$("instHint"); if (h) h.style.display="none"; });
+$("instBtn").onclick = async ()=>{ if (!instEv) return; instEv.prompt(); await instEv.userChoice; instEv = null; $("instBtn").style.display="none"; };
+(()=>{
 })();
 </script>
 </body>
