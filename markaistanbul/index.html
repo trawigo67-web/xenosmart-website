@@ -304,6 +304,8 @@ async function fetchSpot(){
 }
 
 function priceOf(p){
+  // baz/kat: Preis = Preis des Basis-Artikels (z. B. Çeyrek) × Faktor (Yarım = 2, Tam = 4, Gremse = 10 …)
+  if (p.baz){ const b = cfg.products.find(x=>x.id===p.baz); if (b && !b.baz) return { sell: Math.round(priceOf(b).sell) * (+p.kat||0) }; }
   // satisMilyem: Verkauf = Gewicht × Milyem/1000 × Feingoldpreis (inkl. Arbeit, z. B. Çeyrek 960)
   const sell = p.satisMilyem ? p.gram*(p.satisMilyem/1000)*spotG : p.gram*p.purity*spotG*(1+p.satis/100) + (+p.iscilik||0);
   return { sell };

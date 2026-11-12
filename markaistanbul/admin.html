@@ -218,7 +218,8 @@ function rowHtml(o, kind, i){
     <div class="top">
       <div><label>Ad (TR)</label><input data-f="tr" value="${(o.tr||"").replace(/"/g,"&quot;")}"></div>
       ${isP ? `<div><label>Gram</label><input data-f="gram" type="number" step="0.001" inputmode="decimal" value="${o.gram??""}"></div>` : `<div><label>Ayar</label><select data-f="purity">${[[0.916,"22"],[0.75,"18"],[0.585,"14"]].map(([v,l])=>`<option value="${v}" ${+o.purity===v?"selected":""}>${l}</option>`).join("")}</select></div>`}
-      <div><label>Satış milyem</label><input data-f="satisMilyem" type="number" step="0.5" inputmode="decimal" value="${o.satisMilyem??""}"></div>
+      ${isP && o.baz ? `<div><label>× ${baseName(o.baz)}</label><input data-f="kat" type="number" step="0.25" inputmode="decimal" value="${o.kat??""}"></div>`
+                     : `<div><label>Satış milyem</label><input data-f="satisMilyem" type="number" step="0.5" inputmode="decimal" value="${o.satisMilyem??""}"></div>`}
     </div>
     <div class="meta">
       <div class="p">Fiyat: <b class="pv">—</b>${isP?"":" / g"}</div>
@@ -229,8 +230,17 @@ function rowHtml(o, kind, i){
       <div><label>Ad (DE)</label><input data-f="de" value="${(o.de||"").replace(/"/g,"&quot;")}"></div>
       <div><label>Ad (EN)</label><input data-f="en" value="${(o.en||"").replace(/"/g,"&quot;")}"></div>
       <div><label>Grup</label><input data-f="grup" type="number" min="1" step="1" value="${o.grup??1}"></div>
+      ${isP ? `<div style="grid-column:1/-1"><label>Fiyat hesabı</label><select data-f="baz">
+        <option value="">Kendi milyemi</option>
+        ${cfg.products.filter(x=>!x.baz && x!==o).map(x=>`<option value="${x.id}" ${o.baz===x.id?"selected":""}>${x.tr} fiyatının katı</option>`).join("")}
+      </select></div>` : ""}
     </div>
   </div>`;
+}
+function baseName(id){ const b = cfg.products.find(x=>x.id===id); return b ? b.tr : "?"; }
+function priceP(o, s){
+  if (o.baz){ const b = cfg.products.find(x=>x.id===o.baz); return b && !b.baz ? Math.round(b.gram*(b.satisMilyem/1000)*s)*(+o.kat||0) : NaN; }
+  return o.gram*(o.satisMilyem/1000)*s;
 }
 function renderRows(){
   $("prodRows").innerHTML = cfg.products.map((o,i)=>rowHtml(o,"p",i)).join("");
@@ -242,15 +252,20 @@ function renderPrices(){
   $("spot").innerHTML = s ? `Has altın (1 g): <b>${s.toLocaleString("tr-TR",{style:"currency",currency:"EUR"})}</b> ${parseFloat($("manSpot").value)>0?"· manuel":"· Kitco canlı"}` : "Has altın fiyatı alınamadı";
   document.querySelectorAll(".row").forEach(r=>{
     const o = (r.dataset.kind==="p"?cfg.products:cfg.bracelets)[+r.dataset.i];
-    const v = r.dataset.kind==="p" ? o.gram*(o.satisMilyem/1000)*s : (o.satisMilyem/1000)*s;
-    r.querySelector(".pv").textContent = s && o.satisMilyem ? eur(v) : "—";
+    const v = r.dataset.kind==="p" ? priceP(o, s) : (o.satisMilyem/1000)*s;
+    r.querySelector(".pv").textContent = s ? eur(v) : "—";
   });
 }
 document.addEventListener("input", e=>{
   const r = e.target.closest(".row");
   if (r && e.target.dataset.f){
     const o = (r.dataset.kind==="p"?cfg.products:cfg.bracelets)[+r.dataset.i], f = e.target.dataset.f;
-    o[f] = ["gram","satisMilyem","purity","grup"].includes(f) ? (e.target.value===""?null:+e.target.value) : e.target.value;
+    o[f] = ["gram","satisMilyem","purity","grup","kat"].includes(f) ? (e.target.value===""?null:+e.target.value) : e.target.value;
+    if (f==="baz"){
+      if (o.baz){ const b = cfg.products.find(x=>x.id===o.baz); if (!o.kat) o.kat = b && b.gram ? Math.round(o.gram/b.gram*100)/100 : 1; }
+      else { delete o.baz; if (!o.satisMilyem) o.satisMilyem = 960; }
+      renderRows(); return;
+    }
   }
   renderPrices();
 });
@@ -258,12 +273,14 @@ document.addEventListener("click", e=>{
   const b = e.target.closest(".row .ib"); if (!b) return;
   const r = b.closest(".row"), arr = r.dataset.kind==="p"?cfg.products:cfg.bracelets, i = +r.dataset.i;
   if (b.dataset.a==="more"){ r.querySelector(".more").classList.toggle("hide"); return; }
-  if (b.dataset.a==="del"){ if (confirmDel(arr[i])) { arr.splice(i,1); renderRows(); } return; }
+  if (b.dataset.a==="del"){
+    if (cfg.products.some(x=>x.baz===arr[i].id)) return toast(`"${arr[i].tr}" silinemez – başka ürünler bu fiyattan hesaplanıyor`, true);
+    if (confirmDel(arr[i])) { arr.splice(i,1); renderRows(); } return; }
   if (b.dataset.a==="up" && i>0){ [arr[i-1],arr[i]]=[arr[i],arr[i-1]]; renderRows(); }
   if (b.dataset.a==="down" && i<arr.length-1){ [arr[i+1],arr[i]]=[arr[i],arr[i+1]]; renderRows(); }
 });
 function confirmDel(o){ return window.confirm(`"${o.tr}" silinsin mi?`); }
-$("addProd").onclick = ()=>{ cfg.products.push({id:"p"+Date.now(), tr:"Yeni ürün", de:"", en:"", gram:1.75, purity:0.916, satisMilyem:960, grup:(cfg.products.at(-1)||{}).grup||1}); renderRows(); };
+$("addProd").onclick = ()=>{ cfg.products.push({id:"p"+Date.now(), tr:"Yeni ürün", de:"", en:"", gram:1.75, purity:0.916, baz:"ceyrek", kat:1, grup:(cfg.products.at(-1)||{}).grup||1}); renderRows(); };
 $("addBra").onclick = ()=>{ cfg.bracelets.push({id:"b"+Date.now(), tr:"Yeni bilezik", de:"", en:"", purity:0.916, satisMilyem:960, grup:3}); renderRows(); };
 
 let panoBlob = null;
@@ -308,7 +325,10 @@ async function openEditor(){
 $("save").onclick = async ()=>{
   // Prüfen
   for (const o of [...cfg.products, ...cfg.bracelets]){
-    if (!o.tr || !(o.satisMilyem > 0) || (o.gram!==undefined && cfg.products.includes(o) && !(o.gram > 0))) return toast(`"${o.tr||"?"}": ad, gram ve milyem dolu olmalı`, true);
+    const isP = cfg.products.includes(o);
+    if (!o.tr || (isP && !(o.gram > 0))) return toast(`"${o.tr||"?"}": ad ve gram dolu olmalı`, true);
+    if (o.baz){ if (!(o.kat > 0)) return toast(`"${o.tr}": kat (×) dolu olmalı`, true); delete o.satisMilyem; }
+    else if (!(o.satisMilyem > 0)) return toast(`"${o.tr}": milyem dolu olmalı`, true);
     if (o.satisMilyem > 1500) return toast(`"${o.tr}": milyem çok yüksek görünüyor`, true);
     if (!o.de) o.de = o.tr; if (!o.en) o.en = o.tr;
   }

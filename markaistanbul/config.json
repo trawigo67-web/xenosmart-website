@@ -20,8 +20,9 @@
    "en": "Yarım (half)",
    "gram": 3.5,
    "purity": 0.916,
-   "satisMilyem": 960,
-   "grup": 1
+   "grup": 1,
+   "baz": "ceyrek",
+   "kat": 2
   },
   {
    "id": "tam",
@@ -30,8 +31,9 @@
    "en": "Tam (full)",
    "gram": 7.0,
    "purity": 0.916,
-   "satisMilyem": 960,
-   "grup": 1
+   "grup": 1,
+   "baz": "ceyrek",
+   "kat": 4
   },
   {
    "id": "gremse",
@@ -40,8 +42,9 @@
    "en": "Gremse (2.5)",
    "gram": 17.5,
    "purity": 0.916,
-   "satisMilyem": 960,
-   "grup": 1
+   "grup": 1,
+   "baz": "ceyrek",
+   "kat": 10
   },
   {
    "id": "rceyrek",
@@ -60,8 +63,9 @@
    "en": "Reşat half",
    "gram": 3.5,
    "purity": 0.916,
-   "satisMilyem": 987.5,
-   "grup": 2
+   "grup": 2,
+   "baz": "rceyrek",
+   "kat": 2
   },
   {
    "id": "rtam",
@@ -70,8 +74,9 @@
    "en": "Reşat full",
    "gram": 7.0,
    "purity": 0.916,
-   "satisMilyem": 987.5,
-   "grup": 2
+   "grup": 2,
+   "baz": "rceyrek",
+   "kat": 4
   },
   {
    "id": "r25",
@@ -80,8 +85,9 @@
    "en": "Reşat 2.5",
    "gram": 17.5,
    "purity": 0.916,
-   "satisMilyem": 987.5,
-   "grup": 2
+   "grup": 2,
+   "baz": "rceyrek",
+   "kat": 10
   },
   {
    "id": "r5",
@@ -90,8 +96,9 @@
    "en": "Reşat 5-piece",
    "gram": 35.0,
    "purity": 0.916,
-   "satisMilyem": 987.5,
-   "grup": 2
+   "grup": 2,
+   "baz": "rceyrek",
+   "kat": 20
   }
  ],
  "bracelets": [

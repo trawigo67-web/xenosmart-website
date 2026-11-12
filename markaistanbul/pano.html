@@ -53,7 +53,9 @@ async function spot(cfg){
 (async()=>{
   const cfg = await (await fetch("config.json?t="+Date.now(),{cache:"no-store"})).json();
   const g = await spot(cfg);
-  const rows = [...cfg.products.map(p=>({n:p.tr, v:p.gram*(p.satisMilyem/1000)*g, grp:p.grup||1})),
+  const base = p => p.gram*(p.satisMilyem/1000)*g;
+  const val = p => { if (p.baz){ const b=cfg.products.find(x=>x.id===p.baz); if (b) return Math.round(base(b))*(+p.kat||0); } return base(p); };
+  const rows = [...cfg.products.map(p=>({n:p.tr, v:val(p), grp:p.grup||1})),
                 ...cfg.bracelets.map(b=>({n:b.tr, v:(b.satisMilyem/1000)*g, grp:b.grup||3}))];
   document.getElementById("list").innerHTML = rows.map((r,i)=>{
     const end = rows[i+1] && rows[i+1].grp!==r.grp;
