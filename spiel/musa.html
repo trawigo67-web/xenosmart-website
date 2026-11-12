@@ -1045,6 +1045,17 @@ let AILE=false,KADIN=false;try{AILE=localStorage.getItem('musaAile')==='1';KADIN
 const KHASH='c158404b9129a3f530a1239ded87a55d4e275bee48b6f106c07de107097c752c';
 const AVR=()=>ROSTER.filter(r=>r.w?KADIN:(AILE||PUBLIC.includes(r.kind))),AVK=()=>AVR().map(r=>r.kind);
 let USER=null;try{USER=JSON.parse(localStorage.getItem('musaUser')||'null')}catch(e){}
+/* ---------- Name filter + report/block for the online arena (store rule: user-generated names) ---------- */
+const NM_SUB=['siktir','sikerim','sikeyim','sikis','orospu','yarrak','yarak','ibne','pezevenk','kahpe','gavat','amcik','aminak','anani','ananiz','fick','hurensohn','hure','wichser','fotze','arschloch','schlampe','nutte','spast','missgeburt','nazi','hitler','fuck','shit','bitch','cunt','nigger','nigga','faggot','whore','pussy','asshole','penis','vagina','porn','porno','rape'];
+const NM_TOK=['amk','aq','amq','mk','pic','got','sik','sg','oc','dick','sex','cock','fag','slut','nude'];
+function nmNorm(n){return String(n||'').toLowerCase().replace(/[çÇ]/g,'c').replace(/[ğĞ]/g,'g').replace(/[ıİ]/g,'i').replace(/[öÖ]/g,'o').replace(/[şŞ]/g,'s').replace(/[üÜ]/g,'u').replace(/0/g,'o').replace(/1/g,'i').replace(/3/g,'e').replace(/4/g,'a').replace(/5/g,'s').replace(/7/g,'t').replace(/@/g,'a').replace(/\$/g,'s')}
+function nmBad(n){const x=nmNorm(n),flat=x.replace(/[^a-z]/g,''),tok=x.split(/[^a-z]+/).filter(Boolean);return NM_SUB.some(w=>flat.includes(w))||tok.some(w=>NM_TOK.includes(w))}
+let NM_BLK=[];try{NM_BLK=JSON.parse(localStorage.getItem('musaBlk')||'[]')||[]}catch(e){}
+/* returns a safe display name, or '' (then the game shows "Player N") */
+function nmOk(n){n=String(n||'').replace(/[^\p{L}\p{N} ._\-]/gu,'').replace(/\s+/g,' ').trim().slice(0,16);if(!n||nmBad(n)||NM_BLK.includes(nmNorm(n)))return '';return n}
+function nmBlock(n){const k=nmNorm(n);if(k&&!NM_BLK.includes(k)){NM_BLK.push(k);NM_BLK=NM_BLK.slice(-200);try{localStorage.setItem('musaBlk',JSON.stringify(NM_BLK))}catch(e){}}}
+const NM_TX={tr:{bad:'Bu isim uygun değil. Lütfen başka bir isim yaz.',rp:'Bildir',done:'İsim gizlendi ve engellendi.',mail:'E-posta ile bildir'},de:{bad:'Dieser Name ist nicht erlaubt. Bitte wähle einen anderen.',rp:'Melden',done:'Name ausgeblendet und blockiert.',mail:'Per E-Mail melden'},en:{bad:'This name is not allowed. Please choose another one.',rp:'Report',done:'Name hidden and blocked.',mail:'Report by e-mail'}};
+function nmT(){return NM_TX[LANG]||NM_TX.tr}
 async function aileCheck(pw){const n=pw.trim().toLocaleLowerCase('tr').replace(/ç/g,'c').replace(/ı/g,'i').replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o');let h='';try{const d=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(n));h=[...new Uint8Array(d)].map(b=>b.toString(16).padStart(2,'0')).join('')}catch(e){return n==='caycuma67'?'a':n==='kadinlar67'?'k':null}return h===AHASH?'a':h===KHASH?'k':null}
 function preloadAll(){for(const ch of AVK())for(const p of ['idle','walk','punch','kick','block','hit','special','win'])if(!IMG[ch+'_'+p])li(ch+'_'+p,ch+'_'+p+'.webp')}
 function aileScreen(back,msg){const t=T();card.classList.remove('wide');overlay.classList.remove('hidden');
@@ -1064,7 +1075,7 @@ function signUp(next){const t=T();card.classList.remove('wide');overlay.classLis
  card.innerHTML=`<h1 style="font-size:clamp(26px,7vw,46px)">${t.rgT}</h1><h2 style="font-size:clamp(15px,4vw,19px)">${t.rgTxt}</h2>
  <input id="rgn" maxlength="16" placeholder="${t.rgName}" autocomplete="off" value="${USER?USER.name:''}" style="width:100%;box-sizing:border-box;font:800 22px system-ui;text-align:center;padding:14px;border-radius:14px;border:2px solid #ffffff44;background:#0b0f1e;color:#fff;margin:6px 0">
  <button class="big alt" id="rgc">${t.rgCay}</button><button class="big" id="rgx">${t.rgNo}</button><button class="big" style="background:#ffffff1a;box-shadow:none" id="rgs">${t.rgSkip}</button><p style="font-size:12px;opacity:.7">${t.rgNote}</p>`;
- const save=c=>{const n=document.getElementById('rgn').value.trim().slice(0,16);if(!n){document.getElementById('rgn').focus();return}USER={name:n,cay:c};try{localStorage.setItem('musaUser',JSON.stringify(USER))}catch(e){}sfx('special');next()};
+ const save=c=>{const n=document.getElementById('rgn').value.trim().slice(0,16);if(!n){document.getElementById('rgn').focus();return}if(!nmOk(n)&&!NM_BLK.includes(nmNorm(n))){const i=document.getElementById('rgn');i.value='';i.placeholder=nmT().bad;i.style.borderColor='#ff5a5a';i.focus();sfx('block');return}USER={name:n,cay:c};try{localStorage.setItem('musaUser',JSON.stringify(USER))}catch(e){}sfx('special');next()};
  document.getElementById('rgc').onclick=()=>save(true);document.getElementById('rgx').onclick=()=>save(false);
  document.getElementById('rgs').onclick=()=>{try{localStorage.setItem('musaRegSkip','1')}catch(e){}next()}}
 /* ---------- PlayStation-era extras ---------- */
@@ -1225,16 +1236,18 @@ function onlineMenu(){netClose();const t=T();card.classList.remove('wide');const
 function netLost(){if(!NET)return;netClose();P=[];game.state='menu';netMsg(T().onLost,true)}
 function hostInfo(){if(NET&&NET.role==='host')mqPub(NET.mq,NET.arena+'/info',{n:1+NET.conns.length,s:NET.started?1:0,t:Date.now()},true)}
 function netLobby(){if(!NET||NET.role!=='host'||NET.started)return;const t=T();const n=1+NET.conns.length;hostInfo();
- const pl=Array.from({length:n},(_,i)=>`<span style="display:inline-block;margin:4px;padding:8px 12px;border-radius:12px;background:${i%2?'#c0392b55':'#3a6fd855'}">${i?(NET.conns[i-1]&&NET.conns[i-1].nm?NET.conns[i-1].nm.replace(/[<>&"]/g,''):t.onP+' '+(i+1)):'⭐ '+(USER?USER.name.replace(/[<>&"]/g,''):t.onYou)} · ${t.onTeam} ${i%2+1}</span>`).join('');
+ const pl=Array.from({length:n},(_,i)=>`<span style="display:inline-block;margin:4px;padding:8px 12px;border-radius:12px;background:${i%2?'#c0392b55':'#3a6fd855'}">${i?(NET.conns[i-1]&&NET.conns[i-1].nm?NET.conns[i-1].nm.replace(/[<>&"]/g,'')+` <button data-rp="${i-1}" title="${nmT().rp}" style="border:0;background:#0006;color:#fff;border-radius:8px;padding:2px 7px;margin-left:4px;font-size:13px;cursor:pointer">🚩 ${nmT().rp}</button>`:t.onP+' '+(i+1)):'⭐ '+(USER?USER.name.replace(/[<>&"]/g,''):t.onYou)} · ${t.onTeam} ${i%2+1}</span>`).join('');
  netMsg(`🏟️ ${t.arT} ${NET.arena}<br><small style="font-size:.7em;opacity:.8">${t.arTip}</small>`,true,`<div style="margin:6px 0"><b>${t.onPl} (${n}/4)</b><br>${pl}</div>${n>1?`<button class="big alt" id="ns">${t.onStart}</button>`:''}`);
- const b=document.getElementById('ns');if(b)b.onclick=netBegin}
+ const b=document.getElementById('ns');if(b)b.onclick=netBegin;
+ card.querySelectorAll('[data-rp]').forEach(r=>r.onclick=()=>{const c=NET&&NET.conns[+r.dataset.rp];if(!c||!c.nm)return;const nm=c.nm;nmBlock(nm);c.nm='';netLobby();
+  const p=document.createElement('p');p.style.cssText='font-size:13px;margin:6px 0';p.innerHTML=nmT().done+' <a style="color:#ffd84a" href="mailto:info@xenosmart.de?subject='+encodeURIComponent('MUSA Report')+'&body='+encodeURIComponent('Name: '+nm+'\nArena: '+(NET?NET.arena:'')+'\n')+'">'+nmT().mail+'</a>';card.appendChild(p)})}
 function netHost(ar){const t=T();netMsg(t.onConn,true);const cid=rid();
  loadMq(()=>mqOpen({will:{topic:MQT+ar+'/info',payload:'',retain:true,qos:0}},c=>{NET={role:'host',mq:c,arena:ar,cid,ev:[],rin:{},conns:[],picks:{}};
   c.subscribe(MQT+ar+'/h');c.on('message',(tp,pl)=>{let d;try{d=JSON.parse(pl.toString())}catch(e){return}hostMsg(d)});
   c.on('close',()=>{if(NET&&NET.mq===c)netLost()});NET.hb=setInterval(hostInfo,15000);netLobby()}))}
 function hostMsg(d){if(!NET)return;let conn=NET.conns.find(x=>x.cid===d.from);
  if(d.t==='join'){if(conn)return;if(NET.started||NET.conns.length>=3){mqPub(NET.mq,NET.arena+'/g',{t:'full',to:d.from});return}
-  conn={cid:d.from,slot:NET.conns.length+1,nm:(d.nm||'').slice(0,16)};NET.conns.push(conn);mqPub(NET.mq,NET.arena+'/g',{t:'hello',to:d.from,slot:conn.slot});netLobby();return}
+  conn={cid:d.from,slot:NET.conns.length+1,nm:nmOk(d.nm)};NET.conns.push(conn);mqPub(NET.mq,NET.arena+'/g',{t:'hello',to:d.from,slot:conn.slot});netLobby();return}
  if(!conn)return;
  if(d.t==='bye'){if(NET.started){netLost();return}NET.conns=NET.conns.filter(x=>x!==conn);NET.conns.forEach((x,i)=>{x.slot=i+1;mqPub(NET.mq,NET.arena+'/g',{t:'hello',to:x.cid,slot:x.slot})});netLobby();return}
  netData(d,conn)}
@@ -1244,7 +1257,7 @@ function netJoin(ar){const t=T();netMsg(t.onConn,true);const cid=rid();
  loadMq(()=>mqOpen({will:{topic:MQT+ar+'/h',payload:JSON.stringify({t:'bye',from:cid}),retain:false,qos:0}},c=>{NET={role:'guest',mq:c,arena:ar,cid,ev:[],last:''};
   c.subscribe([MQT+ar+'/g',MQT+ar+'/info']);c.on('message',(tp,pl)=>{if(!NET)return;if(tp.endsWith('/info')){if(!pl.length&&NET.slot)netLost();return}let d;try{d=JSON.parse(pl.toString())}catch(e){return}if(d.to&&d.to!==NET.cid)return;netData(d)});
   c.on('close',()=>{if(NET&&NET.mq===c)netLost()});
-  netSend({t:'join',nm:USER?USER.name:''});setTimeout(()=>{if(NET&&NET.mq===c&&!NET.slot)netMsg(T().onErr,true)},8000)}))}
+  netSend({t:'join',nm:USER?nmOk(USER.name):''});setTimeout(()=>{if(NET&&NET.mq===c&&!NET.slot)netMsg(T().onErr,true)},8000)}))}
 function netWatch(ar){const t=T();netMsg(t.wWait,true);const cid=rid();
  loadMq(()=>mqOpen({},c=>{NET={role:'guest',spec:true,mq:c,arena:ar,cid,ev:[],last:'',side:0};
   c.subscribe([MQT+ar+'/g',MQT+ar+'/info']);c.on('message',(tp,pl)=>{if(!NET)return;if(tp.endsWith('/info')){if(!pl.length)netLost();return}let d;try{d=JSON.parse(pl.toString())}catch(e){return}if(d.to&&d.to!==NET.cid)return;netData(d)});
