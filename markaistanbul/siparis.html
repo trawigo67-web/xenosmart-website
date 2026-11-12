@@ -202,7 +202,15 @@ legend{background:#fff;border:1px solid var(--line);border-radius:20px;padding:3
     <div id="altBox"><label>Ürün türü</label><div class="seg" id="f_alt"></div></div>
     <div class="g2">
       <div><label>Söz verilen teslim</label><input id="f_teslim" type="date"></div>
-      <div><label>Siparişi alan</label><select id="f_alan"></select></div>
+      <div></div>
+    </div>
+    <label>Siparişi alan</label>
+    <div class="seg" id="alanSeg"></div>
+    <select id="f_alan" style="display:none"></select>
+    <div id="newSeller" style="display:none;margin-top:8px">
+      <div style="display:grid;grid-template-columns:1fr 90px 74px;gap:8px">
+        <input id="ns_ad" placeholder="Ad soyad"><input id="ns_kod" placeholder="Kısa ad" style="text-transform:uppercase"><button type="button" class="x" id="ns_ok" style="background:var(--grad);color:#fff;border:0">Ekle</button>
+      </div>
     </div>
   </fieldset>
 
@@ -306,7 +314,7 @@ SHOPS["22"].alt = {"22 ayar ürün":["Yüzük","Kolye","Küpe","Set","Diğer"], 
 const ST = [["alindi","Sipariş alındı"],["toptancida","Toptancıya verildi"],["hazir","Geldi / hazır"],["haber","Müşteriye haber verildi"],["teslim","Teslim edildi"]];
 const STN = Object.fromEntries([...ST,["iptal","İptal"]]);
 const ODEME = ["Nakit","Kart","Havale","Altın"];
-let db=null, user=null, assets=null, shop="22", orders={"22":[], "14":[]}, settings={toptanci:[],personel:[],imza:"Marka Istanbul · Keupstraße 67, Köln · 0221 80039255"};
+let db=null, user=null, assets=null, shop="22", orders={"22":[], "14":[]}, settings={toptanci:[],personel:["Yunus Emre Bilgin (YEB)","Yunus Özkan (YÖ)"],imza:"Marka Istanbul · Keupstraße 67, Köln · 0221 80039255"};
 let filter="aktif", editing=null, formState={}, unsub={}, canWrite=true;
 
 function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("on"),2600); }
@@ -347,7 +355,7 @@ function renderList(){
   $("list").innerHTML = a.map(o=>`<div class="card s-${o.durum}${isLate(o)?" islate":""}" data-no="${esc(o.no)}">
     <div class="t"><div><span class="no">${esc(o.no)}</span> <span class="ty">${esc(o.cesit)}${o.alt?" · "+esc(o.alt):""}</span></div><span class="badge st-${o.durum}">${STN[o.durum]||""}</span></div>
     <div class="m">${esc(o.musteri)}${o.model?" · "+esc(o.model):""}</div>
-    <div class="s"><span class="${isLate(o)?"late":""}">Teslim: ${fd(o.teslimTarih)}${isLate(o)?" ⚠":""}</span>${o.toptanci?`<span>🏭 ${esc(o.toptanci)}</span>`:""}${o.kalan>0?`<span>Kalan ${eur(o.kalan)}</span>`:""}</div>
+    <div class="s"><span class="${isLate(o)?"late":""}">Teslim: ${fd(o.teslimTarih)}${isLate(o)?" ⚠":""}</span>${o.toptanci?`<span>🏭 ${esc(o.toptanci)}</span>`:""}${o.kalan>0?`<span>Kalan ${eur(o.kalan)}</span>`:""}${o.alan?`<span>👤 ${esc(kisa(o.alan))}</span>`:""}</div>
   </div>`).join("");
 }
 
@@ -374,7 +382,7 @@ function openForm(o){
   editing = o || null;
   formState = o ? {cesit:o.cesit, alt:o.alt||"", odeme:o.odeme||"", fotos:[...(o.fotos||[])]} : {cesit:SHOPS[shop].cesit[0], alt:"", odeme:"", fotos:[]};
   $("fTitle").textContent = (o ? "Düzenle · " + o.no : "Yeni sipariş") + " · " + SHOPS[shop].name;
-  $("f_alan").innerHTML = `<option value="">–</option>` + settings.personel.map(p=>`<option>${esc(p)}</option>`).join("");
+  fillAlan(o ? (o.alan||"") : "");
   $("dl_top").innerHTML = settings.toptanci.map(t=>`<option value="${esc(t)}">`).join("");
   for (const [k,id] of Object.entries(FIELDS)) $(id).value = o ? (o[k]??"") : "";
   if (!o){ $("f_no").value = nextNo(); $("f_tarih").value = today(); $("f_adet").value = 1; }
@@ -385,6 +393,26 @@ function openForm(o){
   $("uplLbl").style.display = assets ? "" : "none";
   show("form"); $("bar").classList.add("on");
 }
+function fillAlan(val){
+  const list = [...settings.personel]; if (val && !list.includes(val)) list.push(val);
+  $("f_alan").innerHTML = `<option value="">– seçin –</option>` + list.map(p=>`<option ${p===val?"selected":""}>${esc(p)}</option>`).join("") + `<option value="__new">＋ Yeni satıcı ekle…</option>`;
+  $("newSeller").style.display = "none";
+  $("alanSeg").innerHTML = list.map(p=>`<button type="button" data-v="${esc(p)}" class="${p===val?"on":""}" title="${esc(p)}"><b>${esc(kisa(p))}</b> <span style="font-weight:500;font-size:12px">${esc(p.replace(/\s*\([^)]*\)\s*$/,""))}</span></button>`).join("")
+    + `<button type="button" data-v="__new">＋ Yeni satıcı</button>`;
+  $("alanSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    $("f_alan").value = b.dataset.v; $("f_alan").dispatchEvent(new Event("change"));
+    $("alanSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("on", x===b));
+  });
+}
+$("f_alan").addEventListener("change", ()=>{ const n = $("f_alan").value==="__new"; $("newSeller").style.display = n ? "" : "none"; if (n){ $("ns_ad").value=""; $("ns_kod").value=""; $("ns_ad").focus(); } });
+$("ns_ok").onclick = ()=>{
+  const ad=$("ns_ad").value.trim(), kod=$("ns_kod").value.trim().toLocaleUpperCase("tr-TR");
+  if (!ad) return toast("Satıcının adını yazın");
+  const v = kod ? `${ad} (${kod})` : ad;
+  if (!settings.personel.includes(v)){ settings.personel.push(v); saveSettings(true); }
+  fillAlan(v); toast("Satıcı eklendi ✔");
+};
+const kisa = a => { const m=String(a||"").match(/\(([^)]+)\)\s*$/); return m ? m[1] : (a||""); };
 function renderPhotos(){
   $("f_photos").innerHTML = formState.fotos.map((id,i)=>`<div class="ph"><img src="${PH(id)}" alt=""><button type="button" data-rm="${i}">×</button></div>`).join("");
   $("f_photos").querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{ formState.fotos.splice(+b.dataset.rm,1); renderPhotos(); });
@@ -411,6 +439,7 @@ async function saveForm(){
   for (const [k,id] of Object.entries(FIELDS)){ const v=$(id).value.trim(); o[k] = NUM.includes(k) ? (v===""?null:parseFloat(v)) : v; }
   o.no = o.no.replace(/\s/g,"");
   if (/^\d+$/.test(o.no) && o.no.length<6) o.no = pad(o.no);
+  if (o.alan==="__new") o.alan="";
   o.cesit=formState.cesit; o.alt=formState.alt||""; o.odeme=formState.odeme||""; o.fotos=formState.fotos;
   o.kalan = o.fiyat!=null ? Math.round(((o.fiyat||0)-(o.kapora||0))*100)/100 : null;
   o.dukkan = shop;
@@ -595,7 +624,7 @@ async function start(){
       if ($("det").classList.contains("on") && editing && k===shop && !$("form").classList.contains("on")){ const o=orders[k].find(x=>x.no===editing.no); if (o && o.guncelleme!==editing.guncelleme) openDetail(o.no); }
     }, ()=>{ $("conn").textContent = "Bağlantı hatası – internet bağlantısını kontrol edin."; });
   }
-  db.doc("ayarlar/genel").onSnapshot(s=>{ if (s.exists){ const d=s.data(); settings={toptanci:[...(d.toptanci||[])], personel:[...(d.personel||[])], imza:d.imza??settings.imza}; } });
+  db.doc("ayarlar/genel").onSnapshot(s=>{ if (s.exists){ const d=s.data(); settings={toptanci:[...(d.toptanci||[])], personel:(d.personel&&d.personel.length)?[...d.personel]:settings.personel, imza:d.imza??settings.imza}; if ($("form").classList.contains("on") && !$("f_alan").matches(":focus")) fillAlan($("f_alan").value); } });
 }
 (async ()=>{
   try{ const s=localStorage.getItem("mi_shop"); if (SHOPS[s]){ shop=s; document.querySelectorAll(".shops button").forEach(x=>x.classList.toggle("on",x.dataset.shop===s)); } }catch(e){}
