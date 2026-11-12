@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="robots" content="noindex, nofollow">
+<title>Yönetici – Çeyrekmatik</title>
+<link rel="icon" type="image/png" href="icon-192.png">
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+:root{--cop:#c4702a;--cop2:#a85a1c;--line:#ead7c3;--bg2:#fbf6f0;--muted:#8a8178;--grad:linear-gradient(135deg,#a85a1c 0%,#e3a15a 45%,#c4702a 70%,#8f4a14 100%)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:#fff;color:#1d1d1f;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 16px 60px}
+.logo{display:block;width:200px;margin:0 auto 4px}
+h1{text-align:center;font-size:13px;letter-spacing:4px;text-transform:uppercase;color:var(--cop2);margin-bottom:18px}
+h2{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--cop2);margin:22px 0 8px}
+.card{border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}
+input,select{width:100%;background:var(--bg2);border:1px solid var(--line);color:#1d1d1f;padding:11px;border-radius:10px;font-size:16px;font-family:inherit}
+input:focus{outline:none;border-color:var(--cop)}
+.btn{background:var(--grad);color:#fff;border:0;padding:13px 16px;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;width:100%;margin-top:14px}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--muted);font-weight:600}
+.btn:disabled{opacity:.5}
+.note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:8px}
+.note a{color:var(--cop2)}
+.err{color:#c62828;font-size:13px;margin-top:10px;min-height:18px}
+.hide{display:none!important}
+.spot{text-align:center;font-size:13px;color:var(--muted);margin-bottom:10px}
+.spot b{color:var(--cop2);font-size:16px}
+.row{border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;background:#fff}
+.row .top{display:grid;grid-template-columns:1fr 92px 92px;gap:8px;align-items:end}
+.row .top label{margin-top:0}
+.row .meta{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.row .meta .p{flex:1;font-size:13px;color:var(--muted)}
+.row .meta .p b{color:#1d1d1f;font-size:15px}
+.ib{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:14px;cursor:pointer;color:var(--muted)}
+.ib.del{color:#c62828}
+.more{margin-top:8px;display:grid;grid-template-columns:1fr 1fr 80px;gap:8px}
+.more label{margin-top:0}
+.sep{border-top:1.5px solid #1d1d1f;margin:10px 0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1f8a55;color:#fff;padding:12px 18px;border-radius:20px;font-weight:600;font-size:14px;opacity:0;transition:.3s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1}
+.toast.bad{background:#c62828}
+.bar{position:sticky;bottom:0;background:#fff;padding:10px 0 calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line);margin-top:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="logo" src="logo.png" alt="Marka Istanbul">
+  <h1>Çeyrekmatik · Yönetici</h1>
+
+  <!-- Kurulum (bir kez) -->
+  <section id="setup" class="hide">
+    <div class="card">
+      <h2 style="margin-top:0">İlk kurulum</h2>
+      <p class="note">Bu adım sadece bir kez yapılır. GitHub anahtarı (token) şifrenizle kilitlenip saklanır. Sonra herkes sadece şifreyle girer.</p>
+      <label>GitHub anahtarı (token)</label>
+      <input id="sToken" type="password" autocomplete="off" placeholder="github_pat_…">
+      <label>Yönetici şifresi (en az 8 karakter)</label>
+      <input id="sPw1" type="password" autocomplete="new-password">
+      <label>Şifre tekrar</label>
+      <input id="sPw2" type="password" autocomplete="new-password">
+      <button class="btn" id="sGo">Kurulumu tamamla</button>
+      <div class="err" id="sErr"></div>
+      <p class="note">Anahtar nasıl alınır: <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Fine-grained token</a> → Repository access: <b>Only select repositories → xenosmart-website</b> → Permissions: <b>Contents: Read and write</b> ve <b>Actions: Read and write</b> → Generate token.</p>
+    </div>
+  </section>
+
+  <!-- Giriş -->
+  <section id="login" class="hide">
+    <div class="card">
+      <label>Yönetici şifresi</label>
+      <input id="pw" type="password" autocomplete="current-password">
+      <button class="btn" id="go">Giriş</button>
+      <div class="err" id="lErr"></div>
+    </div>
+  </section>
+
+  <!-- Düzenleme -->
+  <section id="editor" class="hide">
+    <div class="spot" id="spot">Has altın yükleniyor…</div>
+
+    <h2>Günlük paylaşım (her sabah 10:00)</h2>
+    <div class="card" style="text-align:center">
+      <img id="panoImg" alt="Günlük fiyat görseli" style="width:62%;max-width:300px;border:1px solid var(--line);border-radius:10px;display:block;margin:0 auto">
+      <div class="note" id="panoInfo" style="text-align:center"></div>
+      <div class="grid2">
+        <button class="btn" id="panoShare" style="margin-top:10px">Paylaş</button>
+        <a class="btn ghost" id="panoDl" download="marka-fiyatlar.png" style="margin-top:10px;display:block;text-decoration:none;text-align:center">İndir</a>
+      </div>
+      <button class="btn ghost" id="panoNow" style="margin-top:8px">Şimdi yeni görsel oluştur</button>
+      <p class="note">Görsel her sabah 10:00'da güncel fiyatlarla otomatik hazırlanır. "Paylaş" ile Instagram hikâyesine veya WhatsApp durumuna tek dokunuşla gönderin. <a href="pano.html" target="_blank">Canlı panoyu aç</a></p>
+    </div>
+
+    <h2>Altınlar</h2>
+    <div id="prodRows"></div>
+    <button class="ib" id="addProd">+ Ürün ekle</button>
+
+    <h2>Bilezikler (gram fiyatı)</h2>
+    <div id="braRows"></div>
+    <button class="ib" id="addBra">+ Bilezik ekle</button>
+
+    <h2>Genel</h2>
+    <div class="card">
+      <label>Manuel has gram fiyatı (€) – boş bırakın = Kitco canlı fiyat</label>
+      <input id="manSpot" type="number" step="0.01" inputmode="decimal" placeholder="boş = canlı">
+      <div class="grid2">
+        <div><label>WhatsApp numarası</label><input id="wa" type="tel" placeholder="4922180039255"></div>
+        <div><label>Telefon</label><input id="tel" type="tel" placeholder="+4922180039255"></div>
+      </div>
+    </div>
+
+    <div class="bar">
+      <button class="btn" id="save">Kaydet ve yayınla</button>
+      <button class="btn ghost" id="logout">Çıkış</button>
+    </div>
+    <p class="note" style="text-align:center">Kaydettikten sonra yeni fiyatlar yaklaşık 1 dakika içinde tüm telefonlarda görünür.</p>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const REPO = "trawigo67-web/xenosmart-website", BRANCH = "main";
+const CFG = "markaistanbul/config.json", KEY = "markaistanbul/admin-key.json";
+const OZ = 31.1034768;
+const $ = id => document.getElementById(id);
+const enc = new TextEncoder(), dec = new TextDecoder();
+let token = null, cfg = null, cfgSha = null, spotG = null;
+
+function toast(m, bad){ const t=$("toast"); t.textContent=m; t.classList.toggle("bad",!!bad); t.classList.add("on"); setTimeout(()=>t.classList.remove("on"), 3200); }
+const b64 = u8 => btoa(String.fromCharCode(...u8));
+const unb64 = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+const utf8b64 = str => { const u = enc.encode(str); let s=""; for (let i=0;i<u.length;i+=0x8000) s += String.fromCharCode(...u.subarray(i,i+0x8000)); return btoa(s); };
+const b64utf8 = s => dec.decode(unb64(s.replace(/\n/g,"")));
+
+async function deriveKey(pw, salt, iter){
+  const base = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations:iter, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["encrypt","decrypt"]);
+}
+async function gh(path, opt={}){
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}` + (opt.method ? "" : `?ref=${BRANCH}&t=${Date.now()}`), {
+    method: opt.method || "GET",
+    headers: Object.assign({"Accept":"application/vnd.github+json"}, token ? {"Authorization":"Bearer "+token} : {}, opt.body ? {"Content-Type":"application/json"} : {}),
+    body: opt.body ? JSON.stringify(opt.body) : undefined, cache:"no-store"
+  });
+  if (!r.ok){ const e = new Error("GitHub " + r.status); e.status = r.status; throw e; }
+  return r.json();
+}
+async function readKeyFile(){
+  try{ const r = await fetch(`admin-key.json?t=${Date.now()}`, {cache:"no-store"}); if (r.ok) return await r.json(); }catch(e){}
+  try{ const j = await gh(KEY); return JSON.parse(b64utf8(j.content)); }catch(e){ return null; }
+}
+
+/* ---------- Kurulum ---------- */
+$("sGo").onclick = async () => {
+  const tk = $("sToken").value.trim(), p1 = $("sPw1").value, p2 = $("sPw2").value;
+  $("sErr").textContent = "";
+  if (!tk) return $("sErr").textContent = "Lütfen GitHub anahtarını girin.";
+  if (p1.length < 8) return $("sErr").textContent = "Şifre en az 8 karakter olmalı.";
+  if (p1 !== p2) return $("sErr").textContent = "Şifreler aynı değil.";
+  $("sGo").disabled = true;
+  try{
+    token = tk;
+    await gh(CFG); // Anahtar çalışıyor mu?
+    const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12)), iter = 250000;
+    const key = await deriveKey(p1, salt, iter);
+    const ct = new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, enc.encode(tk)));
+    const blob = {v:1, iter, salt:b64(salt), iv:b64(iv), ct:b64(ct)};
+    let sha; try{ sha = (await gh(KEY)).sha; }catch(e){}
+    await gh(KEY, {method:"PUT", body:{message:"Çeyrekmatik: Admin-Schlüssel (verschlüsselt)", content:utf8b64(JSON.stringify(blob)), branch:BRANCH, sha}});
+    try{ sessionStorage.setItem("ck_tok", tk); }catch(e){}
+    toast("Kurulum tamam ✔");
+    openEditor();
+  }catch(e){
+    token = null;
+    $("sErr").textContent = e.status===401||e.status===403||e.status===404 ? "Anahtar geçersiz veya yetkisi yok (Contents: Read and write gerekli)." : "Hata: " + e.message;
+  }finally{ $("sGo").disabled = false; }
+};
+
+/* ---------- Giriş ---------- */
+async function login(){
+  $("lErr").textContent = ""; $("go").disabled = true;
+  try{
+    const k = await readKeyFile(); if (!k) throw new Error("nokey");
+    const key = await deriveKey($("pw").value, unb64(k.salt), k.iter);
+    const pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:unb64(k.iv)}, key, unb64(k.ct));
+    token = dec.decode(pt);
+    try{ sessionStorage.setItem("ck_tok", token); }catch(e){}
+    await openEditor();
+  }catch(e){
+    token = null;
+    $("lErr").textContent = e.message==="nokey" ? "Kurulum yapılmamış." : (e.status ? "GitHub anahtarı artık geçerli değil. Yeni kurulum gerekli." : "Şifre yanlış.");
+  }finally{ $("go").disabled = false; }
+}
+$("go").onclick = login;
+$("pw").addEventListener("keydown", e=>{ if (e.key==="Enter") login(); });
+$("logout").onclick = () => { try{ sessionStorage.removeItem("ck_tok"); }catch(e){} location.reload(); };
+
+/* ---------- Düzenleme ---------- */
+async function loadSpot(){
+  try{
+    const f = (await (await fetch("https://proxy.kitco.com/getPM?symbol=AU&currency=EUR",{cache:"no-store"})).text()).trim().split(",");
+    spotG = parseFloat(f[4])/OZ;
+  }catch(e){
+    try{ const j = await (await fetch("https://api.gold-api.com/price/XAU/EUR")).json(); spotG = j.price/OZ; }catch(_){ spotG = null; }
+  }
+  renderPrices();
+}
+function curSpot(){ const m = parseFloat($("manSpot").value); return m > 0 ? m : spotG; }
+const eur = v => isFinite(v) ? Math.round(v).toLocaleString("tr-TR") + " €" : "—";
+
+function rowHtml(o, kind, i){
+  const isP = kind==="p";
+  return `<div class="row" data-kind="${kind}" data-i="${i}">
+    <div class="top">
+      <div><label>Ad (TR)</label><input data-f="tr" value="${(o.tr||"").replace(/"/g,"&quot;")}"></div>
+      ${isP ? `<div><label>Gram</label><input data-f="gram" type="number" step="0.001" inputmode="decimal" value="${o.gram??""}"></div>` : `<div><label>Ayar</label><select data-f="purity">${[[0.916,"22"],[0.75,"18"],[0.585,"14"]].map(([v,l])=>`<option value="${v}" ${+o.purity===v?"selected":""}>${l}</option>`).join("")}</select></div>`}
+      <div><label>Satış milyem</label><input data-f="satisMilyem" type="number" step="0.5" inputmode="decimal" value="${o.satisMilyem??""}"></div>
+    </div>
+    <div class="meta">
+      <div class="p">Fiyat: <b class="pv">—</b>${isP?"":" / g"}</div>
+      <button class="ib" data-a="up">↑</button><button class="ib" data-a="down">↓</button>
+      <button class="ib" data-a="more">DE / EN</button><button class="ib del" data-a="del">Sil</button>
+    </div>
+    <div class="more hide">
+      <div><label>Ad (DE)</label><input data-f="de" value="${(o.de||"").replace(/"/g,"&quot;")}"></div>
+      <div><label>Ad (EN)</label><input data-f="en" value="${(o.en||"").replace(/"/g,"&quot;")}"></div>
+      <div><label>Grup</label><input data-f="grup" type="number" min="1" step="1" value="${o.grup??1}"></div>
+    </div>
+  </div>`;
+}
+function renderRows(){
+  $("prodRows").innerHTML = cfg.products.map((o,i)=>rowHtml(o,"p",i)).join("");
+  $("braRows").innerHTML = cfg.bracelets.map((o,i)=>rowHtml(o,"b",i)).join("");
+  renderPrices();
+}
+function renderPrices(){
+  const s = curSpot();
+  $("spot").innerHTML = s ? `Has altın (1 g): <b>${s.toLocaleString("tr-TR",{style:"currency",currency:"EUR"})}</b> ${parseFloat($("manSpot").value)>0?"· manuel":"· Kitco canlı"}` : "Has altın fiyatı alınamadı";
+  document.querySelectorAll(".row").forEach(r=>{
+    const o = (r.dataset.kind==="p"?cfg.products:cfg.bracelets)[+r.dataset.i];
+    const v = r.dataset.kind==="p" ? o.gram*(o.satisMilyem/1000)*s : (o.satisMilyem/1000)*s;
+    r.querySelector(".pv").textContent = s && o.satisMilyem ? eur(v) : "—";
+  });
+}
+document.addEventListener("input", e=>{
+  const r = e.target.closest(".row");
+  if (r && e.target.dataset.f){
+    const o = (r.dataset.kind==="p"?cfg.products:cfg.bracelets)[+r.dataset.i], f = e.target.dataset.f;
+    o[f] = ["gram","satisMilyem","purity","grup"].includes(f) ? (e.target.value===""?null:+e.target.value) : e.target.value;
+  }
+  renderPrices();
+});
+document.addEventListener("click", e=>{
+  const b = e.target.closest(".row .ib"); if (!b) return;
+  const r = b.closest(".row"), arr = r.dataset.kind==="p"?cfg.products:cfg.bracelets, i = +r.dataset.i;
+  if (b.dataset.a==="more"){ r.querySelector(".more").classList.toggle("hide"); return; }
+  if (b.dataset.a==="del"){ if (confirmDel(arr[i])) { arr.splice(i,1); renderRows(); } return; }
+  if (b.dataset.a==="up" && i>0){ [arr[i-1],arr[i]]=[arr[i],arr[i-1]]; renderRows(); }
+  if (b.dataset.a==="down" && i<arr.length-1){ [arr[i+1],arr[i]]=[arr[i],arr[i+1]]; renderRows(); }
+});
+function confirmDel(o){ return window.confirm(`"${o.tr}" silinsin mi?`); }
+$("addProd").onclick = ()=>{ cfg.products.push({id:"p"+Date.now(), tr:"Yeni ürün", de:"", en:"", gram:1.75, purity:0.916, satisMilyem:960, grup:(cfg.products.at(-1)||{}).grup||1}); renderRows(); };
+$("addBra").onclick = ()=>{ cfg.bracelets.push({id:"b"+Date.now(), tr:"Yeni bilezik", de:"", en:"", purity:0.916, satisMilyem:960, grup:3}); renderRows(); };
+
+let panoBlob = null;
+async function loadPano(){
+  try{
+    const meta = await (await fetch("pano/latest.json?t="+Date.now(),{cache:"no-store"})).json();
+    panoBlob = await (await fetch("pano/latest.png?t="+Date.now(),{cache:"no-store"})).blob();
+    const url = URL.createObjectURL(panoBlob);
+    $("panoImg").src = url; $("panoDl").href = url;
+    $("panoDl").download = `marka-fiyatlar-${meta.date}.png`;
+    const d = new Date(meta.created);
+    $("panoInfo").textContent = "Oluşturuldu: " + d.toLocaleString("tr-TR",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"});
+  }catch(e){ $("panoInfo").textContent = "Henüz görsel yok – ilk görsel yarın 10:00'da veya 'Şimdi oluştur' ile."; }
+}
+$("panoShare").onclick = async ()=>{
+  if (!panoBlob) return toast("Görsel henüz hazır değil", true);
+  const file = new File([panoBlob], "marka-fiyatlar.png", {type:"image/png"});
+  if (navigator.canShare && navigator.canShare({files:[file]})){
+    try{ await navigator.share({files:[file], text:"Marka Istanbul · Güncel altın fiyatları"}); }catch(e){}
+  } else { $("panoDl").click(); toast("Bu cihaz doğrudan paylaşımı desteklemiyor – görsel indirildi"); }
+};
+$("panoNow").onclick = async ()=>{
+  $("panoNow").disabled = true;
+  try{
+    const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/pano.yml/dispatches`, {method:"POST",
+      headers:{"Accept":"application/vnd.github+json","Authorization":"Bearer "+token,"Content-Type":"application/json"}, body:JSON.stringify({ref:BRANCH})});
+    if (r.status===204){ toast("Görsel hazırlanıyor – yaklaşık 3 dakika"); setTimeout(loadPano, 200000); }
+    else if (r.status===403||r.status===404) toast("Anahtarın 'Actions' yetkisi yok – yeni kurulum gerekli", true);
+    else toast("Başlatılamadı ("+r.status+")", true);
+  }catch(e){ toast("Başlatılamadı", true); }
+  finally{ setTimeout(()=>$("panoNow").disabled=false, 5000); }
+};
+
+async function openEditor(){
+  ["setup","login"].forEach(id=>$(id).classList.add("hide"));
+  const j = await gh(CFG); cfgSha = j.sha; cfg = JSON.parse(b64utf8(j.content));
+  cfg.products = cfg.products||[]; cfg.bracelets = cfg.bracelets||[];
+  $("manSpot").value = cfg.manualSpot || ""; $("wa").value = cfg.whatsapp || ""; $("tel").value = cfg.telefon || "";
+  $("editor").classList.remove("hide");
+  renderRows(); loadSpot(); loadPano();
+}
+$("save").onclick = async ()=>{
+  // Prüfen
+  for (const o of [...cfg.products, ...cfg.bracelets]){
+    if (!o.tr || !(o.satisMilyem > 0) || (o.gram!==undefined && cfg.products.includes(o) && !(o.gram > 0))) return toast(`"${o.tr||"?"}": ad, gram ve milyem dolu olmalı`, true);
+    if (o.satisMilyem > 1500) return toast(`"${o.tr}": milyem çok yüksek görünüyor`, true);
+    if (!o.de) o.de = o.tr; if (!o.en) o.en = o.tr;
+  }
+  cfg.manualSpot = parseFloat($("manSpot").value) > 0 ? +$("manSpot").value : null;
+  cfg.whatsapp = $("wa").value.replace(/\D/g,""); cfg.telefon = $("tel").value.trim();
+  $("save").disabled = true;
+  try{
+    try{ cfgSha = (await gh(CFG)).sha; }catch(e){}
+    const r = await gh(CFG, {method:"PUT", body:{message:"Çeyrekmatik: Preise über Admin geändert", content:utf8b64(JSON.stringify(cfg,null,1)), sha:cfgSha, branch:BRANCH}});
+    cfgSha = r.content.sha;
+    toast("Kaydedildi ✔ – 1 dakika içinde yayında");
+  }catch(e){ toast("Kaydedilemedi: " + e.message, true); }
+  finally{ $("save").disabled = false; }
+};
+
+/* ---------- Başlangıç ---------- */
+(async ()=>{
+  try{ token = sessionStorage.getItem("ck_tok"); }catch(e){}
+  if (token){ try{ await openEditor(); return; }catch(e){ token = null; } }
+  const k = await readKeyFile();
+  $(k ? "login" : "setup").classList.remove("hide");
+})();
+</script>
+</body>
+</html>

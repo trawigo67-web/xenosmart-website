@@ -194,19 +194,7 @@ input:focus,select:focus{outline:none;border-color:var(--cop)}
     <div style="margin-top:8px"><a href="impressum.html" data-t="imprint"></a></div>
   </div>
 
-  <!-- Yönetici: yalnızca ?admin ile açılır. Değişiklikler sadece önizlemedir; kalıcı olması için config.json güncellenir. -->
-  <section id="adm" class="hide card adm" style="margin-top:14px">
-    <h3 data-t="admTitle"></h3>
-    <div class="warn" data-t="admWarn"></div>
-    <label data-t="manualSpot"></label>
-    <input id="manSpot" type="number" step="0.01" placeholder="örn. 112.00">
-    <table style="margin-top:12px">
-      <thead><tr><th data-t="product"></th><th data-t="mSell"></th><th data-t="labor"></th></tr></thead>
-      <tbody id="admRows"></tbody>
-    </table>
-    <button class="btn" id="admApply" data-t="apply"></button>
-    <button class="btn ghost" id="admCopy" data-t="copyCfg"></button>
-  </section>
+
 </div>
 <div class="toast" id="toast"></div>
 
@@ -414,23 +402,7 @@ addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); deferredPrompt 
 $("installBtn").addEventListener("click", async ()=>{ if(!deferredPrompt) return; deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; $("install").classList.remove("on"); });
 $("installX").addEventListener("click", ()=>{ ls.set("mi_noinstall","1"); $("install").classList.remove("on"); });
 
-/* Yönetici önizleme (?admin) */
-function renderAdm(){
-  const rows = [...cfg.products.map(p=>["products",p]), ...cfg.bracelets.map(b=>["bracelets",b])];
-  $("admRows").innerHTML = rows.map(([g,o])=>`<tr><td style="font-size:12px">${nm(o)}</td>
-    <td><input data-g="${g}" data-id="${o.id}" data-f="satis" type="number" step="0.1" value="${o.satis}"></td>
-    <td><input data-g="${g}" data-id="${o.id}" data-f="iscilik" type="number" step="0.5" value="${o.iscilik}"></td></tr>`).join("");
-  $("manSpot").value = cfg.manualSpot || "";
-}
-function toast(m){ const el=$("toast"); el.textContent=m; el.classList.add("on"); setTimeout(()=>el.classList.remove("on"),1600); }
-$("admApply").addEventListener("click",()=>{
-  document.querySelectorAll("#admRows input").forEach(inp=>{ const o = cfg[inp.dataset.g].find(x=>x.id===inp.dataset.id); o[inp.dataset.f] = +inp.value||0; });
-  cfg.manualSpot = $("manSpot").value ? +$("manSpot").value : null;
-  fetchSpot();
-});
-$("admCopy").addEventListener("click",async()=>{
-  try{ await navigator.clipboard.writeText(JSON.stringify(cfg,null,2)); toast(t("copied")); }catch(e){ toast("—"); }
-});
+
 
 document.addEventListener("click", e=>{
   const l = e.target.closest(".lang button"); if (l){ lang=l.dataset.l; ls.set("mi_lang",lang); renderAll(); }
@@ -446,7 +418,6 @@ document.querySelectorAll(".zi").forEach(i=>i.addEventListener("input",renderZek
   lang = ls.get("mi_lang") || ({de:"de",en:"en"}[(navigator.language||"tr").slice(0,2)] || "tr"); if(!T[lang]) lang="tr";
   renderTexts();
   await loadConfig();
-  if (new URLSearchParams(location.search).has("admin")){ $("adm").classList.remove("hide"); renderAdm(); }
   await fetchSpot();
   setInterval(fetchSpot, 60000);
   document.addEventListener("visibilitychange", ()=>{ if (!document.hidden) fetchSpot(); });

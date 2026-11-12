@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<meta name="robots" content="noindex">
+<title>Marka Istanbul – Günlük Fiyat Panosu</title>
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff}
+body{font-family:Inter,system-ui,sans-serif;color:#1d1d1f;-webkit-font-smoothing:antialiased}
+#pano{position:relative;width:1080px;height:1920px;overflow:hidden;background:#fff}
+.w{position:absolute;pointer-events:none}
+.w.tl{left:0;top:0;width:190px}
+.w.br{right:0;bottom:0;width:175px}
+.logo{position:absolute;left:50%;top:95px;transform:translateX(-50%);width:740px}
+.date{position:absolute;top:545px;width:100%;text-align:center;font-size:26px;letter-spacing:6px;color:#a85a1c;text-transform:uppercase;font-weight:600}
+.list{position:absolute;left:190px;right:190px;top:610px}
+.r{display:grid;grid-template-columns:1fr 3px 1fr;align-items:center;height:103px;border-bottom:2px solid #e3a15a}
+.r.end{border-bottom:2.5px solid #1d1d1f}
+.r .n{font-size:38px;letter-spacing:7px;padding-left:24px;font-weight:500}
+.r .b{width:3px;height:46px;background:#c4702a;justify-self:center}
+.r .v{text-align:right;font-size:44px;letter-spacing:3px;padding-right:34px;font-variant-numeric:tabular-nums}
+.orn{display:flex;align-items:center;justify-content:center;margin-top:0}
+.orn i{display:block;height:2px;background:#c4702a}
+.orn b{display:block;width:20px;height:20px;background:#c4702a;transform:rotate(45deg);margin:0 2px}
+.foot{position:absolute;left:0;right:0;bottom:120px;text-align:center;font-size:27px;line-height:1.45}
+.foot .o2{display:flex;justify-content:center;align-items:center;gap:20px;margin-top:22px}
+.foot .o2 i{display:block;width:75px;height:2px;background:#c4702a}
+.foot .o2 b{display:block;width:16px;height:16px;background:#c4702a;transform:rotate(45deg)}
+.addr{position:absolute;left:0;right:0;bottom:52px;text-align:center;font-size:21px;letter-spacing:2px;color:#8a8178}
+</style>
+</head>
+<body>
+<div id="pano">
+  <img class="w tl" src="wave-tl.png" alt="">
+  <img class="w br" src="wave-br.png" alt="">
+  <img class="logo" src="logo.png" alt="Marka Istanbul">
+  <div class="date" id="date"></div>
+  <div class="list" id="list"></div>
+  <div class="foot">Altın fiyatları güncel kura<br>göre değişmektedir.<div class="o2"><i></i><b></b><i></i></div></div>
+  <div class="addr">KEUPSTRASSE 67 · KÖLN · 0221 80039255</div>
+</div>
+<script>
+const OZ = 31.1034768;
+async function spot(cfg){
+  if (cfg.manualSpot) return +cfg.manualSpot;
+  try{ const f=(await (await fetch("https://proxy.kitco.com/getPM?symbol=AU&currency=EUR",{cache:"no-store"})).text()).trim().split(","); const b=parseFloat(f[4]); if(b>1000) return b/OZ; }catch(e){}
+  try{ const j=await (await fetch("https://api.gold-api.com/price/XAU/EUR")).json(); if(j.price) return j.price/OZ; }catch(e){}
+  const d=await (await fetch("price.json?t="+Date.now())).json(); return d.ozEur/OZ;
+}
+(async()=>{
+  const cfg = await (await fetch("config.json?t="+Date.now(),{cache:"no-store"})).json();
+  const g = await spot(cfg);
+  const rows = [...cfg.products.map(p=>({n:p.tr, v:p.gram*(p.satisMilyem/1000)*g, grp:p.grup||1})),
+                ...cfg.bracelets.map(b=>({n:b.tr, v:(b.satisMilyem/1000)*g, grp:b.grup||3}))];
+  document.getElementById("list").innerHTML = rows.map((r,i)=>{
+    const end = rows[i+1] && rows[i+1].grp!==r.grp;
+    return `<div class="r${end?" end":""}"><div class="n">${r.n.toLocaleUpperCase("tr-TR")}</div><div class="b"></div><div class="v">${Math.round(r.v)} €</div></div>`;
+  }).join("") + `<div class="orn" style="margin-top:-11px"><i style="width:44%"></i><b></b><i style="width:44%"></i></div>`;
+  // Listenhöhe anpassen, falls mehr/weniger Zeilen
+  const h = Math.min(103, Math.floor(1060/rows.length));
+  document.querySelectorAll(".r").forEach(e=>e.style.height=h+"px");
+  document.getElementById("date").textContent = new Date().toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/Berlin"});
+  await document.fonts.ready;
+  document.body.dataset.ready = "1";
+})();
+</script>
+</body>
+</html>
