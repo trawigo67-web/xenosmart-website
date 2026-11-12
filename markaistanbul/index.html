@@ -304,16 +304,16 @@ async function fetchSpot(){
 }
 
 function priceOf(p){
-  // baz/kat: Preis = Preis des Basis-Artikels (z. B. Çeyrek) × Faktor (Yarım = 2, Tam = 4, Gremse = 10 …)
-  if (p.baz){ const b = cfg.products.find(x=>x.id===p.baz); if (b && !b.baz) return { sell: Math.round(priceOf(b).sell) * (+p.kat||0) }; }
-  // satisMilyem: Verkauf = Gewicht × Milyem/1000 × Feingoldpreis (inkl. Arbeit, z. B. Çeyrek 960)
-  const sell = p.satisMilyem ? p.gram*(p.satisMilyem/1000)*spotG : p.gram*p.purity*spotG*(1+p.satis/100) + (+p.iscilik||0);
-  return { sell };
+  // Alle Preise werden ABGERUNDET (Math.floor) – auf ganze Euro
+  // baz/kat: Preis = abgerundeter Preis des Basis-Artikels (z. B. Çeyrek) × Faktor (Yarım = 2, Tam = 4, Gremse = 10 …)
+  if (p.baz){ const b = cfg.products.find(x=>x.id===p.baz); if (b && !b.baz) return { sell: priceOf(b).sell * (+p.kat||0) }; }
+  const raw = p.satisMilyem ? p.gram*(p.satisMilyem/1000)*spotG : p.gram*p.purity*spotG*(1+p.satis/100) + (+p.iscilik||0);
+  return { sell: Math.floor(raw) };
 }
 function braceletPrice(b, g){
-  // satisMilyem je Gramm, sonst Feingold × Aufschlag + Arbeit je Gramm
-  const sell = b.satisMilyem ? g*(b.satisMilyem/1000)*spotG : g*b.purity*spotG*(1+b.satis/100) + g*(+b.iscilik||0);
-  return { sell };
+  // Grammpreis abgerundet, dann × Gramm
+  const perG = b.satisMilyem ? (b.satisMilyem/1000)*spotG : b.purity*spotG*(1+b.satis/100) + (+b.iscilik||0);
+  return { sell: Math.floor(perG) * g };
 }
 
 function renderTexts(){
@@ -336,7 +336,7 @@ function renderSpot(){
   $("status").textContent = t(src) + (src==="live" && srcName ? " (" + srcName + ")" : "") + (when ? " · " + when : "") + ch;
   $("dot").classList.toggle("off", src!=="live" && src!=="manual");
 }
-const euro0 = v => isFinite(v) ? Math.round(v).toLocaleString({tr:"tr-TR",de:"de-DE",en:"en-GB"}[lang]) + " €" : "—";
+const euro0 = v => isFinite(v) ? Math.floor(v).toLocaleString({tr:"tr-TR",de:"de-DE",en:"en-GB"}[lang]) + " €" : "—";
 function renderList(){
   const rows = [...cfg.products.map(p=>({n:nm(p), v:priceOf(p).sell, g:p.grup||1})),
                 ...cfg.bracelets.map(b=>({n:nm(b), v:braceletPrice(b,1).sell, g:b.grup||3, per:true}))];

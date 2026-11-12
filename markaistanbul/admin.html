@@ -210,7 +210,7 @@ async function loadSpot(){
   renderPrices();
 }
 function curSpot(){ const m = parseFloat($("manSpot").value); return m > 0 ? m : spotG; }
-const eur = v => isFinite(v) ? Math.round(v).toLocaleString("tr-TR") + " €" : "—";
+const eur = v => isFinite(v) ? Math.floor(v).toLocaleString("tr-TR") + " €" : "—";
 
 function rowHtml(o, kind, i){
   const isP = kind==="p";
@@ -239,7 +239,7 @@ function rowHtml(o, kind, i){
 }
 function baseName(id){ const b = cfg.products.find(x=>x.id===id); return b ? b.tr : "?"; }
 function priceP(o, s){
-  if (o.baz){ const b = cfg.products.find(x=>x.id===o.baz); return b && !b.baz ? Math.round(b.gram*(b.satisMilyem/1000)*s)*(+o.kat||0) : NaN; }
+  if (o.baz){ const b = cfg.products.find(x=>x.id===o.baz); return b && !b.baz ? Math.floor(b.gram*(b.satisMilyem/1000)*s)*(+o.kat||0) : NaN; }
   return o.gram*(o.satisMilyem/1000)*s;
 }
 function renderRows(){

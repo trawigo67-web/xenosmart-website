@@ -54,12 +54,12 @@ async function spot(cfg){
   const cfg = await (await fetch("config.json?t="+Date.now(),{cache:"no-store"})).json();
   const g = await spot(cfg);
   const base = p => p.gram*(p.satisMilyem/1000)*g;
-  const val = p => { if (p.baz){ const b=cfg.products.find(x=>x.id===p.baz); if (b) return Math.round(base(b))*(+p.kat||0); } return base(p); };
+  const val = p => { if (p.baz){ const b=cfg.products.find(x=>x.id===p.baz); if (b) return Math.floor(base(b))*(+p.kat||0); } return base(p); };
   const rows = [...cfg.products.map(p=>({n:p.tr, v:val(p), grp:p.grup||1})),
                 ...cfg.bracelets.map(b=>({n:b.tr, v:(b.satisMilyem/1000)*g, grp:b.grup||3}))];
   document.getElementById("list").innerHTML = rows.map((r,i)=>{
     const end = rows[i+1] && rows[i+1].grp!==r.grp;
-    return `<div class="r${end?" end":""}"><div class="n">${r.n.toLocaleUpperCase("tr-TR")}</div><div class="b"></div><div class="v">${Math.round(r.v)} €</div></div>`;
+    return `<div class="r${end?" end":""}"><div class="n">${r.n.toLocaleUpperCase("tr-TR")}</div><div class="b"></div><div class="v">${Math.floor(r.v)} €</div></div>`;
   }).join("") + `<div class="orn" style="margin-top:-11px"><i style="width:44%"></i><b></b><i style="width:44%"></i></div>`;
   // Listenhöhe anpassen, falls mehr/weniger Zeilen
   const h = Math.min(103, Math.floor(1060/rows.length));
