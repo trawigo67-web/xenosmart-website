@@ -270,6 +270,7 @@ body.role-e .onlyA{display:none!important}
   <fieldset><legend>Müşteri</legend>
     <label>Ad soyad *</label><input id="f_ad" autocomplete="off">
     <label>Telefon (WhatsApp) *</label><input id="f_tel" type="tel" inputmode="tel" placeholder="0176 1234567">
+    <label>WhatsApp mesaj dili</label><div class="seg" id="f_dil"></div>
   </fieldset>
 
   <fieldset><legend>Ödeme</legend>
@@ -421,7 +422,7 @@ const FIELDS = {no:"f_no",tarih:"f_tarih",teslimTarih:"f_teslim",alan:"f_alan",t
 const NUM = ["gelenGram","gram","adet","fiyat","kapora"];
 function openForm(o){
   editing = o || null;
-  formState = o ? {cesit:o.cesit, alt:o.alt||"", odeme:o.odeme||"", fotos:[...(o.fotos||[])]} : {cesit:SHOPS[shop].cesit[0], alt:"", odeme:"", fotos:[]};
+  formState = o ? {cesit:o.cesit, alt:o.alt||"", odeme:o.odeme||"", dil:o.dil||"tr", fotos:[...(o.fotos||[])]} : {cesit:SHOPS[shop].cesit[0], alt:"", odeme:"", dil:"tr", fotos:[]};
   $("fTitle").textContent = (o ? "Düzenle · " + o.no : "Yeni sipariş") + " · " + SHOPS[shop].name;
   fillAlan(o ? (o.alan||"") : "");
   $("dl_top").innerHTML = settings.toptanci.map(t=>`<option value="${esc(t)}">`).join("");
@@ -430,6 +431,7 @@ function openForm(o){
   $("f_no").disabled = !!o;
   seg($("f_cesit"), SHOPS[shop].cesit, formState.cesit, v=>{ formState.cesit=v; formState.alt=""; updCesit(); });
   seg($("f_odeme"), ODEME, formState.odeme, v=>formState.odeme=v);
+  seg($("f_dil"), DIL_L, DIL_LBL[formState.dil], v=>formState.dil=DIL_K[DIL_L.indexOf(v)]);
   updCesit(); updKalan(); renderPhotos(); $("fErr").textContent="";
   $("uplLbl").style.display = assets ? "" : "none";
   show("form"); $("bar").classList.add("on");
@@ -481,7 +483,7 @@ async function saveForm(){
   o.no = o.no.replace(/\s/g,"");
   if (/^\d+$/.test(o.no) && o.no.length<6) o.no = pad(o.no);
   if (o.alan==="__new") o.alan="";
-  o.cesit=formState.cesit; o.alt=formState.alt||""; o.odeme=formState.odeme||""; o.fotos=formState.fotos;
+  o.cesit=formState.cesit; o.alt=formState.alt||""; o.odeme=formState.odeme||""; o.dil=formState.dil||"tr"; o.fotos=formState.fotos;
   o.kalan = o.fiyat!=null ? Math.round(((o.fiyat||0)-(o.kapora||0))*100)/100 : null;
   o.dukkan = shop;
   if (!o.no) return $("fErr").textContent="Sipariş no gerekli.";
@@ -519,26 +521,46 @@ const MSG_DEF = {
   hazir: "Merhaba {musteri}, {no} numaralı siparişiniz hazırdır. Dükkânımızdan teslim alabilirsiniz.{kalanSatir}",
   gecikme: "Merhaba {musteri}, {no} numaralı siparişiniz biraz gecikecektir. Hazır olduğunda size hemen haber vereceğiz. Anlayışınız için teşekkür ederiz."
 };
+const MSG_DEF_DE = {
+  onaylandi: "Hallo {musteri}, Ihre Bestellung Nr. {no} wurde bestätigt.\nArtikel: {urun}{teslimSatir}{kalanSatir}\nVielen Dank!",
+  alindi: "Hallo {musteri}, Ihre Bestellung ist bei uns eingegangen.\nBestell-Nr.: {no}\nArtikel: {urun}{teslimSatir}{kalanSatir}\nVielen Dank!",
+  hazir: "Hallo {musteri}, Ihre Bestellung Nr. {no} ist fertig und kann bei uns im Geschäft abgeholt werden.{kalanSatir}",
+  gecikme: "Hallo {musteri}, Ihre Bestellung Nr. {no} verzögert sich leider etwas. Wir melden uns sofort, sobald sie fertig ist. Vielen Dank für Ihr Verständnis."
+};
+const DIL_K = ["tr","de","trde"], DIL_L = ["🇹🇷 Türkçe","🇩🇪 Deutsch","🇹🇷+🇩🇪 İkisi"], DIL_LBL = {tr:DIL_L[0], de:DIL_L[1], trde:DIL_L[2]};
 const MSG_LBL = {onayIstek:"Onay isteği (YEB/YÖ'ye)", onaylandi:"Sipariş onaylandı (müşteriye)", alindi:"Sipariş alındı (müşteriye)", hazir:"Sipariş hazır (müşteriye)", gecikme:"Gecikme bilgisi (müşteriye)"};
-function fillMsg(key, o, withImza=true){
-  const t = (settings.mesaj && settings.mesaj[key]) || MSG_DEF[key];
-  const v = {musteri:o.musteri||"", no:o.no||"", tel:o.tel||"", urun:[o.cesit,o.alt,o.model].filter(Boolean).join(" · "), dukkan:SHOPS[o.dukkan||shop].name,
-    toplam:o.fiyat!=null?eur(o.fiyat):"–", kapora:o.kapora!=null?eur(o.kapora):"–", kalan:o.kalan!=null?eur(o.kalan):"–", alan:o.alan||"–",
-    teslim:o.teslimTarih?fd(o.teslimTarih):"–", teslimSatir:o.teslimTarih?`\nTahmini teslim: ${fd(o.teslimTarih)}`:"", kalanSatir:o.kalan>0?`\nKalan ödeme: ${eur(o.kalan)}`:"",
+function fillOne(key, o, lang){
+  const de = lang==="de" && MSG_DEF_DE[key];
+  const t = de ? ((settings.mesajDe && settings.mesajDe[key]) || MSG_DEF_DE[key]) : ((settings.mesaj && settings.mesaj[key]) || MSG_DEF[key]);
+  const loc = de ? "de-DE" : "tr-TR";
+  const money = v => Number(v).toLocaleString(loc,{style:"currency",currency:"EUR"});
+  const dt = d => new Date(d+"T12:00:00").toLocaleDateString(loc,{day:"2-digit",month:"2-digit",year:"numeric"});
+  const DE_W = {"Tamir":"Reparatur","22 ayar ürün":"22-Karat-Schmuck","14 ayar ürün":"14-Karat-Schmuck","Bilezik":"Armreif","Ziynet":"Goldmünze","Diğer":"Sonstiges","Yüzük":"Ring","Alyans":"Trauring","Kolye":"Kette","Küpe":"Ohrringe","Bileklik":"Armband","Set":"Set","Lazer":"Laser","Desenli":"gemustert","Gremse":"Gremse (2,5)","Reşat":"Reşat"};
+  const tw = x => de ? (DE_W[x]||x) : x;
+  const v = {musteri:o.musteri||"", no:o.no||"", tel:o.tel||"", urun:[tw(o.cesit),tw(o.alt),o.model].filter(Boolean).join(" · "), dukkan:SHOPS[o.dukkan||shop].name,
+    toplam:o.fiyat!=null?money(o.fiyat):"–", kapora:o.kapora!=null?money(o.kapora):"–", kalan:o.kalan!=null?money(o.kalan):"–", alan:o.alan||"–",
+    teslim:o.teslimTarih?dt(o.teslimTarih):"–",
+    teslimSatir:o.teslimTarih?(de?`\nVoraussichtliche Abholung: ${dt(o.teslimTarih)}`:`\nTahmini teslim: ${dt(o.teslimTarih)}`):"",
+    kalanSatir:o.kalan>0?(de?`\nRestbetrag: ${money(o.kalan)}`:`\nKalan ödeme: ${money(o.kalan)}`):"",
     link:"https://xenosmart.de/markaistanbul/siparis.html"};
-  const txt = t.replace(/\{(\w+)\}/g,(m,k)=> k in v ? v[k] : m);
+  return t.replace(/\{(\w+)\}/g,(m,k)=> k in v ? v[k] : m);
+}
+function fillMsg(key, o, withImza=true, lang){
+  lang = lang || "tr";
+  const txt = lang==="trde" && MSG_DEF_DE[key] ? fillOne(key,o,"tr") + "\n\n— — —\n\n" + fillOne(key,o,"de") : fillOne(key,o,lang);
   return withImza && settings.imza ? txt + "\n\n" + settings.imza : txt;
 }
 const waLink = (tel, txt) => `https://wa.me/${waNum(tel)}?text=${encodeURIComponent(txt)}`;
 function onayKisi(){ return ONAYCI.map((n,i)=>({ad:n, tel:(settings.onayTel||{})[["yeb","yo"][i]]||""})); }
-function msgs(o){
+function msgs(o, lang){
   const arr = [];
-  if (o.onaylayan) arr.push(["✔ Siparişiniz onaylandı", fillMsg("onaylandi", o)]);
-  else arr.push(["Sipariş alındı mesajı", fillMsg("alindi", o)]);
-  arr.push(["Siparişiniz hazır mesajı", fillMsg("hazir", o)]);
-  arr.push(["Gecikme bilgisi", fillMsg("gecikme", o)]);
+  if (o.onaylayan) arr.push([lang==="de"?"✔ Bestellung bestätigt":"✔ Siparişiniz onaylandı", fillMsg("onaylandi", o, true, lang)]);
+  else arr.push([lang==="de"?"Bestellung eingegangen":"Sipariş alındı mesajı", fillMsg("alindi", o, true, lang)]);
+  arr.push([lang==="de"?"Bestellung fertig":"Siparişiniz hazır mesajı", fillMsg("hazir", o, true, lang)]);
+  arr.push([lang==="de"?"Verzögerung":"Gecikme bilgisi", fillMsg("gecikme", o, true, lang)]);
   return arr;
 }
+function waButtons(o, tel, lang){ return msgs(o, lang).map(([l,m],i)=>`<a class="${i?"alt":""}" href="https://wa.me/${tel}?text=${encodeURIComponent(m)}" target="_blank" rel="noopener">${l}</a>`).join(""); }
 function openDetail(no, justCreated){
   const o = shopOrders().find(x=>x.no===no) || (justCreated ? null : null);
   if (!o){ setTimeout(()=>{ if (shopOrders().find(x=>x.no===no)) openDetail(no); }, 600); return; }
@@ -560,7 +582,7 @@ function openDetail(no, justCreated){
       return `<button data-st="${k}" class="${o.durum!=="iptal"&&i<=idx?"done":""} ${o.durum===k?"cur":""}"><span class="dot"></span>${l}<small>${h?new Date(h.t).toLocaleString("tr-TR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):""}</small></button>`;}).join("")}
       <button data-st="iptal" class="${o.durum==="iptal"?"cur":""}" style="color:var(--bad)"><span class="dot" style="${o.durum==="iptal"?"background:var(--bad);border-color:var(--bad)":""}"></span>İptal</button></div></fieldset>
     <fieldset style="${pend?"display:none":""}"><legend>WhatsApp</legend>
-      ${tel ? `<div class="wabox">${msgs(o).map(([l,m],i)=>`<a class="${i?"alt":""}" href="https://wa.me/${tel}?text=${encodeURIComponent(m)}" target="_blank" rel="noopener">${l}</a>`).join("")}</div>
+      ${tel ? `<div class="seg" id="waDil" style="margin-top:8px">${DIL_K.map(k=>`<button type="button" data-dil="${k}" class="${(o.dil||"tr")===k?"on":""}">${DIL_L[DIL_K.indexOf(k)]}</button>`).join("")}</div><div class="wabox" id="waBox">${waButtons(o, tel, o.dil||"tr")}</div>
       <p class="note">Butona basınca WhatsApp hazır mesajla açılır, Gönder'e basmanız yeterli. Numara: +${tel}</p>` : `<p class="note">Telefon numarası yok.</p>`}
     </fieldset>
     <fieldset><legend>Bilgiler</legend>
@@ -576,6 +598,7 @@ function openDetail(no, justCreated){
     <div style="display:flex;gap:8px">${A||pend?`<button class="btn" id="dEdit">Düzenle</button>`:""}${A?`<button class="btn ghost" id="dDel" style="flex:.6;color:var(--bad)">Sil</button>`:""}</div>`;
   if (A) $("dBody").querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>setStatus(o, b.dataset.st));
   else $("dBody").querySelectorAll("[data-st]").forEach(b=>{ b.disabled=true; b.style.opacity=b.classList.contains("cur")||b.classList.contains("done")?1:.55; });
+  $("dBody").querySelectorAll("#waDil button").forEach(b=>b.onclick=()=>{ $("dBody").querySelectorAll("#waDil button").forEach(x=>x.classList.toggle("on",x===b)); $("waBox").innerHTML = waButtons(o, waNum(o.tel), b.dataset.dil); });
   $("dBody").querySelectorAll("[data-onay]").forEach(b=>b.onclick=()=>approve(o, b.dataset.onay));
   if ($("dRed")) $("dRed").onclick = ()=>setStatus(o, "iptal");
   if ($("dEdit")) $("dEdit").onclick = ()=>openForm(o);
@@ -607,7 +630,8 @@ function renderSettings(){
   $("s_imza").value = settings.imza||"";
   $("ot_yeb").value = (settings.onayTel||{}).yeb||""; $("ot_yo").value = (settings.onayTel||{}).yo||"";
   $("msgEdit").innerHTML = Object.keys(MSG_DEF).map(k=>`<label>${MSG_LBL[k]}</label><textarea data-msg="${k}" rows="4">${esc((settings.mesaj||{})[k]||MSG_DEF[k])}</textarea>`).join("") + `<button type="button" class="x" id="msgReset" style="margin-top:8px">Varsayılan metinlere dön</button>`;
-  $("msgReset").onclick = ()=>{ document.querySelectorAll("[data-msg]").forEach(t=>t.value=MSG_DEF[t.dataset.msg]); };
+  $("msgEdit").insertAdjacentHTML("beforeend", `<h4 style="margin:18px 0 4px;font-size:12px;letter-spacing:2px;color:var(--cop2)">🇩🇪 ALMANCA METİNLER (MÜŞTERİYE)</h4>` + Object.keys(MSG_DEF_DE).map(k=>`<label>${MSG_LBL[k]} – Deutsch</label><textarea data-msgde="${k}" rows="4">${esc((settings.mesajDe||{})[k]||MSG_DEF_DE[k])}</textarea>`).join(""));
+  $("msgReset").onclick = ()=>{ document.querySelectorAll("[data-msg]").forEach(t=>t.value=MSG_DEF[t.dataset.msg]); document.querySelectorAll("[data-msgde]").forEach(t=>t.value=MSG_DEF_DE[t.dataset.msgde]); };
   document.querySelectorAll("#set [data-k]").forEach(b=>b.onclick=()=>{ settings[b.dataset.k].splice(+b.dataset.i,1); renderSettings(); saveSettings(); });
 }
 async function saveSettings(silent){
@@ -615,7 +639,7 @@ async function saveSettings(silent){
 }
 $("s_topAdd").onclick=()=>{ const v=$("s_top").value.trim(); if(v && !settings.toptanci.includes(v)){ settings.toptanci.push(v); $("s_top").value=""; renderSettings(); saveSettings(); } };
 $("s_perAdd").onclick=()=>{ const v=$("s_per").value.trim(); if(v && !settings.personel.includes(v)){ settings.personel.push(v); $("s_per").value=""; renderSettings(); saveSettings(); } };
-$("msgSave").onclick=()=>{ settings.onayTel = {yeb:$("ot_yeb").value.trim(), yo:$("ot_yo").value.trim()}; settings.mesaj = {}; document.querySelectorAll("[data-msg]").forEach(t=>{ if (t.value.trim() && t.value.trim()!==MSG_DEF[t.dataset.msg]) settings.mesaj[t.dataset.msg]=t.value.trim(); }); saveSettings(); };
+$("msgSave").onclick=()=>{ settings.onayTel = {yeb:$("ot_yeb").value.trim(), yo:$("ot_yo").value.trim()}; settings.mesaj = {}; document.querySelectorAll("[data-msg]").forEach(t=>{ if (t.value.trim() && t.value.trim()!==MSG_DEF[t.dataset.msg]) settings.mesaj[t.dataset.msg]=t.value.trim(); }); settings.mesajDe = {}; document.querySelectorAll("[data-msgde]").forEach(t=>{ if (t.value.trim() && t.value.trim()!==MSG_DEF_DE[t.dataset.msgde]) settings.mesajDe[t.dataset.msgde]=t.value.trim(); }); saveSettings(); };
 $("s_save").onclick=()=>{ settings.imza=$("s_imza").value.trim(); saveSettings(); };
 $("btnSet").onclick=()=>{ renderSettings(); $("roleInfo").innerHTML = isAdmin() ? "Giriş: <b>Yönetici</b>" : "Giriş: <b>Eleman</b> – siparişleriniz YEB/YÖ onayından sonra işleme alınır."; show("set"); };
 $("ekGo").onclick = async ()=>{ const c=$("ekCode").value.trim(); if (c.length<4) return toast("Kod en az 4 karakter olmalı");
@@ -717,7 +741,7 @@ async function start(){
       if ($("det").classList.contains("on") && editing && k===shop && !$("form").classList.contains("on")){ const o=orders[k].find(x=>x.no===editing.no); if (o && o.guncelleme!==editing.guncelleme) openDetail(o.no); }
     }, ()=>{ $("conn").textContent = "Bağlantı hatası – internet bağlantısını kontrol edin."; });
   }
-  db.doc("ayarlar/genel").onSnapshot(s=>{ if (s.exists){ const d=s.data(); settings={toptanci:[...(d.toptanci||[])], personel:(d.personel&&d.personel.length)?[...d.personel]:settings.personel, imza:d.imza??settings.imza, mesaj:d.mesaj||{}, onayTel:d.onayTel||{}}; if ($("form").classList.contains("on") && !$("f_alan").matches(":focus")) fillAlan($("f_alan").value); } });
+  db.doc("ayarlar/genel").onSnapshot(s=>{ if (s.exists){ const d=s.data(); settings={toptanci:[...(d.toptanci||[])], personel:(d.personel&&d.personel.length)?[...d.personel]:settings.personel, imza:d.imza??settings.imza, mesaj:d.mesaj||{}, mesajDe:d.mesajDe||{}, onayTel:d.onayTel||{}}; if ($("form").classList.contains("on") && !$("f_alan").matches(":focus")) fillAlan($("f_alan").value); } });
 }
 (async ()=>{
   try{ const s=localStorage.getItem("mi_shop"); if (SHOPS[s]){ shop=s; document.querySelectorAll(".shops button").forEach(x=>x.classList.toggle("on",x.dataset.shop===s)); } }catch(e){}
