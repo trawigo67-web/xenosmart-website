@@ -1,17 +1,30 @@
 {
-  "name": "Çeyrekmatik Yönetici – Marka Istanbul",
-  "short_name": "Ç. Yönetici",
-  "description": "Marka Istanbul fiyat ve milyem yönetimi",
-  "start_url": "./admin.html",
-  "scope": "./",
-  "id": "./admin.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
-  "lang": "tr",
-  "icons": [
-    {"src": "icon-admin-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "icon-admin-512.png", "sizes": "512x512", "type": "image/png"},
-    {"src": "icon-admin-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
-  ]
+ "name": "Marka Istanbul – Fiyat Yönetimi",
+ "short_name": "Fiyatlar",
+ "description": "Marka Istanbul fiyat ve milyem yönetimi",
+ "start_url": "./admin.html",
+ "scope": "./admin.html",
+ "id": "./admin.html",
+ "display": "standalone",
+ "background_color": "#ffffff",
+ "theme_color": "#ffffff",
+ "lang": "tr",
+ "icons": [
+  {
+   "src": "icon-admin-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-admin-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-admin-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
 }

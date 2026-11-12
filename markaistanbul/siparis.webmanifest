@@ -1,0 +1,30 @@
+{
+ "name": "Marka Istanbul – Sipariş Takip",
+ "short_name": "Sipariş",
+ "description": "Marka 22 ve Marka 14 sipariş takibi",
+ "id": "./siparis.html",
+ "start_url": "./siparis.html",
+ "scope": "./siparis.html",
+ "display": "standalone",
+ "background_color": "#ffffff",
+ "theme_color": "#ffffff",
+ "lang": "tr",
+ "icons": [
+  {
+   "src": "icon-siparis-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-siparis-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-siparis-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

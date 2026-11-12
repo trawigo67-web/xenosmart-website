@@ -6,9 +6,10 @@
 <title>Marka Istanbul – Sipariş Takip</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#ffffff">
-<link rel="manifest" href="admin.webmanifest">
-<link rel="icon" type="image/png" href="icon-admin-192.png">
-<link rel="apple-touch-icon" href="apple-touch-admin.png">
+<link rel="manifest" href="siparis.webmanifest">
+<link rel="icon" type="image/png" href="icon-siparis-192.png">
+<link rel="apple-touch-icon" href="apple-touch-siparis.png">
+<meta name="apple-mobile-web-app-title" content="Sipariş">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <link href="fonts/fonts.css" rel="stylesheet">
@@ -187,7 +188,8 @@ body.role-e .onlyA{display:none!important}
     <button class="btn" id="suGo" style="width:100%;margin-top:14px">Kurulumu tamamla</button>
     <div class="err" id="suErr"></div>
   </fieldset>
-  <p class="note" style="text-align:center"><a href="admin.html" style="color:var(--cop2)">← Fiyat yönetimi</a></p>
+  <button class="btn" id="instBtn" style="display:none;width:100%;margin-top:4px">📲 Sipariş uygulamasını telefona yükle</button>
+  <p class="note" id="instHint" style="text-align:center">📲 Uygulama olarak ekleyin: iPhone'da Paylaş → „Ana Ekrana Ekle“, Android'de menü ⋮ → „Uygulamayı yükle“.</p>
 </div></div>
 <div class="wrap">
   <div class="topbtn"><a href="admin.html" class="onlyA" style="border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px;color:var(--cop2);text-decoration:none">💰 Fiyatlar</a><button id="btnSet">⚙︎ Ayarlar</button></div>
@@ -693,6 +695,12 @@ $("pwGo").onclick = async ()=>{
   if ($("pwNew").value.length<8) return toast("Yeni şifre en az 8 karakter olmalı");
   try{ const j = await api("POST","/password",{old:$("pwOld").value, new:$("pwNew").value}); TOKEN=j.token; try{localStorage.setItem("mi_sp_tok",TOKEN);}catch(e){} $("pwOld").value=$("pwNew").value=""; toast("Şifre değiştirildi ✔"); }
   catch(e){ toast(e.code==="wrong" ? "Mevcut şifre yanlış" : "Değiştirilemedi"); } };
+
+/* ---------- App-Installation ---------- */
+let instEv = null;
+try{ if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) $("instHint").style.display="none"; }catch(e){}
+addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); instEv=e; $("instBtn").style.display="block"; $("instHint").style.display="none"; });
+$("instBtn").onclick = async ()=>{ if (!instEv) return; instEv.prompt(); await instEv.userChoice; instEv=null; $("instBtn").style.display="none"; };
 
 /* ---------- Start ---------- */
 let started = false;
