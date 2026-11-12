@@ -17,18 +17,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Goldpreis holen
+      - name: Goldpreis holen (Kitco, sonst gold-api.com)
         run: |
           set -e
-          curl -fsS https://api.gold-api.com/price/XAU/EUR -o /tmp/g.json
           python3 - <<'EOF'
-          import json
-          j = json.load(open('/tmp/g.json'))
-          p = float(j['price'])
+          import json, urllib.request, datetime
+          def get(u):
+              return urllib.request.urlopen(urllib.request.Request(u, headers={'User-Agent': 'Mozilla/5.0'}), timeout=20).read().decode()
+          try:
+              f = get('https://proxy.kitco.com/getPM?symbol=AU&currency=EUR').strip().split(',')
+              p, src = float(f[4]), 'Kitco'
+          except Exception as e:
+              print('Kitco Fehler:', e)
+              p, src = float(json.loads(get('https://api.gold-api.com/price/XAU/EUR'))['price']), 'gold-api.com'
           assert 1000 < p < 20000, p
-          json.dump({'ozEur': round(p, 2), 'updatedAt': j.get('updatedAt'), 'source': 'gold-api.com'},
-                    open('markaistanbul/price.json', 'w'))
-          print('Preis pro Unze EUR:', p)
+          now = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+          json.dump({'ozEur': round(p, 2), 'updatedAt': now, 'source': src}, open('markaistanbul/price.json', 'w'))
+          print(src, 'EUR/oz:', p)
           EOF
       - name: Speichern
         run: |
