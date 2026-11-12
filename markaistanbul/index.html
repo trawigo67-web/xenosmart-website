@@ -49,7 +49,9 @@ body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--tex
 /* Preisliste wie im Aushang */
 .plist{padding:0 6px}
 .prow{display:grid;grid-template-columns:1fr 2px 1fr;align-items:center;padding:16px 4px;border-bottom:1px solid var(--cop3)}
-.prow .pn{letter-spacing:3px;font-size:16px;text-transform:uppercase;font-weight:500}
+.prow .pn{letter-spacing:3px;font-size:16px;text-transform:uppercase;font-weight:500;display:flex;align-items:center;gap:10px}
+.prow .pn .pic{flex:0 0 46px;filter:drop-shadow(0 1px 1px rgba(122,90,23,.25))}
+.prow{grid-template-columns:1.25fr 2px .9fr!important;padding:9px 4px!important}
 .prow .bar{width:2px;height:24px;background:var(--cop);justify-self:center}
 .prow .pv{text-align:right;font-size:20px;letter-spacing:1.5px;font-variant-numeric:tabular-nums;padding-right:6px}
 .prow .pv small{font-size:11px;color:var(--muted);letter-spacing:0}
@@ -349,12 +351,40 @@ function renderSpot(){
   $("dot").classList.toggle("off", src!=="live" && src!=="manual");
 }
 const euro0 = v => isFinite(v) ? Math.floor(v).toLocaleString({tr:"tr-TR",de:"de-DE",en:"en-GB"}[lang]) + " €" : "—";
+/* Produktbilder (gezeichnete Illustrationen, Größe nach Gewicht) */
+let _gid=0;
+function pic(o, kind){
+  const id="g"+(++_gid), box=46;
+  const grad=`<defs><radialGradient id="${id}" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff3c4"/><stop offset=".35" stop-color="#e9c96a"/><stop offset=".75" stop-color="#c39a35"/><stop offset="1" stop-color="#8f6b1e"/></radialGradient></defs>`;
+  if (kind==="b" || (o.grup||1)>=3){
+    const burma = /burma/i.test(o.id+o.tr);
+    let deco="";
+    if (burma){ for(let i=0;i<24;i++){ const a=i*15*Math.PI/180, x1=23+19*Math.cos(a), y1=23+19*Math.sin(a), x2=23+14*Math.cos(a+.22), y2=23+14*Math.sin(a+.22); deco+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#8f6b1e" stroke-width="1.1" opacity=".75"/>`; } }
+    else { for(let i=0;i<16;i++){ const a=i*22.5*Math.PI/180; deco+=`<circle cx="${(23+16.5*Math.cos(a)).toFixed(1)}" cy="${(23+16.5*Math.sin(a)).toFixed(1)}" r="1.3" fill="#fff6d0" stroke="#8f6b1e" stroke-width=".5"/>`; } }
+    return `<svg class="pic" viewBox="0 0 46 46" width="${box}" height="${box}" aria-hidden="true">${grad}<circle cx="23" cy="23" r="16.5" fill="none" stroke="url(#${id})" stroke-width="${burma?9:7}"/><circle cx="23" cy="23" r="${burma?21:20}" fill="none" stroke="#7a5a17" stroke-width=".6" opacity=".6"/><circle cx="23" cy="23" r="${burma?12:13}" fill="none" stroke="#7a5a17" stroke-width=".6" opacity=".6"/>${deco}</svg>`;
+  }
+  const g = o.gram || (()=>{ const b=cfg.products.find(x=>x.id===o.baz); return b ? b.gram*(+o.kat||1) : 1.75; })();
+  const d = Math.min(46, 26 + 5*Math.log2(Math.max(g,1.75)/1.75)), r=d/2, c=23;
+  const resat = (o.grup||1)===2;
+  let inner="";
+  if (resat){ // Lorbeerkranz
+    for(let i=0;i<9;i++){ const a=(-60+i*17)*Math.PI/180; for (const sgn of [1,-1]){ const x=c+sgn*r*.62*Math.cos(a), y=c+r*.62*Math.sin(a)+r*.05; inner+=`<ellipse cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" rx="${(r*.13).toFixed(2)}" ry="${(r*.06).toFixed(2)}" transform="rotate(${(sgn*(a*180/Math.PI)+90*sgn).toFixed(0)} ${x.toFixed(2)} ${y.toFixed(2)})" fill="#9a7624" opacity=".8"/>`; } }
+    { const sx=c, sy=c-r*.04, sr=r*.2; let pts=""; for(let i=0;i<10;i++){ const q=-Math.PI/2+i*Math.PI/5, rr=i%2?sr*.45:sr; pts+=`${(sx+rr*Math.cos(q)).toFixed(2)},${(sy+rr*Math.sin(q)).toFixed(2)} `; } inner+=`<polygon points="${pts}" fill="#8f6b1e" opacity=".85"/>`; }
+  } else { // Hilal und Stern
+    const cr=r*.36;
+    inner=`<circle cx="${c-r*.06}" cy="${c}" r="${cr}" fill="#9a7624" opacity=".85"/><circle cx="${c+r*.06}" cy="${c}" r="${cr*.82}" fill="url(#${id})"/>`;
+    const sx=c+r*.3, sy=c, sr=r*.14; let pts=""; for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, rr=i%2?sr*.45:sr; pts+=`${(sx+rr*Math.cos(a)).toFixed(2)},${(sy+rr*Math.sin(a)).toFixed(2)} `; }
+    inner+=`<polygon points="${pts}" fill="#9a7624" opacity=".9"/>`;
+  }
+  let dots=""; const n=Math.round(r*2.2); for(let i=0;i<n;i++){ const a=i*2*Math.PI/n; dots+=`<circle cx="${(c+r*.84*Math.cos(a)).toFixed(2)}" cy="${(c+r*.84*Math.sin(a)).toFixed(2)}" r="${(r*.035).toFixed(2)}" fill="#8f6b1e" opacity=".7"/>`; }
+  return `<svg class="pic" viewBox="0 0 46 46" width="${box}" height="${box}" aria-hidden="true">${grad}<circle cx="${c}" cy="${c+.8}" r="${r}" fill="#000" opacity=".12"/><circle cx="${c}" cy="${c}" r="${r}" fill="url(#${id})" stroke="#8f6b1e" stroke-width=".8"/><circle cx="${c}" cy="${c}" r="${r*.92}" fill="none" stroke="#fff3c4" stroke-width=".6" opacity=".8"/>${dots}${inner}</svg>`;
+}
 function renderList(){
-  const rows = [...cfg.products.map(p=>({n:nm(p), v:priceOf(p).sell, g:p.grup||1})),
-                ...cfg.bracelets.map(b=>({n:nm(b), v:braceletPrice(b,1).sell, g:b.grup||3, per:true}))];
+  const rows = [...cfg.products.map(p=>({n:nm(p), v:priceOf(p).sell, g:p.grup||1, img:pic(p,"p")})),
+                ...cfg.bracelets.map(b=>({n:nm(b), v:braceletPrice(b,1).sell, g:b.grup||3, per:true, img:pic(b,"b")}))];
   $("list").innerHTML = rows.map((r,i)=>{
     const end = rows[i+1] && rows[i+1].g !== r.g;
-    return `<div class="prow${end?" gend":""}"><div class="pn">${r.n}</div><div class="bar"></div><div class="pv">${euro0(r.v)}${r.per?` <small>/g</small>`:""}</div></div>`;
+    return `<div class="prow${end?" gend":""}"><div class="pn">${r.img}<span>${r.n}</span></div><div class="bar"></div><div class="pv">${euro0(r.v)}${r.per?` <small>/g</small>`:""}</div></div>`;
   }).join("");
 }
 function renderBilezik(){
