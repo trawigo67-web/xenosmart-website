@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#1c1c1a">
 <meta name="robots" content="noindex, nofollow">
 <script src="tema.js"></script>
+<script src="foto-isle.js"></script>
 <title>Yönetici – Çeyrekmatik</title>
 <link rel="icon" type="image/png" href="icon-admin-192.png">
 <link rel="manifest" href="admin.webmanifest">
@@ -103,9 +104,18 @@ img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px au
 .fotogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .fotogrid .fc{border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px 6px;text-align:center;font-size:12px;font-weight:600}
 .fotogrid .th{width:64px;height:64px;border-radius:50%;margin:0 auto 6px;background:#f6efd9 center/cover no-repeat;border:2px solid #d9bd72;display:flex;align-items:center;justify-content:center;color:#b8913a;font-size:22px}
-.fotogrid .fc .bt{display:flex;gap:4px;justify-content:center;margin-top:6px}
+.fotogrid .fc .bt{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:6px}
+.fotogrid .fc .bt button:first-child{flex:1 1 100%}
 .fotogrid .fc button{border:1px solid var(--line);background:#fffaf0;border-radius:8px;padding:5px 7px;font:inherit;font-size:11px;cursor:pointer}
 .fotogrid .fc button.rm{color:#c62828}
+.fmodal{position:fixed;inset:0;z-index:200;background:rgba(20,18,12,.75);display:none;align-items:flex-end;justify-content:center}
+.fmodal.on{display:flex}
+.fbox{background:#fffcf3;width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
+.fbox h3{text-align:center;letter-spacing:2px;text-transform:uppercase;font-size:14px;color:#8f6b1e;margin:0 0 10px}
+.fcmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fcmp div{text-align:center}.fcmp small{display:block;color:#857d6c;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.fcmp img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:14px;border:1px solid #e8dcb8;background:radial-gradient(circle at 50% 40%,#fffdf6,#f5e9c4)}
+.fcmp img#fmBefore{object-fit:cover;background:#eee}
 </style>
 </head>
 <body>
@@ -165,9 +175,19 @@ img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px au
 
     <h2>Ürün fotoğrafları</h2>
     <div class="card">
-      <p class="note" style="margin-top:0">Müşteriler Çeyrekmatik'te fiyatın yanında bu fotoğrafı görür, dokununca büyür. Ürünü açık renkli bir zeminde, iyi ışıkta, yukarıdan çekin. Fotoğraf kare kesilir ve otomatik yayınlanır.</p>
+      <p class="note" style="margin-top:0">Müşteriler Çeyrekmatik'te fiyatın yanında bu fotoğrafı görür, dokununca büyür. Ürünü <b>beyaz kâğıt</b> üzerine koyun, gün ışığında, flaşsız, tam yukarıdan çekin. Uygulama arka planı otomatik siler, ışığı ve rengi düzeltir, ortalar. Yayınlamadan önce önce/sonra görürsünüz. Orijinaller arşivde saklanır.</p>
       <div id="fotoGrid" class="fotogrid"></div>
-      <input type="file" id="fotoIn" accept="image/*" style="display:none">
+      <input type="file" id="fotoCam" accept="image/*" capture="environment" style="display:none">
+      <input type="file" id="fotoGal" accept="image/*" style="display:none">
+<div id="fotoModal" class="fmodal"><div class="fbox">
+  <h3 id="fmTitle">Fotoğraf</h3>
+  <div class="fcmp"><div><small>Önce</small><img id="fmBefore" alt=""></div><div><small>Sonra</small><img id="fmAfter" alt=""></div></div>
+  <div class="note" id="fmInfo" style="text-align:center"></div>
+  <button class="btn" id="fmOk">✔ Yayınla</button>
+  <div class="grid2"><button class="btn ghost" id="fmRetry">↻ Tekrar çek</button><button class="btn ghost" id="fmOrig">Kesmeden kullan</button></div>
+  <button class="btn ghost" id="fmCancel" style="margin-top:8px">Vazgeç</button>
+</div></div>
+
     </div>
 
     <h2>Tema</h2>
@@ -444,31 +464,52 @@ document.addEventListener("click", e=>{
 function confirmDel(o){ return window.confirm(`"${o.tr}" silinsin mi?`); }
 function renderFotos(){
   const all=[...cfg.products.map(o=>["p",o]),...cfg.bracelets.map(o=>["b",o])];
-  $("fotoGrid").innerHTML = all.map(([k,o])=>`<div class="fc"><div class="th" style="${o.foto?`background-image:url('${o.foto}')`:""}">${o.foto?"":"📷"}</div>${o.tr}
-    <div class="bt"><button type="button" data-fup="${k}:${o.id}">${o.foto?"Değiştir":"📷 Ekle"}</button>${o.foto?`<button type="button" class="rm" data-frm="${k}:${o.id}">Kaldır</button>`:""}</div></div>`).join("");
-  $("fotoGrid").querySelectorAll("[data-fup]").forEach(b=>b.onclick=()=>{ fotoKey=b.dataset.fup; $("fotoIn").value=""; $("fotoIn").click(); });
-  $("fotoGrid").querySelectorAll("[data-frm]").forEach(b=>b.onclick=()=>{ const o=qObj(b.dataset.frm); if(!confirm(`"${o.tr}" fotoğrafı kaldırılsın mı?`)) return; delete o.foto; renderFotos(); $("save").click(); });
+  $("fotoGrid").innerHTML = all.map(([k,o])=>`<div class="fc"><div class="th" style="${o.foto?`background-image:url('${o.foto}');background-size:${o.fotoTip==="kesik"?"contain":"cover"}`:""}">${o.foto?"":"📷"}</div>${o.tr}
+    <div class="bt"><button type="button" data-fcam="${k}:${o.id}">📷 Çek</button><button type="button" data-fgal="${k}:${o.id}">🖼</button>${o.foto?`<button type="button" class="rm" data-frm="${k}:${o.id}">✕</button>`:""}</div></div>`).join("");
+  $("fotoGrid").querySelectorAll("[data-fcam]").forEach(b=>b.onclick=()=>{ fotoKey=b.dataset.fcam; $("fotoCam").click(); });
+  $("fotoGrid").querySelectorAll("[data-fgal]").forEach(b=>b.onclick=()=>{ fotoKey=b.dataset.fgal; $("fotoGal").click(); });
+  $("fotoGrid").querySelectorAll("[data-frm]").forEach(b=>b.onclick=()=>{ const o=qObj(b.dataset.frm); if(!confirm(`"${o.tr}" fotoğrafı kaldırılsın mı?`)) return; delete o.foto; delete o.fotoTip; renderFotos(); $("save").click(); });
 }
-let fotoKey=null;
-async function fotoJpeg(file){
+let fotoKey=null, fotoFile=null, fotoRes=null;
+const fotoTyp = key => key.startsWith("b:") ? "bilezik" : "para";
+async function jpegB64(file, max, q){
+  const bmp = await createImageBitmap(file); const sc=Math.min(1,max/Math.max(bmp.width,bmp.height));
+  const c=document.createElement("canvas"); c.width=Math.round(bmp.width*sc); c.height=Math.round(bmp.height*sc); c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
+  return {b64:c.toDataURL("image/jpeg",q).split(",")[1], url:c.toDataURL("image/jpeg",q)};
+}
+async function squareJpeg(file){
   const bmp = await createImageBitmap(file); const m=Math.min(bmp.width,bmp.height), S=Math.min(800,m);
   const c=document.createElement("canvas"); c.width=c.height=S; const x=c.getContext("2d");
-  x.fillStyle="#fff"; x.fillRect(0,0,S,S);
-  x.drawImage(bmp,(bmp.width-m)/2,(bmp.height-m)/2,m,m,0,0,S,S);
-  return c.toDataURL("image/jpeg",0.85).split(",")[1];
+  x.drawImage(bmp,(bmp.width-m)/2,(bmp.height-m)/2,m,m,0,0,S,S); return c.toDataURL("image/jpeg",0.85).split(",")[1];
 }
-$("fotoIn").addEventListener("change", async e=>{
-  const f=e.target.files[0]; if(!f||!fotoKey) return;
-  const o=qObj(fotoKey); if(!o) return;
-  toast("Fotoğraf yükleniyor…");
+async function onFoto(e){
+  const f=e.target.files[0]; e.target.value=""; if(!f||!fotoKey) return;
+  const o=qObj(fotoKey); fotoFile=f; fotoRes=null;
+  $("fmTitle").textContent=o.tr; $("fmBefore").src=URL.createObjectURL(f); $("fmAfter").removeAttribute("src");
+  $("fmInfo").textContent="Fotoğraf işleniyor…"; $("fmOk").disabled=true; $("fotoModal").classList.add("on");
+  await new Promise(r=>setTimeout(r,50));
+  try{ fotoRes = await FotoIsle.isle(f, fotoTyp(fotoKey)); $("fmAfter").src=fotoRes.png; $("fmInfo").textContent="Arka plan silindi, ışık ve renk düzeltildi. Beğendiyseniz Yayınla'ya basın."; $("fmOk").disabled=false; }
+  catch(err){ $("fmInfo").textContent="⚠️ "+err.message+". Tekrar çekin ya da 'Kesmeden kullan'."; }
+}
+$("fotoCam").addEventListener("change", onFoto); $("fotoGal").addEventListener("change", onFoto);
+$("fmCancel").onclick=()=>$("fotoModal").classList.remove("on");
+$("fmRetry").onclick=()=>{ $("fotoModal").classList.remove("on"); $("fotoCam").click(); };
+async function putFile(path,b64,msg){ let sha; try{ sha=(await gh(path)).sha; }catch(err){} return gh(path,{method:"PUT", body:{message:msg, content:b64, branch:BRANCH, ...(sha?{sha}:{})}}); }
+async function publishFoto(kesik){
+  const o=qObj(fotoKey); if(!o||!fotoFile) return;
+  $("fmOk").disabled=$("fmOrig").disabled=true; $("fmInfo").textContent="Yükleniyor…";
   try{
-    const b64 = await fotoJpeg(f), path=`markaistanbul/urun/${o.id}.jpg`;
-    let sha; try{ sha=(await gh(path)).sha; }catch(err){}
-    await gh(path,{method:"PUT", body:{message:`Çeyrekmatik: Foto ${o.tr}`, content:b64, branch:BRANCH, ...(sha?{sha}:{})}});
-    o.foto=`urun/${o.id}.jpg?v=${Date.now()}`;
-    renderFotos(); $("save").click();
-  }catch(err){ toast("Fotoğraf yüklenemedi: "+err.message, true); }
-});
+    const ts=new Date().toISOString().slice(0,16).replace(/[:T]/g,"-");
+    const orj=await jpegB64(fotoFile,1600,0.85);
+    await putFile(`markaistanbul/urun/arsiv/${o.id}-${ts}.jpg`, orj.b64, `Foto-Arşiv: ${o.tr}`);   // Datenbank der Originale
+    if (kesik){ await putFile(`markaistanbul/urun/${o.id}.${fotoRes.ext}`, fotoRes.png.split(",")[1], `Çeyrekmatik: Foto ${o.tr}`); o.foto=`urun/${o.id}.${fotoRes.ext}?v=${Date.now()}`; o.fotoTip="kesik"; }
+    else { await putFile(`markaistanbul/urun/${o.id}.jpg`, await squareJpeg(fotoFile), `Çeyrekmatik: Foto ${o.tr}`); o.foto=`urun/${o.id}.jpg?v=${Date.now()}`; o.fotoTip="kare"; }
+    $("fotoModal").classList.remove("on"); renderFotos(); $("save").click();
+  }catch(err){ $("fmInfo").textContent="Yüklenemedi: "+err.message; }
+  finally{ $("fmOk").disabled=$("fmOrig").disabled=false; }
+}
+$("fmOk").onclick=()=>publishFoto(true);
+$("fmOrig").onclick=()=>publishFoto(false);
 function renderTema(){
   const cur = cfg.tema || "zen";
   $("temaGrid").innerHTML = Object.entries(ZTema.TEMALAR).map(([k,t])=>`<button type="button" data-tema="${k}" class="${k===cur?"on":""}"><span class="ik">${t.ikon}</span>${t.ad.replace(" (standart)","")}<span class="sw" style="background:linear-gradient(90deg,${t.band} 0 45%,${t.line} 45% 55%,${t.bg[1]} 55%)"></span></button>`).join("");
