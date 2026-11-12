@@ -29,7 +29,7 @@
    "tr": "Tam",
    "de": "Tam (Ganz)",
    "en": "Tam (full)",
-   "gram": 7.0,
+   "gram": 7,
    "purity": 0.916,
    "grup": 1,
    "baz": "ceyrek",
@@ -72,7 +72,7 @@
    "tr": "R Tam",
    "de": "Reşat Tam",
    "en": "Reşat full",
-   "gram": 7.0,
+   "gram": 7,
    "purity": 0.916,
    "grup": 2,
    "baz": "rceyrek",
@@ -94,7 +94,7 @@
    "tr": "R 5'li",
    "de": "Reşat 5er",
    "en": "Reşat 5-piece",
-   "gram": 35.0,
+   "gram": 35,
    "purity": 0.916,
    "grup": 2,
    "baz": "rceyrek",
@@ -130,5 +130,6 @@
   "5": "10:00",
   "6": "10:00",
   "7": "10:00"
- }
+ },
+ "manualSpot": null
 }
