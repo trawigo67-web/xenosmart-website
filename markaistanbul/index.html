@@ -13,8 +13,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Marka Istanbul – Çeyrekmatik</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Great+Vibes&family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="fonts/fonts.css" rel="stylesheet">
 <style>
 :root{
   --bg:#faf7f1; --card:#ffffff; --card2:#f6f2ea; --line:#e7dfd0;
@@ -84,6 +83,11 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
 .hide{display:none!important}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:20px;font-weight:600;font-size:13px;opacity:0;transition:.3s;pointer-events:none}
 .toast.on{opacity:1}
+.shop{margin-top:14px}
+.shop .tag{color:var(--gold2);font-size:12px;letter-spacing:1px;margin:-4px 0 10px;font-weight:600}
+.shop .srow{font-size:14px;margin:6px 0;color:var(--text)}
+.shop .srow a{color:var(--navy);text-decoration:none;font-weight:600}
+.cta .dm{background:#fff;color:#833ab4;border:1px solid #d9c2ee}
 </style>
 </head>
 <body>
@@ -146,15 +150,26 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
     </div>
   </section>
 
-  <div class="cta">
-    <a class="wa hide" id="waLink" href="#" target="_blank" rel="noopener">WhatsApp</a>
-    <a class="tel" id="telLink" href="tel:+4922180039255" data-t="call"></a>
-    <a class="ig" href="https://www.instagram.com/markaistanbuljuwelier/" target="_blank" rel="noopener">Instagram</a>
+  <div class="card shop">
+    <h3>Marka Trauringe &amp; Diamanten</h3>
+    <div class="tag" data-t="shopTag"></div>
+    <div class="srow">📍 <a href="https://maps.google.com/?q=Keupstra%C3%9Fe+67,+51063+K%C3%B6ln" target="_blank" rel="noopener">Keupstraße 67, 51063 Köln</a></div>
+    <div class="srow">🕙 <span data-t="hours"></span></div>
+    <div class="srow">☎️ <a href="tel:+4922180039255">0221 80039255</a></div>
+    <div class="srow">📨 <span data-t="orderVia"></span></div>
+    <div class="cta">
+      <a class="wa hide" id="waLink" href="#" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="tel" id="telLink" href="tel:+4922180039255" data-t="call"></a>
+    </div>
+    <div class="cta" style="margin-top:8px">
+      <a class="ig" href="https://www.instagram.com/markaistanbuljuwelier/" target="_blank" rel="noopener">Instagram @markaistanbuljuwelier</a>
+      <a class="dm" href="https://ig.me/m/markaistanbuljuwelier" target="_blank" rel="noopener" data-t="dm"></a>
+    </div>
   </div>
 
   <div class="foot">
     <div data-t="disclaimer"></div>
-    <div style="margin-top:6px">Marka Trauringe &amp; Diamanten · Keupstraße 67 · 51063 Köln<br><span data-t="hours"></span> · 0221 80039255</div>
+    <div style="margin-top:8px"><a href="impressum.html" data-t="imprint"></a></div>
   </div>
 
   <!-- Yönetici: yalnızca ?admin ile açılır. Değişiklikler sadece önizlemedir; kalıcı olması için config.json güncellenir. -->
@@ -189,7 +204,7 @@ const T = {
   buTitle:"Bu paraya ne alabilirim?",buAmount:"Bütçe (€)",pieces:"adet",rest:"kalan",
   sTitle:"Altınımı kaça satarım?",sType:"Ne satıyorsunuz?",sGet:"Tahmini ödeme",sNote:"Kesin fiyat dükkânda tartı ve ayar kontrolünden sonra belirlenir.",
   disclaimer:"Fiyatlar bilgi amaçlıdır, altın piyasasına göre anlık değişir. Kesin fiyat için dükkânımıza gelin veya bizi arayın.",
-  call:"Ara",hours:"Pzt–Cmt 10:00–19:00",
+  call:"Ara",shopTag:"Kuyumcu & saat · Altın takı • Alyans • Hediye",orderVia:"Sipariş ve sorular için WhatsApp / DM",dm:"Mesaj gönder",imprint:"Künye / Gizlilik",hours:"Pzt–Cmt 10:00–19:00",
   installIos:"<b>Uygulama olarak ekle:</b> Paylaş <span style='font-size:15px'>⎋</span> → „Ana Ekrana Ekle“",installAnd:"<b>Çeyrekmatik'i telefonuna ekle</b> – tek dokunuşla aç.",installBtn:"Ekle",
   admTitle:"Yönetici (önizleme)",admWarn:"Buradaki değişiklikler yalnızca bu ekranda önizlemedir. Kalıcı olması için ‘Ayarları kopyala’ ile Timur’a gönderin.",
   manualSpot:"Manuel has gram fiyatı (€) – boş = canlı fiyat",product:"Ürün",mSell:"Satış +%",mBuy:"Alış −%",labor:"İşçilik €",
@@ -202,7 +217,7 @@ const T = {
   buTitle:"Was bekomme ich für mein Budget?",buAmount:"Budget (€)",pieces:"Stk.",rest:"Rest",
   sTitle:"Was bekomme ich für mein Gold?",sType:"Was möchten Sie verkaufen?",sGet:"Geschätzte Auszahlung",sNote:"Der genaue Preis wird im Geschäft nach Wiegen und Prüfung festgelegt.",
   disclaimer:"Alle Preise sind unverbindlich und ändern sich mit dem Goldkurs. Für ein verbindliches Angebot besuchen Sie uns oder rufen Sie an.",
-  call:"Anrufen",hours:"Mo–Sa 10:00–19:00",
+  call:"Anrufen",shopTag:"Schmuck- & Uhrengeschäft · Goldschmuck • Trauringe • Geschenke",orderVia:"Bestellung & Anfragen per WhatsApp / DM",dm:"Nachricht senden",imprint:"Impressum / Datenschutz",hours:"Mo–Sa 10:00–19:00",
   installIos:"<b>Als App hinzufügen:</b> Teilen <span style='font-size:15px'>⎋</span> → „Zum Home-Bildschirm“",installAnd:"<b>Çeyrekmatik aufs Handy</b> – mit einem Tipp öffnen.",installBtn:"Installieren",
   admTitle:"Admin (Vorschau)",admWarn:"Änderungen hier sind nur eine Vorschau auf diesem Bildschirm.",
   manualSpot:"Manueller Feingoldpreis pro Gramm (€) – leer = Live-Kurs",product:"Produkt",mSell:"VK +%",mBuy:"AK −%",labor:"Arbeit €",
@@ -215,7 +230,7 @@ const T = {
   buTitle:"What can I get for my budget?",buAmount:"Budget (€)",pieces:"pcs",rest:"left",
   sTitle:"What do I get for my gold?",sType:"What are you selling?",sGet:"Estimated payout",sNote:"The exact price is set in the shop after weighing and testing.",
   disclaimer:"All prices are for information only and change with the gold price. For a binding offer, visit us or give us a call.",
-  call:"Call",hours:"Mon–Sat 10:00–19:00",
+  call:"Call",shopTag:"Jewellery & watches · Gold jewellery • Wedding rings • Gifts",orderVia:"Orders & enquiries via WhatsApp / DM",dm:"Send message",imprint:"Imprint / Privacy",hours:"Mon–Sat 10:00–19:00",
   installIos:"<b>Add as app:</b> Share <span style='font-size:15px'>⎋</span> → “Add to Home Screen”",installAnd:"<b>Add Çeyrekmatik to your phone</b> – open it with one tap.",installBtn:"Install",
   admTitle:"Admin (preview)",admWarn:"Changes here are only a preview on this screen.",
   manualSpot:"Manual fine gold price per gram (€) – empty = live price",product:"Product",mSell:"Sell +%",mBuy:"Buy −%",labor:"Labour €",
