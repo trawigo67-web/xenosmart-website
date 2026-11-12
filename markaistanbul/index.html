@@ -116,7 +116,7 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
     <button class="on" data-tab="prices" data-t="tPrices"></button>
     <button data-tab="bilezik" data-t="tBilezik"></button>
     <button data-tab="budget" data-t="tBudget"></button>
-    <button data-tab="sell" data-t="tSell"></button>
+    <button data-tab="zekat" data-t="tZekat"></button>
   </div>
 
   <section id="prices"><div class="list" id="list"></div></section>
@@ -141,12 +141,24 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
     </div>
   </section>
 
-  <section id="sell" class="hide">
+  <section id="zekat" class="hide">
     <div class="card">
-      <h3 data-t="sTitle"></h3>
-      <label data-t="sType"></label><select id="sType"></select>
-      <label id="sQtyLbl" data-t="adet"></label><input id="sQty" type="number" inputmode="decimal" value="1" min="0" step="1">
-      <div class="res"><div class="s" data-t="sGet"></div><div class="big" id="sRes">—</div><div class="s" data-t="sNote"></div></div>
+      <h3 data-t="zTitle"></h3>
+      <div class="s" style="color:var(--muted);font-size:12px;margin-bottom:4px" data-t="zIntro"></div>
+      <div class="grid2">
+        <div><label data-t="zCeyrek"></label><input class="zi" data-k="ceyrek" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
+        <div><label data-t="zYarim"></label><input class="zi" data-k="yarim" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
+        <div><label data-t="zTam"></label><input class="zi" data-k="tam" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
+        <div><label data-t="zAta"></label><input class="zi" data-k="ata" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
+        <div><label data-t="zResat"></label><input class="zi" data-k="resat" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
+        <div><label data-t="zGram24"></label><input class="zi" data-k="g24" type="number" inputmode="decimal" min="0" step="0.1" placeholder="0"></div>
+        <div><label data-t="zG22"></label><input class="zi" data-k="g22" type="number" inputmode="decimal" min="0" step="0.1" placeholder="0"></div>
+        <div><label data-t="zG18"></label><input class="zi" data-k="g18" type="number" inputmode="decimal" min="0" step="0.1" placeholder="0"></div>
+        <div><label data-t="zG14"></label><input class="zi" data-k="g14" type="number" inputmode="decimal" min="0" step="0.1" placeholder="0"></div>
+        <div><label data-t="zCash"></label><input class="zi" data-k="cash" type="number" inputmode="decimal" min="0" step="50" placeholder="0"></div>
+      </div>
+      <div class="res"><div class="s" data-t="zDue"></div><div class="big" id="zRes">—</div><div class="s" id="zDet"></div></div>
+      <div class="s" style="color:var(--muted);font-size:11px;margin-top:10px;line-height:1.5" data-t="zNote"></div>
     </div>
   </section>
 
@@ -179,7 +191,7 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
     <label data-t="manualSpot"></label>
     <input id="manSpot" type="number" step="0.01" placeholder="örn. 112.00">
     <table style="margin-top:12px">
-      <thead><tr><th data-t="product"></th><th data-t="mSell"></th><th data-t="mBuy"></th><th data-t="labor"></th></tr></thead>
+      <thead><tr><th data-t="product"></th><th data-t="mSell"></th><th data-t="labor"></th></tr></thead>
       <tbody id="admRows"></tbody>
     </table>
     <button class="btn" id="admApply" data-t="apply"></button>
@@ -204,7 +216,7 @@ const T = {
   buTitle:"Bu paraya ne alabilirim?",buAmount:"Bütçe (€)",pieces:"adet",rest:"kalan",
   sTitle:"Altınımı kaça satarım?",sType:"Ne satıyorsunuz?",sGet:"Tahmini ödeme",sNote:"Kesin fiyat dükkânda tartı ve ayar kontrolünden sonra belirlenir.",
   disclaimer:"Fiyatlar bilgi amaçlıdır, altın piyasasına göre anlık değişir. Kesin fiyat için dükkânımıza gelin veya bizi arayın.",
-  call:"Ara",shopTag:"Kuyumcu & saat · Altın takı • Alyans • Hediye",orderVia:"Sipariş ve sorular için WhatsApp / DM",dm:"Mesaj gönder",imprint:"Künye / Gizlilik",hours:"Pzt–Cmt 10:00–19:00",
+  call:"Ara",tZekat:"Zekât",zTitle:"Zekât hesapla",zIntro:"Elinizdeki altını ve birikiminizi girin, zekâtınızı güncel has altın fiyatıyla hesaplayalım.",zCeyrek:"Çeyrek (adet)",zYarim:"Yarım (adet)",zTam:"Tam (adet)",zAta:"Ata Lira (adet)",zResat:"Reşat (adet)",zGram24:"Gram altın 24 ayar (g)",zG22:"22 ayar bilezik/takı (g)",zG18:"18 ayar takı (g)",zG14:"14 ayar takı (g)",zCash:"Nakit / birikim (€)",zDue:"Vermeniz gereken zekât",zNone:"Zekât düşmüyor",zHas:"Has altın",zTotal:"Toplam değer",zNisab:"Nisap",zRate:"%2,5 (1/40)",zNote:"Nisap: 80,18 g altın (Diyanet). Zekât, nisaba ulaşan ve üzerinden bir kameri yıl geçen varlık için verilir. Bu hesap bilgi amaçlıdır; dini konularda bir din görevlisine danışınız.",shopTag:"Kuyumcu & saat · Altın takı • Alyans • Hediye",orderVia:"Sipariş ve sorular için WhatsApp / DM",dm:"Mesaj gönder",imprint:"Künye / Gizlilik",hours:"Pzt–Cmt 10:00–19:00",
   installIos:"<b>Uygulama olarak ekle:</b> Paylaş <span style='font-size:15px'>⎋</span> → „Ana Ekrana Ekle“",installAnd:"<b>Çeyrekmatik'i telefonuna ekle</b> – tek dokunuşla aç.",installBtn:"Ekle",
   admTitle:"Yönetici (önizleme)",admWarn:"Buradaki değişiklikler yalnızca bu ekranda önizlemedir. Kalıcı olması için ‘Ayarları kopyala’ ile Timur’a gönderin.",
   manualSpot:"Manuel has gram fiyatı (€) – boş = canlı fiyat",product:"Ürün",mSell:"Satış +%",mBuy:"Alış −%",labor:"İşçilik €",
@@ -217,7 +229,7 @@ const T = {
   buTitle:"Was bekomme ich für mein Budget?",buAmount:"Budget (€)",pieces:"Stk.",rest:"Rest",
   sTitle:"Was bekomme ich für mein Gold?",sType:"Was möchten Sie verkaufen?",sGet:"Geschätzte Auszahlung",sNote:"Der genaue Preis wird im Geschäft nach Wiegen und Prüfung festgelegt.",
   disclaimer:"Alle Preise sind unverbindlich und ändern sich mit dem Goldkurs. Für ein verbindliches Angebot besuchen Sie uns oder rufen Sie an.",
-  call:"Anrufen",shopTag:"Schmuck- & Uhrengeschäft · Goldschmuck • Trauringe • Geschenke",orderVia:"Bestellung & Anfragen per WhatsApp / DM",dm:"Nachricht senden",imprint:"Impressum / Datenschutz",hours:"Mo–Sa 10:00–19:00",
+  call:"Anrufen",tZekat:"Zakat",zTitle:"Zakat berechnen",zIntro:"Geben Sie Ihr Gold und Ihr Erspartes ein – wir berechnen Ihre Zakat mit dem aktuellen Feingoldpreis.",zCeyrek:"Çeyrek (Stück)",zYarim:"Yarım (Stück)",zTam:"Tam (Stück)",zAta:"Ata Lira (Stück)",zResat:"Reşat (Stück)",zGram24:"Goldbarren 24K (g)",zG22:"22K Armreif/Schmuck (g)",zG18:"18K Schmuck (g)",zG14:"14K Schmuck (g)",zCash:"Bargeld / Ersparnisse (€)",zDue:"Ihre Zakat",zNone:"Keine Zakat fällig",zHas:"Feingold",zTotal:"Gesamtwert",zNisab:"Nisab",zRate:"2,5 % (1/40)",zNote:"Nisab: 80,18 g Gold (Diyanet). Zakat ist fällig, wenn das Vermögen den Nisab erreicht und ein Mondjahr lang besessen wurde. Diese Berechnung dient nur zur Orientierung; wenden Sie sich bei religiösen Fragen an einen Imam.",shopTag:"Schmuck- & Uhrengeschäft · Goldschmuck • Trauringe • Geschenke",orderVia:"Bestellung & Anfragen per WhatsApp / DM",dm:"Nachricht senden",imprint:"Impressum / Datenschutz",hours:"Mo–Sa 10:00–19:00",
   installIos:"<b>Als App hinzufügen:</b> Teilen <span style='font-size:15px'>⎋</span> → „Zum Home-Bildschirm“",installAnd:"<b>Çeyrekmatik aufs Handy</b> – mit einem Tipp öffnen.",installBtn:"Installieren",
   admTitle:"Admin (Vorschau)",admWarn:"Änderungen hier sind nur eine Vorschau auf diesem Bildschirm.",
   manualSpot:"Manueller Feingoldpreis pro Gramm (€) – leer = Live-Kurs",product:"Produkt",mSell:"VK +%",mBuy:"AK −%",labor:"Arbeit €",
@@ -225,12 +237,12 @@ const T = {
   waMsg:"Hallo Marka Istanbul, ich schreibe aus dem Çeyrekmatik. Ich möchte ein Angebot:"},
  en:{spotLbl:"Fine gold · 1 gram (24K)",live:"Live price",daily:"Daily price",offline:"Last known price",manual:"Shop price",ozLbl:"Ounce",
   tPrices:"Prices",tBilezik:"Bangle",tBudget:"Budget",tSell:"Sell gold",
-  buy:"We sell",sell:"We buy",
+  buy:"Price",sell:"We buy",
   bTitle:"Calculate bangle / jewellery",karat:"Karat",gram:"Grams",adet:"Pieces",approx:"Estimated selling price",
   buTitle:"What can I get for my budget?",buAmount:"Budget (€)",pieces:"pcs",rest:"left",
   sTitle:"What do I get for my gold?",sType:"What are you selling?",sGet:"Estimated payout",sNote:"The exact price is set in the shop after weighing and testing.",
   disclaimer:"All prices are for information only and change with the gold price. For a binding offer, visit us or give us a call.",
-  call:"Call",shopTag:"Jewellery & watches · Gold jewellery • Wedding rings • Gifts",orderVia:"Orders & enquiries via WhatsApp / DM",dm:"Send message",imprint:"Imprint / Privacy",hours:"Mon–Sat 10:00–19:00",
+  call:"Call",tZekat:"Zakat",zTitle:"Calculate zakat",zIntro:"Enter your gold and savings – we calculate your zakat with the current fine gold price.",zCeyrek:"Çeyrek (pcs)",zYarim:"Yarım (pcs)",zTam:"Tam (pcs)",zAta:"Ata Lira (pcs)",zResat:"Reşat (pcs)",zGram24:"Gold bar 24K (g)",zG22:"22K bangle/jewellery (g)",zG18:"18K jewellery (g)",zG14:"14K jewellery (g)",zCash:"Cash / savings (€)",zDue:"Your zakat",zNone:"No zakat due",zHas:"Fine gold",zTotal:"Total value",zNisab:"Nisab",zRate:"2.5% (1/40)",zNote:"Nisab: 80.18 g of gold (Diyanet). Zakat is due on wealth that reaches the nisab and has been held for one lunar year. This calculation is for guidance only; please consult an imam on religious questions.",shopTag:"Jewellery & watches · Gold jewellery • Wedding rings • Gifts",orderVia:"Orders & enquiries via WhatsApp / DM",dm:"Send message",imprint:"Imprint / Privacy",hours:"Mon–Sat 10:00–19:00",
   installIos:"<b>Add as app:</b> Share <span style='font-size:15px'>⎋</span> → “Add to Home Screen”",installAnd:"<b>Add Çeyrekmatik to your phone</b> – open it with one tap.",installBtn:"Install",
   admTitle:"Admin (preview)",admWarn:"Changes here are only a preview on this screen.",
   manualSpot:"Manual fine gold price per gram (€) – empty = live price",product:"Product",mSell:"Sell +%",mBuy:"Buy −%",labor:"Labour €",
@@ -294,16 +306,14 @@ async function fetchSpot(){
 }
 
 function priceOf(p){
-  const fine = p.gram*p.purity*spotG;
-  // alisMilyem: Ankauf = Gewicht × Milyem/1000 × Feingoldpreis (z. B. Çeyrek 940)
-  const buy = p.alisMilyem ? p.gram*(p.alisMilyem/1000)*spotG : fine*(1-p.alis/100);
   // satisMilyem: Verkauf = Gewicht × Milyem/1000 × Feingoldpreis (inkl. Arbeit, z. B. Çeyrek 960)
-  const sell = p.satisMilyem ? p.gram*(p.satisMilyem/1000)*spotG : fine*(1+p.satis/100) + (+p.iscilik||0);
-  return { sell, buy };
+  const sell = p.satisMilyem ? p.gram*(p.satisMilyem/1000)*spotG : p.gram*p.purity*spotG*(1+p.satis/100) + (+p.iscilik||0);
+  return { sell };
 }
 function braceletPrice(b, g){
-  const fine = g*b.purity*spotG;
-  return { sell: fine*(1+b.satis/100) + g*(+b.iscilik||0), buy: fine*(1-b.alis/100) };
+  // satisMilyem je Gramm, sonst Feingold × Aufschlag + Arbeit je Gramm
+  const sell = b.satisMilyem ? g*(b.satisMilyem/1000)*spotG : g*b.purity*spotG*(1+b.satis/100) + g*(+b.iscilik||0);
+  return { sell };
 }
 
 function renderTexts(){
@@ -326,18 +336,15 @@ function renderSpot(){
   $("status").textContent = t(src) + (src==="live" && srcName ? " (" + srcName + ")" : "") + (when ? " · " + when : "") + ch;
   $("dot").classList.toggle("off", src!=="live" && src!=="manual");
 }
+function rowHtml(name, sub, val){
+  return `<div class="item" style="grid-template-columns:1fr auto"><div><div class="n">${name}</div><div class="s">${sub}</div></div>
+      <div class="col"><div class="k">${t("buy")}</div><div class="v sell">${val}</div></div></div>`;
+}
 function renderList(){
-  $("list").innerHTML = cfg.products.map(p=>{
-    const r = priceOf(p);
-    return `<div class="item"><div><div class="n">${nm(p)}</div><div class="s">${p.gram} g · ${Math.round(p.purity*1000)}</div></div>
-      <div class="col"><div class="k">${t("sell")}</div><div class="v buy">${fmt(r.buy)}</div></div>
-      <div class="col"><div class="k">${t("buy")}</div><div class="v sell">${fmt(r.sell)}</div></div></div>`;
-  }).join("") + cfg.bracelets.map(b=>{
-    const r = braceletPrice(b,1);
-    return `<div class="item"><div><div class="n">${nm(b)}</div><div class="s">1 g + ${fmt(+b.iscilik)} ${t("perGram")}</div></div>
-      <div class="col"><div class="k">${t("sell")}</div><div class="v buy">${fmt(r.buy)}</div></div>
-      <div class="col"><div class="k">${t("buy")}</div><div class="v sell">${fmt(r.sell)}</div></div></div>`;
-  }).join("");
+  const coins = p => rowHtml(nm(p), `${p.gram} g · ${Math.round(p.purity*1000)}`, fmt(priceOf(p).sell));
+  $("list").innerHTML = cfg.products.filter(p=>!p.sonda).map(coins).join("")
+    + cfg.bracelets.map(b=>rowHtml(nm(b), `1 g · ${Math.round(b.purity*1000)}`, fmt(braceletPrice(b,1).sell) + `<span style="font-size:11px;color:var(--muted);font-weight:500"> /g</span>`)).join("")
+    + cfg.products.filter(p=>p.sonda).map(coins).join("");
 }
 function renderBilezik(){
   const sel = $("bKarat"), cur = sel.value;
@@ -347,7 +354,7 @@ function renderBilezik(){
   const g = +$("bGram").value||0, n = Math.max(1, +$("bAdet").value||1);
   const r = braceletPrice(b, g);
   $("bRes").textContent = fmt(r.sell*n);
-  $("bDet").textContent = `${n} × ${g} g · ${t("sell")}: ${fmt(r.buy*n)}`;
+  $("bDet").textContent = `${n} × ${g} g · ${fmt(braceletPrice(b,1).sell)} / g`;
 }
 function renderBudget(){
   const amt = +$("buAmt").value||0;
@@ -357,15 +364,24 @@ function renderBudget(){
       <div class="col"><div class="v buy">${k} ${t("pieces")}</div></div></div>`;
   }).join("");
 }
-function renderSell(){
-  const sel = $("sType"), cur = sel.value;
-  sel.innerHTML = cfg.products.map(p=>`<option value="p:${p.id}">${nm(p)}</option>`).join("") +
-                  cfg.bracelets.map(b=>`<option value="b:${b.id}">${nm(b)} (${t("gram")})</option>`).join("");
-  if (cur) sel.value = cur;
-  const [k,id] = sel.value.split(":"), q = +$("sQty").value||0;
-  $("sQtyLbl").textContent = k==="b" ? t("gram") : t("adet");
-  const o = k==="p" ? cfg.products.find(x=>x.id===id) : cfg.bracelets.find(x=>x.id===id); if (!o) return;
-  $("sRes").textContent = fmt(k==="p" ? priceOf(o).buy*q : braceletPrice(o, q).buy);
+function renderZekat(){
+  const v = {}; document.querySelectorAll(".zi").forEach(i=> v[i.dataset.k] = Math.max(0, +i.value||0));
+  const P = id => cfg.products.find(x=>x.id===id) || {gram:0,purity:0};
+  let has = 0;
+  ["ceyrek","yarim","tam","ata","resat"].forEach(id=>{ const p=P(id); has += (v[id]||0)*p.gram*p.purity; });
+  has += (v.g24||0)*0.995 + (v.g22||0)*0.916 + (v.g18||0)*0.750 + (v.g14||0)*0.585;
+  const total = has*spotG + (v.cash||0);
+  const nisabG = +cfg.zekatNisabGram || 80.18, nisab = nisabG*spotG;
+  const loc = {tr:"tr-TR",de:"de-DE",en:"en-GB"}[lang];
+  const hg = has.toLocaleString(loc,{maximumFractionDigits:2});
+  if (total <= 0){ $("zRes").textContent = "—"; $("zDet").textContent = `${t("zNisab")}: ${nisabG.toLocaleString(loc)} g = ${fmt(nisab)}`; return; }
+  if (total < nisab){
+    $("zRes").textContent = t("zNone");
+    $("zDet").innerHTML = `${t("zHas")}: ${hg} g · ${t("zTotal")}: ${fmt(total)}<br>${t("zNisab")}: ${nisabG.toLocaleString(loc)} g = ${fmt(nisab)}`;
+  } else {
+    $("zRes").textContent = fmt(total/40);
+    $("zDet").innerHTML = `${t("zHas")}: ${hg} g · ${t("zTotal")}: ${fmt(total)}<br>${t("zNisab")}: ${nisabG.toLocaleString(loc)} g = ${fmt(nisab)} · ${t("zRate")}`;
+  }
 }
 function renderLinks(){
   const wa = (cfg.whatsapp||"").replace(/\D/g,"");
@@ -373,7 +389,7 @@ function renderLinks(){
   $("waLink").href = `https://wa.me/${wa}?text=${encodeURIComponent(t("waMsg"))}`;
   if (cfg.telefon) $("telLink").href = "tel:" + cfg.telefon;
 }
-function renderAll(){ renderTexts(); renderSpot(); if(spotG && cfg){ renderList(); renderBilezik(); renderBudget(); renderSell(); } renderLinks(); }
+function renderAll(){ renderTexts(); renderSpot(); if(spotG && cfg){ renderList(); renderBilezik(); renderBudget(); renderZekat(); } renderLinks(); }
 
 /* "Uygulama olarak ekle" */
 let deferredPrompt = null;
@@ -394,7 +410,6 @@ function renderAdm(){
   const rows = [...cfg.products.map(p=>["products",p]), ...cfg.bracelets.map(b=>["bracelets",b])];
   $("admRows").innerHTML = rows.map(([g,o])=>`<tr><td style="font-size:12px">${nm(o)}</td>
     <td><input data-g="${g}" data-id="${o.id}" data-f="satis" type="number" step="0.1" value="${o.satis}"></td>
-    <td><input data-g="${g}" data-id="${o.id}" data-f="alis" type="number" step="0.1" value="${o.alis}"></td>
     <td><input data-g="${g}" data-id="${o.id}" data-f="iscilik" type="number" step="0.5" value="${o.iscilik}"></td></tr>`).join("");
   $("manSpot").value = cfg.manualSpot || "";
 }
@@ -412,11 +427,11 @@ document.addEventListener("click", e=>{
   const l = e.target.closest(".lang button"); if (l){ lang=l.dataset.l; ls.set("mi_lang",lang); renderAll(); }
   const tb = e.target.closest(".tabs button");
   if (tb){ document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b===tb));
-    ["prices","bilezik","budget","sell"].forEach(id=>$(id).classList.toggle("hide", id!==tb.dataset.tab)); }
+    ["prices","bilezik","budget","zekat"].forEach(id=>$(id).classList.toggle("hide", id!==tb.dataset.tab)); }
 });
 ["bKarat","bGram","bAdet"].forEach(id=>$(id).addEventListener("input",renderBilezik));
 $("buAmt").addEventListener("input",renderBudget);
-["sType","sQty"].forEach(id=>$(id).addEventListener("input",renderSell));
+document.querySelectorAll(".zi").forEach(i=>i.addEventListener("input",renderZekat));
 
 (async function start(){
   lang = ls.get("mi_lang") || ({de:"de",en:"en"}[(navigator.language||"tr").slice(0,2)] || "tr"); if(!T[lang]) lang="tr";

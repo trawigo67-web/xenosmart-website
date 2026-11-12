@@ -4,27 +4,14 @@
  "fallbackOzEur": 3485.85,
  "products": [
   {
-   "id": "gram24",
-   "tr": "Gram Altın (24 ayar)",
-   "de": "Goldbarren 1 g (24K)",
-   "gram": 1.0,
-   "purity": 0.995,
-   "satis": 5,
-   "alis": 3,
-   "iscilik": 3,
-   "en": "Gold bar 1 g (24K)"
-  },
-  {
    "id": "ceyrek",
    "tr": "Çeyrek Altın",
    "de": "Viertel (Çeyrek)",
    "gram": 1.75,
    "purity": 0.916,
    "satis": 6,
-   "alis": 4,
    "iscilik": 8,
    "en": "Quarter coin (Çeyrek)",
-   "alisMilyem": 940,
    "satisMilyem": 960
   },
   {
@@ -34,7 +21,6 @@
    "gram": 3.5,
    "purity": 0.916,
    "satis": 6,
-   "alis": 4,
    "iscilik": 14,
    "en": "Half coin (Yarım)"
   },
@@ -45,7 +31,6 @@
    "gram": 7.0,
    "purity": 0.916,
    "satis": 6,
-   "alis": 4,
    "iscilik": 25,
    "en": "Full coin (Tam)"
   },
@@ -56,7 +41,6 @@
    "gram": 7.216,
    "purity": 0.916,
    "satis": 5,
-   "alis": 3,
    "iscilik": 20,
    "en": "Ata Lira (Cumhuriyet)"
   },
@@ -67,41 +51,58 @@
    "gram": 7.216,
    "purity": 0.916,
    "satis": 7,
-   "alis": 4,
    "iscilik": 35,
    "en": "Reşat coin"
+  },
+  {
+   "id": "gram24",
+   "tr": "Gram Altın (24 ayar)",
+   "de": "Goldbarren 1 g (24K)",
+   "gram": 1.0,
+   "purity": 0.995,
+   "satis": 5,
+   "iscilik": 3,
+   "en": "Gold bar 1 g (24K)",
+   "sonda": true
   }
  ],
  "bracelets": [
   {
-   "id": "b22",
-   "tr": "22 ayar bilezik (916)",
-   "de": "Armreif 22K (916)",
+   "id": "ajda",
+   "tr": "Ajda Kibrit Bilezik (22 ayar)",
+   "de": "Ajda-Armreif (22K)",
+   "en": "Ajda bangle (22K)",
    "purity": 0.916,
    "satis": 6,
-   "alis": 6,
-   "iscilik": 6,
-   "en": "Bangle 22K (916)"
+   "iscilik": 6
   },
   {
-   "id": "b18",
-   "tr": "18 ayar (750)",
-   "de": "18K (750)",
-   "purity": 0.75,
-   "satis": 8,
-   "alis": 8,
-   "iscilik": 10,
-   "en": "18K (750)"
+   "id": "burma",
+   "tr": "Burma Bilezik – İkili / Üçlü (22 ayar)",
+   "de": "Burma-Armreif zwei-/dreifach (22K)",
+   "en": "Burma bangle double/triple (22K)",
+   "purity": 0.916,
+   "satis": 6,
+   "iscilik": 6
   },
   {
-   "id": "b14",
-   "tr": "14 ayar (585)",
-   "de": "14K (585)",
-   "purity": 0.585,
-   "satis": 10,
-   "alis": 10,
-   "iscilik": 12,
-   "en": "14K (585)"
+   "id": "lazer",
+   "tr": "Lazer Bilezik (22 ayar)",
+   "de": "Laser-Armreif (22K)",
+   "en": "Laser bangle (22K)",
+   "purity": 0.916,
+   "satis": 6,
+   "iscilik": 6
+  },
+  {
+   "id": "desenli",
+   "tr": "Desenli Bilezik (22 ayar)",
+   "de": "Gemusterter Armreif (22K)",
+   "en": "Patterned bangle (22K)",
+   "purity": 0.916,
+   "satis": 6,
+   "iscilik": 6
   }
- ]
+ ],
+ "zekatNisabGram": 80.18
 }
