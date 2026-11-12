@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#1c1c1a">
 <meta name="robots" content="noindex, nofollow">
+<script src="tema.js"></script>
 <title>Yönetici – Çeyrekmatik</title>
 <link rel="icon" type="image/png" href="icon-admin-192.png">
 <link rel="manifest" href="admin.webmanifest">
@@ -19,10 +20,10 @@
   if (standalone && !/[?&]fiyat=1/.test(location.search)) location.replace("siparis.html?app=yonetici");
 }catch(e){} })();
 </script>
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link href="fonts/fonts.css" rel="stylesheet">
 <style>
-:root{--cop:#c4702a;--cop2:#a85a1c;--line:#ead7c3;--bg2:#fbf6f0;--muted:#8a8178;--grad:linear-gradient(135deg,#a85a1c 0%,#e3a15a 45%,#c4702a 70%,#8f4a14 100%)}
+:root{--cop:#b8913a;--cop2:#8f6b1e;--line:#e8dcb8;--bg2:#fbf7ea;--muted:#857d6c;--grad:linear-gradient(135deg,#8f6b1e 0%,#e6c86e 45%,#b8913a 70%,#7a5a17 100%)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Inter,system-ui,sans-serif;background:#fff;color:#1d1d1f;-webkit-font-smoothing:antialiased}
 .wrap{max-width:720px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 16px 60px}
@@ -84,11 +85,27 @@ input:focus{outline:none;border-color:var(--cop)}
 .qb + .qb{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
 details.adv{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:16px}
 details.adv summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:14px}
+
+/* ZEN × MARKA tema */
+html{background:#1c1c1a}
+body{background:radial-gradient(120% 70% at 50% 35%,#fffdf6 0%,#fbf4df 70%,#f5e9c4 100%) fixed!important}
+:root{--zband:#1c1c1a;--zline:#c9a647}
+body{min-height:100vh}
+.zband{position:relative;z-index:2;background:var(--zband);height:calc(14px + env(safe-area-inset-top));border-bottom:2px solid var(--zline);box-shadow:0 1px 0 #f3e3a8 inset}
+.zband.b{height:calc(14px + env(safe-area-inset-bottom));border-bottom:0;border-top:2px solid var(--zline);margin-top:26px}
+.waves,.wv{display:none!important}
+img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px auto 2px}
+.temagrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.temagrid button{border:2px solid var(--line);border-radius:14px;background:#fff;padding:10px 4px 8px;cursor:pointer;font:inherit;font-size:12px;font-weight:600;color:#1d1d1f;display:flex;flex-direction:column;align-items:center;gap:5px}
+.temagrid button .sw{width:100%;height:18px;border-radius:6px}
+.temagrid button .ik{font-size:22px;line-height:1}
+.temagrid button.on{border-color:var(--zacc,#b8913a);box-shadow:0 0 0 3px rgba(201,166,71,.25)}
 </style>
 </head>
 <body>
+<div class="zband"></div>
 <div class="wrap">
-  <img class="logo" src="logo.png" alt="Marka Istanbul">
+  <img class="zlock" src="lockup.png" alt="Zen Diamond × Marka Istanbul">
   <h1>Çeyrekmatik · Yönetici</h1>
 
   <!-- Kurulum (bir kez) -->
@@ -137,7 +154,14 @@ details.adv summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:
       </div>
     </div>
     <div id="quick"></div>
+    <button class="ib" id="goNames" style="width:100%;margin:0 0 10px">✏️ Ürün isimlerini değiştir</button>
     <div class="bar" style="position:static;border:0;padding-top:0;margin-top:0"><button class="btn" id="save2" style="margin-top:0">Kaydet ve yayınla</button></div>
+
+    <h2>Tema</h2>
+    <div class="card">
+      <p class="note" style="margin-top:0">Müşteri uygulaması, sipariş uygulaması ve günlük fiyat görseli seçilen temayla görünür. Logolar değişmez. Seçin, sonra <b>Kaydet ve yayınla</b>.</p>
+      <div id="temaGrid" class="temagrid"></div>
+    </div>
 
     <h2>Günlük paylaşım</h2>
     <div class="card" style="text-align:center">
@@ -157,7 +181,8 @@ details.adv summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:
       <p class="note">Görsel her gün seçilen saatte güncel fiyatlarla otomatik hazırlanır. "Paylaş" ile Instagram hikâyesine veya WhatsApp durumuna tek dokunuşla gönderin. <a href="pano.html" target="_blank">Canlı panoyu aç</a></p>
     </div>
 
-    <details class="adv"><summary>Ürünleri düzenle (isim, gram, kat, sıra, ekle/sil)</summary>
+    <details class="adv" id="advProd"><summary>✏️ Ürün isimleri ve ayarları (isim değiştir · ekle · sil · sırala)</summary>
+    <p class="note">İsmi değiştirin, sonra <b>Kaydet ve yayınla</b>. Müşteri uygulamasında ve günlük görselde yeni isim görünür. Almanca/İngilizce isim boşsa Türkçe isim kullanılır.</p>
     <h2>Altınlar</h2>
     <div id="prodRows"></div>
     <button class="ib" id="addProd">+ Ürün ekle</button>
@@ -287,11 +312,13 @@ function rowHtml(o, kind, i){
     <div class="meta">
       <div class="p">Fiyat: <b class="pv">—</b>${isP?"":" / g"}</div>
       <button class="ib" data-a="up">↑</button><button class="ib" data-a="down">↓</button>
-      <button class="ib" data-a="more">DE / EN</button><button class="ib del" data-a="del">Sil</button>
+      <button class="ib" data-a="more">Diğer</button><button class="ib del" data-a="del">Sil</button>
+    </div>
+    <div class="names" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><label>Ad (DE) – Almanca</label><input data-f="de" value="${(o.de||"").replace(/"/g,"&quot;")}"></div>
+      <div><label>Ad (EN) – İngilizce</label><input data-f="en" value="${(o.en||"").replace(/"/g,"&quot;")}"></div>
     </div>
     <div class="more hide">
-      <div><label>Ad (DE)</label><input data-f="de" value="${(o.de||"").replace(/"/g,"&quot;")}"></div>
-      <div><label>Ad (EN)</label><input data-f="en" value="${(o.en||"").replace(/"/g,"&quot;")}"></div>
       <div><label>Grup</label><input data-f="grup" type="number" min="1" step="1" value="${o.grup??1}"></div>
       ${isP ? `<div style="grid-column:1/-1"><label>Fiyat hesabı</label><select data-f="baz">
         <option value="">Kendi milyemi</option>
@@ -305,7 +332,7 @@ function priceP(o, s){
   if (o.baz){ const b = cfg.products.find(x=>x.id===o.baz); return b && !b.baz ? Math.floor(b.gram*(b.satisMilyem/1000)*s)*(+o.kat||0) : NaN; }
   return o.gram*(o.satisMilyem/1000)*s;
 }
-const QNAME = {ceyrek:["Ziynetler","Çeyrek · Yarım · Tam · Gremse"], rceyrek:["Reşatlar","R Çeyrek · R Yarım · R Tam · R 2,5 · R 5'li"]};
+const QTITLE = {ceyrek:"Ziynetler", rceyrek:"Reşatlar"};
 function priceB(o, s){ return Math.floor((o.satisMilyem/1000)*s); }
 function marjTxt(o){ const p = +o.purity || 0.916, m = (o.satisMilyem/(p*1000) - 1)*100; return isFinite(m) ? `Altın değerinin <b>${m>=0?"+":""}${m.toLocaleString("tr-TR",{maximumFractionDigits:1})} %</b> ${m>=0?"üstü":"altı"} · ${Math.round(p*1000)} ayar` : ""; }
 function stepper(key, val){
@@ -317,7 +344,7 @@ function stepper(key, val){
 function renderQuick(){
   const bases = cfg.products.filter(p=>!p.baz);
   let h = bases.map(b=>{
-    const [title, sub] = QNAME[b.id] || [b.tr, cfg.products.filter(x=>x.baz===b.id).map(x=>x.tr).join(" · ")];
+    const title = QTITLE[b.id] || b.tr, sub = [b, ...cfg.products.filter(x=>x.baz===b.id)].map(x=>x.tr).join(" · ");
     return `<div class="q"><h3>${title}</h3><div class="sub">${sub ? sub + " – " : ""}satış milyemi</div>
       ${stepper("p:"+b.id, b.satisMilyem)}<div class="marj" data-m="p:${b.id}"></div><div class="qp" data-qp="p:${b.id}"></div></div>`;
   }).join("");
@@ -378,6 +405,9 @@ document.addEventListener("input", e=>{
   const r = e.target.closest(".row");
   if (r && e.target.dataset.f){
     const o = (r.dataset.kind==="p"?cfg.products:cfg.bracelets)[+r.dataset.i], f = e.target.dataset.f;
+    if (f==="tr"){ // DE/EN mitziehen, solange sie gleich dem alten Namen waren
+      for (const k of ["de","en"]) if (!o[k] || o[k]===o.tr){ o[k]=e.target.value; const inp=r.querySelector(`[data-f="${k}"]`); if (inp) inp.value=e.target.value; }
+    }
     o[f] = ["gram","satisMilyem","purity","grup","kat"].includes(f) ? (e.target.value===""?null:+e.target.value) : e.target.value;
     if (["satisMilyem","tr","purity","kat"].includes(f)) renderQuick();
     if (f==="baz"){
@@ -399,6 +429,13 @@ document.addEventListener("click", e=>{
   if (b.dataset.a==="down" && i<arr.length-1){ [arr[i+1],arr[i]]=[arr[i],arr[i+1]]; renderRows(); }
 });
 function confirmDel(o){ return window.confirm(`"${o.tr}" silinsin mi?`); }
+function renderTema(){
+  const cur = cfg.tema || "zen";
+  $("temaGrid").innerHTML = Object.entries(ZTema.TEMALAR).map(([k,t])=>`<button type="button" data-tema="${k}" class="${k===cur?"on":""}"><span class="ik">${t.ikon}</span>${t.ad.replace(" (standart)","")}<span class="sw" style="background:linear-gradient(90deg,${t.band} 0 45%,${t.line} 45% 55%,${t.bg[1]} 55%)"></span></button>`).join("");
+  $("temaGrid").querySelectorAll("button").forEach(b=>b.onclick=()=>{ cfg.tema=b.dataset.tema; ZTema.apply(cfg.tema,{force:true}); renderTema(); toast(ZTema.TEMALAR[cfg.tema].ad + " – yayınlamak için Kaydet'e basın"); });
+  ZTema.apply(cur);
+}
+$("goNames").onclick = ()=>{ const d=$("advProd"); d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); };
 $("addProd").onclick = ()=>{ cfg.products.push({id:"p"+Date.now(), tr:"Yeni ürün", de:"", en:"", gram:1.75, purity:0.916, baz:"ceyrek", kat:1, grup:(cfg.products.at(-1)||{}).grup||1}); renderRows(); };
 $("addBra").onclick = ()=>{ cfg.bracelets.push({id:"b"+Date.now(), tr:"Yeni bilezik", de:"", en:"", purity:0.916, satisMilyem:960, grup:3}); renderRows(); };
 
@@ -450,7 +487,7 @@ async function openEditor(){
   cfg.products = cfg.products||[]; cfg.bracelets = cfg.bracelets||[];
   $("manSpot").value = cfg.manualSpot || ""; $("wa").value = cfg.whatsapp || ""; $("tel").value = cfg.telefon || "";
   $("editor").classList.remove("hide");
-  renderRows(); renderPlan(); loadSpot(); loadPano();
+  renderRows(); renderPlan(); renderTema(); loadSpot(); loadPano();
 }
 $("manClear").onclick = ()=>{ $("manSpot").value = ""; renderPrices(); };
 $("save2") && ($("save2").onclick = ()=>$("save").click());

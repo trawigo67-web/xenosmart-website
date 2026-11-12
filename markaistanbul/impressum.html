@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#a85a1c">
+<meta name="theme-color" content="#1c1c1a">
 <meta name="robots" content="noindex">
 <title>Impressum & Datenschutz – Marka Istanbul Çeyrekmatik</title>
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -11,18 +11,29 @@
 <style>
 body{margin:0;font-family:Inter,system-ui,sans-serif;background:#ffffff;color:#1f2a37;line-height:1.6}
 .wrap{max-width:640px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 18px 48px}
-a{color:#a85a1c}
+a{color:#8f6b1e}
 .back{display:inline-block;margin-bottom:14px;text-decoration:none;font-weight:600}
-h1{font-family:'Playfair Display',serif;color:#a85a1c;font-size:26px;margin:0 0 4px}
-h2{font-family:'Playfair Display',serif;color:#a85a1c;font-size:19px;margin:26px 0 6px}
-h3{font-size:15px;margin:16px 0 4px;color:#8f4a14}
+h1{font-family:'Playfair Display',serif;color:#8f6b1e;font-size:26px;margin:0 0 4px}
+h2{font-family:'Playfair Display',serif;color:#8f6b1e;font-size:19px;margin:26px 0 6px}
+h3{font-size:15px;margin:16px 0 4px;color:#7a5a17}
 .card{background:#fff;border:1px solid #e7dfd0;border-radius:14px;padding:16px 18px;margin-top:12px}
 p{margin:6px 0;font-size:14px}
 .tr{color:#7a8494;font-size:13px}
 hr{border:0;border-top:1px solid #e7dfd0;margin:22px 0}
+
+/* ZEN × MARKA tema */
+html{background:#1c1c1a}
+body{background:radial-gradient(120% 70% at 50% 35%,#fffdf6 0%,#fbf4df 70%,#f5e9c4 100%) fixed!important}
+:root{--zband:#1c1c1a;--zline:#c9a647}
+body{min-height:100vh}
+.zband{position:relative;z-index:2;background:var(--zband);height:calc(14px + env(safe-area-inset-top));border-bottom:2px solid var(--zline);box-shadow:0 1px 0 #f3e3a8 inset}
+.zband.b{height:calc(14px + env(safe-area-inset-bottom));border-bottom:0;border-top:2px solid var(--zline);margin-top:26px}
+.waves,.wv{display:none!important}
+img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px auto 2px}
 </style>
 </head>
 <body>
+<div class="zband"></div>
 <div class="wrap">
   <a class="back" href="./">← Çeyrekmatik</a>
   <h1>Impressum</h1>
@@ -79,5 +90,6 @@ hr{border:0;border-top:1px solid #e7dfd0;margin:22px 0}
 
   <p class="tr" style="margin-top:18px">Stand: November 2026</p>
 </div>
+<script src="tema.js"></script><script>ZTema.auto({lang:(document.documentElement.lang||"tr").slice(0,2)})</script>
 </body>
 </html>

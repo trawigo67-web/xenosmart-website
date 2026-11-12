@@ -6,37 +6,40 @@
 <meta name="robots" content="noindex">
 <title>Marka Istanbul – Günlük Fiyat Panosu</title>
 <link href="fonts/fonts.css" rel="stylesheet">
+<script src="tema.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#fff}
+html,body{background:#fbf4df}
 body{font-family:Inter,system-ui,sans-serif;color:#1d1d1f;-webkit-font-smoothing:antialiased}
-#pano{position:relative;width:1080px;height:1920px;overflow:hidden;background:#fff}
+#pano{position:relative;width:1080px;height:1920px;overflow:hidden;background:radial-gradient(120% 70% at 50% 40%,#fffdf6 0%,#fbf4df 70%,#f3e5ba 100%)}
+.band{position:absolute;left:0;right:0;height:70px;background:#1c1c1a}
+.band.t{top:0;border-bottom:5px solid #c9a647}
+.band.b{bottom:0;border-top:5px solid #c9a647}
 .w{position:absolute;pointer-events:none}
 .w.tl{left:0;top:0;width:190px}
 .w.br{right:0;bottom:0;width:175px}
-.logo{position:absolute;left:50%;top:95px;transform:translateX(-50%);width:740px}
-.date{position:absolute;top:545px;width:100%;text-align:center;font-size:26px;letter-spacing:6px;color:#a85a1c;text-transform:uppercase;font-weight:600}
+.logo{position:absolute;left:50%;top:205px;transform:translateX(-50%);width:860px}
+.date{position:absolute;top:545px;width:100%;text-align:center;font-size:26px;letter-spacing:6px;color:#8f6b1e;text-transform:uppercase;font-weight:600}
 .list{position:absolute;left:190px;right:190px;top:610px}
-.r{display:grid;grid-template-columns:1fr 3px 1fr;align-items:center;height:103px;border-bottom:2px solid #e3a15a}
+.r{display:grid;grid-template-columns:1fr 3px 1fr;align-items:center;height:103px;border-bottom:2px solid #d9bd72}
 .r.end{border-bottom:2.5px solid #1d1d1f}
 .r .n{font-size:38px;letter-spacing:7px;padding-left:24px;font-weight:500}
-.r .b{width:3px;height:46px;background:#c4702a;justify-self:center}
+.r .b{width:3px;height:46px;background:#b8913a;justify-self:center}
 .r .v{text-align:right;font-size:44px;letter-spacing:3px;padding-right:34px;font-variant-numeric:tabular-nums}
 .orn{display:flex;align-items:center;justify-content:center;margin-top:0}
-.orn i{display:block;height:2px;background:#c4702a}
-.orn b{display:block;width:20px;height:20px;background:#c4702a;transform:rotate(45deg);margin:0 2px}
-.foot{position:absolute;left:0;right:0;bottom:120px;text-align:center;font-size:27px;line-height:1.45}
+.orn i{display:block;height:2px;background:#b8913a}
+.orn b{display:block;width:20px;height:20px;background:#b8913a;transform:rotate(45deg);margin:0 2px}
+.foot{position:absolute;left:0;right:0;bottom:165px;text-align:center;font-size:27px;line-height:1.45}
 .foot .o2{display:flex;justify-content:center;align-items:center;gap:20px;margin-top:22px}
-.foot .o2 i{display:block;width:75px;height:2px;background:#c4702a}
-.foot .o2 b{display:block;width:16px;height:16px;background:#c4702a;transform:rotate(45deg)}
-.addr{position:absolute;left:0;right:0;bottom:52px;text-align:center;font-size:21px;letter-spacing:2px;color:#8a8178}
+.foot .o2 i{display:block;width:75px;height:2px;background:#b8913a}
+.foot .o2 b{display:block;width:16px;height:16px;background:#b8913a;transform:rotate(45deg)}
+.addr{position:absolute;left:0;right:0;bottom:100px;text-align:center;font-size:21px;letter-spacing:2px;color:#857d6c}
 </style>
 </head>
 <body>
 <div id="pano">
-  <img class="w tl" src="wave-tl.png" alt="">
-  <img class="w br" src="wave-br.png" alt="">
-  <img class="logo" src="logo.png" alt="Marka Istanbul">
+  <div class="band t"></div><div class="band b"></div>
+  <img class="logo" src="lockup.png" alt="Zen Diamond × Marka Istanbul">
   <div class="date" id="date"></div>
   <div class="list" id="list"></div>
   <div class="foot">Altın fiyatları güncel kura<br>göre değişmektedir.<div class="o2"><i></i><b></b><i></i></div></div>
@@ -65,6 +68,8 @@ async function spot(cfg){
   const h = Math.min(103, Math.floor(1060/rows.length));
   document.querySelectorAll(".r").forEach(e=>e.style.height=h+"px");
   document.getElementById("date").textContent = new Date().toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/Berlin"});
+  if (window.ZTema){ ZTema.apply(cfg.tema||"zen",{statik:true, panoStyle:"position:absolute;left:0;right:0;top:455px;font-size:38px;gap:18px"});
+    const t=ZTema.TEMALAR[ZTema.get()]; document.querySelectorAll(".band").forEach(b=>{b.style.background=t.band;b.style.borderColor=t.line;}); document.querySelector(".date").style.color=t.acc==="#b8913a"?"":t.acc; }
   await document.fonts.ready;
   document.body.dataset.ready = "1";
 })();

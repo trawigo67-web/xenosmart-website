@@ -6,8 +6,8 @@
  "scope": "./",
  "id": "./admin.html",
  "display": "standalone",
- "background_color": "#ffffff",
- "theme_color": "#ffffff",
+ "background_color": "#fbf4df",
+ "theme_color": "#1c1c1a",
  "lang": "tr",
  "icons": [
   {
