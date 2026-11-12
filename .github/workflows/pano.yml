@@ -1,0 +1,59 @@
+name: Çeyrekmatik Tagespreis-Bild 10 Uhr
+
+# Erstellt jeden Morgen gegen 10:00 Uhr (Köln) das Preis-Bild für Instagram/WhatsApp
+# und legt es unter markaistanbul/pano/latest.png ab (Admin-Bereich: "Günlük paylaşım").
+on:
+  schedule:
+    - cron: "50 7 * * *"   # 09:50 Köln im Sommer
+    - cron: "50 8 * * *"   # 09:50 Köln im Winter
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pano
+  cancel-in-progress: false
+
+jobs:
+  bild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Uhrzeit prüfen
+        id: zeit
+        run: |
+          H=$(TZ=Europe/Berlin date +%H); D=$(TZ=Europe/Berlin date +%F)
+          echo "datum=$D" >> $GITHUB_OUTPUT
+          LAST=$(python3 -c "import json;print(json.load(open('markaistanbul/pano/latest.json'))['date'])" 2>/dev/null || echo none)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo "los=1" >> $GITHUB_OUTPUT
+          elif [ "$H" -ge 9 ] && [ "$H" -le 11 ] && [ "$LAST" != "$D" ]; then echo "los=1" >> $GITHUB_OUTPUT
+          else echo "Übersprungen (Stunde $H, letztes Bild $LAST)"; fi
+      - name: Browser installieren
+        if: steps.zeit.outputs.los == '1'
+        run: |
+          npm i --no-save playwright@1
+          npx playwright install --with-deps chromium
+      - name: Bild erstellen
+        if: steps.zeit.outputs.los == '1'
+        run: |
+          python3 -m http.server 8765 >/dev/null 2>&1 &
+          sleep 2
+          mkdir -p markaistanbul/pano
+          cat > /tmp/shot.js <<'JS'
+          const {chromium}=require('playwright');
+          (async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1080,height:1920},deviceScaleFactor:1});
+          await p.goto('http://localhost:8765/markaistanbul/pano.html');
+          await p.waitForSelector('body[data-ready="1"]',{timeout:60000});await p.waitForTimeout(800);
+          await p.locator('#pano').screenshot({path:'markaistanbul/pano/latest.png'});await b.close();})();
+          JS
+          NODE_PATH=$(pwd)/node_modules node /tmp/shot.js
+          echo "{\"date\":\"${{ steps.zeit.outputs.datum }}\",\"created\":\"$(date -u +%FT%TZ)\"}" > markaistanbul/pano/latest.json
+      - name: Speichern
+        if: steps.zeit.outputs.los == '1'
+        run: |
+          git config user.name "Çeyrekmatik Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add markaistanbul/pano/latest.png markaistanbul/pano/latest.json
+          git commit -m "Tagespreis-Bild ${{ steps.zeit.outputs.datum }}" || exit 0
+          git pull --rebase -q && git push
