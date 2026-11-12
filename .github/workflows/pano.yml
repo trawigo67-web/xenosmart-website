@@ -4,8 +4,7 @@ name: Çeyrekmatik Tagespreis-Bild 10 Uhr
 # und legt es unter markaistanbul/pano/latest.png ab (Admin-Bereich: "Günlük paylaşım").
 on:
   schedule:
-    - cron: "50 7 * * *"   # 09:50 Köln im Sommer
-    - cron: "50 8 * * *"   # 09:50 Köln im Winter
+    - cron: "5,25,45 3-11 * * *"   # alle 20 Min. zwischen ca. 05:00 und 13:00 Uhr Köln; die Uhrzeit pro Wochentag steht in config.json (Admin)
   workflow_dispatch:
 
 permissions:
@@ -20,15 +19,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Uhrzeit prüfen
+      - name: Uhrzeit prüfen (Wochenplan aus dem Admin)
         id: zeit
         run: |
-          H=$(TZ=Europe/Berlin date +%H); D=$(TZ=Europe/Berlin date +%F)
-          echo "datum=$D" >> $GITHUB_OUTPUT
-          LAST=$(python3 -c "import json;print(json.load(open('markaistanbul/pano/latest.json'))['date'])" 2>/dev/null || echo none)
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then echo "los=1" >> $GITHUB_OUTPUT
-          elif [ "$H" -ge 9 ] && [ "$H" -le 11 ] && [ "$LAST" != "$D" ]; then echo "los=1" >> $GITHUB_OUTPUT
-          else echo "Übersprungen (Stunde $H, letztes Bild $LAST)"; fi
+          python3 - <<'EOF' >> $GITHUB_OUTPUT
+          import json, datetime, zoneinfo, os
+          now = datetime.datetime.now(zoneinfo.ZoneInfo("Europe/Berlin"))
+          d = now.strftime("%Y-%m-%d"); print("datum=" + d)
+          if os.environ.get("EV") == "workflow_dispatch":
+              print("los=1"); raise SystemExit
+          cfg = json.load(open("markaistanbul/config.json"))
+          t = (cfg.get("paylasim") or {}).get(str(now.isoweekday()), "10:00")
+          try: last = json.load(open("markaistanbul/pano/latest.json"))["date"]
+          except Exception: last = ""
+          if not t or last == d: raise SystemExit
+          h, m = map(int, t.split(":"))
+          ziel = now.replace(hour=h, minute=m, second=0, microsecond=0)
+          # ca. 25 Min. vorher starten, damit das Bild zur gewählten Uhrzeit fertig ist; bis 2 Std. danach nachholen
+          if ziel - datetime.timedelta(minutes=25) <= now <= ziel + datetime.timedelta(hours=2):
+              print("los=1")
+          EOF
+        env:
+          EV: ${{ github.event_name }}
       - name: Browser installieren
         if: steps.zeit.outputs.los == '1'
         run: |
