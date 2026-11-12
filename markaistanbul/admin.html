@@ -100,6 +100,12 @@ img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px au
 .temagrid button .sw{width:100%;height:18px;border-radius:6px}
 .temagrid button .ik{font-size:22px;line-height:1}
 .temagrid button.on{border-color:var(--zacc,#b8913a);box-shadow:0 0 0 3px rgba(201,166,71,.25)}
+.fotogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fotogrid .fc{border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px 6px;text-align:center;font-size:12px;font-weight:600}
+.fotogrid .th{width:64px;height:64px;border-radius:50%;margin:0 auto 6px;background:#f6efd9 center/cover no-repeat;border:2px solid #d9bd72;display:flex;align-items:center;justify-content:center;color:#b8913a;font-size:22px}
+.fotogrid .fc .bt{display:flex;gap:4px;justify-content:center;margin-top:6px}
+.fotogrid .fc button{border:1px solid var(--line);background:#fffaf0;border-radius:8px;padding:5px 7px;font:inherit;font-size:11px;cursor:pointer}
+.fotogrid .fc button.rm{color:#c62828}
 </style>
 </head>
 <body>
@@ -156,6 +162,13 @@ img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px au
     <div id="quick"></div>
     <button class="ib" id="goNames" style="width:100%;margin:0 0 10px">✏️ Ürün isimlerini değiştir</button>
     <div class="bar" style="position:static;border:0;padding-top:0;margin-top:0"><button class="btn" id="save2" style="margin-top:0">Kaydet ve yayınla</button></div>
+
+    <h2>Ürün fotoğrafları</h2>
+    <div class="card">
+      <p class="note" style="margin-top:0">Müşteriler Çeyrekmatik'te fiyatın yanında bu fotoğrafı görür, dokununca büyür. Ürünü açık renkli bir zeminde, iyi ışıkta, yukarıdan çekin. Fotoğraf kare kesilir ve otomatik yayınlanır.</p>
+      <div id="fotoGrid" class="fotogrid"></div>
+      <input type="file" id="fotoIn" accept="image/*" style="display:none">
+    </div>
 
     <h2>Tema</h2>
     <div class="card">
@@ -429,6 +442,33 @@ document.addEventListener("click", e=>{
   if (b.dataset.a==="down" && i<arr.length-1){ [arr[i+1],arr[i]]=[arr[i],arr[i+1]]; renderRows(); }
 });
 function confirmDel(o){ return window.confirm(`"${o.tr}" silinsin mi?`); }
+function renderFotos(){
+  const all=[...cfg.products.map(o=>["p",o]),...cfg.bracelets.map(o=>["b",o])];
+  $("fotoGrid").innerHTML = all.map(([k,o])=>`<div class="fc"><div class="th" style="${o.foto?`background-image:url('${o.foto}')`:""}">${o.foto?"":"📷"}</div>${o.tr}
+    <div class="bt"><button type="button" data-fup="${k}:${o.id}">${o.foto?"Değiştir":"📷 Ekle"}</button>${o.foto?`<button type="button" class="rm" data-frm="${k}:${o.id}">Kaldır</button>`:""}</div></div>`).join("");
+  $("fotoGrid").querySelectorAll("[data-fup]").forEach(b=>b.onclick=()=>{ fotoKey=b.dataset.fup; $("fotoIn").value=""; $("fotoIn").click(); });
+  $("fotoGrid").querySelectorAll("[data-frm]").forEach(b=>b.onclick=()=>{ const o=qObj(b.dataset.frm); if(!confirm(`"${o.tr}" fotoğrafı kaldırılsın mı?`)) return; delete o.foto; renderFotos(); $("save").click(); });
+}
+let fotoKey=null;
+async function fotoJpeg(file){
+  const bmp = await createImageBitmap(file); const m=Math.min(bmp.width,bmp.height), S=Math.min(800,m);
+  const c=document.createElement("canvas"); c.width=c.height=S; const x=c.getContext("2d");
+  x.fillStyle="#fff"; x.fillRect(0,0,S,S);
+  x.drawImage(bmp,(bmp.width-m)/2,(bmp.height-m)/2,m,m,0,0,S,S);
+  return c.toDataURL("image/jpeg",0.85).split(",")[1];
+}
+$("fotoIn").addEventListener("change", async e=>{
+  const f=e.target.files[0]; if(!f||!fotoKey) return;
+  const o=qObj(fotoKey); if(!o) return;
+  toast("Fotoğraf yükleniyor…");
+  try{
+    const b64 = await fotoJpeg(f), path=`markaistanbul/urun/${o.id}.jpg`;
+    let sha; try{ sha=(await gh(path)).sha; }catch(err){}
+    await gh(path,{method:"PUT", body:{message:`Çeyrekmatik: Foto ${o.tr}`, content:b64, branch:BRANCH, ...(sha?{sha}:{})}});
+    o.foto=`urun/${o.id}.jpg?v=${Date.now()}`;
+    renderFotos(); $("save").click();
+  }catch(err){ toast("Fotoğraf yüklenemedi: "+err.message, true); }
+});
 function renderTema(){
   const cur = cfg.tema || "zen";
   $("temaGrid").innerHTML = Object.entries(ZTema.TEMALAR).map(([k,t])=>`<button type="button" data-tema="${k}" class="${k===cur?"on":""}"><span class="ik">${t.ikon}</span>${t.ad.replace(" (standart)","")}<span class="sw" style="background:linear-gradient(90deg,${t.band} 0 45%,${t.line} 45% 55%,${t.bg[1]} 55%)"></span></button>`).join("");
@@ -487,7 +527,7 @@ async function openEditor(){
   cfg.products = cfg.products||[]; cfg.bracelets = cfg.bracelets||[];
   $("manSpot").value = cfg.manualSpot || ""; $("wa").value = cfg.whatsapp || ""; $("tel").value = cfg.telefon || "";
   $("editor").classList.remove("hide");
-  renderRows(); renderPlan(); renderTema(); loadSpot(); loadPano();
+  renderRows(); renderPlan(); renderTema(); renderFotos(); loadSpot(); loadPano();
 }
 $("manClear").onclick = ()=>{ $("manSpot").value = ""; renderPrices(); };
 $("save2") && ($("save2").onclick = ()=>$("save").click());
