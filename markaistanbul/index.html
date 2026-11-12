@@ -224,7 +224,7 @@ const T = {
   waMsg:"Hello Marka Istanbul, I'm writing from Çeyrekmatik. I'd like a quote:"}
 };
 
-let lang = "tr", cfg = null, spotG = null, src = "offline", priceTime = null;
+let lang = "tr", cfg = null, spotG = null, src = "offline", priceTime = null, srcName = "", chg = null;
 const $ = id => document.getElementById(id);
 const t = k => T[lang][k] || k;
 const fmt = v => isFinite(v) ? v.toLocaleString({tr:"tr-TR",de:"de-DE",en:"en-GB"}[lang],{style:"currency",currency:"EUR",maximumFractionDigits:2}) : "—";
@@ -237,6 +237,11 @@ async function getJSON(url, ms=6000){
   finally{ clearTimeout(tm); }
 }
 
+async function getText(url, ms=6000){
+  const ctl = new AbortController(); const tm = setTimeout(()=>ctl.abort(), ms);
+  try{ const r = await fetch(url,{signal:ctl.signal, cache:"no-store"}); if(!r.ok) throw 0; return await r.text(); }
+  finally{ clearTimeout(tm); }
+}
 async function loadConfig(){
   try{ cfg = await getJSON("config.json?v="+Date.now()); ls.set("mi_cfg", JSON.stringify(cfg)); }
   catch(e){ try{ cfg = JSON.parse(ls.get("mi_cfg")); }catch(_){ } }
@@ -245,10 +250,20 @@ async function loadConfig(){
 
 async function fetchSpot(){
   if (cfg.manualSpot){ spotG = +cfg.manualSpot; src = "manual"; priceTime = new Date(); return renderAll(); }
+  chg = null;
   try{
+    // 1) Kitco (Bid, EUR je Unze)
+    const txt = await getText("https://proxy.kitco.com/getPM?symbol=AU&currency=EUR");
+    const f = txt.trim().split(",");
+    const bid = parseFloat(f[4]);
+    if (!(bid > 1000)) throw 0;
+    spotG = bid/OZ; src = "live"; priceTime = new Date(); srcName = "Kitco";
+    chg = parseFloat(f[8]);
+  }catch(e0){ try{
+    // 2) gold-api.com
     const j = await getJSON("https://api.gold-api.com/price/XAU/EUR");
     if (!j.price) throw 0;
-    spotG = j.price/OZ; src = "live"; priceTime = new Date(j.updatedAt || Date.now());
+    spotG = j.price/OZ; src = "live"; priceTime = new Date(j.updatedAt || Date.now()); srcName = "gold-api";
   }catch(e){
     try{
       const d = await getJSON("price.json?v="+Date.now());
@@ -259,7 +274,7 @@ async function fetchSpot(){
       if (last){ spotG = last.g; priceTime = new Date(last.d); } else { spotG = cfg.fallbackOzEur/OZ; priceTime = null; }
       src = "offline";
     }
-  }
+  }}
   if (src !== "offline") ls.set("mi_last", JSON.stringify({g:spotG, d:priceTime.toISOString()}));
   renderAll();
 }
@@ -289,7 +304,8 @@ function renderSpot(){
     when = today ? priceTime.toLocaleTimeString(loc,{hour:"2-digit",minute:"2-digit"})
                  : priceTime.toLocaleDateString(loc) + " " + priceTime.toLocaleTimeString(loc,{hour:"2-digit",minute:"2-digit"});
   }
-  $("status").textContent = t(src) + (when ? " · " + when : "");
+  const ch = (src==="live" && Number.isFinite(chg)) ? `  ${chg>=0?"▲":"▼"} ${Math.abs(chg).toLocaleString(loc,{maximumFractionDigits:2})}%` : "";
+  $("status").textContent = t(src) + (src==="live" && srcName ? " (" + srcName + ")" : "") + (when ? " · " + when : "") + ch;
   $("dot").classList.toggle("off", src!=="live" && src!=="manual");
 }
 function renderList(){
