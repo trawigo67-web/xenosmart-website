@@ -1,18 +1,105 @@
 {
-  "whatsapp": "",
-  "telefon": "+4922180039255",
-  "fallbackOzEur": 3485.85,
-  "products": [
-    {"id":"gram24","tr":"Gram Altın (24 ayar)","de":"Goldbarren 1 g (24K)","gram":1.00,"purity":0.995,"satis":5,"alis":3,"iscilik":3},
-    {"id":"ceyrek","tr":"Çeyrek Altın","de":"Viertel (Çeyrek)","gram":1.75,"purity":0.916,"satis":6,"alis":4,"iscilik":8},
-    {"id":"yarim","tr":"Yarım Altın","de":"Halb (Yarım)","gram":3.50,"purity":0.916,"satis":6,"alis":4,"iscilik":14},
-    {"id":"tam","tr":"Tam Altın","de":"Ganz (Tam)","gram":7.00,"purity":0.916,"satis":6,"alis":4,"iscilik":25},
-    {"id":"ata","tr":"Ata Lira (Cumhuriyet)","de":"Ata Lira (Cumhuriyet)","gram":7.216,"purity":0.916,"satis":5,"alis":3,"iscilik":20},
-    {"id":"resat","tr":"Reşat Altın","de":"Reşat","gram":7.216,"purity":0.916,"satis":7,"alis":4,"iscilik":35}
-  ],
-  "bracelets": [
-    {"id":"b22","tr":"22 ayar bilezik (916)","de":"Armreif 22K (916)","purity":0.916,"satis":6,"alis":6,"iscilik":6},
-    {"id":"b18","tr":"18 ayar (750)","de":"18K (750)","purity":0.750,"satis":8,"alis":8,"iscilik":10},
-    {"id":"b14","tr":"14 ayar (585)","de":"14K (585)","purity":0.585,"satis":10,"alis":10,"iscilik":12}
-  ]
+ "whatsapp": "",
+ "telefon": "+4922180039255",
+ "fallbackOzEur": 3485.85,
+ "products": [
+  {
+   "id": "gram24",
+   "tr": "Gram Altın (24 ayar)",
+   "de": "Goldbarren 1 g (24K)",
+   "gram": 1.0,
+   "purity": 0.995,
+   "satis": 5,
+   "alis": 3,
+   "iscilik": 3,
+   "en": "Gold bar 1 g (24K)"
+  },
+  {
+   "id": "ceyrek",
+   "tr": "Çeyrek Altın",
+   "de": "Viertel (Çeyrek)",
+   "gram": 1.75,
+   "purity": 0.916,
+   "satis": 6,
+   "alis": 4,
+   "iscilik": 8,
+   "en": "Quarter coin (Çeyrek)"
+  },
+  {
+   "id": "yarim",
+   "tr": "Yarım Altın",
+   "de": "Halb (Yarım)",
+   "gram": 3.5,
+   "purity": 0.916,
+   "satis": 6,
+   "alis": 4,
+   "iscilik": 14,
+   "en": "Half coin (Yarım)"
+  },
+  {
+   "id": "tam",
+   "tr": "Tam Altın",
+   "de": "Ganz (Tam)",
+   "gram": 7.0,
+   "purity": 0.916,
+   "satis": 6,
+   "alis": 4,
+   "iscilik": 25,
+   "en": "Full coin (Tam)"
+  },
+  {
+   "id": "ata",
+   "tr": "Ata Lira (Cumhuriyet)",
+   "de": "Ata Lira (Cumhuriyet)",
+   "gram": 7.216,
+   "purity": 0.916,
+   "satis": 5,
+   "alis": 3,
+   "iscilik": 20,
+   "en": "Ata Lira (Cumhuriyet)"
+  },
+  {
+   "id": "resat",
+   "tr": "Reşat Altın",
+   "de": "Reşat",
+   "gram": 7.216,
+   "purity": 0.916,
+   "satis": 7,
+   "alis": 4,
+   "iscilik": 35,
+   "en": "Reşat coin"
+  }
+ ],
+ "bracelets": [
+  {
+   "id": "b22",
+   "tr": "22 ayar bilezik (916)",
+   "de": "Armreif 22K (916)",
+   "purity": 0.916,
+   "satis": 6,
+   "alis": 6,
+   "iscilik": 6,
+   "en": "Bangle 22K (916)"
+  },
+  {
+   "id": "b18",
+   "tr": "18 ayar (750)",
+   "de": "18K (750)",
+   "purity": 0.75,
+   "satis": 8,
+   "alis": 8,
+   "iscilik": 10,
+   "en": "18K (750)"
+  },
+  {
+   "id": "b14",
+   "tr": "14 ayar (585)",
+   "de": "14K (585)",
+   "purity": 0.585,
+   "satis": 10,
+   "alis": 10,
+   "iscilik": 12,
+   "en": "14K (585)"
+  }
+ ]
 }

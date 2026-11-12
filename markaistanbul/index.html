@@ -93,7 +93,7 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
       <img class="logo" src="icon-192.png" alt="Marka Istanbul">
       <div><h1 class="mk">MARKA</h1><div class="ist">istanbul</div><small>Çeyrekmatik</small></div>
     </div>
-    <div class="lang"><button data-l="tr" class="on">TR</button><button data-l="de">DE</button></div>
+    <div class="lang"><button data-l="tr" class="on">TR</button><button data-l="de">DE</button><button data-l="en">EN</button></div>
   </header>
 
   <div class="install" id="install">
@@ -208,13 +208,26 @@ const T = {
   admTitle:"Admin (Vorschau)",admWarn:"Änderungen hier sind nur eine Vorschau auf diesem Bildschirm.",
   manualSpot:"Manueller Feingoldpreis pro Gramm (€) – leer = Live-Kurs",product:"Produkt",mSell:"VK +%",mBuy:"AK −%",labor:"Arbeit €",
   apply:"Vorschau",copyCfg:"Einstellungen kopieren",copied:"Kopiert",perGram:"/ g Arbeitslohn",
-  waMsg:"Hallo Marka Istanbul, ich schreibe aus dem Çeyrekmatik. Ich möchte ein Angebot:"}
+  waMsg:"Hallo Marka Istanbul, ich schreibe aus dem Çeyrekmatik. Ich möchte ein Angebot:"},
+ en:{spotLbl:"Fine gold · 1 gram (24K)",live:"Live price",daily:"Daily price",offline:"Last known price",manual:"Shop price",ozLbl:"Ounce",
+  tPrices:"Prices",tBilezik:"Bangle",tBudget:"Budget",tSell:"Sell gold",
+  buy:"We sell",sell:"We buy",
+  bTitle:"Calculate bangle / jewellery",karat:"Karat",gram:"Grams",adet:"Pieces",approx:"Estimated selling price",
+  buTitle:"What can I get for my budget?",buAmount:"Budget (€)",pieces:"pcs",rest:"left",
+  sTitle:"What do I get for my gold?",sType:"What are you selling?",sGet:"Estimated payout",sNote:"The exact price is set in the shop after weighing and testing.",
+  disclaimer:"All prices are for information only and change with the gold price. For a binding offer, visit us or give us a call.",
+  call:"Call",hours:"Mon–Sat 10:00–19:00",
+  installIos:"<b>Add as app:</b> Share <span style='font-size:15px'>⎋</span> → “Add to Home Screen”",installAnd:"<b>Add Çeyrekmatik to your phone</b> – open it with one tap.",installBtn:"Install",
+  admTitle:"Admin (preview)",admWarn:"Changes here are only a preview on this screen.",
+  manualSpot:"Manual fine gold price per gram (€) – empty = live price",product:"Product",mSell:"Sell +%",mBuy:"Buy −%",labor:"Labour €",
+  apply:"Preview",copyCfg:"Copy settings",copied:"Copied",perGram:"/ g labour",
+  waMsg:"Hello Marka Istanbul, I'm writing from Çeyrekmatik. I'd like a quote:"}
 };
 
 let lang = "tr", cfg = null, spotG = null, src = "offline", priceTime = null;
 const $ = id => document.getElementById(id);
 const t = k => T[lang][k] || k;
-const fmt = v => isFinite(v) ? v.toLocaleString(lang==="tr"?"tr-TR":"de-DE",{style:"currency",currency:"EUR",maximumFractionDigits:2}) : "—";
+const fmt = v => isFinite(v) ? v.toLocaleString({tr:"tr-TR",de:"de-DE",en:"en-GB"}[lang],{style:"currency",currency:"EUR",maximumFractionDigits:2}) : "—";
 const nm = o => o[lang] || o.tr;
 const ls = { get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} } };
 
@@ -269,7 +282,7 @@ function renderTexts(){
 function renderSpot(){
   $("spotG").textContent = spotG ? fmt(spotG) : "—";
   $("spotOz").textContent = spotG ? `${t("ozLbl")}: ${fmt(spotG*OZ)}` : "";
-  const loc = lang==="tr"?"tr-TR":"de-DE";
+  const loc = {tr:"tr-TR",de:"de-DE",en:"en-GB"}[lang];
   let when = "";
   if (priceTime && !isNaN(priceTime)){
     const today = priceTime.toDateString() === new Date().toDateString();
@@ -372,7 +385,7 @@ $("buAmt").addEventListener("input",renderBudget);
 ["sType","sQty"].forEach(id=>$(id).addEventListener("input",renderSell));
 
 (async function start(){
-  lang = ls.get("mi_lang") || "tr";
+  lang = ls.get("mi_lang") || ({de:"de",en:"en"}[(navigator.language||"tr").slice(0,2)] || "tr"); if(!T[lang]) lang="tr";
   renderTexts();
   await loadConfig();
   if (new URLSearchParams(location.search).has("admin")){ $("adm").classList.remove("hide"); renderAdm(); }
