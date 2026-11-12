@@ -1,9 +1,9 @@
 {
- "name": "Marka Istanbul – Fiyat Yönetimi",
- "short_name": "Fiyatlar",
+ "name": "Marka Istanbul – Yönetici",
+ "short_name": "Yönetici",
  "description": "Marka Istanbul fiyat ve milyem yönetimi",
- "start_url": "./admin.html",
- "scope": "./admin.html",
+ "start_url": "./siparis.html?app=yonetici",
+ "scope": "./",
  "id": "./admin.html",
  "display": "standalone",
  "background_color": "#ffffff",

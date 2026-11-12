@@ -11,7 +11,14 @@
 <link rel="apple-touch-icon" href="apple-touch-admin.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Fiyatlar">
+<meta name="apple-mobile-web-app-title" content="Yönetici">
+<script>
+// Als App geöffnet: zuerst Bestellungen zeigen; Preise nur über den Knopf "💰 Fiyatlar" (admin.html?fiyat=1)
+(function(){ try{
+  var standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  if (standalone && !/[?&]fiyat=1/.test(location.search)) location.replace("siparis.html?app=yonetici");
+}catch(e){} })();
+</script>
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link href="fonts/fonts.css" rel="stylesheet">
 <style>
