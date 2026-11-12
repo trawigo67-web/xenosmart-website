@@ -57,6 +57,11 @@ input:focus{outline:none;border-color:var(--cop)}
 .qp div{display:flex;justify-content:space-between;padding:7px 2px;border-bottom:1px solid var(--line);font-size:15px}
 .qp div span:first-child{letter-spacing:2px;text-transform:uppercase;font-size:13px}
 .qp div span:last-child{font-weight:700;font-variant-numeric:tabular-nums}
+.plan{width:100%;border-collapse:collapse;margin-top:4px}
+.plan td{padding:6px 4px;border-bottom:1px solid var(--line);font-size:15px;text-align:left}
+.plan td:first-child{font-weight:600;width:42%}
+.plan select{padding:9px;font-size:15px}
+.plan tr.off td:first-child{color:var(--muted);text-decoration:line-through}
 .qb + .qb{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
 details.adv{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:16px}
 details.adv summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:14px}
@@ -109,7 +114,7 @@ details.adv summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:
     <div id="quick"></div>
     <div class="bar" style="position:static;border:0;padding-top:0;margin-top:0"><button class="btn" id="save2" style="margin-top:0">Kaydet ve yayınla</button></div>
 
-    <h2>Günlük paylaşım (her sabah 10:00)</h2>
+    <h2>Günlük paylaşım</h2>
     <div class="card" style="text-align:center">
       <img id="panoImg" alt="Günlük fiyat görseli" style="width:62%;max-width:300px;border:1px solid var(--line);border-radius:10px;display:block;margin:0 auto">
       <div class="note" id="panoInfo" style="text-align:center"></div>
@@ -118,7 +123,13 @@ details.adv summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:
         <a class="btn ghost" id="panoDl" download="marka-fiyatlar.png" style="margin-top:10px;display:block;text-decoration:none;text-align:center">İndir</a>
       </div>
       <button class="btn ghost" id="panoNow" style="margin-top:8px">Şimdi yeni görsel oluştur</button>
-      <p class="note">Görsel her sabah 10:00'da güncel fiyatlarla otomatik hazırlanır. "Paylaş" ile Instagram hikâyesine veya WhatsApp durumuna tek dokunuşla gönderin. <a href="pano.html" target="_blank">Canlı panoyu aç</a></p>
+      <h3 style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--cop2);margin:16px 0 6px">Haftalık paylaşım saatleri</h3>
+      <table class="plan" id="plan"></table>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:8px">
+        <select id="planAll"></select><button class="ib" id="planAllBtn">Hepsine uygula</button>
+      </div>
+      <p class="note">Görsel seçtiğiniz saatte hazır olur (GitHub bazen 10–20 dk gecikebilir). Değişiklik için alttaki <b>Kaydet ve yayınla</b>'ya basın.</p>
+      <p class="note">Görsel her gün seçilen saatte güncel fiyatlarla otomatik hazırlanır. "Paylaş" ile Instagram hikâyesine veya WhatsApp durumuna tek dokunuşla gönderin. <a href="pano.html" target="_blank">Canlı panoyu aç</a></p>
     </div>
 
     <details class="adv"><summary>Ürünleri düzenle (isim, gram, kat, sıra, ekle/sil)</summary>
@@ -397,13 +408,24 @@ $("panoNow").onclick = async ()=>{
   finally{ setTimeout(()=>$("panoNow").disabled=false, 5000); }
 };
 
+const GUN = ["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
+const SAAT = ["", ...Array.from({length:13},(_,i)=>{ const m=360+i*30; return String(Math.floor(m/60)).padStart(2,"0")+":"+(m%60?"30":"00"); })];
+const saatOpt = v => SAAT.map(t=>`<option value="${t}" ${t===v?"selected":""}>${t||"Paylaşım yok"}</option>`).join("");
+function renderPlan(){
+  cfg.paylasim = cfg.paylasim || Object.fromEntries(GUN.map((_,i)=>[String(i+1),"10:00"]));
+  $("plan").innerHTML = GUN.map((g,i)=>{ const v = cfg.paylasim[String(i+1)]||""; return `<tr class="${v?"":"off"}"><td>${g}</td><td><select data-gun="${i+1}">${saatOpt(v)}</select></td></tr>`; }).join("");
+  $("planAll").innerHTML = saatOpt("10:00");
+  $("plan").querySelectorAll("select").forEach(sel=>sel.onchange=()=>{ cfg.paylasim[sel.dataset.gun]=sel.value; sel.closest("tr").classList.toggle("off",!sel.value); });
+}
+$("planAllBtn").onclick = ()=>{ const v=$("planAll").value; GUN.forEach((_,i)=>cfg.paylasim[String(i+1)]=v); renderPlan(); toast("Tüm günler: " + (v||"paylaşım yok")); };
+
 async function openEditor(){
   ["setup","login"].forEach(id=>$(id).classList.add("hide"));
   const j = await gh(CFG); cfgSha = j.sha; cfg = JSON.parse(b64utf8(j.content));
   cfg.products = cfg.products||[]; cfg.bracelets = cfg.bracelets||[];
   $("manSpot").value = cfg.manualSpot || ""; $("wa").value = cfg.whatsapp || ""; $("tel").value = cfg.telefon || "";
   $("editor").classList.remove("hide");
-  renderRows(); loadSpot(); loadPano();
+  renderRows(); renderPlan(); loadSpot(); loadPano();
 }
 $("manClear").onclick = ()=>{ $("manSpot").value = ""; renderPrices(); };
 $("save2") && ($("save2").onclick = ()=>$("save").click());
