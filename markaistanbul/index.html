@@ -50,17 +50,18 @@ body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--tex
 .plist{padding:0 6px}
 .prow{display:grid;grid-template-columns:1fr 2px 1fr;align-items:center;padding:16px 4px;border-bottom:1px solid var(--cop3)}
 .prow .pn{letter-spacing:3px;font-size:16px;text-transform:uppercase;font-weight:500;display:flex;align-items:center;gap:10px}
-.prow .pn .pic{flex:0 0 46px;filter:drop-shadow(0 1px 1px rgba(122,90,23,.25))}
-.prow .pn img.pic.ph{width:46px;height:46px;border-radius:50%;object-fit:cover;border:1.5px solid #d9bd72;background:#fff;cursor:zoom-in}
-.prow .pn .picbox{flex:0 0 46px;width:46px;height:46px;display:flex;align-items:center;justify-content:center}
-.prow .pn img.pic.cut{object-fit:contain;cursor:zoom-in;flex:none}
+.prow .pic{justify-self:center;display:block;filter:drop-shadow(0 1px 1px rgba(122,90,23,.25))}
+.prow img.pic.gen{height:auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.22));cursor:zoom-in}
+.prow img.pic.ph{width:46px;height:46px;border-radius:50%;object-fit:cover;border:1.5px solid #d9bd72;background:#fff;cursor:zoom-in}
+.prow .picbox{justify-self:center;width:60px;height:60px;display:flex;align-items:center;justify-content:center}
+.prow img.pic.cut{object-fit:contain;cursor:zoom-in;flex:none}
 .zoom img.cut{object-fit:contain;background:radial-gradient(circle at 50% 40%,#fffdf6,#f5e9c4)}
 .zoom{position:fixed;inset:0;z-index:100;background:rgba(20,18,12,.82);display:none;align-items:center;justify-content:center;flex-direction:column;padding:24px}
 .zoom.on{display:flex}
 .zoom img{width:min(86vw,420px);height:min(86vw,420px);object-fit:cover;border-radius:22px;border:3px solid #c9a647;background:#fff}
 .zoom b{color:#f3e3a8;margin-top:14px;letter-spacing:3px;text-transform:uppercase;font-weight:600}
 .zoom span{color:#fff;font-size:22px;margin-top:4px}
-.prow{grid-template-columns:1.25fr 2px .9fr!important;padding:9px 4px!important}
+.prow{grid-template-columns:1fr 76px 1fr!important;min-height:68px;padding:10px 4px!important}
 .prow .bar{width:2px;height:24px;background:var(--cop);justify-self:center}
 .prow .pv{text-align:right;font-size:20px;letter-spacing:1.5px;font-variant-numeric:tabular-nums;padding-right:6px}
 .prow .pv small{font-size:11px;color:var(--muted);letter-spacing:0}
@@ -362,14 +363,20 @@ function renderSpot(){
 const euro0 = v => isFinite(v) ? Math.floor(v).toLocaleString({tr:"tr-TR",de:"de-DE",en:"en-GB"}[lang]) + " €" : "—";
 /* Produktbilder (gezeichnete Illustrationen, Größe nach Gewicht) */
 let _gid=0;
+// Hazır ürün görselleri: [dosya, genişlik px] – altınlar büyüklüğüne göre ölçeklenir; yönetici fotoğrafı (foto) önceliklidir
+const URUN = {ceyrek:["ziynet",30],yarim:["ziynet",36],tam:["ziynet",42],gremse:["ziynet",50],
+  rceyrek:["resat",30],ryarim:["resat",36],rtam:["resat",42],r25:["resat",48],r5:["resat",54],
+  burma:["burma",70],ajda:["ajda",70]};
 function pic(o, kind){
   if (o.foto){
     if (o.fotoTip==="kesik"){ // freigestellt: Größe nach Gewicht wie bei den Zeichnungen
-      let px=46; if (kind!=="b" && (o.grup||1)<3){ const g=o.gram || (()=>{ const b=cfg.products.find(x=>x.id===o.baz); return b ? b.gram*(+o.kat||1) : 1.75; })(); px=Math.round(Math.min(46, 26 + 5*Math.log2(Math.max(g,1.75)/1.75))*1.08); }
+      let px=64; if (kind!=="b" && (o.grup||1)<3){ const g=o.gram || (()=>{ const b=cfg.products.find(x=>x.id===o.baz); return b ? b.gram*(+o.kat||1) : 1.75; })(); px=Math.round(Math.min(56, 30 + 6*Math.log2(Math.max(g,1.75)/1.75))); } else px=64;
       return `<span class="picbox"><img class="pic cut" src="${o.foto}" alt="" loading="lazy" data-zoom="${o.foto}" data-cut="1" style="width:${px}px;height:${px}px"></span>`;
     }
     return `<img class="pic ph" src="${o.foto}" alt="" loading="lazy" data-zoom="${o.foto}">`;
   }
+  const gen = URUN[o.id];
+  if (gen) return `<img class="pic gen" src="urun/${gen[0]}.webp" width="${gen[1]}" alt="" loading="lazy" data-zoom="urun/${gen[0]}.webp" data-cut="1">`;
   const id="g"+(++_gid), box=46;
   const grad=`<defs><radialGradient id="${id}" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff3c4"/><stop offset=".35" stop-color="#e9c96a"/><stop offset=".75" stop-color="#c39a35"/><stop offset="1" stop-color="#8f6b1e"/></radialGradient></defs>`;
   if (kind==="b" || (o.grup||1)>=3){
@@ -400,7 +407,7 @@ function renderList(){
                 ...cfg.bracelets.map(b=>({n:nm(b), v:braceletPrice(b,1).sell, g:b.grup||3, per:true, img:pic(b,"b")}))];
   $("list").innerHTML = rows.map((r,i)=>{
     const end = rows[i+1] && rows[i+1].g !== r.g;
-    return `<div class="prow${end?" gend":""}" data-n="${r.n}" data-v="${euro0(r.v)}${r.per?" / g":""}"><div class="pn">${r.img}<span>${r.n}</span></div><div class="bar"></div><div class="pv">${euro0(r.v)}${r.per?` <small>/g</small>`:""}</div></div>`;
+    return `<div class="prow${end?" gend":""}" data-n="${r.n}" data-v="${euro0(r.v)}${r.per?" / g":""}"><div class="pn"><span>${r.n}</span></div>${r.img}<div class="pv">${euro0(r.v)}${r.per?` <small>/g</small>`:""}</div></div>`;
   }).join("");
 }
 function renderBilezik(){
