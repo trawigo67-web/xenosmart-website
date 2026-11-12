@@ -5,103 +5,113 @@
  "products": [
   {
    "id": "ceyrek",
-   "tr": "Çeyrek Altın",
-   "de": "Viertel (Çeyrek)",
+   "tr": "Çeyrek",
+   "de": "Çeyrek (Viertel)",
+   "en": "Çeyrek (quarter)",
    "gram": 1.75,
    "purity": 0.916,
-   "satis": 6,
-   "iscilik": 8,
-   "en": "Quarter coin (Çeyrek)",
-   "satisMilyem": 960
+   "satisMilyem": 960,
+   "grup": 1
   },
   {
    "id": "yarim",
-   "tr": "Yarım Altın",
-   "de": "Halb (Yarım)",
+   "tr": "Yarım",
+   "de": "Yarım (Halb)",
+   "en": "Yarım (half)",
    "gram": 3.5,
    "purity": 0.916,
-   "satis": 6,
-   "iscilik": 14,
-   "en": "Half coin (Yarım)"
+   "satisMilyem": 960,
+   "grup": 1
   },
   {
    "id": "tam",
-   "tr": "Tam Altın",
-   "de": "Ganz (Tam)",
+   "tr": "Tam",
+   "de": "Tam (Ganz)",
+   "en": "Tam (full)",
    "gram": 7.0,
    "purity": 0.916,
-   "satis": 6,
-   "iscilik": 25,
-   "en": "Full coin (Tam)"
+   "satisMilyem": 960,
+   "grup": 1
   },
   {
-   "id": "ata",
-   "tr": "Ata Lira (Cumhuriyet)",
-   "de": "Ata Lira (Cumhuriyet)",
-   "gram": 7.216,
+   "id": "gremse",
+   "tr": "Gremse",
+   "de": "Gremse (2,5)",
+   "en": "Gremse (2.5)",
+   "gram": 17.5,
    "purity": 0.916,
-   "satis": 5,
-   "iscilik": 20,
-   "en": "Ata Lira (Cumhuriyet)"
+   "satisMilyem": 960,
+   "grup": 1
   },
   {
-   "id": "resat",
-   "tr": "Reşat Altın",
-   "de": "Reşat",
-   "gram": 7.216,
+   "id": "rceyrek",
+   "tr": "R Çeyrek",
+   "de": "Reşat Çeyrek",
+   "en": "Reşat quarter",
+   "gram": 1.75,
    "purity": 0.916,
-   "satis": 7,
-   "iscilik": 35,
-   "en": "Reşat coin"
+   "satisMilyem": 987.5,
+   "grup": 2
   },
   {
-   "id": "gram24",
-   "tr": "Gram Altın (24 ayar)",
-   "de": "Goldbarren 1 g (24K)",
-   "gram": 1.0,
-   "purity": 0.995,
-   "satis": 5,
-   "iscilik": 3,
-   "en": "Gold bar 1 g (24K)",
-   "sonda": true
+   "id": "ryarim",
+   "tr": "R Yarım",
+   "de": "Reşat Yarım",
+   "en": "Reşat half",
+   "gram": 3.5,
+   "purity": 0.916,
+   "satisMilyem": 987.5,
+   "grup": 2
+  },
+  {
+   "id": "rtam",
+   "tr": "R Tam",
+   "de": "Reşat Tam",
+   "en": "Reşat full",
+   "gram": 7.0,
+   "purity": 0.916,
+   "satisMilyem": 987.5,
+   "grup": 2
+  },
+  {
+   "id": "r25",
+   "tr": "R 2,5",
+   "de": "Reşat 2,5",
+   "en": "Reşat 2.5",
+   "gram": 17.5,
+   "purity": 0.916,
+   "satisMilyem": 987.5,
+   "grup": 2
+  },
+  {
+   "id": "r5",
+   "tr": "R 5'li",
+   "de": "Reşat 5er",
+   "en": "Reşat 5-piece",
+   "gram": 35.0,
+   "purity": 0.916,
+   "satisMilyem": 987.5,
+   "grup": 2
   }
  ],
  "bracelets": [
   {
-   "id": "ajda",
-   "tr": "Ajda Kibrit Bilezik (22 ayar)",
-   "de": "Ajda-Armreif (22K)",
-   "en": "Ajda bangle (22K)",
-   "purity": 0.916,
-   "satis": 6,
-   "iscilik": 6
-  },
-  {
    "id": "burma",
-   "tr": "Burma Bilezik – İkili / Üçlü (22 ayar)",
-   "de": "Burma-Armreif zwei-/dreifach (22K)",
-   "en": "Burma bangle double/triple (22K)",
+   "tr": "Burma",
+   "de": "Burma",
+   "en": "Burma",
    "purity": 0.916,
-   "satis": 6,
-   "iscilik": 6
+   "satisMilyem": 960,
+   "grup": 3
   },
   {
-   "id": "lazer",
-   "tr": "Lazer Bilezik (22 ayar)",
-   "de": "Laser-Armreif (22K)",
-   "en": "Laser bangle (22K)",
+   "id": "ajda",
+   "tr": "Ajda",
+   "de": "Ajda",
+   "en": "Ajda",
    "purity": 0.916,
-   "satis": 6,
-   "iscilik": 6
-  },
-  {
-   "id": "desenli",
-   "tr": "Desenli Bilezik (22 ayar)",
-   "de": "Gemusterter Armreif (22K)",
-   "en": "Patterned bangle (22K)",
-   "purity": 0.916,
-   "satis": 6,
-   "iscilik": 6
+   "satisMilyem": 980,
+   "grup": 3
   }
  ],
  "zekatNisabGram": 80.18

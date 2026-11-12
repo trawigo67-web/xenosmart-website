@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#2f4a6e">
+<meta name="theme-color" content="#ffffff">
 <meta name="description" content="Marka Istanbul Köln – güncel Çeyrek, Yarım, Tam, Gram altın ve bilezik fiyatları. Aktuelle Goldpreise.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Çeyrekmatik">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -16,89 +16,99 @@
 <link href="fonts/fonts.css" rel="stylesheet">
 <style>
 :root{
-  --bg:#faf7f1; --card:#ffffff; --card2:#f6f2ea; --line:#e7dfd0;
-  --navy:#2f4a6e; --navy2:#1f3350; --gold:#b8913a; --gold2:#9a7628; --goldbg:#fbf5e6;
-  --text:#1f2a37; --muted:#7a8494; --green:#2e9e6a; --zen:#c8102e;
+  --bg:#ffffff; --card:#ffffff; --card2:#fbf6f0; --line:#ead7c3;
+  --cop:#c4702a; --cop2:#a85a1c; --cop3:#e3a15a; --copbg:#fdf5ec;
+  --text:#1d1d1f; --muted:#8a8178; --navy:#1d1d1f;
+  --grad:linear-gradient(135deg,#a85a1c 0%,#e3a15a 45%,#c4702a 70%,#8f4a14 100%);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
-.wrap{max-width:560px;margin:0 auto;padding:calc(12px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom))}
-header{display:flex;align-items:center;justify-content:space-between;padding:8px 0 16px}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{width:56px;height:56px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(47,74,110,.12)}
-.logo b{font-family:Cinzel,'Playfair Display',serif;color:var(--navy);font-size:12px;letter-spacing:.5px}
-.logo i{font-family:'Great Vibes',cursive;color:var(--navy);font-size:12px;font-style:normal;margin-top:1px}
-.brand .mk{font-family:Cinzel,serif;font-size:22px;color:var(--navy);letter-spacing:2px;line-height:1}
-.brand .ist{font-family:'Great Vibes',cursive;font-size:20px;color:var(--navy);margin-left:34px;line-height:1}
-.brand small{display:block;color:var(--gold2);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;margin-top:4px;font-weight:600}
+html{background:#fff}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden}
+.waves{position:absolute;pointer-events:none;z-index:0;height:auto}
+.waves.tl{left:0;top:0;width:min(15vw,80px)}
+.waves.br{right:0;bottom:0;width:min(14vw,75px)}
+.wrap{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom))}
+.topbar{display:flex;justify-content:flex-end}
 .lang{display:flex;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff}
-.lang button{background:none;border:0;color:var(--muted);padding:6px 11px;font-weight:600;font-size:12px;cursor:pointer}
-.lang button.on{background:var(--navy);color:#fff}
-.spot{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:18px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;color:#fff;box-shadow:0 8px 24px rgba(31,51,80,.18)}
-.spot:after{content:"";position:absolute;right:-50px;top:-50px;width:170px;height:170px;border-radius:50%;background:radial-gradient(#e9c873 0%,transparent 70%);opacity:.35}
-.spot .lbl{color:#c9d4e3;font-size:12px;text-transform:uppercase;letter-spacing:1px}
-.spot .big{font-size:32px;font-weight:700;color:#f1d58a;margin:4px 0;font-family:'Playfair Display',serif}
-.spot .row{display:flex;justify-content:space-between;color:#c9d4e3;font-size:12px;gap:8px;flex-wrap:wrap}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#5fe0a5;margin-right:6px;animation:p 2s infinite}
-.dot.off{background:#f0b429;animation:none}
+.lang button{background:none;border:0;color:var(--muted);padding:6px 11px;font-weight:600;font-size:12px;cursor:pointer;letter-spacing:1px}
+.lang button.on{background:var(--grad);color:#fff}
+.hero{text-align:center;margin:4px 0 14px}
+.hero img{width:min(78%,330px);height:auto;display:block;margin:0 auto}
+.hero small{display:block;color:var(--cop);font-size:11px;letter-spacing:4px;text-transform:uppercase;margin-top:6px;font-weight:600}
+.spot{text-align:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 6px;margin-bottom:14px}
+.spot .lbl{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:2px}
+.spot .big{font-size:28px;font-weight:600;margin:2px 0;letter-spacing:1px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.spot .row{display:flex;justify-content:center;color:var(--muted);font-size:12px;gap:14px;flex-wrap:wrap}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#2e9e6a;margin-right:6px;animation:p 2s infinite}
+.dot.off{background:#e3a008;animation:none}
 @keyframes p{50%{opacity:.35}}
-.tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
-.tabs button{flex:1;white-space:nowrap;background:#fff;border:1px solid var(--line);color:var(--muted);padding:10px 8px;border-radius:12px;font-weight:600;font-size:13px;cursor:pointer}
-.tabs button.on{border-color:var(--navy);color:#fff;background:var(--navy)}
+.tabs{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto}
+.tabs button{flex:1;white-space:nowrap;background:#fff;border:1px solid var(--line);color:var(--muted);padding:10px 8px;border-radius:24px;font-weight:600;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
+.tabs button.on{border-color:transparent;color:#fff;background:var(--grad)}
+/* Preisliste wie im Aushang */
+.plist{padding:0 6px}
+.prow{display:grid;grid-template-columns:1fr 2px 1fr;align-items:center;padding:16px 4px;border-bottom:1px solid var(--cop3)}
+.prow .pn{letter-spacing:3px;font-size:16px;text-transform:uppercase;font-weight:500}
+.prow .bar{width:2px;height:24px;background:var(--cop);justify-self:center}
+.prow .pv{text-align:right;font-size:20px;letter-spacing:1.5px;font-variant-numeric:tabular-nums;padding-right:6px}
+.prow .pv small{font-size:11px;color:var(--muted);letter-spacing:0}
+.prow.gend{border-bottom:1.5px solid #1d1d1f}
+.prow:last-child{border-bottom:1px solid var(--cop3)}
+.pfoot{text-align:center;font-size:13px;line-height:1.5;margin:14px auto 0;max-width:260px}
+.orn{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0}
+.orn i{display:block;height:1px;width:60px;background:var(--cop3)}
+.orn b{display:block;width:9px;height:9px;background:var(--cop);transform:rotate(45deg)}
 .list{display:flex;flex-direction:column;gap:8px}
-.item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;grid-template-columns:1fr auto auto;gap:6px 14px;align-items:center;box-shadow:0 1px 3px rgba(31,42,55,.04)}
-.item .n{font-weight:600;color:var(--navy2)}
+.item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center}
+.item .n{font-weight:600;letter-spacing:1px}
 .item .s{color:var(--muted);font-size:12px}
 .item .col{text-align:right}
-.item .col .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-.item .col .v{font-weight:700;font-size:16px}
-.v.buy{color:var(--gold2)} .v.sell{color:var(--navy)}
+.item .col .v{font-weight:600;font-size:16px;color:var(--cop2)}
+.v.buy{color:var(--cop2)} .v.sell{color:var(--text)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
-.card h3{font-size:17px;margin-bottom:10px;color:var(--navy);font-family:'Playfair Display',serif}
+.card h3{font-size:14px;margin-bottom:10px;color:var(--cop2);letter-spacing:3px;text-transform:uppercase;font-weight:600}
 label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}
 input,select{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--text);padding:12px;border-radius:10px;font-size:16px;font-family:inherit}
-input:focus,select:focus{outline:none;border-color:var(--gold)}
-.res{margin-top:14px;padding:14px;border-radius:12px;background:var(--goldbg);border:1px solid #ead9ac}
-.res .big{font-size:28px;font-weight:700;color:var(--gold2);font-family:'Playfair Display',serif}
+input:focus,select:focus{outline:none;border-color:var(--cop)}
+.res{margin-top:14px;padding:14px;border-radius:12px;background:var(--copbg);border:1px solid var(--line);text-align:center}
+.res .big{font-size:28px;font-weight:600;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .res .s{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.5}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{background:var(--navy);color:#fff;border:0;padding:12px 16px;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:12px}
+.btn{background:var(--grad);color:#fff;border:0;padding:12px 16px;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:12px}
 .btn.ghost{background:none;border:1px solid var(--line);color:var(--muted)}
 .foot{margin-top:18px;color:var(--muted);font-size:11px;line-height:1.6;text-align:center}
-.foot a{color:var(--navy)}
+.foot a{color:var(--cop2)}
 .cta{display:flex;gap:8px;margin-top:14px}
 .cta a{flex:1;display:block;text-align:center;text-decoration:none;padding:12px;border-radius:12px;font-weight:600;font-size:13px}
-.cta .wa{background:#1f8a55;color:#fff}.cta .tel{background:#fff;color:var(--navy);border:1px solid var(--navy)}
+.cta .wa{background:#1f8a55;color:#fff}.cta .tel{background:#fff;color:var(--cop2);border:1px solid var(--cop)}
 .cta .ig{background:linear-gradient(45deg,#f9a825,#e1306c,#833ab4);color:#fff}
-.install{display:none;background:#fff;border:1px solid var(--gold);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.5;align-items:center;gap:10px}
+.cta .dm{background:#fff;color:#833ab4;border:1px solid #d9c2ee}
+.install{display:none;background:#fff;border:1px solid var(--cop3);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.5;align-items:center;gap:10px}
 .install.on{display:flex}
-.install b{color:var(--navy)}
-.install button{background:var(--navy);color:#fff;border:0;border-radius:10px;padding:9px 12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.install b{color:var(--cop2)}
+.install button{background:var(--grad);color:#fff;border:0;border-radius:10px;padding:9px 12px;font-weight:700;cursor:pointer;white-space:nowrap}
 .install .x{background:none;color:var(--muted);padding:4px 6px}
 .adm table{width:100%;border-collapse:collapse;font-size:13px}
 .adm th{text-align:left;color:var(--muted);font-weight:500;font-size:11px;padding:4px}
 .adm td{padding:4px}
 .adm td input{padding:8px;font-size:14px}
-.warn{background:var(--goldbg);border:1px solid #ead9ac;color:var(--gold2);border-radius:10px;padding:10px;font-size:12px;margin-bottom:12px;line-height:1.5}
+.warn{background:var(--copbg);border:1px solid var(--line);color:var(--cop2);border-radius:10px;padding:10px;font-size:12px;margin-bottom:12px;line-height:1.5}
 .hide{display:none!important}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:20px;font-weight:600;font-size:13px;opacity:0;transition:.3s;pointer-events:none}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--cop);color:#fff;padding:10px 16px;border-radius:20px;font-weight:600;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:5}
 .toast.on{opacity:1}
-.shop{margin-top:14px}
-.shop .tag{color:var(--gold2);font-size:12px;letter-spacing:1px;margin:-4px 0 10px;font-weight:600}
-.shop .srow{font-size:14px;margin:6px 0;color:var(--text)}
-.shop .srow a{color:var(--navy);text-decoration:none;font-weight:600}
-.cta .dm{background:#fff;color:#833ab4;border:1px solid #d9c2ee}
+.shop{margin-top:18px}
+.shop h3{letter-spacing:2px}
+.shop .tag{color:var(--muted);font-size:12px;letter-spacing:.5px;margin:-4px 0 10px}
+.shop .srow{font-size:14px;margin:6px 0}
+.shop .srow a{color:var(--cop2);text-decoration:none;font-weight:600}
 </style>
 </head>
 <body>
+<img class="waves tl" src="wave-tl.png" alt="" aria-hidden="true">
+<img class="waves br" src="wave-br.png" alt="" aria-hidden="true">
 <div class="wrap">
-  <header>
-    <div class="brand">
-      <img class="logo" src="icon-192.png" alt="Marka Istanbul">
-      <div><h1 class="mk">MARKA</h1><div class="ist">istanbul</div><small>Çeyrekmatik</small></div>
-    </div>
-    <div class="lang"><button data-l="tr" class="on">TR</button><button data-l="de">DE</button><button data-l="en">EN</button></div>
-  </header>
+  <div class="topbar"><div class="lang"><button data-l="tr" class="on">TR</button><button data-l="de">DE</button><button data-l="en">EN</button></div></div>
+  <div class="hero"><img src="logo.png" alt="Marka Istanbul" width="640" height="375"><small>Çeyrekmatik</small></div>
 
   <div class="install" id="install">
     <div style="flex:1" id="installTxt"></div>
@@ -119,7 +129,7 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
     <button data-tab="zekat" data-t="tZekat"></button>
   </div>
 
-  <section id="prices"><div class="list" id="list"></div></section>
+  <section id="prices"><div class="plist" id="list"></div><div class="orn"><i></i><b></b><i></i></div><div class="pfoot" data-t="pFoot"></div><div class="orn"><i></i><b></b><i></i></div></section>
 
   <section id="bilezik" class="hide">
     <div class="card">
@@ -149,8 +159,8 @@ input:focus,select:focus{outline:none;border-color:var(--gold)}
         <div><label data-t="zCeyrek"></label><input class="zi" data-k="ceyrek" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
         <div><label data-t="zYarim"></label><input class="zi" data-k="yarim" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
         <div><label data-t="zTam"></label><input class="zi" data-k="tam" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
-        <div><label data-t="zAta"></label><input class="zi" data-k="ata" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
-        <div><label data-t="zResat"></label><input class="zi" data-k="resat" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
+        <div><label data-t="zGremse"></label><input class="zi" data-k="gremse" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
+        <div><label data-t="zR5"></label><input class="zi" data-k="r5" type="number" inputmode="numeric" min="0" step="1" placeholder="0"></div>
         <div><label data-t="zGram24"></label><input class="zi" data-k="g24" type="number" inputmode="decimal" min="0" step="0.1" placeholder="0"></div>
         <div><label data-t="zG22"></label><input class="zi" data-k="g22" type="number" inputmode="decimal" min="0" step="0.1" placeholder="0"></div>
         <div><label data-t="zG18"></label><input class="zi" data-k="g18" type="number" inputmode="decimal" min="0" step="0.1" placeholder="0"></div>
@@ -216,7 +226,7 @@ const T = {
   buTitle:"Bu paraya ne alabilirim?",buAmount:"Bütçe (€)",pieces:"adet",rest:"kalan",
   sTitle:"Altınımı kaça satarım?",sType:"Ne satıyorsunuz?",sGet:"Tahmini ödeme",sNote:"Kesin fiyat dükkânda tartı ve ayar kontrolünden sonra belirlenir.",
   disclaimer:"Fiyatlar bilgi amaçlıdır, altın piyasasına göre anlık değişir. Kesin fiyat için dükkânımıza gelin veya bizi arayın.",
-  call:"Ara",tZekat:"Zekât",zTitle:"Zekât hesapla",zIntro:"Elinizdeki altını ve birikiminizi girin, zekâtınızı güncel has altın fiyatıyla hesaplayalım.",zCeyrek:"Çeyrek (adet)",zYarim:"Yarım (adet)",zTam:"Tam (adet)",zAta:"Ata Lira (adet)",zResat:"Reşat (adet)",zGram24:"Gram altın 24 ayar (g)",zG22:"22 ayar bilezik/takı (g)",zG18:"18 ayar takı (g)",zG14:"14 ayar takı (g)",zCash:"Nakit / birikim (€)",zDue:"Vermeniz gereken zekât",zNone:"Zekât düşmüyor",zHas:"Has altın",zTotal:"Toplam değer",zNisab:"Nisap",zRate:"%2,5 (1/40)",zNote:"Nisap: 80,18 g altın (Diyanet). Zekât, nisaba ulaşan ve üzerinden bir kameri yıl geçen varlık için verilir. Bu hesap bilgi amaçlıdır; dini konularda bir din görevlisine danışınız.",shopTag:"Kuyumcu & saat · Altın takı • Alyans • Hediye",orderVia:"Sipariş ve sorular için WhatsApp / DM",dm:"Mesaj gönder",imprint:"Künye / Gizlilik",hours:"Pzt–Cmt 10:00–19:00",
+  call:"Ara",pFoot:"Altın fiyatları güncel kura göre değişmektedir.",zGremse:"2,5'lik / Gremse (adet)",zR5:"5'li (adet)",tZekat:"Zekât",zTitle:"Zekât hesapla",zIntro:"Elinizdeki altını ve birikiminizi girin, zekâtınızı güncel has altın fiyatıyla hesaplayalım.",zCeyrek:"Çeyrek – Ziynet/Reşat (adet)",zYarim:"Yarım – Ziynet/Reşat (adet)",zTam:"Tam – Ziynet/Reşat (adet)",zAta:"Ata Lira (adet)",zResat:"Reşat (adet)",zGram24:"Gram altın 24 ayar (g)",zG22:"22 ayar bilezik/takı (g)",zG18:"18 ayar takı (g)",zG14:"14 ayar takı (g)",zCash:"Nakit / birikim (€)",zDue:"Vermeniz gereken zekât",zNone:"Zekât düşmüyor",zHas:"Has altın",zTotal:"Toplam değer",zNisab:"Nisap",zRate:"%2,5 (1/40)",zNote:"Nisap: 80,18 g altın (Diyanet). Zekât, nisaba ulaşan ve üzerinden bir kameri yıl geçen varlık için verilir. Bu hesap bilgi amaçlıdır; dini konularda bir din görevlisine danışınız.",shopTag:"Kuyumcu & saat · Altın takı • Alyans • Hediye",orderVia:"Sipariş ve sorular için WhatsApp / DM",dm:"Mesaj gönder",imprint:"Künye / Gizlilik",hours:"Pzt–Cmt 10:00–19:00",
   installIos:"<b>Uygulama olarak ekle:</b> Paylaş <span style='font-size:15px'>⎋</span> → „Ana Ekrana Ekle“",installAnd:"<b>Çeyrekmatik'i telefonuna ekle</b> – tek dokunuşla aç.",installBtn:"Ekle",
   admTitle:"Yönetici (önizleme)",admWarn:"Buradaki değişiklikler yalnızca bu ekranda önizlemedir. Kalıcı olması için ‘Ayarları kopyala’ ile Timur’a gönderin.",
   manualSpot:"Manuel has gram fiyatı (€) – boş = canlı fiyat",product:"Ürün",mSell:"Satış +%",mBuy:"Alış −%",labor:"İşçilik €",
@@ -229,7 +239,7 @@ const T = {
   buTitle:"Was bekomme ich für mein Budget?",buAmount:"Budget (€)",pieces:"Stk.",rest:"Rest",
   sTitle:"Was bekomme ich für mein Gold?",sType:"Was möchten Sie verkaufen?",sGet:"Geschätzte Auszahlung",sNote:"Der genaue Preis wird im Geschäft nach Wiegen und Prüfung festgelegt.",
   disclaimer:"Alle Preise sind unverbindlich und ändern sich mit dem Goldkurs. Für ein verbindliches Angebot besuchen Sie uns oder rufen Sie an.",
-  call:"Anrufen",tZekat:"Zakat",zTitle:"Zakat berechnen",zIntro:"Geben Sie Ihr Gold und Ihr Erspartes ein – wir berechnen Ihre Zakat mit dem aktuellen Feingoldpreis.",zCeyrek:"Çeyrek (Stück)",zYarim:"Yarım (Stück)",zTam:"Tam (Stück)",zAta:"Ata Lira (Stück)",zResat:"Reşat (Stück)",zGram24:"Goldbarren 24K (g)",zG22:"22K Armreif/Schmuck (g)",zG18:"18K Schmuck (g)",zG14:"14K Schmuck (g)",zCash:"Bargeld / Ersparnisse (€)",zDue:"Ihre Zakat",zNone:"Keine Zakat fällig",zHas:"Feingold",zTotal:"Gesamtwert",zNisab:"Nisab",zRate:"2,5 % (1/40)",zNote:"Nisab: 80,18 g Gold (Diyanet). Zakat ist fällig, wenn das Vermögen den Nisab erreicht und ein Mondjahr lang besessen wurde. Diese Berechnung dient nur zur Orientierung; wenden Sie sich bei religiösen Fragen an einen Imam.",shopTag:"Schmuck- & Uhrengeschäft · Goldschmuck • Trauringe • Geschenke",orderVia:"Bestellung & Anfragen per WhatsApp / DM",dm:"Nachricht senden",imprint:"Impressum / Datenschutz",hours:"Mo–Sa 10:00–19:00",
+  call:"Anrufen",pFoot:"Die Goldpreise ändern sich mit dem aktuellen Kurs.",zGremse:"2,5er / Gremse (Stück)",zR5:"5er (Stück)",tZekat:"Zakat",zTitle:"Zakat berechnen",zIntro:"Geben Sie Ihr Gold und Ihr Erspartes ein – wir berechnen Ihre Zakat mit dem aktuellen Feingoldpreis.",zCeyrek:"Çeyrek (Stück)",zYarim:"Yarım (Stück)",zTam:"Tam (Stück)",zAta:"Ata Lira (Stück)",zResat:"Reşat (Stück)",zGram24:"Goldbarren 24K (g)",zG22:"22K Armreif/Schmuck (g)",zG18:"18K Schmuck (g)",zG14:"14K Schmuck (g)",zCash:"Bargeld / Ersparnisse (€)",zDue:"Ihre Zakat",zNone:"Keine Zakat fällig",zHas:"Feingold",zTotal:"Gesamtwert",zNisab:"Nisab",zRate:"2,5 % (1/40)",zNote:"Nisab: 80,18 g Gold (Diyanet). Zakat ist fällig, wenn das Vermögen den Nisab erreicht und ein Mondjahr lang besessen wurde. Diese Berechnung dient nur zur Orientierung; wenden Sie sich bei religiösen Fragen an einen Imam.",shopTag:"Schmuck- & Uhrengeschäft · Goldschmuck • Trauringe • Geschenke",orderVia:"Bestellung & Anfragen per WhatsApp / DM",dm:"Nachricht senden",imprint:"Impressum / Datenschutz",hours:"Mo–Sa 10:00–19:00",
   installIos:"<b>Als App hinzufügen:</b> Teilen <span style='font-size:15px'>⎋</span> → „Zum Home-Bildschirm“",installAnd:"<b>Çeyrekmatik aufs Handy</b> – mit einem Tipp öffnen.",installBtn:"Installieren",
   admTitle:"Admin (Vorschau)",admWarn:"Änderungen hier sind nur eine Vorschau auf diesem Bildschirm.",
   manualSpot:"Manueller Feingoldpreis pro Gramm (€) – leer = Live-Kurs",product:"Produkt",mSell:"VK +%",mBuy:"AK −%",labor:"Arbeit €",
@@ -242,7 +252,7 @@ const T = {
   buTitle:"What can I get for my budget?",buAmount:"Budget (€)",pieces:"pcs",rest:"left",
   sTitle:"What do I get for my gold?",sType:"What are you selling?",sGet:"Estimated payout",sNote:"The exact price is set in the shop after weighing and testing.",
   disclaimer:"All prices are for information only and change with the gold price. For a binding offer, visit us or give us a call.",
-  call:"Call",tZekat:"Zakat",zTitle:"Calculate zakat",zIntro:"Enter your gold and savings – we calculate your zakat with the current fine gold price.",zCeyrek:"Çeyrek (pcs)",zYarim:"Yarım (pcs)",zTam:"Tam (pcs)",zAta:"Ata Lira (pcs)",zResat:"Reşat (pcs)",zGram24:"Gold bar 24K (g)",zG22:"22K bangle/jewellery (g)",zG18:"18K jewellery (g)",zG14:"14K jewellery (g)",zCash:"Cash / savings (€)",zDue:"Your zakat",zNone:"No zakat due",zHas:"Fine gold",zTotal:"Total value",zNisab:"Nisab",zRate:"2.5% (1/40)",zNote:"Nisab: 80.18 g of gold (Diyanet). Zakat is due on wealth that reaches the nisab and has been held for one lunar year. This calculation is for guidance only; please consult an imam on religious questions.",shopTag:"Jewellery & watches · Gold jewellery • Wedding rings • Gifts",orderVia:"Orders & enquiries via WhatsApp / DM",dm:"Send message",imprint:"Imprint / Privacy",hours:"Mon–Sat 10:00–19:00",
+  call:"Call",pFoot:"Gold prices change with the current rate.",zGremse:"2.5 / Gremse (pcs)",zR5:"5-piece (pcs)",tZekat:"Zakat",zTitle:"Calculate zakat",zIntro:"Enter your gold and savings – we calculate your zakat with the current fine gold price.",zCeyrek:"Çeyrek (pcs)",zYarim:"Yarım (pcs)",zTam:"Tam (pcs)",zAta:"Ata Lira (pcs)",zResat:"Reşat (pcs)",zGram24:"Gold bar 24K (g)",zG22:"22K bangle/jewellery (g)",zG18:"18K jewellery (g)",zG14:"14K jewellery (g)",zCash:"Cash / savings (€)",zDue:"Your zakat",zNone:"No zakat due",zHas:"Fine gold",zTotal:"Total value",zNisab:"Nisab",zRate:"2.5% (1/40)",zNote:"Nisab: 80.18 g of gold (Diyanet). Zakat is due on wealth that reaches the nisab and has been held for one lunar year. This calculation is for guidance only; please consult an imam on religious questions.",shopTag:"Jewellery & watches · Gold jewellery • Wedding rings • Gifts",orderVia:"Orders & enquiries via WhatsApp / DM",dm:"Send message",imprint:"Imprint / Privacy",hours:"Mon–Sat 10:00–19:00",
   installIos:"<b>Add as app:</b> Share <span style='font-size:15px'>⎋</span> → “Add to Home Screen”",installAnd:"<b>Add Çeyrekmatik to your phone</b> – open it with one tap.",installBtn:"Install",
   admTitle:"Admin (preview)",admWarn:"Changes here are only a preview on this screen.",
   manualSpot:"Manual fine gold price per gram (€) – empty = live price",product:"Product",mSell:"Sell +%",mBuy:"Buy −%",labor:"Labour €",
@@ -336,15 +346,14 @@ function renderSpot(){
   $("status").textContent = t(src) + (src==="live" && srcName ? " (" + srcName + ")" : "") + (when ? " · " + when : "") + ch;
   $("dot").classList.toggle("off", src!=="live" && src!=="manual");
 }
-function rowHtml(name, sub, val){
-  return `<div class="item" style="grid-template-columns:1fr auto"><div><div class="n">${name}</div><div class="s">${sub}</div></div>
-      <div class="col"><div class="k">${t("buy")}</div><div class="v sell">${val}</div></div></div>`;
-}
+const euro0 = v => isFinite(v) ? Math.round(v).toLocaleString({tr:"tr-TR",de:"de-DE",en:"en-GB"}[lang]) + " €" : "—";
 function renderList(){
-  const coins = p => rowHtml(nm(p), `${p.gram} g · ${Math.round(p.purity*1000)}`, fmt(priceOf(p).sell));
-  $("list").innerHTML = cfg.products.filter(p=>!p.sonda).map(coins).join("")
-    + cfg.bracelets.map(b=>rowHtml(nm(b), `1 g · ${Math.round(b.purity*1000)}`, fmt(braceletPrice(b,1).sell) + `<span style="font-size:11px;color:var(--muted);font-weight:500"> /g</span>`)).join("")
-    + cfg.products.filter(p=>p.sonda).map(coins).join("");
+  const rows = [...cfg.products.map(p=>({n:nm(p), v:priceOf(p).sell, g:p.grup||1})),
+                ...cfg.bracelets.map(b=>({n:nm(b), v:braceletPrice(b,1).sell, g:b.grup||3, per:true}))];
+  $("list").innerHTML = rows.map((r,i)=>{
+    const end = rows[i+1] && rows[i+1].g !== r.g;
+    return `<div class="prow${end?" gend":""}"><div class="pn">${r.n}</div><div class="bar"></div><div class="pv">${euro0(r.v)}${r.per?` <small>/g</small>`:""}</div></div>`;
+  }).join("");
 }
 function renderBilezik(){
   const sel = $("bKarat"), cur = sel.value;
@@ -368,7 +377,7 @@ function renderZekat(){
   const v = {}; document.querySelectorAll(".zi").forEach(i=> v[i.dataset.k] = Math.max(0, +i.value||0));
   const P = id => cfg.products.find(x=>x.id===id) || {gram:0,purity:0};
   let has = 0;
-  ["ceyrek","yarim","tam","ata","resat"].forEach(id=>{ const p=P(id); has += (v[id]||0)*p.gram*p.purity; });
+  ["ceyrek","yarim","tam","gremse","r5"].forEach(id=>{ const p=P(id); has += (v[id]||0)*p.gram*p.purity; });
   has += (v.g24||0)*0.995 + (v.g22||0)*0.916 + (v.g18||0)*0.750 + (v.g14||0)*0.585;
   const total = has*spotG + (v.cash||0);
   const nisabG = +cfg.zekatNisabGram || 80.18, nisab = nisabG*spotG;
