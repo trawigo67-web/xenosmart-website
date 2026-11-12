@@ -1,16 +1,30 @@
 {
-  "name": "Marka Istanbul – Çeyrekmatik",
-  "short_name": "Çeyrekmatik",
-  "description": "Güncel altın fiyatları: Çeyrek, Yarım, Tam, Gram, Bilezik – Marka Istanbul Köln",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
-  "lang": "tr",
-  "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
-    {"src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
-  ]
+ "name": "Çeyrekmatik – Marka Istanbul",
+ "short_name": "Çeyrekmatik",
+ "description": "Güncel altın fiyatları: Çeyrek, Yarım, Tam, Gram, Bilezik – Marka Istanbul Köln",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#ffffff",
+ "theme_color": "#ffffff",
+ "lang": "tr",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-maskable.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "id": "./"
 }
