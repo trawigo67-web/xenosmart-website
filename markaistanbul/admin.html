@@ -45,6 +45,21 @@ input:focus{outline:none;border-color:var(--cop)}
 .toast.bad{background:#c62828}
 .bar{position:sticky;bottom:0;background:#fff;padding:10px 0 calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line);margin-top:16px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.q{border:1.5px solid var(--cop);border-radius:18px;padding:16px;margin-bottom:14px;background:#fffaf4}
+.q h3{font-size:15px;letter-spacing:3px;text-transform:uppercase;color:var(--cop2);margin-bottom:4px}
+.q .sub{font-size:12px;color:var(--muted);margin-bottom:10px}
+.qin{display:grid;grid-template-columns:52px 52px 1fr 52px 52px;gap:6px;align-items:center}
+.qin button{height:52px;border-radius:12px;border:1px solid var(--line);background:#fff;font-size:17px;font-weight:700;color:var(--cop2);cursor:pointer}
+.qin input{height:52px;text-align:center;font-size:26px;font-weight:700;padding:4px;color:#1d1d1f}
+.marj{text-align:center;font-size:13px;margin-top:6px;color:var(--muted)}
+.marj b{color:var(--cop2)}
+.qp{margin-top:10px;border-top:1px solid var(--line)}
+.qp div{display:flex;justify-content:space-between;padding:7px 2px;border-bottom:1px solid var(--line);font-size:15px}
+.qp div span:first-child{letter-spacing:2px;text-transform:uppercase;font-size:13px}
+.qp div span:last-child{font-weight:700;font-variant-numeric:tabular-nums}
+.qb + .qb{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+details.adv{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:16px}
+details.adv summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:14px}
 </style>
 </head>
 <body>
@@ -81,7 +96,18 @@ input:focus{outline:none;border-color:var(--cop)}
 
   <!-- Düzenleme -->
   <section id="editor" class="hide">
-    <div class="spot" id="spot">Has altın yükleniyor…</div>
+    <div class="q">
+      <h3>Has altın fiyatı (1 g)</h3>
+      <div class="sub">Tüm fiyatlar bu fiyat × milyem ile hesaplanır.</div>
+      <div class="spot" id="spot" style="text-align:left;margin:0 0 8px">Has altın yükleniyor…</div>
+      <label style="margin-top:4px">Kendi has fiyatınız (€) – boş bırakın = Kitco canlı fiyat</label>
+      <div style="display:grid;grid-template-columns:1fr 110px;gap:8px">
+        <input id="manSpot" type="number" step="0.01" inputmode="decimal" placeholder="boş = Kitco canlı" style="height:52px;font-size:22px;font-weight:700;text-align:center">
+        <button class="ib" id="manClear" style="height:52px">Canlıya dön</button>
+      </div>
+    </div>
+    <div id="quick"></div>
+    <div class="bar" style="position:static;border:0;padding-top:0;margin-top:0"><button class="btn" id="save2" style="margin-top:0">Kaydet ve yayınla</button></div>
 
     <h2>Günlük paylaşım (her sabah 10:00)</h2>
     <div class="card" style="text-align:center">
@@ -95,6 +121,7 @@ input:focus{outline:none;border-color:var(--cop)}
       <p class="note">Görsel her sabah 10:00'da güncel fiyatlarla otomatik hazırlanır. "Paylaş" ile Instagram hikâyesine veya WhatsApp durumuna tek dokunuşla gönderin. <a href="pano.html" target="_blank">Canlı panoyu aç</a></p>
     </div>
 
+    <details class="adv"><summary>Ürünleri düzenle (isim, gram, kat, sıra, ekle/sil)</summary>
     <h2>Altınlar</h2>
     <div id="prodRows"></div>
     <button class="ib" id="addProd">+ Ürün ekle</button>
@@ -103,10 +130,10 @@ input:focus{outline:none;border-color:var(--cop)}
     <div id="braRows"></div>
     <button class="ib" id="addBra">+ Bilezik ekle</button>
 
+    </details>
+
     <h2>Genel</h2>
     <div class="card">
-      <label>Manuel has gram fiyatı (€) – boş bırakın = Kitco canlı fiyat</label>
-      <input id="manSpot" type="number" step="0.01" inputmode="decimal" placeholder="boş = canlı">
       <div class="grid2">
         <div><label>WhatsApp numarası</label><input id="wa" type="tel" placeholder="4922180039255"></div>
         <div><label>Telefon</label><input id="tel" type="tel" placeholder="+4922180039255"></div>
@@ -242,12 +269,66 @@ function priceP(o, s){
   if (o.baz){ const b = cfg.products.find(x=>x.id===o.baz); return b && !b.baz ? Math.floor(b.gram*(b.satisMilyem/1000)*s)*(+o.kat||0) : NaN; }
   return o.gram*(o.satisMilyem/1000)*s;
 }
+const QNAME = {ceyrek:["Ziynetler","Çeyrek · Yarım · Tam · Gremse"], rceyrek:["Reşatlar","R Çeyrek · R Yarım · R Tam · R 2,5 · R 5'li"]};
+function priceB(o, s){ return Math.floor((o.satisMilyem/1000)*s); }
+function marjTxt(o){ const p = +o.purity || 0.916, m = (o.satisMilyem/(p*1000) - 1)*100; return isFinite(m) ? `Altın değerinin <b>${m>=0?"+":""}${m.toLocaleString("tr-TR",{maximumFractionDigits:1})} %</b> ${m>=0?"üstü":"altı"} · ${Math.round(p*1000)} ayar` : ""; }
+function stepper(key, val){
+  return `<div class="qin" data-q="${key}">
+    <button data-s="-5">−5</button><button data-s="-0.5">−½</button>
+    <input type="number" inputmode="decimal" step="0.5" value="${val??""}" aria-label="Milyem">
+    <button data-s="0.5">+½</button><button data-s="5">+5</button></div>`;
+}
+function renderQuick(){
+  const bases = cfg.products.filter(p=>!p.baz);
+  let h = bases.map(b=>{
+    const [title, sub] = QNAME[b.id] || [b.tr, cfg.products.filter(x=>x.baz===b.id).map(x=>x.tr).join(" · ")];
+    return `<div class="q"><h3>${title}</h3><div class="sub">${sub ? sub + " – " : ""}satış milyemi</div>
+      ${stepper("p:"+b.id, b.satisMilyem)}<div class="marj" data-m="p:${b.id}"></div><div class="qp" data-qp="p:${b.id}"></div></div>`;
+  }).join("");
+  h += `<div class="q"><h3>Bilezikler</h3><div class="sub">Gram başına satış milyemi</div>` +
+    cfg.bracelets.map(b=>`<div class="qb"><div style="font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:13px;margin-bottom:6px">${b.tr}</div>
+      ${stepper("b:"+b.id, b.satisMilyem)}<div class="marj" data-m="b:${b.id}"></div><div class="qp" data-qp="b:${b.id}"></div></div>`).join("") + `</div>`;
+  $("quick").innerHTML = h;
+  updateQuick();
+}
+function qObj(key){ const [k,id] = key.split(":"); return (k==="p"?cfg.products:cfg.bracelets).find(x=>x.id===id); }
+function updateQuick(){
+  const s = curSpot();
+  document.querySelectorAll("[data-m]").forEach(el=>{ el.innerHTML = marjTxt(qObj(el.dataset.m)); });
+  document.querySelectorAll("[data-qp]").forEach(el=>{
+    const key = el.dataset.qp, o = qObj(key);
+    if (!s){ el.innerHTML = ""; return; }
+    if (key.startsWith("b:")){ el.innerHTML = `<div><span>1 gram</span><span>${eur(priceB(o,s))}</span></div><div><span>10 gram</span><span>${eur(priceB(o,s)*10)}</span></div>`; return; }
+    const items = [o, ...cfg.products.filter(x=>x.baz===o.id)];
+    el.innerHTML = items.map(x=>`<div><span>${x.tr}</span><span>${eur(priceP(x,s))}</span></div>`).join("");
+  });
+}
+function setMilyem(key, v){
+  const o = qObj(key); if (!o) return;
+  o.satisMilyem = Math.round(v*2)/2;
+  // gleichen Wert im erweiterten Bereich nachziehen
+  const [k] = key.split(":"); const arr = k==="p"?cfg.products:cfg.bracelets, i = arr.indexOf(o);
+  const inp = document.querySelector(`.row[data-kind="${k}"][data-i="${i}"] [data-f="satisMilyem"]`); if (inp) inp.value = o.satisMilyem;
+  updateQuick(); renderPrices(true);
+}
+document.addEventListener("click", e=>{
+  const b = e.target.closest(".qin button"); if (!b) return;
+  const wrap = b.closest(".qin"), inp = wrap.querySelector("input");
+  const v = (parseFloat(inp.value)||0) + parseFloat(b.dataset.s); inp.value = v; setMilyem(wrap.dataset.q, v);
+});
+document.addEventListener("input", e=>{
+  const w = e.target.closest(".qin"); if (!w) return;
+  const v = parseFloat(e.target.value); if (v > 0) setMilyem(w.dataset.q, v);
+}, true);
+
 function renderRows(){
   $("prodRows").innerHTML = cfg.products.map((o,i)=>rowHtml(o,"p",i)).join("");
   $("braRows").innerHTML = cfg.bracelets.map((o,i)=>rowHtml(o,"b",i)).join("");
+  renderQuick();
   renderPrices();
 }
-function renderPrices(){
+function renderPrices(fromQuick){
+  if (!fromQuick && $("quick").innerHTML) updateQuick();
   const s = curSpot();
   $("spot").innerHTML = s ? `Has altın (1 g): <b>${s.toLocaleString("tr-TR",{style:"currency",currency:"EUR"})}</b> ${parseFloat($("manSpot").value)>0?"· manuel":"· Kitco canlı"}` : "Has altın fiyatı alınamadı";
   document.querySelectorAll(".row").forEach(r=>{
@@ -257,10 +338,12 @@ function renderPrices(){
   });
 }
 document.addEventListener("input", e=>{
+  if (e.target.closest(".qin")) return;
   const r = e.target.closest(".row");
   if (r && e.target.dataset.f){
     const o = (r.dataset.kind==="p"?cfg.products:cfg.bracelets)[+r.dataset.i], f = e.target.dataset.f;
     o[f] = ["gram","satisMilyem","purity","grup","kat"].includes(f) ? (e.target.value===""?null:+e.target.value) : e.target.value;
+    if (["satisMilyem","tr","purity","kat"].includes(f)) renderQuick();
     if (f==="baz"){
       if (o.baz){ const b = cfg.products.find(x=>x.id===o.baz); if (!o.kat) o.kat = b && b.gram ? Math.round(o.gram/b.gram*100)/100 : 1; }
       else { delete o.baz; if (!o.satisMilyem) o.satisMilyem = 960; }
@@ -322,6 +405,8 @@ async function openEditor(){
   $("editor").classList.remove("hide");
   renderRows(); loadSpot(); loadPano();
 }
+$("manClear").onclick = ()=>{ $("manSpot").value = ""; renderPrices(); };
+$("save2") && ($("save2").onclick = ()=>$("save").click());
 $("save").onclick = async ()=>{
   // Prüfen
   for (const o of [...cfg.products, ...cfg.bracelets]){
