@@ -70,6 +70,11 @@ async function spot(cfg){
     const footTop = document.querySelector(".foot").getBoundingClientRect().top - pr.top;
     // Tarih ve tema yazısı logonun altında, liste tarihin altında başlar
     const dateEl = document.getElementById("date"), listEl = document.getElementById("list");
+    // Konsept kapağı varsa: selam ve tarih kapağın hemen altına dizilir
+    const kp = document.querySelector(".logo.zkapak");
+    if (kp){ let y = Math.round(kp.getBoundingClientRect().bottom - pr.top) + 14;
+      const se = document.querySelector("#pano .zselam"); if (se){ se.style.top = y+"px"; y += se.offsetHeight + 12; }
+      dateEl.style.top = y+"px"; }
     const top = Math.max(document.querySelector(".logo.zkapak") ? 0 : 610, Math.ceil(dateEl.getBoundingClientRect().bottom - pr.top) + 28);
     listEl.style.top = top + "px";
     const h = Math.max(40, Math.min(103, Math.floor((footTop - 44 - top - 20) / rows.length)));

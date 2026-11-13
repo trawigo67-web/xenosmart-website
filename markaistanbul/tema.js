@@ -19,21 +19,25 @@
     siyah: { ad: "Siyah & Altın konsept", ikon: "🖤", band: "#0c0c0d", line: "#c9a647", acc: "#d8b65a", bg: ["#1d1e21", "#141416", "#0c0c0d"], selam: null, fx: null, kapak: "kapak-siyah.jpg", koyu: true },
     beyaz: { ad: "Beyaz konsept",         ikon: "🤍", band: "#f4f5f4", line: "#c9a647", acc: "#b8913a", bg: ["#fcfdfc", "#f6f7f6", "#eff0ef"], selam: null, fx: null, kapak: "kapak-beyaz.jpg" },
   });
+  // Sezon temaları da konsept görselleriyle (Timur'un gönderdiği kapaklar) ve koyu zeminle gelir
+  Object.assign(TEMALAR.noel,       { kapak: "kapak-noel.jpg",       koyu: true, acc: "#e6c86e", bg: ["#4a1a14", "#2a120e", "#150b08"] });
+  Object.assign(TEMALAR.yilbasi,    { kapak: "kapak-yilbasi.jpg",    koyu: true, acc: "#e6c86e", bg: ["#1c2140", "#0e1126", "#06070f"] });
+  Object.assign(TEMALAR.sevgililer, { kapak: "kapak-sevgililer.jpg", koyu: true, acc: "#f0cf8a", bg: ["#6a1420", "#430f12", "#22080b"] });
+  Object.assign(TEMALAR.ramazan,    { kapak: "kapak-ramazan.jpg",    koyu: true, acc: "#e6c86e", bg: ["#103238", "#071f28", "#04121a"] });
   const KAPAK_CSS = `
 img.zlock.zkapak{width:100%!important;max-width:none!important;border-radius:14px;margin:8px auto 4px!important}
-#pano .logo.zkapak{left:0!important;top:75px!important;transform:none!important;width:1080px!important;-webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent);mask-image:linear-gradient(to bottom,#000 80%,transparent)}
-#pano:has(.logo.zkapak) .date{top:440px}`;
+#pano .logo.zkapak{left:0!important;top:75px!important;transform:none!important;width:1080px!important;-webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent);mask-image:linear-gradient(to bottom,#000 80%,transparent)}`;
   const koyuCss = (n) => { const p = `html[data-tema="${n}"]`; return `
-${p}{--bg:#121213;--card:#1a1a1c;--card2:#222225;--line:#4d4123;--cop:#d1ad55;--cop2:#e6c86e;--cop3:#6a5a2c;--copbg:#1f1c14;--text:#f3ead2;--muted:#a79c82;--navy:#f3ead2;color-scheme:dark}
+${p}{--bg:#121213;--card:rgba(0,0,0,.28);--card2:rgba(0,0,0,.38);--line:rgba(209,173,85,.38);--cop:#d1ad55;--cop2:#e6c86e;--cop3:rgba(209,173,85,.45);--copbg:rgba(0,0,0,.3);--text:#f3ead2;--muted:#a79c82;--navy:#f3ead2;color-scheme:dark}
 ${p} body:has(.plist){color:#f3ead2}
-${p} body:has(.plist) .lang,${p} body:has(.plist) .tabs button,${p} body:has(.plist) .install,${p} body:has(.plist) .cta .tel,${p} body:has(.plist) .cta .dm{background:#1a1a1c}
+${p} body:has(.plist) .lang,${p} body:has(.plist) .tabs button,${p} body:has(.plist) .install,${p} body:has(.plist) .cta .tel,${p} body:has(.plist) .cta .dm{background:rgba(0,0,0,.3)}
 ${p} body:has(.plist) .install{color:#f3ead2}
 ${p} body:has(.plist) .tabs button.on,${p} body:has(.plist) .lang button.on{background:var(--grad);color:#141416}
 ${p} body:has(.plist) .btn:not(.ghost),${p} body:has(.plist) .install button:not(.x){color:#141416}
 ${p} body:has(.plist) .prow.gend{border-bottom-color:#d1ad55}
-${p} body:has(.plist) .prow img.pic.ph{background:#1a1a1c}
+${p} body:has(.plist) .prow img.pic.ph{background:rgba(0,0,0,.3)}
 ${p} #pano{color:#f3ead2}
-${p} #pano .r{border-bottom-color:#6a5a2c}
+${p} #pano .r{border-bottom-color:rgba(209,173,85,.45)}
 ${p} #pano .r.end{border-bottom-color:#d1ad55}
 ${p} #pano .r .b,${p} #pano .orn i,${p} #pano .orn b,${p} #pano .foot .o2 i,${p} #pano .foot .o2 b{background:#d1ad55}
 ${p} #pano .addr{color:#a79c82}`; };
