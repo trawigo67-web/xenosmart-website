@@ -17,7 +17,7 @@
 <meta name="description" content="Diş Fırlat – dönen çarklara dişi doğru anda fırlat. 15 seviye, boss çarkları, sonsuz mod. Ücretsiz oyna.">
 <style>
   :root{--a:#38e1ff;--b:#ff4fd8;--glass:rgba(255,255,255,.16);--sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom)}
-  html,body{margin:0;height:100%;background:#145a5a;color:#eef;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;background:#1a130e;color:#eef;font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
   canvas{display:block;width:100vw;height:100vh;height:100dvh}
   #top{position:fixed;top:calc(12px + env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between;align-items:center;gap:6px;pointer-events:none;z-index:10}
   .pill{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(8,48,52,.28));border:1px solid rgba(255,255,255,.28);box-shadow:0 4px 14px rgba(0,40,45,.22),inset 0 1px 0 rgba(255,255,255,.25);text-shadow:0 1px 2px rgba(0,30,35,.45);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;padding:6px 12px;font-weight:600;font-size:14px;white-space:nowrap}
@@ -35,7 +35,7 @@
   #dots i.boss{outline:1.5px solid #ff4d6d;outline-offset:1px}
   #hint{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);max-width:calc(100vw - 184px);width:max-content;text-align:center;color:#fff;font-size:12.5px;font-weight:600;line-height:1.3;pointer-events:none;padding:6px 12px;border-radius:14px;background:rgba(6,44,48,.5);border:1px solid rgba(255,255,255,.18);text-shadow:0 1px 2px rgba(0,30,35,.5)}
   #hint:empty{display:none}
-  #slow{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:64px;height:64px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:radial-gradient(circle at 34% 26%,rgba(255,255,255,.65),rgba(255,255,255,.14) 42%,rgba(0,60,70,.38) 100%);color:#fff;font:inherit;font-weight:900;font-size:10.5px;letter-spacing:.3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 6px 18px rgba(0,40,50,.35),0 0 18px color-mix(in srgb,var(--a) 45%,transparent),inset 0 -4px 8px rgba(0,40,50,.25);text-shadow:0 1px 2px rgba(0,30,35,.55);transition:transform .12s,opacity .3s;cursor:pointer}
+  #slow{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:64px;height:64px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:radial-gradient(circle at 34% 26%,rgba(255,255,255,.65),rgba(255,255,255,.14) 42%,rgba(90,45,10,.5) 100%);color:#fff;font:inherit;font-weight:900;font-size:10.5px;letter-spacing:.3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 6px 18px rgba(0,40,50,.35),0 0 18px color-mix(in srgb,var(--a) 45%,transparent),inset 0 -4px 8px rgba(0,40,50,.25);text-shadow:0 1px 2px rgba(0,30,35,.55);transition:transform .12s,opacity .3s;cursor:pointer}
   #slow:active{transform:scale(.92)}
   #slow b{font-size:22px;line-height:1}
   #slow.used{opacity:.25;filter:grayscale(1)}
@@ -103,7 +103,7 @@
   /* --- konfor: büyük dokunma alanları (görünüm aynı, alan ≥44px) --- */
   .ib{position:relative} .ib::after{content:'';position:absolute;left:-2px;right:-2px;top:-8px;bottom:-8px}
   .tg{min-height:44px} .lg{min-height:44px;min-width:52px}
-  #pz{position:fixed;left:14px;bottom:calc(18px + env(safe-area-inset-bottom));width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,.45);background:radial-gradient(circle at 34% 26%,rgba(255,255,255,.45),rgba(255,255,255,.1) 45%,rgba(0,60,70,.35) 100%);color:#fff;font:inherit;font-weight:900;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,40,50,.3),inset 0 -4px 8px rgba(0,40,50,.22);cursor:pointer;transition:transform .12s,opacity .25s;z-index:3}
+  #pz{position:fixed;left:14px;bottom:calc(18px + env(safe-area-inset-bottom));width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,.45);background:radial-gradient(circle at 34% 26%,rgba(255,255,255,.45),rgba(255,255,255,.1) 45%,rgba(90,45,10,.45) 100%);color:#fff;font:inherit;font-weight:900;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,40,50,.3),inset 0 -4px 8px rgba(0,40,50,.22);cursor:pointer;transition:transform .12s,opacity .25s;z-index:3}
   #pz:active{transform:scale(.9)} #pz.hid{opacity:0;pointer-events:none}
   #pz::after{content:'';position:absolute;inset:-6px}
   body[data-device=tablet] #pz{width:68px;height:68px;font-size:26px}
@@ -135,7 +135,7 @@
   /* öğretici */
   #tut{position:fixed;inset:0;z-index:8;display:none}
   #tut.on{display:block}
-  #tut .bub{position:absolute;left:50%;transform:translateX(-50%);width:min(330px,90vw);box-sizing:border-box;padding:14px 16px 12px;border-radius:20px;background:linear-gradient(160deg,rgba(30,120,112,.95),rgba(14,62,78,.95));border:1px solid rgba(255,255,255,.4);box-shadow:0 14px 40px rgba(0,30,40,.5);text-align:center;font-size:15.5px;line-height:1.4;color:#fff;animation:pop .3s cubic-bezier(.3,1.5,.5,1)}
+  #tut .bub{position:absolute;left:50%;transform:translateX(-50%);width:min(330px,90vw);box-sizing:border-box;padding:14px 16px 12px;border-radius:20px;background:linear-gradient(170deg,rgba(92,54,28,.96),rgba(38,22,12,.96));border:2px solid rgba(255,190,90,.6);box-shadow:0 14px 40px rgba(0,0,0,.55);text-align:center;font-size:15.5px;line-height:1.4;color:#fff;animation:pop .3s cubic-bezier(.3,1.5,.5,1)}
   #tut .st{font-size:11px;font-weight:900;letter-spacing:2px;color:#a6ff4d;margin-bottom:4px}
   #tut .tb{display:flex;gap:8px;margin-top:10px}
   #tut .tb .btn{flex:1;font-size:16px;padding:11px 10px;min-height:44px}
@@ -212,6 +212,7 @@ BI.trophy='<svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor"
   ];
   const TOTAL = LEVELS.length, MAX_LIVES = 3, FLY = 0.11;
   const THEMES = {
+    atolye: {name:'Atölye', need:0, img:'art/bg-df.webp', a:'#ff9a3c', b:'#ffd23f', bg:['#3a2618','#1c1614','#0b0c0f'], blobs:['#ff8a2a','#ffb347','#c8642d','#3fd0c0'], body:['#ece7df','#77767c','#bdb5aa'], idle:['#a39a8f','#4b484b','#857d73'], pal:['#ffb347','#ff6b35','#ffd23f','#3fd0c0','#e8a33a','#ff4f6b']},
     cham: {name:'Bukalemun', need:0, cham:true, a:'#2ee6c8', b:'#a6ff4d', bg:['#1f8a6a','#145a5a','#0a2a35'], blobs:['#5dff8a','#2ee6c8','#ffd23f','#ff8c42'], body:['#86d6c6','#3f8a8e','#73c0b8'], idle:['#62a8a2','#2f6670','#559896'], pal:['#a6ff4d','#2ee6c8','#ffd23f','#ff8c42','#ff4fd8','#38e1ff']},
     neon: {name:'Neon',  need:0,  a:'#38e1ff', b:'#ff4fd8', bg:['#4b2fb8','#2a1b7a','#160f45'], blobs:['#ff4fd8','#38e1ff','#7b5cff','#ffb347'], body:['#8a93d6','#4b4f9a','#7a83c8'], idle:['#6c72b4','#3c3f80','#5d63a6'], pal:['#38e1ff','#ff4fd8','#7dff6a','#ffc23d','#9b6bff','#ff6b6b']},
     gold: {name:'Altın', need:10, a:'#ffd166', b:'#ff8c42', bg:['#7a4a12','#4a2a0a','#2a1606'], blobs:['#ffd166','#ff8c42','#ff5e7e','#fff1b8'], body:['#d8a868','#8a5e2c','#c49456'], idle:['#a8804e','#6a4a26','#946e42'], pal:['#ffd166','#ff8c42','#fff1b8','#e8a33a','#ffb36b','#f7e08a']},
@@ -220,13 +221,15 @@ BI.trophy='<svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor"
   };
 
   // ================= KAYIT =================
-  let SAVE = {vol:1, lvl:0, stars:[], hi:0, theme:'cham', music:true, sfx:true, helper:true, vib:true};
+  let SAVE = {vol:1, lvl:0, stars:[], hi:0, theme:'atolye', music:true, sfx:true, helper:true, vib:true};
   try{ Object.assign(SAVE, JSON.parse(localStorage.getItem('disfirlat2')||'{}')); }catch(e){}
   const persist = () => { try{ localStorage.setItem('disfirlat2', JSON.stringify(SAVE)); }catch(e){} };
   window.__lbScore=()=>{let s=0;try{s=score}catch(e){}SAVE.best1=Math.max(SAVE.best1||0,s||0);return Math.max(SAVE.hi||0,SAVE.best1||0);};
   const totalStars = () => SAVE.stars.reduce((s,v)=>s+(v||0),0);
   if (!SAVE.chamV){ SAVE.theme='cham'; SAVE.chamV=1; }
-  let T = THEMES[SAVE.theme] || THEMES.cham;
+  if (!SAVE.atoV){ if (SAVE.theme==='cham') SAVE.theme='atolye'; SAVE.atoV=1; }
+  let T = THEMES[SAVE.theme] || THEMES.atolye;
+  const DFBG=new Image(); DFBG.onload=()=>{DFBG.ok=true}; DFBG.src='art/bg-df.webp';
   function applyTheme(){ document.documentElement.style.setProperty('--a', T.a); document.documentElement.style.setProperty('--b', T.b); }
   applyTheme();
 
@@ -1181,11 +1184,11 @@ BI.trophy='<svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor"
     const ag=x.createLinearGradient(0,-r*0.3,0,r*0.3); ag.addColorStop(0,shade(acc,0.35)); ag.addColorStop(1,shade(acc,-0.3));
     x.fillStyle=ag; x.beginPath(); x.arc(0,0,r*0.3,0,TAU); x.fill();
     const hg=x.createRadialGradient(-r*0.07,-r*0.08,0,0,0,r*0.245);
-    hg.addColorStop(0,'#ffffff'); hg.addColorStop(0.35,'#dff6f2'); hg.addColorStop(0.8,'#82aaa8'); hg.addColorStop(1,'#3e6a6c');
+    hg.addColorStop(0,'#ffffff'); hg.addColorStop(0.35,'#eceef0'); hg.addColorStop(0.8,'#9aa0a6'); hg.addColorStop(1,'#4a5058');
     x.fillStyle=hg; x.beginPath(); x.arc(0,0,r*0.245,0,TAU); x.fill();
     if (look!==2){
       x.beginPath(); for (let k=0;k<6;k++){ const a=k*TAU/6, hr=r*0.1; x[k?'lineTo':'moveTo'](Math.cos(a)*hr,Math.sin(a)*hr); } x.closePath();
-      const bg=x.createLinearGradient(0,-r*0.1,0,r*0.1); bg.addColorStop(0,'#5e8e8e'); bg.addColorStop(1,'#24494c');
+      const bg=x.createLinearGradient(0,-r*0.1,0,r*0.1); bg.addColorStop(0,'#7d848c'); bg.addColorStop(1,'#2e3338');
       x.fillStyle=bg; x.fill(); x.strokeStyle='rgba(255,255,255,.45)'; x.lineWidth=1; x.stroke();
     }
     x.strokeStyle='rgba(0,30,38,.45)'; x.lineWidth=1; x.beginPath(); x.arc(0,0,r-0.5,0,TAU); x.stroke();
@@ -1304,6 +1307,12 @@ BI.trophy='<svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor"
   function drawBg(){
     const g0 = fever>0 ? ['#ff9a2e','#e0447a','#7a2a7a'] : (T.cham ? chamBg(time) : T.bg);
     const bl = fever>0 ? ['#ffd23f','#ff4f8b','#ff9f1c','#ffffff'] : (T.cham ? chamBl(time) : T.blobs);
+    if (T.img && DFBG.ok && !(fever>0)){
+      const iw=DFBG.width, ih=DFBG.height, sc=Math.max(W/iw,H/ih)*1.03, dw=iw*sc, dh=ih*sc;
+      ctx.drawImage(DFBG,(W-dw)/2+Math.sin(time*0.15)*W*0.008,(H-dh)/2,dw,dh);
+      const ov=ctx.createRadialGradient(W/2,H*0.42,Math.min(W,H)*0.2,W/2,H*0.42,Math.max(W,H)*0.8); ov.addColorStop(0,'rgba(14,10,6,.30)'); ov.addColorStop(1,'rgba(8,6,4,.62)');
+      ctx.fillStyle=ov; ctx.fillRect(0,0,W,H);
+    } else {
     // düşük çözünürlüklü arka plan: degrade + aurora + bokeh + siluetler (ucuz, yumuşak)
     const bw=Math.max(40,Math.round(W/7)), bh=Math.max(40,Math.round(H/7));
     if (!bgc || bgc.width!==bw || bgc.height!==bh){ bgc=document.createElement('canvas'); bgc.width=bw; bgc.height=bh; bgx=bgc.getContext('2d'); }
@@ -1332,6 +1341,7 @@ BI.trophy='<svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor"
     const vg=x.createRadialGradient(bw/2,bh*0.45,m*0.35,bw/2,bh*0.45,M*0.8); vg.addColorStop(0,'rgba(0,20,30,0)'); vg.addColorStop(1,'rgba(0,20,30,.3)');
     x.fillStyle=vg; x.fillRect(0,0,bw,bh);
     ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='low'; ctx.drawImage(bgc,0,0,W,H);
+    }
     // yıldız tozları
     ctx.fillStyle='#ffffff';
     for (const s of stars){ ctx.globalAlpha=0.3+0.6*Math.sin(time*1.6+s.p)**2;
