@@ -90,6 +90,20 @@
   .g8{background:linear-gradient(150deg,#ff9a3c,#1b2b55 60%,#0b1020)}
   .g7{background:linear-gradient(150deg,#38e1ff,#6b2fd6 55%,#12082e)}
   .g6{background:linear-gradient(150deg,#e0a23a,#8a4b1f 55%,#3a1c0a)}
+  /* Poster-Karten im Hochformat (v56) */
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px 12px}
+  .grid .game{background:none;border:0;box-shadow:none;overflow:visible;padding:0;min-height:0;border-radius:0}
+  .grid .game::before{display:none}
+  .poster{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;border-radius:18px;border:3px solid rgba(255,255,255,.28);box-shadow:0 12px 28px rgba(0,0,0,.4);background:#0b2a30}
+  .grid .game h2{font-size:16px;margin-top:9px;max-width:none!important;line-height:1.15!important}
+  .grid .game h2 br{display:none}
+  .grid .game h2 span{font-size:inherit!important}
+  .grid .game h2 span::before{content:' '}
+  .grid .game p{max-width:none;margin-top:3px;font-size:12px;line-height:1.35;opacity:.85;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .grid .stat{margin-top:5px;font-size:12px}
+  .grid .play{position:static;display:inline-block;margin-top:8px;font-size:15px;padding:5px 16px;box-shadow:0 3px 0 #12301E}
+  .grid .new{position:static;display:inline-block;margin-left:6px;vertical-align:middle}
+  .grid .new:empty{display:none}
 </style>
 <script>
 window.HI={share:'<svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5.5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="18.5" r="2.6"/><path d="M8.3 10.8l7.4-4M8.3 13.2l7.4 4"/></svg>',
@@ -125,43 +139,43 @@ play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l1
   <div class="feat" id="feat"></div>
   <div class="grid">
     <a class="game g10" href="caycuma-defense.html" id="gcdef">
-      <img class="thumb" src="caycuma-defense/thumb.webp" alt="">
+      <img class="poster" src="thumbs/caycuma-defense.webp" alt="" width="600" height="800" decoding="async">
       <h2 style="max-width:62%;line-height:1">Çaycuma<br><span style="font-size:19px">DEFENSE</span></h2><p id="d10"></p><div class="stat" id="s10"></div><span class="play" id="p10">▶</span><span class="new" id="nw10"></span>
     </a>
     <a class="game g9" href="caycuma-run.html" id="gcrun">
-      <img class="art" src="caycuma-run/selim.webp" alt="" style="object-fit:contain;filter:drop-shadow(0 6px 10px #0008)">
+      <img class="poster" src="thumbs/caycuma-run.webp" alt="" width="600" height="800" decoding="async">
       <h2 style="max-width:58%;line-height:1">Çaycuma<br><span style="font-size:21px">RUN</span></h2><p id="d9"></p><div class="stat" id="s9"></div><span class="play" id="p9">▶</span><span class="new" id="nw9"></span>
     </a>
     <a class="game g8" href="musa.html" id="gmusa">
-      <img class="art" src="musa/musa_win.webp" alt="" style="object-fit:contain;filter:drop-shadow(0 6px 10px #0008)">
+      <img class="poster" src="thumbs/musa.webp" alt="" width="600" height="800" decoding="async">
       <h2 style="max-width:58%;line-height:1">MUSA<br><span style="font-size:17px">Çaycuma</span></h2><p id="d8"></p><div class="stat" id="s8"></div><span class="play" id="p8">▶</span><span class="new" id="nw8"></span>
     </a>
     <a class="game g7" href="mechablock.html" id="gmecha">
-      <svg class="art" viewBox="0 0 120 120"><g transform="translate(66 52)"><circle r="40" fill="none" stroke="#dfe3ff" stroke-width="7" stroke-dasharray="7 5"/><circle r="34" fill="#160f3a" stroke="#38e1ff" stroke-width="2"/><path d="M0 0V-30A30 30 0 0 1 26 -15z" fill="#38e1ff"/><path d="M0 0L26 -15A30 30 0 0 1 26 15z" fill="#ff3df2"/><path d="M0 0L26 15A30 30 0 0 1 0 30z" fill="#ffe14d"/><path d="M0 0L-26 15A30 30 0 0 1 -26 -15z" fill="#5dff7a" opacity=".85"/><circle r="10" fill="#2a1d55" stroke="#a6ff4d" stroke-width="2"/></g><path d="M66 100l-7 10h14z" fill="#ffe14d"/><rect x="58" y="108" width="16" height="10" rx="3" fill="#38e1ff"/></svg>
+      <img class="poster" src="thumbs/mechablock.webp" alt="" width="600" height="800" decoding="async">
       <h2>MechaBlock</h2><p id="d7"></p><div class="stat" id="s7"></div><span class="play" id="p7">▶</span><span class="new" id="nw7"></span>
     </a>
     <a class="game g5" href="zipzip/" id="gzip">
-      <svg class="art" viewBox="0 0 120 120"><circle cx="96" cy="22" r="10" fill="#fff6b0"/><rect x="0" y="98" width="120" height="22" fill="#8a5530"/><rect x="0" y="96" width="120" height="7" fill="#4fca45"/><g transform="translate(62 92)"><rect x="-9" y="-28" width="18" height="17" rx="6" fill="#4b5341"/><rect x="-6" y="-19" width="12" height="5" rx="2.5" fill="#3d4434"/><rect x="-7" y="-12" width="5" height="9" fill="#1c1c22" transform="rotate(20 -5 -12)"/><rect x="2" y="-12" width="5" height="9" fill="#1c1c22" transform="rotate(-25 4 -12)"/><circle cx="0" cy="-40" r="12" fill="#f3c9a2"/><path d="M-13-41q-1-13 9-15 9-3 15 2 4 4 2 10-3-3-8-3-9 0-18 6z" fill="#2b1d15"/><ellipse cx="3" cy="-39" rx="3" ry="4.5" fill="#fff"/><ellipse cx="9" cy="-39" rx="2.8" ry="4.3" fill="#fff"/><circle cx="4" cy="-38.5" r="1.8" fill="#3b2a1a"/><circle cx="10" cy="-38.5" r="1.7" fill="#3b2a1a"/><rect x="8" y="-26" width="14" height="7" rx="3.5" fill="#5ff0ff"/></g><circle cx="98" cy="62" r="5" fill="none" stroke="#dff" stroke-width="2"/><circle cx="110" cy="60" r="3.5" fill="none" stroke="#dff" stroke-width="2"/><path d="M8 96q0-16 12-16t12 16z" fill="#5ee36a"/><circle cx="16" cy="88" r="2.6" fill="#fff"/><circle cx="24" cy="88" r="2.6" fill="#fff"/><circle cx="15.5" cy="88.5" r="1.2" fill="#222"/><circle cx="23.5" cy="88.5" r="1.2" fill="#222"/></svg>
+      <img class="poster" src="thumbs/zipzip.webp" alt="" width="600" height="800" decoding="async">
       <h2 style="max-width:58%;line-height:1">Zıpzıp<br><span style="font-size:19px">Macerası</span></h2><p id="d5"></p><div class="stat" id="s5"></div><span class="play" id="p5">▶</span><span class="new" id="nw5"></span>
     </a>
     <a class="game g4" href="1453/" id="g1453">
-      <img class="thumb" src="1453/art/thumb.jpg" alt="">
+      <img class="poster" src="thumbs/1453.webp" alt="" width="600" height="800" decoding="async">
       <h2 style="max-width:58%;line-height:1">1453<br><span style="font-size:19px">Surları Yık!</span></h2><p id="d4"></p><div class="stat" id="s4"></div><span class="play" id="p4">▶</span><span class="new" id="nw4"></span>
     </a>
     <a class="game g1" href="disfirlat.html">
-      <svg class="art" viewBox="0 0 120 120"><g fill="none" stroke="#fff" stroke-width="6" opacity=".9"><circle cx="70" cy="50" r="28"/><circle cx="70" cy="50" r="8" fill="#fff"/></g><g fill="#ffd23f"><rect x="64" y="12" width="12" height="12" rx="3"/><rect x="100" y="44" width="12" height="12" rx="3"/><rect x="64" y="76" width="12" height="12" rx="3"/><rect x="28" y="44" width="12" height="12" rx="3"/></g><circle cx="34" cy="100" r="16" fill="none" stroke="#a6ff4d" stroke-width="5"/></svg>
+      <img class="poster" src="thumbs/dis-firlat.webp" alt="" width="600" height="800" decoding="async">
       <h2>Diş Fırlat</h2><p id="d1"></p><div class="stat" id="s1"></div><span class="play" id="p1">▶</span>
     </a>
     <a class="game g2" href="blok.html">
-      <svg class="art" viewBox="0 0 120 120"><g stroke="#fff" stroke-width="2"><rect x="56" y="14" width="22" height="22" rx="5" fill="#38e1ff"/><rect x="78" y="14" width="22" height="22" rx="5" fill="#38e1ff"/><rect x="78" y="36" width="22" height="22" rx="5" fill="#ffd23f"/><rect x="78" y="58" width="22" height="22" rx="5" fill="#ffd23f"/><rect x="34" y="58" width="22" height="22" rx="5" fill="#ff4f6d"/><rect x="56" y="58" width="22" height="22" rx="5" fill="#5dff8a"/><rect x="34" y="80" width="22" height="22" rx="5" fill="#b26bff"/><rect x="56" y="80" width="22" height="22" rx="5" fill="#b26bff"/></g></svg>
+      <img class="poster" src="thumbs/neon-blok.webp" alt="" width="600" height="800" decoding="async">
       <h2>Neon Blok</h2><p id="d2"></p><div class="stat" id="s2"></div><span class="play" id="p2">▶</span>
     </a>
     <a class="game g3" href="batak.html">
-      <svg class="art" viewBox="0 0 120 120"><g transform="rotate(-14 60 60)"><rect x="30" y="22" width="44" height="62" rx="7" fill="#fffaf0" stroke="#d8c49a" stroke-width="2"/><text x="40" y="44" font-size="16" font-weight="900" fill="#1e1a5a" font-family="Georgia">A</text><text x="46" y="74" font-size="28" fill="#1e1a5a">♠</text></g><g transform="rotate(12 60 60)"><rect x="52" y="28" width="44" height="62" rx="7" fill="#fffaf0" stroke="#d8c49a" stroke-width="2"/><text x="62" y="50" font-size="16" font-weight="900" fill="#ff2d55" font-family="Georgia">K</text><text x="66" y="80" font-size="28" fill="#ff2d55">♥</text></g><path d="M24 100 q6 -10 0 -20 M34 100 q6 -10 0 -20" stroke="#fff" stroke-width="3" fill="none" opacity=".5"/></svg>
+      <img class="poster" src="thumbs/neon-batak.webp" alt="" width="600" height="800" decoding="async">
       <h2>Neon Batak</h2><p id="d3"></p><div class="stat" id="s3"></div><span class="play" id="p3">▶</span>
     </a>
     <a class="game g6" href="tavla.html">
-      <svg class="art" viewBox="0 0 120 120"><rect x="14" y="20" width="96" height="80" rx="8" fill="#6b3a1d" stroke="#ffd28a" stroke-width="3"/><g fill="#ffe7b0"><path d="M20 26 l8 34 l8 -34z"/><path d="M52 26 l8 34 l8 -34z"/><path d="M36 94 l8 -34 l8 34z"/><path d="M68 94 l8 -34 l8 34z"/></g><g fill="#c8462d"><path d="M36 26 l8 34 l8 -34z"/><path d="M84 26 l8 34 l8 -34z"/><path d="M20 94 l8 -34 l8 34z"/><path d="M84 94 l8 -34 l8 34z"/></g><circle cx="44" cy="86" r="7" fill="#fff8e6" stroke="#b08a50" stroke-width="2"/><circle cx="76" cy="34" r="7" fill="#2a160b" stroke="#ffd28a" stroke-width="2"/><rect x="58" y="64" width="18" height="18" rx="4" fill="#fff" transform="rotate(14 67 73)"/><circle cx="64" cy="70" r="2" fill="#c8462d"/><circle cx="70" cy="76" r="2" fill="#c8462d"/></svg>
+      <img class="poster" src="thumbs/tavla.webp" alt="" width="600" height="800" decoding="async">
       <h2>Tavla</h2><p id="d6"></p><div class="stat" id="s6"></div><span class="play" id="p6">▶</span><span class="new" id="nw6"></span>
     </a>
   </div>
