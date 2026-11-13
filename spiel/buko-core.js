@@ -3,8 +3,9 @@
 (function(){
   const KEY='bukoCore';
   const today=()=>{ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); };
-  let D={coins:0, day:'', tasks:[], played:[], ach:{}, owned:{back_classic:1, skin_gem:1}, sel:{back:'classic', skin:'gem'}, total:0};
+  let D={coins:0, day:'', tasks:[], played:[], ach:{}, owned:{back_classic:1, skin_gem:1, skin_neon:1}, sel:{back:'classic', skin:'neon'}, total:0};
   try{ Object.assign(D, JSON.parse(localStorage.getItem(KEY)||'{}')); }catch(e){}
+  if (!D.neonV){ D.owned=D.owned||{}; D.owned.skin_neon=1; D.sel=D.sel||{}; if (!D.sel.skin||D.sel.skin==='gem') D.sel.skin='neon'; D.neonV=1; }
   const save=()=>{ try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){} };
   const lang=()=>{ try{ const l=(JSON.parse(localStorage.getItem('disfirlat2')||'{}').lang)||(navigator.language||'tr').slice(0,2); return ['tr','de','en'].includes(l)?l:'en'; }catch(e){ return 'tr'; } };
 
@@ -32,6 +33,7 @@
     {id:'back_nazar',   type:'back', price:150, tr:'Nazar boncuğu', de:'Nazar-Auge',         en:'Evil eye'},
     {id:'back_neon',    type:'back', price:200, tr:'Neon',          de:'Neon',               en:'Neon'},
     {id:'back_gold',    type:'back', price:300, tr:'Altın lale',    de:'Goldene Tulpe',      en:'Golden tulip'},
+    {id:'skin_neon',    type:'skin', price:0,   tr:'Neon',          de:'Neon',               en:'Neon'},
     {id:'skin_gem',     type:'skin', price:0,   tr:'Değerli taş',   de:'Edelstein',          en:'Gem'},
     {id:'skin_candy',   type:'skin', price:150, tr:'Şeker',         de:'Bonbon',             en:'Candy'},
     {id:'skin_pixel',   type:'skin', price:200, tr:'Piksel',        de:'Pixel',              en:'Pixel'},

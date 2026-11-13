@@ -1152,6 +1152,7 @@ window.__lbScore=()=>SAVE.wins||0;
       g.strokeStyle='#8a8f9a'; g.lineWidth=2; g.beginPath(); g.moveTo(tx+14,ty-16); g.quadraticCurveTo(tx+24,ty-20,tx+26,ty-28); g.stroke();
     }
     // masa gölgesi + ahşap kenar
+    { const am=g.createRadialGradient(W/2,cy-ry*0.6,0,W/2,cy-ry*0.6,Math.max(W,H)*0.75); am.addColorStop(0,'rgba(170,70,255,.22)'); am.addColorStop(.6,'rgba(90,30,160,.12)'); am.addColorStop(1,'rgba(20,6,40,.35)'); g.fillStyle=am; g.fillRect(0,0,W,H); }
     g.fillStyle='rgba(0,0,0,.5)'; g.beginPath(); g.ellipse(cx,cy+ry*0.1+8,rx+22,ry+20,0,0,7); g.fill();
     const wood=g.createLinearGradient(0,cy-ry-16,0,cy+ry+16); wood.addColorStop(0,'#9a6434'); wood.addColorStop(.5,'#6a3f1c'); wood.addColorStop(1,'#3a2010');
     g.fillStyle=wood; g.beginPath(); g.ellipse(cx,cy,rx+16,ry+16,0,0,7); g.fill();
@@ -1160,8 +1161,11 @@ window.__lbScore=()=>SAVE.wins||0;
     g.restore();
     g.strokeStyle='rgba(255,226,170,.45)'; g.lineWidth=1.5; g.beginPath(); g.ellipse(cx,cy,rx+14,ry+14,0,Math.PI*1.08,Math.PI*1.92); g.stroke();
     g.strokeStyle='#c8963a'; g.lineWidth=2.2; g.beginPath(); g.ellipse(cx,cy,rx+1,ry+1,0,0,7); g.stroke();
+    // Neon-Rand (Cover-Stil)
+    g.save(); g.shadowColor='#ff3df2'; g.shadowBlur=18; g.strokeStyle='rgba(255,90,240,.9)'; g.lineWidth=2.6; g.beginPath(); g.ellipse(cx,cy,rx-4,ry-4,0,0,7); g.stroke();
+    g.shadowColor='#38e1ff'; g.strokeStyle='rgba(120,230,255,.75)'; g.lineWidth=1.4; g.beginPath(); g.ellipse(cx,cy,rx-8,ry-8,0,0,7); g.stroke(); g.restore();
     // çuha (keçe)
-    const felt=g.createRadialGradient(cx,cy-ry*0.35,0,cx,cy,Math.max(rx,ry)); felt.addColorStop(0,'#2f8a56'); felt.addColorStop(.6,'#1b6a40'); felt.addColorStop(1,'#0c3a22');
+    const felt=g.createRadialGradient(cx,cy-ry*0.35,0,cx,cy,Math.max(rx,ry)); felt.addColorStop(0,'#4a3496'); felt.addColorStop(.6,'#2c1d6a'); felt.addColorStop(1,'#130b36');
     g.fillStyle=felt; g.beginPath(); g.ellipse(cx,cy,rx,ry,0,0,7); g.fill();
     g.save(); g.beginPath(); g.ellipse(cx,cy,rx,ry,0,0,7); g.clip();
     for (let i=0;i<rx*ry/6;i++){ g.fillStyle=R()<.5?'rgba(255,255,255,.035)':'rgba(0,0,0,.06)'; g.fillRect(cx-rx+R()*rx*2, cy-ry+R()*ry*2, 1, 1); }
