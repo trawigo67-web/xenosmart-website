@@ -50,7 +50,9 @@
    "purity": 0.916,
    "grup": 1,
    "baz": "ceyrek",
-   "kat": 10
+   "kat": 10,
+   "foto": "urun/gremse.png?v=1794564789603",
+   "fotoTip": "kesik"
   },
   {
    "id": "rceyrek",
