@@ -123,13 +123,31 @@ play:'<svg class="bi" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l1
   .cc .pn{font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .cc .ps{margin-left:auto;font-weight:800;color:#ffe27a;font-variant-numeric:tabular-nums}
 </style>
+<style>
+  /* v58 Cover-Stil: Key-Art-Hintergrund, Goldlogo, Rahmen, warme Panels */
+  body{background:#160f2c}
+  #bg{animation:none;background:linear-gradient(180deg,rgba(22,15,44,.15) 0,rgba(22,15,44,.35) 30vh,rgba(22,15,44,.92) 62vh,#160f2c 80vh),url(art/bg-hero.webp) center top/cover no-repeat,#160f2c}
+  #bg::after{background:radial-gradient(ellipse at 50% 26%,rgba(0,0,0,.42),transparent 58%),radial-gradient(circle at 50% 100%,rgba(120,60,200,.35),transparent 60%)}
+  @media (min-aspect-ratio:4/3){#bg{background-size:auto,100% auto,auto}}
+  @media (max-aspect-ratio:1/1){#bg{background-position:center top,18% top,center}}
+  h1.bklogo .b{position:relative;color:#3a1600;-webkit-text-stroke:clamp(9px,2vw,13px) #3a1600;paint-order:stroke fill;text-shadow:0 4px 0 #3a1600,0 7px 0 #2a0f00,0 12px 18px rgba(0,0,0,.55)}
+  h1.bklogo .b::after{content:attr(data-t);position:absolute;left:0;top:0;right:0;color:transparent;-webkit-text-stroke:0;text-shadow:none;background:linear-gradient(180deg,#fff6b8 0%,#ffd84a 38%,#ffab1f 62%,#e8780c 100%);-webkit-background-clip:text;background-clip:text;letter-spacing:inherit}
+  h1.bklogo .g{background:linear-gradient(180deg,#8ff06a,#3fae3a);color:#fff;-webkit-text-stroke:3px #12301E;paint-order:stroke fill;border-color:#12301E}
+  .tag{text-shadow:0 2px 6px rgba(0,0,0,.8);font-weight:700}
+  .poster{border:3px solid #ffd45a;box-shadow:0 0 0 2px #5a2a00,0 10px 0 -2px rgba(90,42,0,.55),0 16px 30px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.4)}
+  .grid .game:hover .poster,.grid .game:active .poster{box-shadow:0 0 0 2px #5a2a00,0 0 22px rgba(255,200,60,.65),0 16px 30px rgba(0,0,0,.5)}
+  .grid .game h2{font-family:'Lilita One','Bricolage Grotesque',system-ui,sans-serif;font-weight:400;letter-spacing:.5px;color:#ffe066;-webkit-text-stroke:3px #3a1600;paint-order:stroke fill;text-shadow:0 2px 0 #3a1600}
+  .panel,.champs{background:linear-gradient(180deg,rgba(78,40,120,.78),rgba(30,18,58,.9));border:2px solid rgba(255,212,90,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 12px 30px rgba(0,0,0,.35)}
+  .panel h3,.champs h3{font-family:'Lilita One','Bricolage Grotesque',system-ui,sans-serif;font-weight:400;letter-spacing:.5px;color:#ffd84a;-webkit-text-stroke:3px #3a1600;paint-order:stroke fill;font-size:22px}
+  .item,.cc{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.06));border:1px solid rgba(255,212,90,.35)}
+</style>
 </head>
 <body>
 <div id="bg"></div>
 <div class="wrap">
   <header>
     <img class="logo" src="buko.webp" alt="Buko">
-    <h1 class="bklogo" aria-label="Buko Games"><span class="b">BUKO</span><span class="g">GAMES</span></h1>
+    <h1 class="bklogo" aria-label="Buko Games"><span class="b" data-t="BUKO">BUKO</span><span class="g">GAMES</span></h1>
     <div class="tag" id="tag"></div>
     <div class="langs" id="langs"></div>
     <div class="coins" id="coins">🪙 0</div>

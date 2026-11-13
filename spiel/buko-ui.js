@@ -60,8 +60,22 @@
     '@media (min-width:700px) and (min-height:500px){#top .lft>.bk-candy{min-width:48px!important;min-height:44px!important}}',
     '@media (min-width:700px) and (min-height:500px){#bkSheet{align-items:center}#bkSheet .pn{border-radius:26px;border-bottom:3px solid #12301E;padding-bottom:20px}}',
     'body[data-device=tablet] .bk-candy.bk-sq{min-width:48px!important;min-height:48px!important}',
-    'body[data-device=tablet] .bk-candy.bk-sq>svg.bk-ic{width:28px;height:28px}'
+    'body[data-device=tablet] .bk-candy.bk-sq>svg.bk-ic{width:28px;height:28px}',
+    '.bk-candy[style*="display: none"],.bk-candy[style*="display:none"]{display:none!important}'
   ].join('\n');
+  /* v58 Cover-Stil: illustrierte Menue-Hintergruende + Goldtitel */
+  (function(){
+    var f=(location.pathname.match(/([^\/]+)\.html$/)||[])[1]||'';
+    var M={disfirlat:['#card','df','rgba(18,78,76,.74)','rgba(8,30,38,.86)'],blok:['#card','blok','rgba(58,24,104,.72)','rgba(16,8,40,.86)'],batak:['#card2','batak','rgba(96,52,24,.80)','rgba(36,18,8,.90)'],tavla:['#card2','tavla','rgba(96,52,24,.80)','rgba(36,18,8,.90)'],mechablock:['#oStart','mecha']};
+    var m=M[f]; if(!m) return;
+    var S=m[0], u=base+'art/bg-'+m[1]+'.webp';
+    var dk=m[2]?'rgba(10,6,24,.18),rgba(10,6,24,.5)':'rgba(5,4,14,.62),rgba(5,4,14,.8)';
+    css+='\n'+S+'{background:linear-gradient(180deg,'+dk+'),url('+u+') center/cover no-repeat,#120a24!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}';
+    if(m[2]){
+      css+='\n'+S+' .box{background:linear-gradient(180deg,'+m[2]+','+m[3]+')!important;border:2px solid rgba(255,212,90,.62)!important;box-shadow:0 0 0 2px rgba(58,22,0,.55),0 22px 50px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.28)!important;-webkit-backdrop-filter:blur(6px)!important;backdrop-filter:blur(6px)!important}';
+      css+='\n'+S+' .box h1{font-family:"Lilita One",system-ui,sans-serif!important;font-weight:400!important;letter-spacing:1px;background:none!important;color:#ffd84a!important;-webkit-text-fill-color:#ffd84a!important;-webkit-text-stroke:6px #3a1600;paint-order:stroke fill;text-shadow:0 4px 0 #3a1600,0 8px 16px rgba(0,0,0,.55)!important;filter:none!important}';
+    }
+  })();
   var st=document.createElement('style'); st.id='bukoUI'; st.textContent=css; (document.head||document.documentElement).appendChild(st);
 
   var P='fill="none" stroke="currentColor" stroke-width="2.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';

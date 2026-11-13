@@ -1,5 +1,5 @@
 {
- "v": "buko-v57",
+ "v": "buko-v58",
  "files": [
   "./",
   "1453/",
@@ -18,6 +18,12 @@
   "1453/index.html",
   "1453/lb.js",
   "1453/vendor/matter.min.js",
+  "art/bg-batak.webp",
+  "art/bg-blok.webp",
+  "art/bg-df.webp",
+  "art/bg-hero.webp",
+  "art/bg-mecha.webp",
+  "art/bg-tavla.webp",
   "batak.html",
   "blok.html",
   "buko-core.js",
