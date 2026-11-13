@@ -186,6 +186,10 @@ body{min-height:100vh}
 .zband.b{height:calc(14px + env(safe-area-inset-bottom));border-bottom:0;border-top:2px solid var(--zline);margin-top:26px}
 .waves,.wv{display:none!important}
 img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px auto 2px}
+
+/* iPad (A16, 820×1180) ve diğer tabletler: aynı düzen, büyütülmüş */
+@media (min-width:768px) and (pointer:coarse){.wrap,.sheet .in,.bar .in2,.fab,.modal .box,.toast{zoom:1.2}}
+@media (min-width:1024px) and (pointer:coarse){.wrap,.sheet .in,.bar .in2,.fab,.modal .box,.toast{zoom:1.4}}
 </style>
 </head>
 <body>

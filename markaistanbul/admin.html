@@ -121,6 +121,10 @@ img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px au
 .frm button{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:20px;padding:8px 12px;font:inherit;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
 .frm button i{width:14px;height:14px;border-radius:50%;border:1px solid #cdbfa8;display:inline-block}
 .frm button.on{border-color:var(--cop);color:var(--cop2);background:#fff6ec}
+
+/* iPad (A16, 820×1180) ve diğer tabletler: aynı düzen, büyütülmüş */
+@media (min-width:768px) and (pointer:coarse){.wrap,.fbox,.toast{zoom:1.2}}
+@media (min-width:1024px) and (pointer:coarse){.wrap,.fbox,.toast{zoom:1.35}}
 </style>
 </head>
 <body>
