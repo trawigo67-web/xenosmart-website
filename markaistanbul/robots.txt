@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /siparis
+Disallow: /pano
+Disallow: /api/
+Sitemap: https://marka22.de/sitemap.xml
