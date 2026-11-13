@@ -388,7 +388,7 @@ const ONAYCI = ["Yunus Emre Bilgin (YEB)","Yunus Özkan (YÖ)"];
 let ROLE = "a"; try{ ROLE = localStorage.getItem("mi_sp_role") || "a"; }catch(e){}
 const isAdmin = () => ROLE !== "e";
 const ODEME = ["Nakit","Kart","Havale","Altın"];
-let db=null, user=null, assets=null, shop="22", orders={"22":[], "14":[]}, settings={toptanci:[],personel:["Yunus Emre Bilgin (YEB)","Yunus Özkan (YÖ)"],imza:"Marka Istanbul · Keupstraße 67, Köln · 0221 80039255"};
+let db=null, user=null, assets=null, shop="22", orders={"22":[], "14":[]}, settings={toptanci:[],personel:["Yunus Emre Bilgin (YEB)","Yunus Özkan (YÖ)"],imza:"Marka Istanbul · Keupstraße 52-54, Köln · 0221 80039255"};
 let filter="aktif", editing=null, formState={}, unsub={}, canWrite=true;
 
 function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("on"),2600); }
