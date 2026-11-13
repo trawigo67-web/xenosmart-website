@@ -23,9 +23,9 @@ body{font-family:Inter,system-ui,sans-serif;color:#1d1d1f;-webkit-font-smoothing
 .list{position:absolute;left:190px;right:190px;top:610px}
 .r{display:grid;grid-template-columns:1fr 3px 1fr;align-items:center;height:103px;border-bottom:2px solid #d9bd72}
 .r.end{border-bottom:2.5px solid #1d1d1f}
-.r .n{font-size:38px;letter-spacing:7px;padding-left:24px;font-weight:500}
+.r .n{font-size:38px;letter-spacing:7px;padding-left:24px;font-weight:500;white-space:nowrap;overflow:hidden}
 .r .b{width:3px;height:46px;background:#b8913a;justify-self:center}
-.r .v{text-align:right;font-size:44px;letter-spacing:3px;padding-right:34px;font-variant-numeric:tabular-nums}
+.r .v{white-space:nowrap;text-align:right;font-size:44px;letter-spacing:3px;padding-right:34px;font-variant-numeric:tabular-nums}
 .orn{display:flex;align-items:center;justify-content:center;margin-top:0}
 .orn i{display:block;height:2px;background:#b8913a}
 .orn b{display:block;width:20px;height:20px;background:#b8913a;transform:rotate(45deg);margin:0 2px}
@@ -64,13 +64,29 @@ async function spot(cfg){
     const end = rows[i+1] && rows[i+1].grp!==r.grp;
     return `<div class="r${end?" end":""}"><div class="n">${r.n.toLocaleUpperCase("tr-TR")}</div><div class="b"></div><div class="v">${Math.floor(r.v)} €</div></div>`;
   }).join("") + `<div class="orn" style="margin-top:-11px"><i style="width:44%"></i><b></b><i style="width:44%"></i></div>`;
-  // Listenhöhe anpassen, falls mehr/weniger Zeilen
-  const h = Math.min(103, Math.floor(1060/rows.length));
-  document.querySelectorAll(".r").forEach(e=>e.style.height=h+"px");
+  window.__fit = ()=>{
+    // Satır yüksekliği: liste, alttaki yazının (foot) üstünde bitmeli – üst üste binme olmasın
+    const pr = document.getElementById("pano").getBoundingClientRect();
+    const footTop = document.querySelector(".foot").getBoundingClientRect().top - pr.top;
+    // Tarih ve tema yazısı logonun altında, liste tarihin altında başlar
+    const dateEl = document.getElementById("date"), listEl = document.getElementById("list");
+    const top = Math.max(610, Math.ceil(dateEl.getBoundingClientRect().bottom - pr.top) + 28);
+    listEl.style.top = top + "px";
+    const h = Math.max(40, Math.min(103, Math.floor((footTop - 44 - top - 20) / rows.length)));
+    const k = Math.min(1, h/72);
+    document.querySelectorAll(".r").forEach(e=>{ e.style.height = h+"px";
+      const n = e.querySelector(".n"), v = e.querySelector(".v");
+      n.style.fontSize = (38*k)+"px"; v.style.fontSize = (44*k)+"px"; e.querySelector(".b").style.height = Math.round(46*k)+"px";
+      // Uzun isim tek satırda kalsın: sığana kadar küçült
+      let fs = 38*k, ls = 7; while (n.scrollWidth > n.clientWidth && fs > 18){ fs -= 1; ls = Math.max(1, ls-.4); n.style.fontSize = fs+"px"; n.style.letterSpacing = ls+"px"; }
+    });
+  };
   document.getElementById("date").textContent = new Date().toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/Berlin"});
   if (window.ZTema){ ZTema.apply(cfg.tema||"zen",{statik:true, panoStyle:"position:absolute;left:0;right:0;top:455px;font-size:38px;gap:18px"});
     const t=ZTema.TEMALAR[ZTema.get()]; document.querySelectorAll(".band").forEach(b=>{b.style.background=t.band;b.style.borderColor=t.line;}); document.querySelector(".date").style.color=t.acc==="#b8913a"?"":t.acc; }
   await document.fonts.ready;
+  await Promise.all([...document.images].map(i=>i.complete ? 0 : new Promise(r=>{ i.onload = i.onerror = r; })));
+  window.__fit();
   document.body.dataset.ready = "1";
 })();
 </script>
