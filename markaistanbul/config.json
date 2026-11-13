@@ -11,9 +11,7 @@
    "gram": 1.75,
    "purity": 0.916,
    "satisMilyem": 960,
-   "grup": 1,
-   "foto": "urun/ceyrek.png?v=1794606888342",
-   "fotoTip": "kesik"
+   "grup": 1
   },
   {
    "id": "yarim",
@@ -24,9 +22,7 @@
    "purity": 0.916,
    "grup": 1,
    "baz": "ceyrek",
-   "kat": 2,
-   "foto": "urun/yarim.png?v=1794606902697",
-   "fotoTip": "kesik"
+   "kat": 2
   },
   {
    "id": "tam",
@@ -37,9 +33,7 @@
    "purity": 0.916,
    "grup": 1,
    "baz": "ceyrek",
-   "kat": 4,
-   "foto": "urun/tam.png?v=1794606913506",
-   "fotoTip": "kesik"
+   "kat": 4
   },
   {
    "id": "gremse",
@@ -50,9 +44,7 @@
    "purity": 0.916,
    "grup": 1,
    "baz": "ceyrek",
-   "kat": 10,
-   "foto": "urun/gremse.png?v=1794606926722",
-   "fotoTip": "kesik"
+   "kat": 10
   },
   {
    "id": "rceyrek",
@@ -127,7 +119,7 @@
    "purity": 0.916,
    "satisMilyem": 975,
    "grup": 3,
-   "foto": "urun/ajda.jpg?v=1794607084779",
+   "foto": "urun/ajda.jpg?v=1794607351454",
    "fotoTip": "kare"
   }
  ],
