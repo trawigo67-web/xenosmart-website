@@ -1,4 +1,4 @@
-const V = "ceyrekmatik-v31";
+const V = "ceyrekmatik-v32";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "icon-maskable.png", "logo.png", "lockup.png", "kapak-siyah.jpg", "kapak-beyaz.jpg", "kapak-noel.jpg", "kapak-yilbasi.jpg", "kapak-sevgililer.jpg", "kapak-ramazan.jpg", "tema.js", "config.json", "price.json", "impressum.html", "fonts/fonts.css", "urun/ziynet.webp", "urun/resat.webp", "urun/burma.webp", "urun/ajda.webp"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(V).then(c => c.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k))))); self.clients.claim(); });
