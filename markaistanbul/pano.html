@@ -70,7 +70,7 @@ async function spot(cfg){
     const footTop = document.querySelector(".foot").getBoundingClientRect().top - pr.top;
     // Tarih ve tema yazısı logonun altında, liste tarihin altında başlar
     const dateEl = document.getElementById("date"), listEl = document.getElementById("list");
-    const top = Math.max(610, Math.ceil(dateEl.getBoundingClientRect().bottom - pr.top) + 28);
+    const top = Math.max(document.querySelector(".logo.zkapak") ? 0 : 610, Math.ceil(dateEl.getBoundingClientRect().bottom - pr.top) + 28);
     listEl.style.top = top + "px";
     const h = Math.max(40, Math.min(103, Math.floor((footTop - 44 - top - 20) / rows.length)));
     const k = Math.min(1, h/72);

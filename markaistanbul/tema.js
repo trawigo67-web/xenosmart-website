@@ -14,6 +14,29 @@
     ramazan:    { ad: "Ramazan",         ikon: "🌙", band: "#0d2a2c", line: "#d8b65a", acc: "#1f6f68", bg: ["#fffdf6", "#f6f2e2", "#e6e6d4"],
                   selam: { tr: "Hayırlı Ramazanlar", de: "Gesegneter Ramadan", en: "Ramadan Kareem" }, fx: "yildiz", dek: "🌙" },
   };
+  // Konsept temaları: kendi kapak görseli (kapak) ile gelir; koyu:true olanlar müşteri sayfasını ve günlük görseli koyu zemine çevirir
+  Object.assign(TEMALAR, {
+    siyah: { ad: "Siyah & Altın konsept", ikon: "🖤", band: "#0c0c0d", line: "#c9a647", acc: "#d8b65a", bg: ["#1d1e21", "#141416", "#0c0c0d"], selam: null, fx: null, kapak: "kapak-siyah.jpg", koyu: true },
+    beyaz: { ad: "Beyaz konsept",         ikon: "🤍", band: "#f4f5f4", line: "#c9a647", acc: "#b8913a", bg: ["#fcfdfc", "#f6f7f6", "#eff0ef"], selam: null, fx: null, kapak: "kapak-beyaz.jpg" },
+  });
+  const KAPAK_CSS = `
+img.zlock.zkapak{width:100%!important;max-width:none!important;border-radius:14px;margin:8px auto 4px!important}
+#pano .logo.zkapak{left:0!important;top:75px!important;transform:none!important;width:1080px!important;-webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent);mask-image:linear-gradient(to bottom,#000 80%,transparent)}
+#pano:has(.logo.zkapak) .date{top:440px}`;
+  const koyuCss = (n) => { const p = `html[data-tema="${n}"]`; return `
+${p}{--bg:#121213;--card:#1a1a1c;--card2:#222225;--line:#4d4123;--cop:#d1ad55;--cop2:#e6c86e;--cop3:#6a5a2c;--copbg:#1f1c14;--text:#f3ead2;--muted:#a79c82;--navy:#f3ead2;color-scheme:dark}
+${p} body:has(.plist){color:#f3ead2}
+${p} body:has(.plist) .lang,${p} body:has(.plist) .tabs button,${p} body:has(.plist) .install,${p} body:has(.plist) .cta .tel,${p} body:has(.plist) .cta .dm{background:#1a1a1c}
+${p} body:has(.plist) .install{color:#f3ead2}
+${p} body:has(.plist) .tabs button.on,${p} body:has(.plist) .lang button.on{background:var(--grad);color:#141416}
+${p} body:has(.plist) .btn:not(.ghost),${p} body:has(.plist) .install button:not(.x){color:#141416}
+${p} body:has(.plist) .prow.gend{border-bottom-color:#d1ad55}
+${p} body:has(.plist) .prow img.pic.ph{background:#1a1a1c}
+${p} #pano{color:#f3ead2}
+${p} #pano .r{border-bottom-color:#6a5a2c}
+${p} #pano .r.end{border-bottom-color:#d1ad55}
+${p} #pano .r .b,${p} #pano .orn i,${p} #pano .orn b,${p} #pano .foot .o2 i,${p} #pano .foot .o2 b{background:#d1ad55}
+${p} #pano .addr{color:#a79c82}`; };
   const FX = { kar: ["❄", "❅", "❆"], isilti: ["✦", "✧", "·"], cicek: ["🌸", "🌼", "🌷"], kalp: ["♥", "❤", "♡"], yildiz: ["✦", "☆", "✧"] };
   let cur = "zen", lang = "tr", statik = false;
 
@@ -21,7 +44,8 @@
     return `
 :root{--zband:${t.band};--zline:${t.line};--zacc:${t.acc}}
 html{background:${t.band}!important}
-body{background:radial-gradient(120% 70% at 50% 35%,${t.bg[0]} 0%,${t.bg[1]} 70%,${t.bg[2]} 100%) fixed!important}
+${t.koyu ? "body:has(.plist)" : "body"}{background:radial-gradient(120% 70% at 50% 35%,${t.bg[0]} 0%,${t.bg[1]} 70%,${t.bg[2]} 100%) fixed!important}
+${t.kapak ? `#pano{background:radial-gradient(120% 70% at 50% 40%,${t.bg[0]} 0%,${t.bg[1]} 70%,${t.bg[2]} 100%)!important}` + KAPAK_CSS : ""}${t.koyu ? koyuCss(cur) : ""}
 
 .zselam{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px auto 4px;font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:17px;letter-spacing:.5px;color:${t.acc};text-align:center}
 .zselam i{display:block;height:1px;width:34px;background:${t.line}}
@@ -46,6 +70,13 @@ body{background:radial-gradient(120% 70% at 50% 35%,${t.bg[0]} 0%,${t.bg[1]} 70%
     document.documentElement.dataset.tema = cur;
     ensure("zTemaCss", "style").textContent = cur === "zen" ? "" : css(t);
     const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = t.band;
+    // Kapak görseli: konsept temalarında logo yerine konsept görseli; diğerlerinde asıl logo geri gelir
+    document.querySelectorAll("img.zlock, img.logo").forEach((img) => {
+      if (!img.dataset.asil) img.dataset.asil = img.getAttribute("src");
+      const src = t.kapak || img.dataset.asil;
+      if (img.getAttribute("src") !== src) img.setAttribute("src", src);
+      img.classList.toggle("zkapak", !!t.kapak);
+    });
     // Gruß unter dem Logo
     document.querySelectorAll(".zselam").forEach((e) => e.remove());
     if (t.selam) {
