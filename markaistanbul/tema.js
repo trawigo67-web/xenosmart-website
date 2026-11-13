@@ -26,6 +26,8 @@
   Object.assign(TEMALAR.ramazan,    { kapak: "kapak-ramazan.jpg",    koyu: true, acc: "#e6c86e", bg: ["#103238", "#071f28", "#04121a"] });
   const KAPAK_CSS = `
 img.zlock.zkapak{width:100%!important;max-width:none!important;border-radius:14px;margin:8px auto 4px!important}
+body:has(.plist) .topbar{position:relative;z-index:3}
+body:has(.plist) img.zlock.zkapak{width:calc(100% + 40px)!important;margin:-46px -20px 2px!important;border-radius:0;position:relative;z-index:0;-webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent);mask-image:linear-gradient(to bottom,#000 70%,transparent)}
 #pano .logo.zkapak{left:0!important;top:75px!important;transform:none!important;width:1080px!important;-webkit-mask-image:linear-gradient(to bottom,#000 80%,transparent);mask-image:linear-gradient(to bottom,#000 80%,transparent)}`;
   const koyuCss = (n) => { const p = `html[data-tema="${n}"]`; return `
 ${p}{--bg:#121213;--card:rgba(0,0,0,.28);--card2:rgba(0,0,0,.38);--line:rgba(209,173,85,.38);--cop:#d1ad55;--cop2:#e6c86e;--cop3:rgba(209,173,85,.45);--copbg:rgba(0,0,0,.3);--text:#f3ead2;--muted:#a79c82;--navy:#f3ead2;color-scheme:dark}
