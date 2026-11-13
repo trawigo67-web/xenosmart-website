@@ -583,7 +583,7 @@ function fillOne(key, o, lang){
     teslim:o.teslimTarih?dt(o.teslimTarih):"–",
     teslimSatir:o.teslimTarih?(de?`\nVoraussichtliche Abholung: ${dt(o.teslimTarih)}`:`\nTahmini teslim: ${dt(o.teslimTarih)}`):"",
     kalanSatir:o.kalan>0?(de?`\nRestbetrag: ${money(o.kalan)}`:`\nKalan ödeme: ${money(o.kalan)}`):"",
-    link:"https://xenosmart.de/markaistanbul/siparis.html"};
+    link:location.origin+location.pathname};
   return t.replace(/\{(\w+)\}/g,(m,k)=> k in v ? v[k] : m);
 }
 function fillMsg(key, o, withImza=true, lang){
@@ -713,7 +713,7 @@ $("list").addEventListener("click", e=>{ const c=e.target.closest(".card"); if(c
 $("fab").onclick=()=>{ if(!db) return toast("Bağlantı yok"); if(!canWrite) return toast("Kayıt yetkiniz yok"); openForm(null); };
 
 /* ---------- Online-API (Cloudflare) ---------- */
-const API = "https://marka-siparis-api.pages.dev/api";
+const API = /(^|\.)marka22\.de$/.test(location.hostname) ? "/api" : "https://marka-siparis-api.pages.dev/api";
 let TOKEN = null; try{ TOKEN = localStorage.getItem("mi_sp_tok"); }catch(e){}
 const PH = id => `${API}/photos/${encodeURIComponent(id)}?t=${encodeURIComponent(TOKEN||"")}`;
 async function api(method, path, body){
