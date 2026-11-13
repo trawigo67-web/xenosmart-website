@@ -116,6 +116,11 @@ img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px au
 .fcmp div{text-align:center}.fcmp small{display:block;color:#857d6c;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
 .fcmp img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:14px;border:1px solid #e8dcb8;background:radial-gradient(circle at 50% 40%,#fffdf6,#f5e9c4)}
 .fcmp img#fmBefore{object-fit:cover;background:#eee}
+.frm{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin-top:10px}
+.frm span{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cop2);font-weight:600;width:100%}
+.frm button{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:20px;padding:8px 12px;font:inherit;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.frm button i{width:14px;height:14px;border-radius:50%;border:1px solid #cdbfa8;display:inline-block}
+.frm button.on{border-color:var(--cop);color:var(--cop2);background:#fff6ec}
 </style>
 </head>
 <body>
@@ -200,6 +205,13 @@ img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px au
     <div class="card" style="text-align:center">
       <img id="panoImg" alt="Günlük fiyat görseli" style="width:62%;max-width:300px;border:1px solid var(--line);border-radius:10px;display:block;margin:0 auto">
       <div class="note" id="panoInfo" style="text-align:center"></div>
+      <div class="frm" id="frm" role="group" aria-label="Çerçeve">
+        <span>Çerçeve</span>
+        <button type="button" data-f="yok">Yok</button>
+        <button type="button" data-f="beyaz"><i style="background:#fff"></i>Beyaz</button>
+        <button type="button" data-f="siyah"><i style="background:#111"></i>Siyah</button>
+        <button type="button" data-f="altin"><i style="background:linear-gradient(135deg,#8f6b1e,#f3d98b,#c39a35)"></i>Altın</button>
+      </div>
       <div class="grid2">
         <button class="btn" id="panoShare" style="margin-top:10px">Paylaş</button>
         <a class="btn ghost" id="panoDl" download="marka-fiyatlar.png" style="margin-top:10px;display:block;text-decoration:none;text-align:center">İndir</a>
@@ -520,18 +532,46 @@ $("goNames").onclick = ()=>{ const d=$("advProd"); d.open=true; d.scrollIntoView
 $("addProd").onclick = ()=>{ cfg.products.push({id:"p"+Date.now(), tr:"Yeni ürün", de:"", en:"", gram:1.75, purity:0.916, baz:"ceyrek", kat:1, grup:(cfg.products.at(-1)||{}).grup||1}); renderRows(); };
 $("addBra").onclick = ()=>{ cfg.bracelets.push({id:"b"+Date.now(), tr:"Yeni bilezik", de:"", en:"", purity:0.916, satisMilyem:960, grup:3}); renderRows(); };
 
-let panoBlob = null;
+let panoBlob = null, panoRaw = null, panoUrl = null, panoName = "marka-fiyatlar.png";
+let frame = "yok"; try{ frame = localStorage.getItem("mi_cerceve") || "yok"; }catch(e){}
+/* Çerçeve: görsel aynı boyutta kalır (1080×1920), içerik biraz küçülür ve etrafına çerçeve gelir */
+async function framed(blob, f){
+  if (f==="yok" || !blob) return blob;
+  const img = await createImageBitmap(blob), W = img.width, H = img.height, b = Math.round(W*0.04);
+  const c = document.createElement("canvas"); c.width = W; c.height = H;
+  const x = c.getContext("2d");
+  if (f==="altin"){ const g = x.createLinearGradient(0,0,W,H);
+    [[0,"#8f6b1e"],[.2,"#e9c96a"],[.4,"#fff3c4"],[.6,"#c39a35"],[.8,"#f3d98b"],[1,"#8f6b1e"]].forEach(([p,col])=>g.addColorStop(p,col));
+    x.fillStyle = g; } else x.fillStyle = f==="siyah" ? "#111111" : "#ffffff";
+  x.fillRect(0,0,W,H);
+  const k = (W-2*b)/W, w = W-2*b, h = Math.round(H*k), y = Math.round((H-h)/2);
+  x.drawImage(img, b, y, w, h);
+  x.lineWidth = Math.max(2, Math.round(W*0.002));
+  x.strokeStyle = f==="altin" ? "rgba(90,62,10,.75)" : f==="siyah" ? "rgba(233,201,106,.9)" : "rgba(0,0,0,.18)";
+  x.strokeRect(b - x.lineWidth/2, y - x.lineWidth/2, w + x.lineWidth, h + x.lineWidth);
+  return await new Promise(r => c.toBlob(r, "image/png"));
+}
+async function applyFrame(){
+  document.querySelectorAll("#frm button").forEach(b=>b.classList.toggle("on", b.dataset.f===frame));
+  if (!panoRaw) return;
+  try{ panoBlob = await framed(panoRaw, frame); }catch(e){ panoBlob = panoRaw; }
+  if (panoUrl) URL.revokeObjectURL(panoUrl);
+  panoUrl = URL.createObjectURL(panoBlob);
+  $("panoImg").src = panoUrl; $("panoDl").href = panoUrl; $("panoDl").download = panoName;
+}
+$("frm").onclick = e=>{ const b = e.target.closest("button[data-f]"); if (!b) return;
+  frame = b.dataset.f; try{ localStorage.setItem("mi_cerceve", frame); }catch(_){} applyFrame(); };
 async function loadPano(){
   try{
     const meta = await (await fetch("pano/latest.json?t="+Date.now(),{cache:"no-store"})).json();
-    panoBlob = await (await fetch("pano/latest.png?t="+Date.now(),{cache:"no-store"})).blob();
-    const url = URL.createObjectURL(panoBlob);
-    $("panoImg").src = url; $("panoDl").href = url;
-    $("panoDl").download = `marka-fiyatlar-${meta.date}.png`;
+    panoRaw = await (await fetch("pano/latest.png?t="+Date.now(),{cache:"no-store"})).blob();
+    panoName = `marka-fiyatlar-${meta.date}.png`;
+    await applyFrame();
     const d = new Date(meta.created);
     $("panoInfo").textContent = "Oluşturuldu: " + d.toLocaleString("tr-TR",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"});
   }catch(e){ $("panoInfo").textContent = "Henüz görsel yok – ilk görsel yarın 10:00'da veya 'Şimdi oluştur' ile."; }
 }
+applyFrame();
 $("panoShare").onclick = async ()=>{
   if (!panoBlob) return toast("Görsel henüz hazır değil", true);
   const file = new File([panoBlob], "marka-fiyatlar.png", {type:"image/png"});
