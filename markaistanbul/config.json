@@ -11,7 +11,9 @@
    "gram": 1.75,
    "purity": 0.916,
    "satisMilyem": 960,
-   "grup": 1
+   "grup": 1,
+   "foto": "urun/ceyrek.png?v=1794564502664",
+   "fotoTip": "kesik"
   },
   {
    "id": "yarim",
@@ -132,5 +134,5 @@
   "7": "10:00"
  },
  "manualSpot": null,
- "tema": "zen"
+ "tema": "noel"
 }
