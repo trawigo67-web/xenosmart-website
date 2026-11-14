@@ -1,0 +1,7 @@
+# Cloudflare Pages: Kopfzeilen für die ausgelieferten Dateien
+/*
+  X-Content-Type-Options: nosniff
+  X-Robots-Tag: noindex, nofollow
+/admin/*
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer

@@ -30,7 +30,7 @@
 <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></symbol>
 <symbol id="i-route" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8z"/></symbol>
 <symbol id="i-insta" viewBox="0 0 24 24"><rect x="3.500" y="3.500" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.300 6.700h.010"/></symbol>
-<symbol id="i-fork" viewBox="0 0 24 24"><path d="M7 3v8a2 2 0 002 2v8M5 3v5M9 3v5M17 3c-2 2-3 5-3 8h3v10"/></symbol>
+<symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="7.2" r="3.7" fill="currentColor" stroke="none"/><path d="M4.6 21c.5-4.6 3.4-7.3 7.4-7.3s6.9 2.7 7.4 7.3z" fill="currentColor" stroke="none"/></symbol><symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="1.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9M20 4v5h-5"/></symbol><symbol id="i-fork" viewBox="0 0 24 24"><path d="M7 3v8a2 2 0 002 2v8M5 3v5M9 3v5M17 3c-2 2-3 5-3 8h3v10"/></symbol>
 </defs></svg>
 
 <a class="skip" href="#start" id="skip" data-i="skip">Zum Inhalt springen</a>
@@ -236,33 +236,29 @@
 
 <!-- ================= RESERVIEREN ================= -->
 <div class="view" id="v-reservieren">
-  <section class="block"><div class="wrap split" style="align-items:flex-start">
-    <div>
+  <section class="block"><div class="wrap rsv">
+    <div class="rsv-head">
       <p class="eyebrow" data-i="res.e">Montag bis Sonntag 09:00 – 23:00</p>
       <h1 data-i="res.h">Tisch reservieren</h1>
       <p data-i="res.p">Wählen Sie Tag, Uhrzeit und Personenzahl. Für Gruppen ab 10 Personen empfehlen wir den V.I.P Room.</p>
-      <div class="ticket tilt" id="ticket" style="margin-top:32px" aria-hidden="true">
+    </div>
+    <div class="rsv-main">
+      <div class="rsv-mine" id="rsvMine"></div>
+      <p class="rsv-note" id="rsvNote" hidden></p>
+      <ol class="rsv-steps" id="rsvSteps"></ol>
+      <div class="rsv-panel" id="rsvPanel"><p class="rsv-load" data-i="rsv.loading">Freie Zeiten werden geladen …</p></div>
+      <div class="result" id="resOut" role="status" aria-live="polite"></div>
+      <p class="fine" data-i="res.fine">Eine Reservierungsanfrage ist noch keine bestätigte Reservierung. Verbindlich wird sie erst mit unserer ausdrücklichen Bestätigung.</p>
+    </div>
+    <div class="rsv-side">
+      <div class="ticket tilt" id="ticket" aria-hidden="true">
         <div class="vt"><span class="brand"><img src="img/logo.svg" alt="" width="30" height="38" style="height:38px"><span><b style="font-size:22px">LEONN</b><i>RESTAURANT</i></span></span><span class="eyebrow" data-i="tk.label">Reservierung</span></div>
         <div><div class="tk-date" id="tkDate"></div><div class="tk-time num" id="tkTime"></div></div>
         <div class="tk-row"><span id="tkPers"></span><span id="tkWhere"></span></div>
         <div class="tk-name" id="tkName"></div>
+        <div class="tk-stamp" id="tkStamp" hidden></div>
       </div>
-      <p style="margin-top:26px"><span data-i="res.phone">Lieber telefonisch?</span> <a href="tel:+4924439124069" style="font-family:var(--display);font-size:30px;white-space:nowrap">02443 9124069</a></p>
-    </div>
-    <div>
-      <form class="form" id="resForm" novalidate>
-        <label><span data-i="res.date">Datum</span><input type="date" id="rDate" required></label>
-        <label><span data-i="res.time">Uhrzeit</span><select id="rTime"></select></label>
-        <label><span data-i="res.pers">Personen</span><select id="rPers"></select></label>
-        <label><span data-i="res.where">Bereich</span><select id="rWhere"><option value="r" data-i="res.w1">Restaurant</option><option value="v">V.I.P Room</option></select></label>
-        <label><span data-i="res.name">Name</span><input type="text" id="rName" autocomplete="name" required></label>
-        <label><span data-i="res.tel">Telefon</span><input type="tel" id="rTel" autocomplete="tel" inputmode="tel" required></label>
-        <label class="full"><span data-i="res.mail">E-Mail für die Bestätigung</span><input type="email" id="rMail" autocomplete="email" required></label>
-        <label class="full"><span data-i="res.note">Wunsch (optional)</span><textarea id="rNote" rows="2"></textarea></label>
-        <div class="full"><button class="btn" type="submit" data-i="res.send">Anfrage prüfen</button></div>
-      </form>
-      <div class="result" id="resOut" role="status" aria-live="polite"></div>
-      <p class="fine" data-i="res.fine">Eine Reservierungsanfrage ist noch keine bestätigte Reservierung. Verbindlich wird sie erst mit der ausdrücklichen Bestätigung per E-Mail.</p>
+      <p class="rsv-phone"><span data-i="res.phone">Lieber telefonisch?</span> <a href="tel:+4924439124069" style="font-family:var(--display);font-size:30px;white-space:nowrap">02443 9124069</a></p>
     </div>
   </div></section>
 </div>
@@ -372,6 +368,7 @@
 </aside>
 <div class="veil" id="veil"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="mName" id="modal" tabindex="-1"></div></div>
 
+<script src="config.js"></script>
 <script src="data.js"></script>
 <script src="tx.js"></script>
 <script src="app.js"></script>

@@ -1,0 +1,9 @@
+# Leonn Reservierung – Einstellungen für Cloudflare Pages (Projekt-Wurzel = dieser Ordner)
+name = "leonn-reservierung"
+pages_build_output_dir = "."
+compatibility_date = "2026-11-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "leonn-reservierung"
+database_id = "beefa01d-544f-476e-ac27-c0ff24bcab33"
