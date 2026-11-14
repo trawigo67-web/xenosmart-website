@@ -24,6 +24,7 @@ const T = {
   'pin.locked': ['Zu viele Versuche. Bitte {n} Minuten warten.', 'Çok fazla deneme. Lütfen {n} dakika bekleyin.'],
   net: ['Keine Verbindung. Bitte noch einmal versuchen.', 'Bağlantı yok. Lütfen tekrar deneyin.'],
   off: ['Keine Verbindung zum Reservierungssystem. Die App versucht es von selbst wieder.', 'Rezervasyon sistemine bağlantı yok. Uygulama kendiliğinden tekrar dener.'],
+  soon: ['Das Reservierungssystem wird gerade eingerichtet. Danach ist das hier die App für das Restaurant.', 'Rezervasyon sistemi şu anda kuruluyor. Ardından burası restoranın uygulaması olacak.'],
   'name.q': ['Dein Name', 'Adın'],
   'name.h': ['Damit im Verlauf steht, wer bestätigt hat.', 'Kimin onayladığı kayıtta görünsün diye.'],
   'setup.h': ['Ersteinrichtung', 'İlk kurulum'],
@@ -203,7 +204,7 @@ async function poll() {
 
 /* ------------------------------------------------------------ Anmeldung */
 async function boot() {
-  if (!API) { S.lock = 'off'; render(); return; }
+  if (!API) { S.lock = 'soon'; render(); return; }   // noch nicht eingerichtet: nichts ansprechen
   const st = await call('GET', '/admin/state');
   if (!st.ok) { if (S.lock !== 'off') { S.lock = 'off'; render(); } setTimeout(boot, 5000); return; }   // keine Verbindung: warten und selbst wieder versuchen
   S.mode = st.j.mode;
@@ -220,7 +221,7 @@ function lockHtml() {
   const lang = '<div class="lk-lang"><button type="button" data-a="lang" data-v="de" aria-pressed="' + (LI === 0) + '">DE</button><button type="button" data-a="lang" data-v="tr" aria-pressed="' + (LI === 1) + '">TR</button></div>';
   if (S.lock === 'load') return '<div class="lock">' + head + '<p class="lk-msg">…</p></div>';
   if (S.lock === 'none') return '<div class="lock">' + head + '<p class="lk-msg">' + esc(t('setup.none')) + '</p>' + lang + '</div>';
-  if (S.lock === 'off') return '<div class="lock">' + head + '<p class="lk-msg wait">' + esc(t('off')) + '</p>' + lang + '</div>';
+  if (S.lock === 'off' || S.lock === 'soon') return '<div class="lock">' + head + '<p class="lk-msg wait">' + esc(t(S.lock)) + '</p>' + lang + '</div>';
   if (S.lock === 'setup') return '<div class="lock">' + head + '<form class="lk-form" id="setupForm" novalidate><h1>' + esc(t('setup.h')) + '</h1><p>' + esc(t('setup.p')) + '</p>' +
     '<label>' + esc(t('setup.code')) + '<input id="suCode" autocomplete="off" autocapitalize="characters" spellcheck="false" required></label>' +
     '<label>' + esc(t('name.q')) + '<input id="suName" autocomplete="given-name" maxlength="30" value="' + esc(S.name) + '" required></label>' +
