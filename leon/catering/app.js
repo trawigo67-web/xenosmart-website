@@ -260,11 +260,12 @@ function renderDone() {
   const stepsHtml = idx === undefined ? '' : '<ol class="steps">' + steps.map((s, i) => '<li class="' + (i === idx ? 'on' : i < idx ? 'past' : '') + '"><span class="n num">' + pad(i + 1) + '</span><div><b>' + s[0] + '</b><span>' + s[1] + '</span></div></li>').join('') + '</ol>';
   const note = cur.demo ? '<p class="note warn">Vorführ-Modus: Diese Anfrage wurde nicht gesendet. Sie liegt nur auf diesem Gerät, damit Sie den Ablauf ausprobieren können.</p>'
     : p.test ? '<p class="note warn">Testbetrieb: Diese Anfrage gilt noch nicht als echte Bestellung.</p>' : '';
-  const acts = (p.canAccept ? '<button type="button" class="btn" data-act="accept">Angebot annehmen</button>' : '') +
-    (p.canCancel ? '<button type="button" class="btn sm danger" data-act="cancel">Anfrage stornieren</button>' : '') +
+  // Ein offenes Angebot ist das Wichtigste auf der Seite: Der Knopf steht deshalb gleich unter der Überschrift, auch auf dem Handy ohne Scrollen
+  const accept = p.canAccept ? '<div class="actions"><button type="button" class="btn" data-act="accept">Angebot annehmen · ' + eur(p.total) + '</button></div>' : '';
+  const acts = (p.canCancel ? '<button type="button" class="btn sm danger" data-act="cancel">Anfrage stornieren</button>' : '') +
     (cur.demo ? '<a class="btn sm ghost" href="../admin/">So sieht es das Team</a>' : '<button type="button" class="btn sm ghost" data-act="link">Link zu dieser Anfrage kopieren</button>') +
     '<button type="button" class="btn sm ghost" data-act="new">Neue Anfrage</button>';
-  box.innerHTML = '<span class="pill ' + st[1] + '">' + st[0] + '</span><h1 tabindex="-1" id="done-h">' + head + '</h1>' + note + stepsHtml +
+  box.innerHTML = '<span class="pill ' + st[1] + '">' + st[0] + '</span><h1 tabindex="-1" id="done-h">' + head + '</h1>' + note + accept + stepsHtml +
     (p.status === 'confirmed' ? '<p class="note good">Zur Anzahlung melden wir uns bei Ihnen. Fragen: ' + esc(PHONE) + '</p>' : '') +
     '<div class="actions">' + acts + '</div><p class="hint" id="done-msg" role="status"></p>' + mineHtml;
   $('done-bon').parentNode.hidden = false;
