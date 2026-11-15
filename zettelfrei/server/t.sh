@@ -52,14 +52,16 @@ if [ ! -f "$DIR/.env" ]; then
 fi
 if ! grep -qE '^(OPENAI|GEMINI)_API_KEY=.+' "$DIR/.env"; then
   echo
-  echo ">>> Jetzt bitte DEINEN KI-Schluessel einfuegen (OpenAI beginnt mit sk-, Gemini mit AIza)."
-  echo ">>> Er wird nicht angezeigt. Nur Enter = ueberspringen (KI bleibt aus)."
+  echo ">>> KI-Schluessel: am einfachsten spaeter im Browser unter https://$DOMAIN/admin eintragen."
+  echo ">>> Hier einfach Enter druecken (oder Claude sk-ant-..., OpenAI sk-..., Gemini AIza... einfuegen)."
   read -r -s -p "Schluessel: " KEY </dev/tty; echo
   case "$KEY" in
+    sk-ant-*) grep -q '^ANTHROPIC_API_KEY=' "$DIR/.env" || echo "ANTHROPIC_API_KEY=" >> "$DIR/.env"
+             sed -i "s|^AI_PROVIDER=.*|AI_PROVIDER=anthropic|; s|^ANTHROPIC_API_KEY=.*|ANTHROPIC_API_KEY=${KEY}|" "$DIR/.env"; ok "Claude-Schluessel gespeichert" ;;
     sk-*) sed -i "s|^AI_PROVIDER=.*|AI_PROVIDER=openai|; s|^OPENAI_API_KEY=.*|OPENAI_API_KEY=${KEY}|" "$DIR/.env"; ok "OpenAI-Schluessel gespeichert" ;;
     AIza*) sed -i "s|^AI_PROVIDER=.*|AI_PROVIDER=gemini|; s|^GEMINI_API_KEY=.*|GEMINI_API_KEY=${KEY}|" "$DIR/.env"; ok "Gemini-Schluessel gespeichert" ;;
-    "") bad "Kein Schluessel: App laeuft, KI-Auslesen bleibt aus (spaeter in $DIR/.env eintragen)" ;;
-    *) bad "Unbekanntes Format - nicht gespeichert" ;;
+    "") info "Kein Schluessel eingegeben – bitte unter https://$DOMAIN/admin eintragen" ;;
+    *) info "Kein gueltiger Schluessel eingegeben – bitte unter https://$DOMAIN/admin eintragen" ;;
   esac
   unset KEY
 fi
