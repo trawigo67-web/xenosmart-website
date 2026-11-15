@@ -80,7 +80,7 @@
     #bukoLB .rk{width:24px;height:24px;font-size:12px}
     #bukoLB .ft{padding:6px 12px 8px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:center}
     #bukoLB .yr{margin:0;flex-direction:column;font-size:12px}
-    #bukoLB input{padding:7px 10px;font-size:15px} #bukoLB .go{padding:7px 12px;font-size:14px}
+    #bukoLB input{padding:7px 10px;font-size:16px} #bukoLB .go{padding:7px 12px;font-size:14px}
     #bukoLB .st{grid-column:1/3;margin:0;min-height:0} #bukoLB .nt{display:none}
     #bukoLB .x{margin:0;padding:6px 10px;width:auto;grid-column:3;grid-row:1}
     #bukoLB .row{grid-column:2}

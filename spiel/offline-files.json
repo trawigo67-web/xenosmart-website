@@ -1,5 +1,5 @@
 {
- "v": "buko-v60",
+ "v": "buko-v61",
  "files": [
   "./",
   "1453/",
@@ -168,6 +168,7 @@
   "musa/yusuf_walk.webp",
   "musa/yusuf_win.webp",
   "buko-ui.js",
+  "buko-nozoom.js",
   "buko.svg",
   "fonts/lilita-one-latin-400-normal.woff2",
   "fonts/lilita-one-latin-ext-400-normal.woff2",
