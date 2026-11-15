@@ -195,6 +195,8 @@ var I = {
 'hot': ['Scharf', 'Acılı', 'Spicy'],
 'mild': ['Leicht scharf', 'Hafif acılı', 'Mildly spicy'],
 'pre': ['Nur auf Vorbestellung', 'Yalnızca ön siparişle', 'Pre-order only'],
+'rec': ['Empfehlung des Hauses', 'Ustanın tavsiyesi', 'House recommendation'],
+'bfph': ['Unser Frühstückstisch', 'Kahvaltı sofrası', 'Our breakfast table'],
 'dishes': ['Gerichte', 'çeşit', 'dishes'],
 'until14': ['täglich bis 14:00 Uhr', 'her gün 14:00’e kadar', 'daily until 14:00'],
 'clock': [' Uhr', '', ''],
@@ -336,6 +338,7 @@ function match(it) {
 }
 function tags(it) {
   var h = '';
+  if (it.rec) h += '<span class="tag rec">' + ic('star') + esc(t('rec')) + '</span>';
   if (it.hot) h += '<span class="tag hot">' + ic('flame') + esc(t('hot')) + '</span>';
   if (it.mild) h += '<span class="tag hot">' + ic('flame') + esc(t('mild')) + '</span>';
   if (it.pre) h += '<span class="tag pre">' + ic('clock') + esc(t('pre')) + '</span>';
@@ -357,15 +360,20 @@ function row(it) {
     '<div class="r"><span class="price num">' + esc(it.p) + '</span>' + addBtn(it) + '</div>' +
     (d ? '<p class="d">' + esc(d) + '</p>' : '') + (tg ? '<div class="tags">' + tg + '</div>' : '') + '</div>';
 }
+function sideNote(s, note) {
+  var x = s.side;
+  return '<p class="sn side"><span class="sideph"><img src="img/s/' + x.img + '" alt="" width="' + x.sw + '" height="' + x.sh + '" loading="lazy" decoding="async"></span><span>' + esc(note) + '</span></p>';
+}
 function splitList(s) { return String(s).split(/,\s(?![^(]*\))/); }
 function cevParts(it) {
   var d = ds(it), m = d.split(/\s*(?:Garnituren|Garnitürler|Sides):\s*/);
   return { lead: m[0], garn: m[1] ? splitList(m[1]) : [] };
 }
 function garnHtml(list) {
-  return list.map(function (g) {
-    var m = /^([^(]+)\s*(\(.*\))?$/.exec(g);
-    return '<li><b>' + esc((m ? m[1] : g).trim()) + '</b>' + (m && m[2] ? ' ' + esc(m[2]) : '') + '</li>';
+  var imgs = (secById['leonn-kuzu-cevirme'] || {}).garnImg || [];
+  return list.map(function (g, i) {
+    var m = /^([^(]+)\s*(\(.*\))?$/.exec(g), x = imgs[i];
+    return '<li' + (x ? ' class="gi"' : '') + '>' + (x ? '<img src="img/xs/' + x.img + '" alt="" loading="lazy" decoding="async">' : '') + '<b>' + esc((m ? m[1] : g).trim()) + '</b>' + (m && m[2] ? ' ' + esc(m[2]) : '') + '</li>';
   }).join('');
 }
 function persLabel(n) { return n + ' ' + t(n > 1 ? 'persN' : 'pers1'); }
@@ -390,11 +398,14 @@ function renderMenu() {
       total += its.length;
       its.forEach(function (it) { visible.push(it.id); });
       var title = secT(s), note = secN(s);
-      if (!gh) gh += '<div class="head"><h2>' + esc(multi ? g.n[LI] : title) + '</h2><p>' + esc(!multi || sid === 'fruhstuck' ? note : '') + '</p></div>';
-      if (multi && sid !== 'fruhstuck') gh += '<h3 class="sub">' + esc(title) + '</h3>' + (note ? '<p class="sn">' + esc(note) + '</p>' : '');
+      var hn = !multi || sid === 'fruhstuck' ? note : '';
+      if (!gh) gh += '<div class="head"><h2>' + esc(multi ? g.n[LI] : title) + '</h2>' + (hn && !multi && s.side ? sideNote(s, hn) : '<p>' + esc(hn) + '</p>') + '</div>';
+      if (multi && sid !== 'fruhstuck') gh += '<h3 class="sub">' + esc(title) + '</h3>' + (note ? (s.side ? sideNote(s, note) : '<p class="sn">' + esc(note) + '</p>') : '');
       if (sid === 'fruhstuck' && plain) {
         var a = s.items[0], b = s.items[1];
-        gh += '<div class="ess" data-rv><div><p class="eyebrow">' + esc(t('incl')) + '</p><h3>Breakfast Essentials</h3>' +
+        var bp = s.photos || [];
+        gh += '<div class="ess" data-rv>' + (bp.length ? '<figure class="ess-ph"><img src="img/' + bp[0].img + '" alt="' + esc(t('bfph')) + '" width="' + bp[0].w + '" height="' + bp[0].h + '" loading="lazy" decoding="async">' +
+          bp.slice(1).map(function (x, i) { return '<img class="acc a' + i + '" src="img/s/' + x.img + '" alt="" width="' + x.sw + '" height="' + x.sh + '" loading="lazy" decoding="async">'; }).join('') + '</figure>' : '') + '<div><p class="eyebrow">' + esc(t('incl')) + '</p><h3>Breakfast Essentials</h3>' +
           '<div class="pl" data-item="' + a.id + '"><span>' + esc(t('pp')) + '</span><i></i><span class="price num">' + esc(a.p) + '</span>' + addBtn(a) + '</div>' +
           '<div class="pl" data-item="' + b.id + '"><span>' + esc(t('kid')) + '</span><i></i><span class="price num">' + esc(b.p) + '</span>' + addBtn(b) + '</div></div>' +
           '<ul>' + splitList(ds(a)).map(function (x) { return '<li>' + esc(x.charAt(0).toUpperCase() + x.slice(1)) + '</li>'; }).join('') + '</ul></div>';

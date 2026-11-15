@@ -87,17 +87,12 @@ nav.main a.on{color:var(--gold)}
 .burger[aria-expanded="true"] span{background:transparent}
 .burger[aria-expanded="true"] span::before{top:0;transform:rotate(45deg)}
 .burger[aria-expanded="true"] span::after{top:0;transform:rotate(-45deg)}
-/* sieben Menüpunkte (mit Catering): in der breiten Ansicht etwas enger setzen, damit die Kopfzeile nicht überläuft */
-@media (min-width:1241px){
-  nav.main{gap:4px 14px;letter-spacing:.08em}
-  .top .wrap{gap:16px 16px}
-}
 @media (max-width:1240px){
   nav.main{position:fixed;left:0;right:0;top:0;bottom:0;z-index:-1;background:rgba(7,6,27,.985);flex-direction:column;justify-content:center;align-items:center;gap:6px;padding:90px 24px 110px;font-family:var(--display);font-size:34px;letter-spacing:.04em;text-transform:none;opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
   nav.main.open{opacity:1;visibility:visible}
   nav.main a{padding:10px 8px;transform:translateY(16px);opacity:0;transition:transform .5s var(--ease),opacity .5s}
   nav.main.open a{transform:none;opacity:1}
-  nav.main.open a:nth-child(2){transition-delay:.05s}nav.main.open a:nth-child(3){transition-delay:.1s}nav.main.open a:nth-child(4){transition-delay:.15s}nav.main.open a:nth-child(5){transition-delay:.2s}nav.main.open a:nth-child(6){transition-delay:.25s}nav.main.open a:nth-child(7){transition-delay:.3s}
+  nav.main.open a:nth-child(2){transition-delay:.05s}nav.main.open a:nth-child(3){transition-delay:.1s}nav.main.open a:nth-child(4){transition-delay:.15s}nav.main.open a:nth-child(5){transition-delay:.2s}nav.main.open a:nth-child(6){transition-delay:.25s}
   nav.main a::after{bottom:6px}
   .burger{display:inline-flex}
   .tools .btn{display:none}
@@ -679,3 +674,20 @@ footer.site h4{font-family:var(--body);font-size:13px;letter-spacing:.24em;text-
   .rsv-people span,.rsv-people .ic{width:25px;height:25px}
   .view>section.block:first-child{padding-top:46px}
 }
+
+/* Neue Karte: Empfehlung des Hauses, Beilagen-Fotos, Frühstückstisch */
+.tag.rec{color:var(--deep);background:var(--gold);border-color:var(--gold);font-weight:500}
+.tag.rec svg{fill:currentColor;stroke:none}
+.sn.side{display:flex;align-items:center;gap:14px;margin-top:6px}
+.sideph{flex:0 0 auto;width:86px;height:64px;display:flex;align-items:center;justify-content:center}
+.sideph img{max-width:100%;max-height:100%;width:auto;height:auto;filter:drop-shadow(0 8px 10px rgba(0,0,0,.5))}
+.garn li.gi{display:flex;align-items:center;gap:14px;padding-left:0}
+.garn li.gi::before{display:none}
+.garn li.gi img{flex:0 0 64px;width:64px;height:52px;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
+.ess-ph{flex:1 1 100%;position:relative;margin:-34px -34px 6px;height:clamp(200px,30vw,340px);overflow:hidden;border-bottom:1px solid var(--line)}
+.ess-ph>img:first-child{width:100%;height:100%;object-fit:cover;object-position:center 70%}
+.ess-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,6,27,.5),transparent 35%,transparent 72%,rgba(7,6,27,.35));pointer-events:none}
+.ess-ph .acc{position:absolute;z-index:1;height:auto;filter:drop-shadow(0 14px 16px rgba(0,0,0,.55))}
+.ess-ph .a0{width:clamp(90px,13vw,150px);left:4%;top:8%}
+.ess-ph .a1{width:clamp(80px,11vw,130px);right:4%;top:6%}
+@media (max-width:760px){.ess-ph{margin:-24px -24px 6px}.sideph{width:70px;height:52px}}

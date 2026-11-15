@@ -1,5 +1,5 @@
 // Leonn Reservierungen – hält die App-Hülle bereit und zeigt Mitteilungen bei neuen Anfragen
-const V = 'leonn-admin-v3';
+const V = 'leonn-admin-v2';
 const SHELL = ['./', 'admin.css', 'admin.js', 'manifest.webmanifest', 'icon-192.png', '../fonts.css', '../config.js', '../img/logo.svg'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(V).then((c) => c.addAll(SHELL)).catch(() => {})); self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== V && k.startsWith('leonn-admin')).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });

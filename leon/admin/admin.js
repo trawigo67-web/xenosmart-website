@@ -106,27 +106,6 @@ const T = {
   placeholder: ['Platzhalter: bitte an eure echten Zahlen anpassen.', 'Örnek değerler: lütfen gerçek sayılarınıza göre ayarlayın.'],
   'log.created': ['Anfrage über die Webseite', 'Web sitesinden talep'], 'log.created_auto': ['Über die Webseite, automatisch bestätigt', 'Web sitesinden, otomatik onay'], 'log.created_admin': ['Von Hand eingetragen', 'Elle eklendi'],
   'log.moved': ['Termin geändert', 'Randevu değişti'], 'log.edited': ['Daten geändert', 'Bilgiler değişti'], 'log.table': ['Tisch geändert', 'Masa değişti'], 'log.note': ['Notiz geändert', 'Not değişti'], 'log.cancelled_guest': ['Vom Gast storniert', 'Misafir iptal etti'],
-  // Catering
-  'tab.cat': ['Catering', 'Catering'], 'demo.s': ['Vorschau', 'Önizleme'],
-  'cat.none': ['Noch keine Catering-Anfragen.', 'Henüz catering talebi yok.'],
-  'cat.run': ['Laufende Aufträge', 'Devam eden siparişler'], 'cat.old': ['Erledigt und abgesagt', 'Tamamlanan ve iptal edilen'],
-  'cat.guests': ['Gäste', 'misafir'], 'cat.firm': ['Feste Aufträge', 'Kesin sipariş'], 'cat.sum': ['Umsatz fest', 'Kesin ciro'],
-  'cst.pending': ['Angefragt', 'Talep'], 'cst.offered': ['Angebot gesendet', 'Teklif gönderildi'], 'cst.confirmed': ['Bestätigt', 'Onaylandı'], 'cst.paid': ['Anzahlung da', 'Kapora alındı'], 'cst.done': ['Geliefert', 'Teslim edildi'], 'cst.declined': ['Abgelehnt', 'Reddedildi'], 'cst.cancelled': ['Storniert', 'İptal'],
-  'cat.offer': ['Angebot senden', 'Teklif gönder'], 'cat.accepted': ['Kunde hat angenommen', 'Müşteri kabul etti'], 'cat.paid': ['Anzahlung erhalten', 'Kapora alındı'], 'cat.done': ['Geliefert', 'Teslim edildi'], 'cat.decline': ['Ablehnen', 'Reddet'],
-  'cat.kitchen': ['Küchenliste', 'Mutfak listesi'], 'cat.total': ['Gesamt', 'Toplam'], 'cat.dep': ['Anzahlung', 'Kapora'], 'cat.pp': ['pro Gast', 'kişi başı'],
-  'cat.food': ['Speisen, {pp} pro Person', 'Yemekler, kişi başı {pp}'], 'cat.disc': ['Mengenrabatt {n} %', 'Miktar indirimi %{n}'],
-  'cat.addr': ['Lieferadresse', 'Teslimat adresi'],
-  'cat.del.q': ['Diese Catering-Anfrage endgültig löschen?', 'Bu catering talebi kalıcı olarak silinsin mi?'],
-  'cat.toast': ['Neue Catering-Anfrage: {x}', 'Yeni catering talebi: {x}'],
-  'cat.tell.offer': ['Angebot', 'Teklif'],
-  'cat.demo': ['Catering-Vorschau ansehen', 'Catering önizlemesini gör'],
-  'cat.demo.p': ['Vorführ-Modus: Beispiel-Anfragen und alles, was auf diesem Gerät im Catering-Konfigurator abgeschickt wurde. Es wird nichts gesendet.', 'Tanıtım modu: Örnek talepler ve bu cihazda catering sayfasından gönderilenler. Hiçbir şey gönderilmez.'],
-  'clog.created': ['Anfrage über die Webseite', 'Web sitesinden talep'], 'clog.offered': ['Angebot gesendet', 'Teklif gönderildi'], 'clog.confirmed': ['Bestätigt', 'Onaylandı'], 'clog.paid': ['Anzahlung erhalten', 'Kapora alındı'], 'clog.done': ['Geliefert', 'Teslim edildi'],
-  'clog.declined': ['Abgelehnt', 'Reddedildi'], 'clog.cancelled': ['Storniert', 'İptal edildi'], 'clog.pending': ['Wieder geöffnet', 'Yeniden açıldı'], 'clog.note': ['Notiz geändert', 'Not değişti'], 'clog.accepted_guest': ['Vom Kunden angenommen', 'Müşteri kabul etti'], 'clog.cancelled_guest': ['Vom Kunden storniert', 'Müşteri iptal etti'],
-  'cc.m': ['Meze und Salate', 'Meze ve salatalar'], 'cc.f': ['Warme Kleinigkeiten', 'Sıcak atıştırmalıklar'], 'cc.h': ['Grill und Güveç', 'Izgara ve güveç'], 'cc.b': ['Beilagen', 'Garnitürler'], 'cc.d': ['Desserts', 'Tatlılar'], 'cc.k': ['Frühstück', 'Kahvaltı'],
-  'cx.soft': ['Wasser und Softdrinks', 'Su ve meşrubat'], 'cx.cay': ['Semaver-Çay und Türk Kahvesi', 'Semaver çayı ve Türk kahvesi'], 'cx.ayran': ['Ayran und Limonata', 'Ayran ve limonata'], 'cx.eco': ['Kompostierbares Geschirr', 'Kompost edilebilir tabak ve çatal'], 'cx.porz': ['Porzellan, Besteck, Stoffservietten', 'Porselen, çatal bıçak, kumaş peçete'],
-  'cx.staff': ['{n} × Service, {h} Std.', '{n} × servis, {h} saat'], 'cx.deko': ['Tisch- und Buffetdeko', 'Masa ve büfe süslemesi'], 'cx.deliv.a': ['Lieferung bis 10 km', "10 km'ye kadar teslimat"], 'cx.deliv.b': ['Lieferung 10 bis 30 km', '10–30 km teslimat'], 'cx.deliv.c': ['Lieferung 30 bis 60 km', '30–60 km teslimat'],
-  'occ.Geburtstag': ['Geburtstag', 'Doğum günü'], 'occ.Hochzeit': ['Hochzeit', 'Düğün'], 'occ.Verlobung': ['Verlobung', 'Nişan'], 'occ.Familienfeier': ['Familienfeier', 'Aile kutlaması'], 'occ.Firmenfeier': ['Firmenfeier', 'Şirket kutlaması'], 'occ.Geschäftsessen': ['Geschäftsessen', 'İş yemeği'], 'occ.Sonstiges': ['Sonstiges', 'Diğer'],
 };
 const t = (k, o) => { const v = T[k]; let s = v ? v[LI] : k; if (o) s = s.replace(/\{(\w+)\}/g, (m, x) => (o[x] !== undefined ? o[x] : m)); return s; };
 const MSG = {
@@ -138,30 +117,17 @@ const MSG = {
         en: 'Hello {name}, unfortunately we cannot confirm your reservation request for {date} at {time}. Please call us and we will find another time: {tel}' },
 };
 const MLOC = { de: 'de-DE', tr: 'tr-TR', en: 'en-GB' };
-const CMSG = {
-  offer: { de: 'Hallo {name}, Ihr Catering-Angebot vom Leonn Restaurant ist da: {date} um {time} Uhr für {n} Gäste, gesamt {total}, Anzahlung {dep}. Hier ansehen und mit einem Tipp annehmen: {link}',
-           tr: 'Merhaba {name}, Leonn Restaurant catering teklifiniz hazır: {date}, saat {time}, {n} misafir, toplam {total}, kapora {dep}. Buradan görüp tek dokunuşla kabul edebilirsiniz: {link}',
-           en: 'Hello {name}, your catering offer from Leonn Restaurant is ready: {date} at {time} for {n} guests, total {total}, deposit {dep}. View and accept it here: {link}' },
-  ok: { de: 'Hallo {name}, Ihr Catering am {date} um {time} Uhr für {n} Gäste ist bestätigt. Die Anzahlung beträgt {dep}. Wir freuen uns auf Ihr Fest! {link}',
-        tr: 'Merhaba {name}, {date} saat {time} için {n} misafirlik catering siparişiniz onaylandı. Kapora tutarı {dep}. Kutlamanızda sizinle olmaktan mutluluk duyarız! {link}',
-        en: 'Hello {name}, your catering on {date} at {time} for {n} guests is confirmed. The deposit is {dep}. We look forward to your celebration! {link}' },
-  no: { de: 'Hallo {name}, leider können wir Ihr Catering am {date} nicht übernehmen. Rufen Sie uns gern an, wir suchen gemeinsam eine Lösung: {tel}',
-        tr: 'Merhaba {name}, maalesef {date} tarihli catering talebinizi karşılayamıyoruz. Bizi arayın, birlikte bir çözüm bulalım: {tel}',
-        en: 'Hello {name}, unfortunately we cannot take on your catering on {date}. Please call us and we will look for a solution together: {tel}' },
-};
 
 /* ------------------------------------------------------------ Zustand */
 const S = { token: store.get('leonn-admin-token') || '', name: store.get('leonn-admin-name') || '', view: 'day', date: '', today: '', time: '', mode: 'test',
   byId: new Map(), day: {}, pending: [], counts: {}, calYm: '', cfg: null, defaults: null, devices: [], since: 0, boot: Date.now(), seen: new Set(), stats: null,
-  pin: '', pinMsg: '', lock: 'load', busy: false, deferred: null, sheet: null, pushOn: false, demo: false,
-  cat: { rows: [], ts: 0, open: 0, loaded: false, known: false, seen: new Set() } };
+  pin: '', pinMsg: '', lock: 'load', busy: false, deferred: null, sheet: null, pushOn: false };
 const fmtDay = (s, o) => dObj(s).toLocaleDateString(LOC[LI], o || { weekday: 'long', day: 'numeric', month: 'long' });
 const dayName = (s) => (s === S.today ? t('today') : s === addDays(S.today, 1) ? t('tomorrow') : '');
 const areaName = (a) => (a === 'v' ? t('vip') : t('rest'));
 const ACTIVE = ['pending', 'confirmed', 'seated', 'done'];
 
 async function call(method, path, body) {
-  if (S.demo) return demoCall(method, path, body);   // Vorführ-Modus: nichts ansprechen
   const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 12000);
   try {
     const r = await fetch(API + path, { method, signal: ctl.signal, headers: Object.assign({ 'Content-Type': 'application/json' }, S.token ? { Authorization: 'Bearer ' + S.token } : {}), body: body === undefined ? undefined : JSON.stringify(body) });
@@ -182,7 +148,7 @@ function chime() {
     if (navigator.vibrate) navigator.vibrate([120, 60, 120]);
   } catch (e) {}
 }
-function badge() { try { if (navigator.setAppBadge) { const n = S.pending.length + S.cat.open; if (n) navigator.setAppBadge(n); else navigator.clearAppBadge(); } } catch (e) {} }
+function badge() { try { if (navigator.setAppBadge) { if (S.pending.length) navigator.setAppBadge(S.pending.length); else navigator.clearAppBadge(); } } catch (e) {} }
 
 /* ------------------------------------------------------------ Daten holen */
 function take(rows) { rows.forEach((r) => S.byId.set(r.id, r)); }
@@ -195,7 +161,6 @@ async function loadDay(date, quiet) {
   S.day[date] = r.j.rows.map((x) => x.id);
   S.today = r.j.today; S.time = r.j.time; S.mode = r.j.mode; S.since = Math.max(S.since, r.j.ts - 2000);
   setPending(r.j.pending);
-  catSeen(r.j.cat);
   if (S.lock === 'ok') renderMain();
 }
 async function loadCounts() {
@@ -220,7 +185,6 @@ async function poll() {
   const r = await call('GET', '/admin/poll?since=' + S.since);
   if (!r.ok) return;
   S.since = r.j.ts - 2000; S.today = r.j.today; S.time = r.j.time; S.mode = r.j.mode;
-  catSeen(r.j.cat);
   if (!r.j.rows.length && r.j.pending === S.pending.length) return;
   let fresh = null, gone = null;
   r.j.rows.forEach((x) => {
@@ -257,7 +221,7 @@ function lockHtml() {
   const lang = '<div class="lk-lang"><button type="button" data-a="lang" data-v="de" aria-pressed="' + (LI === 0) + '">DE</button><button type="button" data-a="lang" data-v="tr" aria-pressed="' + (LI === 1) + '">TR</button></div>';
   if (S.lock === 'load') return '<div class="lock">' + head + '<p class="lk-msg">…</p></div>';
   if (S.lock === 'none') return '<div class="lock">' + head + '<p class="lk-msg">' + esc(t('setup.none')) + '</p>' + lang + '</div>';
-  if (S.lock === 'off' || S.lock === 'soon') return '<div class="lock">' + head + '<p class="lk-msg wait">' + esc(t(S.lock)) + '</p>' + (S.lock === 'soon' ? '<button type="button" class="btn line" data-a="demo">' + esc(t('cat.demo')) + '</button>' : '') + lang + '</div>';
+  if (S.lock === 'off' || S.lock === 'soon') return '<div class="lock">' + head + '<p class="lk-msg wait">' + esc(t(S.lock)) + '</p>' + lang + '</div>';
   if (S.lock === 'setup') return '<div class="lock">' + head + '<form class="lk-form" id="setupForm" novalidate><h1>' + esc(t('setup.h')) + '</h1><p>' + esc(t('setup.p')) + '</p>' +
     '<label>' + esc(t('setup.code')) + '<input id="suCode" autocomplete="off" autocapitalize="characters" spellcheck="false" required></label>' +
     '<label>' + esc(t('name.q')) + '<input id="suName" autocomplete="given-name" maxlength="30" value="' + esc(S.name) + '" required></label>' +
@@ -365,12 +329,11 @@ function moreHtml() {
     '<section class="card"><h2>' + esc(t('lang')) + '</h2><div class="seg"><button type="button" data-a="lang" data-v="de" aria-pressed="' + (LI === 0) + '">Deutsch</button><button type="button" data-a="lang" data-v="tr" aria-pressed="' + (LI === 1) + '">Türkçe</button></div></section>';
 }
 function mainHtml() {
-  const all = [['day', 'cal2', t('tab.day')], ['inbox', 'bell', t('tab.inbox')], ['cal', 'grid', t('tab.cal')], ['cat', 'tray', t('tab.cat')], ['more', 'gear', t('tab.more')]];
-  const tabs = S.demo ? all.filter((x) => x[0] === 'cat') : all, cnt = (k) => (k === 'inbox' ? S.pending.length : k === 'cat' ? S.cat.open : 0);
-  return '<header class="top"><div class="brand"><img src="../img/logo.svg" alt="" width="26" height="33"><b>LEONN</b></div><span class="mode ' + (S.demo ? 'demo' : S.mode) + '">' + esc(t(S.demo ? 'demo.s' : S.mode === 'live' ? 'live' : 'test.s')) + '</span>' + (S.demo ? '' : '<button type="button" class="sq" data-a="search" aria-label="' + esc(t('search')) + '">' + ic('search') + '</button>') + '<button type="button" class="sq" data-a="reload" aria-label="↻">' + ic('refresh') + '</button></header>' +
-    '<main id="view" class="v-' + S.view + '">' + (S.view === 'day' ? dayHtml() : S.view === 'inbox' ? inboxHtml() : S.view === 'cal' ? calHtml() : S.view === 'cat' ? catHtml() : moreHtml()) + '</main>' +
-    (S.demo ? '' : '<button type="button" class="fab" data-a="new" aria-label="' + esc(t('new.h')) + '">' + ic('plus') + '</button>') +
-    '<nav class="tabs">' + tabs.map((x) => '<button type="button" data-a="tab" data-v="' + x[0] + '" aria-current="' + (S.view === x[0] ? 'page' : 'false') + '">' + ic(x[1]) + '<span>' + esc(x[2]) + '</span>' + (cnt(x[0]) ? '<i class="cnt">' + cnt(x[0]) + '</i>' : '') + '</button>').join('') + '</nav>';
+  const tabs = [['day', 'cal2', t('tab.day')], ['inbox', 'bell', t('tab.inbox')], ['cal', 'grid', t('tab.cal')], ['more', 'gear', t('tab.more')]];
+  return '<header class="top"><div class="brand"><img src="../img/logo.svg" alt="" width="26" height="33"><b>LEONN</b></div><span class="mode ' + S.mode + '">' + esc(t(S.mode === 'live' ? 'live' : 'test.s')) + '</span><button type="button" class="sq" data-a="search" aria-label="' + esc(t('search')) + '">' + ic('search') + '</button><button type="button" class="sq" data-a="reload" aria-label="↻">' + ic('refresh') + '</button></header>' +
+    '<main id="view" class="v-' + S.view + '">' + (S.view === 'day' ? dayHtml() : S.view === 'inbox' ? inboxHtml() : S.view === 'cal' ? calHtml() : moreHtml()) + '</main>' +
+    '<button type="button" class="fab" data-a="new" aria-label="' + esc(t('new.h')) + '">' + ic('plus') + '</button>' +
+    '<nav class="tabs">' + tabs.map((x) => '<button type="button" data-a="tab" data-v="' + x[0] + '" aria-current="' + (S.view === x[0] ? 'page' : 'false') + '">' + ic(x[1]) + '<span>' + esc(x[2]) + '</span>' + (x[0] === 'inbox' && S.pending.length ? '<i class="cnt">' + S.pending.length + '</i>' : '') + '</button>').join('') + '</nav>';
 }
 function render() {
   document.documentElement.lang = LI ? 'tr' : 'de';
@@ -486,180 +449,6 @@ async function saveForm(force) {
   S.date = r.j.row.date; S.view = 'day'; await loadDay(S.date, true);
 }
 
-/* ------------------------------------------------------------ Catering */
-const money = (c, whole) => (Number(c) / 100).toLocaleString(LOC[LI], Object.assign({ style: 'currency', currency: 'EUR' }, whole ? { maximumFractionDigits: 0 } : {}));
-const cchip = (r) => '<span class="st c-' + r.status + '">' + esc(t('cst.' + r.status)) + '</span>';
-const occName = (o) => (T['occ.' + o] ? t('occ.' + o) : o);
-const catWhen = (r) => dayName(r.date) || fmtDay(r.date, { weekday: 'short', day: 'numeric', month: 'short' });
-const catById = (id) => S.cat.rows.find((x) => x.id === id);
-const catPut = (row) => { const i = S.cat.rows.findIndex((x) => x.id === row.id); if (i >= 0) S.cat.rows[i] = row; else S.cat.rows.push(row); };
-const catCount = () => { S.cat.open = S.cat.rows.filter((x) => x.status === 'pending').length; badge(); };
-// Zähler aus Tagesliste und Abfrage: zeigt die Zahl am Reiter und lädt die Liste nach, sobald sich etwas geändert hat
-function catSeen(c) {
-  if (!c) return;
-  const changed = c.open !== S.cat.open, moved = c.ts !== S.cat.ts;
-  S.cat.open = c.open; S.cat.ts = c.ts; badge();
-  if (!S.cat.known) { S.cat.known = true; loadCat(true); }
-  else if (moved) loadCat(true);
-  else if (changed && S.lock === 'ok' && !S.sheet) renderMain();
-}
-let catGen = 0;   // steigt bei jeder Änderung von diesem Gerät aus; eine Liste, die davor angefragt wurde, ist dann veraltet
-async function loadCat(quiet) {
-  const g = catGen, r = await call('GET', '/admin/catering');
-  if (!r.ok) { if (r.status !== 401 && !quiet) toast(t('net'), 'bad'); return; }
-  if (g !== catGen) { loadCat(true); return; }   // inzwischen hier etwas geändert: Antwort verwerfen und frisch holen
-  const first = !S.cat.loaded; let fresh = null;
-  r.j.rows.forEach((x) => { if (x.status === 'pending' && !S.cat.seen.has(x.id)) { S.cat.seen.add(x.id); if (!first) fresh = x; } });
-  S.cat.rows = r.j.rows; S.cat.loaded = true; S.cat.known = true;
-  if (r.j.cat) { S.cat.open = r.j.cat.open; S.cat.ts = r.j.cat.ts; } else catCount();
-  if (r.j.today && !S.today) S.today = r.j.today;
-  badge();
-  if (fresh) { chime(); toast(t('cat.toast', { x: fresh.name + ', ' + fmtDay(fresh.date, { day: 'numeric', month: 'short' }) + ', ' + fresh.guests + ' ' + t('cat.guests') }), 'new'); }
-  if (S.lock !== 'ok') return;
-  if (S.sheet && S.sheet.kind === 'cdetail') { if (catById(S.sheet.id)) openCat(S.sheet.id, true); renderMain(); }
-  else if (!S.sheet) renderMain();
-}
-function catRow(r) {
-  return '<button type="button" class="row" data-a="copen" data-id="' + r.id + '"><span class="r-time"><i>' + esc(catWhen(r)) + '</i><b>' + esc(r.time) + '</b></span>' +
-    '<span class="r-main"><b>' + esc(r.name) + '</b><span>' + r.guests + ' ' + esc(t('cat.guests')) + ' · ' + esc(occName(r.occasion)) + ' · ' + esc(money(r.total)) + (r.test ? ' · Test' : '') + '</span></span>' + cchip(r) + '</button>';
-}
-function catReq(r) {
-  return '<div class="req" data-id="' + r.id + '"><button type="button" class="req-body" data-a="copen" data-id="' + r.id + '"><span class="req-when"><i>' + esc(catWhen(r)) + '</i><b>' + esc(r.time) + '</b></span>' +
-    '<span class="r-main"><b>' + esc(r.name) + '</b><span>' + r.guests + ' ' + esc(t('cat.guests')) + ' · ' + esc(occName(r.occasion)) + ' · ' + esc(money(r.total)) + (r.test ? ' · Test' : '') + '</span>' + (r.note ? '<span class="req-note">„' + esc(r.note) + '“</span>' : '') + '</span></button>' +
-    '<div class="req-act"><button type="button" class="btn no" data-a="cset" data-id="' + r.id + '" data-v="declined">' + ic('x') + esc(t('cat.decline')) + '</button><button type="button" class="btn ok" data-a="cset" data-id="' + r.id + '" data-v="offered">' + ic('check') + esc(t('cat.offer')) + '</button></div></div>';
-}
-function catHtml() {
-  const demo = S.demo ? '<p class="hint warn">' + esc(t('cat.demo.p')) + '</p>' : '';
-  if (!S.cat.loaded) return demo + '<p class="empty">…</p>';
-  const rows = S.cat.rows.slice().sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time) || a.id - b.id);
-  const pend = rows.filter((r) => r.status === 'pending'), run = rows.filter((r) => ['offered', 'confirmed', 'paid'].includes(r.status)), off = rows.filter((r) => ['done', 'declined', 'cancelled'].includes(r.status)).reverse();
-  const firm = rows.filter((r) => r.status === 'confirmed' || r.status === 'paid');
-  let h = demo + '<div class="kpis"><div class="' + (pend.length ? 'warn' : '') + '"><b>' + pend.length + '</b><span>' + esc(t('open')) + '</span></div><div><b>' + firm.length + '</b><span>' + esc(t('cat.firm')) + '</span></div><div><b class="sm">' + esc(money(firm.reduce((a, r) => a + r.total, 0), true)) + '</b><span>' + esc(t('cat.sum')) + '</span></div></div>';
-  if (!rows.length) return h + '<p class="empty">' + esc(t('cat.none')) + '</p>';
-  if (pend.length) h += '<section class="card hot"><h2>' + esc(t('new.req')) + '<small>' + pend.length + '</small></h2>' + pend.map(catReq).join('') + '</section>';
-  if (run.length) h += '<section class="card"><h2>' + esc(t('cat.run')) + '</h2><div class="rows">' + run.map(catRow).join('') + '</div></section>';
-  if (off.length) h += '<section class="card dim"><h2>' + esc(t('cat.old')) + '</h2><div class="rows">' + off.map(catRow).join('') + '</div></section>';
-  return h;
-}
-function cmsgText(r, kind) {
-  const L = CMSG[kind][r.lang] ? r.lang : 'de', loc = MLOC[L], m = (c) => (c / 100).toLocaleString(loc, { style: 'currency', currency: 'EUR' });
-  const v = { name: r.name, date: dObj(r.date).toLocaleDateString(loc, { weekday: 'long', day: 'numeric', month: 'long' }), time: r.time, n: r.guests, total: m(r.total), dep: m(r.deposit), link: (S.demo ? new URL('../catering/', location.href).href : SITE + 'catering/') + '?a=' + r.token, tel: (S.cfg && S.cfg.phone) || '02443 9124069' };
-  return CMSG[kind][L].replace(/\{(\w+)\}/g, (x, k) => (v[k] !== undefined ? v[k] : x));
-}
-function ctellHtml(r, kind) {
-  const txt = cmsgText(r, kind), e = encodeURIComponent(txt), wa = waNum(r.phone);
-  const kb = (k, label) => '<button type="button" data-a="ctellkind" data-id="' + r.id + '" data-v="' + k + '" aria-pressed="' + (kind === k) + '">' + esc(label) + '</button>';
-  return '<div class="tellbox"><div class="seg">' + kb('offer', t('cat.tell.offer')) + kb('ok', t('tell.ok')) + kb('no', t('tell.no')) + '</div>' +
-    '<textarea id="tellTxt" rows="5" readonly>' + esc(txt) + '</textarea><div class="acts">' +
-    (wa.length >= 8 ? '<a class="act wa" href="https://wa.me/' + wa + '?text=' + e + '" target="_blank" rel="noopener">' + ic('chat') + esc(t('wa')) + '</a><a class="act" href="sms:' + esc(r.phone.replace(/\s/g, '')) + '?&body=' + e + '">' + ic('sms') + esc(t('sms')) + '</a>' : '') +
-    (r.email ? '<a class="act" href="mailto:' + encodeURIComponent(r.email) + '?subject=' + encodeURIComponent('Leonn Catering – ' + r.code) + '&body=' + e + '">' + ic('mail') + esc(t('mail')) + '</a>' : '') +
-    '<button type="button" class="act" data-a="copy">' + ic('copy') + esc(t('copy')) + '</button></div></div>';
-}
-function catDetailHtml(r, log, tell) {
-  const btn = (v, label, cls, icn) => '<button type="button" class="btn ' + (cls || 'line') + '" data-a="cset" data-id="' + r.id + '" data-v="' + v + '">' + (icn ? ic(icn) : '') + esc(label) + '</button>';
-  let act = '';
-  if (r.status === 'pending') act = btn('declined', t('cat.decline'), 'no', 'x') + btn('offered', t('cat.offer'), 'ok', 'check');
-  else if (r.status === 'offered') act = btn('confirmed', t('cat.accepted'), 'ok', 'check') + btn('cancelled', t('cancel'));
-  else if (r.status === 'confirmed') act = btn('paid', t('cat.paid'), 'ok', 'check') + btn('cancelled', t('cancel'));
-  else if (r.status === 'paid') act = btn('done', t('cat.done'), 'ok', 'check') + btn('cancelled', t('cancel'));
-  else act = btn('pending', t('reopen'));
-  const tel = String(r.phone || '').replace(/[^\d+]/g, ''), d = r.data || {}, lines = d.lines || [], extra = d.extra || [];
-  const kg = (g) => (g / 1000).toLocaleString(LOC[LI], { maximumFractionDigits: 1 });
-  const kitchen = lines.map((l) => '<tr><th colspan="2">' + esc(T['cc.' + l.cat] ? t('cc.' + l.cat) : l.name) + '</th></tr>' + (l.rows || []).map((x) => '<tr><td>' + esc(x.name) + '</td><td>' + r.guests + ' × ' + x.pg + ' g · ' + kg(x.pg * r.guests) + ' kg</td></tr>').join('')).join('');
-  const xl = (e) => (e.k === 'staff' ? t('cx.staff', { n: e.n, h: e.h }) : e.k === 'deliv' ? (T['cx.deliv.' + e.z] ? t('cx.deliv.' + e.z) : e.label) : (T['cx.' + e.k] ? t('cx.' + e.k) : e.label));
-  return '<div class="d-head c-head"><span class="d-when"><i>' + esc(dayName(r.date) ? dayName(r.date) + ' · ' : '') + esc(fmtDay(r.date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })) + '</i><b>' + esc(r.time) + esc(t('clock')) + '</b></span>' + cchip(r) + '</div>' +
-    '<h2 class="d-name">' + esc(r.name) + '</h2><p class="d-meta">' + ic('person') + r.guests + ' ' + esc(t('cat.guests')) + ' · ' + esc(occName(r.occasion)) + ' · ' + esc(r.code) + (r.test ? ' · Test' : '') + '</p>' +
-    (r.address ? '<p class="d-note plain"><span>' + esc(t('cat.addr')) + '</span>' + esc(r.address) + '</p>' : '') +
-    (r.note ? '<p class="d-note"><span>' + esc(t('note')) + '</span>' + esc(r.note) + '</p>' : '') +
-    '<div class="acts">' + (tel ? '<a class="act" href="tel:' + esc(tel) + '">' + ic('phone') + esc(t('call')) + '<small>' + esc(r.phone) + '</small></a>' : '') + '<button type="button" class="act" data-a="ctell" data-id="' + r.id + '">' + ic('chat') + esc(t('tell')) + '</button></div>' +
-    (tell ? ctellHtml(r, tell) : '') +
-    '<div class="d-act">' + act + '</div>' +
-    '<div class="c-sum"><div><span>' + esc(t('cat.total')) + '</span><b>' + esc(money(r.total)) + '</b></div><div><span>' + esc(t('cat.pp')) + '</span><b>' + esc(money(Math.round(r.total / Math.max(1, r.guests)))) + '</b></div><div><span>' + esc(t('cat.dep')) + '</span><b>' + esc(money(r.deposit)) + '</b></div></div>' +
-    '<table class="ktab"><caption>' + esc(t('cat.kitchen')) + '</caption><tbody>' + kitchen + '</tbody></table>' +
-    '<ul class="c-x"><li><span>' + esc(t('cat.food', { pp: money(d.pp || 0) })) + '</span><b>' + esc(money(d.food || 0)) + '</b></li>' + (d.disc ? '<li><span>' + esc(t('cat.disc', { n: d.rate })) + '</span><b>−' + esc(money(d.disc)) + '</b></li>' : '') +
-    extra.map((e) => '<li><span>' + esc(xl(e)) + '</span><b>' + (e.amount ? esc(money(e.amount)) : '–') + '</b></li>').join('') + '</ul>' +
-    '<label class="f"><span>' + esc(t('inote')) + '</span><input id="cNote" maxlength="600" value="' + esc(r.admin_note) + '" enterkeyhint="done"></label>' +
-    '<div class="d-foot"><button type="button" class="btn line" data-a="csavenote" data-id="' + r.id + '">' + esc(t('save')) + '</button><button type="button" class="btn line danger" data-a="cdel" data-id="' + r.id + '">' + esc(t('del')) + '</button></div>' +
-    (log && log.length ? '<details class="d-log"><summary>' + esc(t('history')) + '</summary><ul>' + log.map((l) => '<li><span>' + esc(new Date(l.ts).toLocaleDateString(LOC[LI], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })) + '</span>' + esc(T['clog.' + l.action] ? t('clog.' + l.action) : l.action) + (l.who && l.who !== 'web' ? ' · ' + esc(l.who) : '') + '</li>').join('') + '</ul></details>' : '');
-}
-async function openCat(id, keep, tell) {
-  const r = catById(id); if (!r) return;
-  const prev = S.sheet && S.sheet.kind === 'cdetail' && S.sheet.id === id ? S.sheet : null;
-  const tk = tell !== undefined ? tell : (prev ? prev.tell : null);
-  const x = '<button type="button" class="sh-x sq" data-a="close" aria-label="' + esc(t('close')) + '">' + ic('x') + '</button>';
-  if (!keep || !prev) sheet(catDetailHtml(r, prev ? prev.log : null, tk), 'cdetail', id);
-  else { const nt = $('#cNote'); if (nt && document.activeElement === nt) return; $('.sh').innerHTML = x + catDetailHtml(r, prev.log, tk); }
-  S.sheet = { kind: 'cdetail', id, tell: tk, log: prev ? prev.log : null };
-  if (!prev || !prev.log) {
-    const g = catGen, d = await call('GET', '/admin/catering/' + id);
-    if (d.ok && g === catGen && S.sheet && S.sheet.kind === 'cdetail' && S.sheet.id === id) { catPut(d.j.row); S.sheet.log = d.j.log; const o = document.activeElement; if (!o || !/INPUT|TEXTAREA/.test(o.tagName)) $('.sh').innerHTML = x + catDetailHtml(d.j.row, d.j.log, S.sheet.tell); }
-  }
-}
-async function catSet(id, status) {
-  const r = await call('PATCH', '/admin/catering/' + id, { status });
-  if (!r.ok) { toast(t('net'), 'bad'); return; }
-  catGen++; catPut(r.j.row); catCount(); renderMain();
-  const tell = status === 'offered' ? 'offer' : status === 'confirmed' ? 'ok' : status === 'declined' ? 'no' : null;
-  if (S.sheet && S.sheet.kind === 'cdetail' && S.sheet.id === id) { S.sheet.log = r.j.log || null; openCat(id, false, tell !== null ? tell : S.sheet.tell); }
-  else if (tell) openCat(id, false, tell);
-  toast(t('cst.' + status), status === 'declined' || status === 'cancelled' ? 'bad' : 'good');
-}
-// Tipps im Catering-Teil. Gibt true zurück, wenn der Tipp hier erledigt wurde.
-async function catClick(a, v, id, el) {
-  if (a === 'demo') { S.demo = true; S.lock = 'ok'; S.view = 'cat'; S.mode = 'test'; render(); loadCat(); return true; }
-  if (a === 'copen') { openCat(id); return true; }
-  if (a === 'cset') { el.disabled = true; await catSet(id, v); return true; }
-  if (a === 'ctell') { const r = catById(id); if (r) openCat(id, false, r.status === 'declined' ? 'no' : (r.status === 'pending' || r.status === 'offered') ? 'offer' : 'ok'); return true; }
-  if (a === 'ctellkind') { openCat(id, false, v); return true; }
-  if (a === 'csavenote') {
-    const r = await call('PATCH', '/admin/catering/' + id, { admin_note: $('#cNote').value });
-    if (r.ok) { catGen++; catPut(r.j.row); if (S.sheet && S.sheet.kind === 'cdetail' && r.j.log) S.sheet.log = r.j.log; toast(t('saved'), 'good'); renderMain(); } else toast(t('net'), 'bad');
-    return true;
-  }
-  if (a === 'cdel') {
-    if (el.dataset.sure) { const r = await call('DELETE', '/admin/catering/' + id, {}); if (r.ok) { catGen++; S.cat.rows = S.cat.rows.filter((x) => x.id !== id); catCount(); closeSheet(); renderMain(); } else toast(t('net'), 'bad'); }
-    else { el.dataset.sure = '1'; el.textContent = t('cat.del.q') + ' ' + t('yes'); }
-    return true;
-  }
-  if (a === 'reload' && (S.demo || S.view === 'cat')) { el.classList.add('spin'); await loadCat(); if (!S.demo) loadDay(S.date, true); return true; }
-  if (a === 'tab' && S.demo) return true;
-  return false;
-}
-/* Vorführ-Modus ohne Schnittstelle: Beispiel-Anfragen und alles, was auf diesem Gerät im Catering-Konfigurator abgeschickt wurde */
-const DEMO_KEY = 'leonn-catering-demo';
-let demoSamples = null;
-const demoLocal = () => { try { const l = JSON.parse(localStorage.getItem(DEMO_KEY) || '[]'); return Array.isArray(l) ? l.filter((r) => r && typeof r.token === 'string' && r.data && typeof r.id === 'number') : []; } catch (e) { return []; } };
-async function demoCall(method, path, body) {
-  if (!demoSamples) {
-    try {
-      const core = await import('../catering/core.js'), now = Date.now();
-      const mk = (id, status, days, guests, occasion, name, pi, over, time) => {
-        const c = core.calc(Object.assign({ guests, sel: core.PRESETS[pi].ids.slice() }, over || {})), o = c.order;
-        return { id, code: 'CDEMO' + id, token: 'demo-sample-' + id, date: addDays(ymd(new Date()), days), time: time || '18:00', guests, occasion, name, phone: '0221 000000', email: '', address: 'Beispielstraße 1, Köln', note: '', lang: 'de', status, total: c.total, deposit: c.dep,
-          data: { sel: o.sel, drinks: o.drinks, ware: o.ware, staff: o.staff, hours: o.hours, deko: o.deko, deliv: o.deliv, pp: c.pp, grams: c.grams, rate: c.rate, food: c.food, disc: c.disc, lines: c.lines, extra: c.extra },
-          admin_note: '', test: true, created_at: now, updated_at: now, log: [{ ts: now, action: 'created', who: 'web' }], sample: true };
-      };
-      demoSamples = [mk(1, 'pending', 9, 60, 'Firmenfeier', 'Beispiel GmbH', 1, { staff: 2, ware: 'porz', deliv: 'b', drinks: ['soft'] }), mk(2, 'offered', 16, 120, 'Hochzeit', 'Familie Beispiel', 2, { staff: 4, hours: 6, deko: true, ware: 'porz', drinks: ['soft', 'cay'] }),
-        mk(3, 'paid', 5, 25, 'Geburtstag', 'Erika Beispiel', 0), mk(4, 'confirmed', 11, 35, 'Familienfeier', 'Familie Muster', 3, { drinks: ['cay'] }, '10:30')];
-    } catch (e) { demoSamples = []; }
-  }
-  const local = demoLocal(), all = local.concat(demoSamples), save = () => { try { localStorage.setItem(DEMO_KEY, JSON.stringify(local)); } catch (e) {} };
-  const nf = { ok: false, status: 404, j: { error: 'not_found' } }, m = /^\/admin\/catering(?:\/(\d+))?$/.exec(path);
-  if (!m) return nf;
-  if (!m[1]) return { ok: true, status: 200, j: { rows: all, today: ymd(new Date()), ts: Date.now(), mode: 'test', cat: { open: all.filter((x) => x.status === 'pending').length, ts: Math.max(0, ...all.map((x) => x.updated_at || 0)) } } };
-  const r = all.find((x) => x.id === +m[1]); if (!r) return nf;
-  if (method === 'GET') return { ok: true, status: 200, j: { row: r, log: r.log || [] } };
-  if (method === 'DELETE') { if (r.sample) demoSamples = demoSamples.filter((x) => x !== r); else { local.splice(local.indexOf(r), 1); save(); } return { ok: true, status: 200, j: { ok: true } }; }
-  if (method === 'PATCH') {
-    const now = Date.now(), who = S.name || 'Admin'; r.log = r.log || [];
-    if (body.status !== undefined && body.status !== r.status) { r.status = body.status; r.log.push({ ts: now, action: body.status, who }); }
-    if (body.admin_note !== undefined && body.admin_note !== r.admin_note) { r.admin_note = String(body.admin_note).slice(0, 600); r.log.push({ ts: now, action: 'note', who }); }
-    r.updated_at = now; if (!r.sample) save();
-    return { ok: true, status: 200, j: { ok: true, row: r, log: r.log } };
-  }
-  return nf;
-}
-
 /* ------------------------------------------------------------ Mitteilungen (Push) und Installation */
 const b64ToU8 = (s) => { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; };
 async function pushState() {
@@ -711,10 +500,9 @@ async function cfgSave(patch, quiet) {
 document.addEventListener('click', async (e) => {
   const el = e.target.closest('[data-a]'); if (!el) return;
   const a = el.dataset.a, v = el.dataset.v, id = +el.dataset.id || 0;
-  if (await catClick(a, v, id, el)) return;
   if (a === 'key') { if (S.busy) return; if (v === 'x') S.pin = S.pin.slice(0, -1); else if (S.pin.length < 6) S.pin += v; S.pinMsg = S.pin.length ? '' : S.pinMsg; const nm = $('#lkName'), keep = nm ? nm.value : null; render(); if (keep !== null && $('#lkName')) $('#lkName').value = keep; if (S.pin.length === 6) tryPin(); }
   else if (a === 'lang') { LI = v === 'tr' ? 1 : 0; store.set('leonn-admin-lang', v); render(); pushSync(); }
-  else if (a === 'tab') { S.view = v; closeSheet(); render(); window.scrollTo(0, 0); if (v === 'day') loadDay(S.date, true); else if (v === 'cal') loadCounts(); else if (v === 'more') { await loadSettings(); await pushState(); render(); loadStats(); } else if (v === 'inbox') loadDay(S.date, true); else if (v === 'cat') loadCat(); }
+  else if (a === 'tab') { S.view = v; closeSheet(); render(); window.scrollTo(0, 0); if (v === 'day') loadDay(S.date, true); else if (v === 'cal') loadCounts(); else if (v === 'more') { await loadSettings(); await pushState(); render(); loadStats(); } else if (v === 'inbox') loadDay(S.date, true); }
   else if (a === 'day') { S.date = addDays(S.date, +v); render(); loadDay(S.date); }
   else if (a === 'today') { S.date = S.today; render(); loadDay(S.date); }
   else if (a === 'pick') { const p = $('#dayPick'); try { if (p.showPicker) p.showPicker(); else p.focus(); } catch (x) { p.focus(); } }
@@ -787,8 +575,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && S.sheet) { closeSheet(); return; }
   if (S.lock === 'pin' && !/INPUT/.test((e.target.tagName || ''))) { if (/^\d$/.test(e.key)) { const b = $('[data-a="key"][data-v="' + e.key + '"]'); if (b) b.click(); } else if (e.key === 'Backspace') { const b = $('[data-a="key"][data-v="x"]'); if (b) b.click(); } }
 });
-document.addEventListener('visibilitychange', () => { if (!document.hidden && S.lock === 'ok') { if (S.demo) { loadCat(true); return; } poll(); loadDay(S.date, true); if (S.view === 'cat') loadCat(true); } });
-window.addEventListener('storage', (e) => { if (S.demo && e.key === DEMO_KEY) loadCat(true); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden && S.lock === 'ok') { poll(); loadDay(S.date, true); } });
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); S.deferred = e; if (S.view === 'more') renderMain(); });
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});

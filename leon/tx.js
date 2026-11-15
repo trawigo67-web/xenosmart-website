@@ -97,7 +97,7 @@ window.LEONN_TX = {
 "desserts-2": { tr: "Ev yapımı fırın sütlaç, üzerinde kıyılmış ceviz", en: "Homemade Turkish oven-baked rice pudding, topped with chopped walnuts" },
 "desserts-3": { tr: "Geleneksel karamelize sütlü tatlı, hafif kavrulmuş aromalı; üzerinde kıyılmış ceviz", en: "Traditional caramelised milk pudding with a fine roasted aroma, topped with chopped walnuts" },
 "desserts-4": { tr: "Kat kat çıtır hamur, Antep fıstığı dolgulu; şerbetli, üzerinde kıyılmış fıstık", en: "Crisp layered pastry with pistachio filling, finished with sugar syrup and topped with chopped pistachios" },
-"desserts-5": { tr: "Geleneksel Maraş dondurması; kremamsı ve bıçakla kesilecek kıvamda", en: "Traditional Turkish milk ice cream, creamy and firm enough to slice" },
+"desserts-5": { tr: "Geleneksel kesme dondurma; kremamsı ve bıçakla kesilecek kıvamda", en: "Traditional Turkish milk ice cream, creamy and firm enough to slice" },
 
 "kids-4": { ntr: "Multivitamin Meyve Suyu 0,20 l", nen: "Multivitamin juice 0,20 l" },
 "kids-5": { ntr: "Portakal Suyu 0,20 l", nen: "Orange juice 0,20 l" },
