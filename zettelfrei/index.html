@@ -67,7 +67,8 @@ section{padding:72px 0}
 .wide-video video{width:100%;height:100%;display:block}
 .facts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .facts .card{padding:18px}
-.facts .num{font-size:2rem}
+.facts .num{font-size:2rem;white-space:nowrap}
+@media (max-width:480px){.facts .num{font-size:1.6rem}.facts .card{padding:14px}}
 .facts p{margin-top:6px;font-size:.95rem}
 .src{margin-top:14px;color:var(--muted);font-size:.8rem;line-height:1.5}
 .who{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
