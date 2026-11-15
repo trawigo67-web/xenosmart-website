@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zettelfrei – Schluss mit dem Papierkram</title>
+<meta name="description" content="Briefe fotografieren, verstehen, Fristen im Griff: Zettelfrei hilft der ganzen Familie mit Behördenpost, Rechnungen und Mahnungen. Auf Deutsch und Türkisch. 30 Tage kostenlos testen.">
+<meta property="og:title" content="Zettelfrei – Schluss mit dem Papierkram">
+<meta property="og:description" content="Brief fotografieren – die KI erklärt ihn, findet die Frist und hilft bei der Antwort. 30 Tage kostenlos.">
+<meta property="og:image" content="https://xenosmart.de/zettelfrei/media/expl_de.jpg">
+<meta name="theme-color" content="#1d4ed8">
+<link rel="icon" href="media/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+/* Layout: one-column landing, alternating light/blue bands; video next to text on wide screens. */
+:root{
+  --bg:#f4f6fb; --surface:#ffffff; --ink:#14213d; --muted:#56607a; --line:#d8deea;
+  --accent:#1d4ed8; --accent-deep:#0f2a8a; --accent-soft:#e3eafd; --stamp:#f2b705; --ok:#147a4a;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif; --f-body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0e1424;--surface:#171f33;--ink:#e8ecf5;--muted:#9aa4ba;--line:#2a3550;--accent:#7aa2ff;--accent-soft:#1f2b4d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1424;--surface:#171f33;--ink:#e8ecf5;--muted:#9aa4ba;--line:#2a3550;--accent:#7aa2ff;--accent-soft:#1f2b4d;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--f-body);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-display);line-height:1.08;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.4rem,6vw,4.2rem);font-weight:800}
+h2{font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:800}
+h3{font-size:1.2rem;font-weight:700}
+p{margin:0}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-left))}
+header.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:14px;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font:800 1.25rem var(--f-display);color:var(--ink);text-decoration:none;flex:1}
+.logo svg{width:34px;height:34px}
+.langs{display:flex;gap:4px;border:1px solid var(--line);border-radius:10px;padding:3px}
+.langs button{border:0;background:none;color:var(--muted);font:600 .85rem var(--f-body);padding:5px 9px;border-radius:7px;cursor:pointer}
+.langs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:14px;padding:14px 22px;font:700 1rem var(--f-body);text-decoration:none;cursor:pointer;border:2px solid transparent;min-height:48px}
+.btn.pri{background:var(--stamp);color:#14213d}
+.btn.pri:hover{filter:brightness(1.05)}
+.btn.ghost{border-color:currentColor;color:inherit}
+.btn.sm{padding:8px 14px;min-height:38px;font-size:.9rem}
+.hero{background:linear-gradient(160deg,var(--accent-deep),#1d4ed8 70%);color:#fff;padding:56px 0 64px}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+.hero p.lead{font-size:1.2rem;color:#dbe4ff;max-width:34ch;margin-top:18px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.hero .note{margin-top:14px;font-size:.9rem;color:#c6d3ff}
+.tag{display:inline-block;background:rgba(255,255,255,.15);border-radius:999px;padding:5px 12px;font-weight:700;font-size:.85rem;margin-bottom:18px}
+.phone-video{justify-self:center;width:min(320px,100%);aspect-ratio:9/16;border-radius:34px;overflow:hidden;border:10px solid #0b1020;box-shadow:0 30px 80px rgba(0,0,0,.4);background:#0b1020}
+.phone-video video{width:100%;height:100%;object-fit:cover;display:block}
+section{padding:72px 0}
+.kicker{font:700 .82rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+.card p{color:var(--muted);margin-top:8px}
+.num{font:800 2.4rem var(--f-display);color:var(--accent);line-height:1}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;margin-top:30px}
+.steps ol{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:18px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:44px 1fr;gap:14px;counter-increment:s}
+.steps li::before{content:counter(s);width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:800 1.2rem var(--f-display)}
+.steps li b{display:block;font-family:var(--f-display);font-size:1.1rem}
+.steps li span{color:var(--muted)}
+.wide-video{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9}
+.wide-video video{width:100%;height:100%;display:block}
+.who{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
+.prices{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:30px;max-width:860px}
+.price{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:12px}
+.price.main{border-color:var(--accent)}
+.price .amt{font:800 2.6rem var(--f-display)} .price .amt small{font-size:1rem;color:var(--muted);font-weight:600}
+.price ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.price li{padding-left:28px;position:relative}
+.price li::before{content:"";position:absolute;left:4px;top:.55em;width:12px;height:7px;border-left:3px solid var(--ok);border-bottom:3px solid var(--ok);transform:rotate(-45deg)}
+.badge{align-self:flex-start;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 12px;font-weight:700;font-size:.82rem}
+.trust{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.trust .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:26px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+details+details{margin-top:10px}
+summary{font-weight:700;cursor:pointer}
+details p{margin-top:10px;color:var(--muted)}
+.final{background:linear-gradient(160deg,var(--accent-deep),#1d4ed8);color:#fff;text-align:center;border-radius:28px;padding:48px 24px;margin:0 auto}
+.final p{color:#dbe4ff;margin:14px auto 26px;max-width:46ch}
+footer{padding:36px 0 calc(36px + env(safe-area-inset-bottom));color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between}
+[lang-tr]{display:none}
+html[lang="tr"] [lang-de]{display:none} html[lang="tr"] [lang-tr]{display:revert}
+:focus-visible{outline:3px solid var(--stamp);outline-offset:3px}
+@media (max-width:860px){
+  .hero .wrap,.steps{grid-template-columns:1fr}
+  .pains,.who,.trust .grid{grid-template-columns:1fr 1fr}
+  .prices{grid-template-columns:1fr}
+}
+@media (max-width:520px){ .pains,.who,.trust .grid{grid-template-columns:1fr} section{padding:52px 0} .hero{padding:36px 0 48px} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="#top"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="8" width="36" height="26" rx="5" fill="#1d4ed8"/><path d="M4 11l16 12 16-12" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><circle cx="33" cy="9" r="6" fill="#f2b705" stroke="#fff" stroke-width="2"/></svg>Zettelfrei</a>
+  <div class="langs" role="group" aria-label="Sprache / Dil"><button type="button" data-lang="de" aria-pressed="true">DE</button><button type="button" data-lang="tr" aria-pressed="false">TR</button></div>
+  <a class="btn pri sm" href="https://zettelfrei.xenosmart.de/"><span lang-de>Testen</span><span lang-tr>Dene</span></a>
+</div></header>
+
+<main id="top">
+<div class="hero"><div class="wrap">
+  <div>
+    <span class="tag"><span lang-de>Neu · Beta · Deutsch &amp; Türkçe</span><span lang-tr>Yeni · Beta · Türkçe &amp; Deutsch</span></span>
+    <h1><span lang-de>Schluss mit dem Papierkram.</span><span lang-tr>Kâğıt derdine son.</span></h1>
+    <p class="lead"><span lang-de>Brief fotografieren – Zettelfrei erklärt ihn verständlich, findet die Frist und hilft bei der Antwort. Für die ganze Familie.</span><span lang-tr>Mektubu fotoğrafla – Zettelfrei onu anlaşılır şekilde açıklar, son tarihi bulur ve cevap yazmana yardım eder. Bütün aile için.</span></p>
+    <div class="ctas">
+      <a class="btn pri" href="https://zettelfrei.xenosmart.de/"><span lang-de>30 Tage kostenlos testen</span><span lang-tr>30 gün ücretsiz dene</span></a>
+      <a class="btn ghost" href="#so-gehts"><span lang-de>So funktioniert's</span><span lang-tr>Nasıl çalışır?</span></a>
+    </div>
+    <p class="note"><span lang-de>Keine Zahlungsdaten nötig. Läuft im Browser auf Handy, Tablet und PC.</span><span lang-tr>Ödeme bilgisi gerekmez. Telefon, tablet ve bilgisayarda tarayıcıda çalışır.</span></p>
+  </div>
+  <div class="phone-video">
+    <video id="spot" controls playsinline preload="metadata" poster="media/spot_de.jpg" aria-label="Zettelfrei Werbespot">
+      <source src="media/spot_de.mp4" type="video/mp4">
+    </video>
+  </div>
+</div></div>
+
+<section><div class="wrap">
+  <div class="kicker"><span lang-de>Kennst du das?</span><span lang-tr>Tanıdık geldi mi?</span></div>
+  <h2><span lang-de>Der Briefkasten ist voll – und keiner weiß, wer sich kümmert.</span><span lang-tr>Posta kutusu dolu – ve kimin ilgileneceği belli değil.</span></h2>
+  <div class="pains">
+    <div class="card"><div class="num">1</div><h3><span lang-de>Amtsdeutsch</span><span lang-tr>Resmi Almanca</span></h3><p><span lang-de>Bescheide vom Finanzamt, der Krankenkasse oder dem Jobcenter sind schwer zu verstehen.</span><span lang-tr>Vergi dairesi, sağlık sigortası veya Jobcenter yazıları zor anlaşılır.</span></p></div>
+    <div class="card"><div class="num">2</div><h3><span lang-de>Verpasste Fristen</span><span lang-tr>Kaçırılan süreler</span></h3><p><span lang-de>Einspruch, Zahlung, Widerspruch: Wer eine Frist verpasst, zahlt oft drauf.</span><span lang-tr>İtiraz, ödeme, ret: Süreyi kaçıran çoğu zaman fazladan öder.</span></p></div>
+    <div class="card"><div class="num">3</div><h3><span lang-de>Chaos in der Familie</span><span lang-tr>Ailede karmaşa</span></h3><p><span lang-de>Briefe liegen auf dem Küchentisch. Wer hat was erledigt? Niemand weiß es.</span><span lang-tr>Mektuplar mutfak masasında. Kim neyi halletti? Kimse bilmiyor.</span></p></div>
+  </div>
+</div></section>
+
+<section id="so-gehts" style="padding-top:0"><div class="wrap">
+  <div class="kicker"><span lang-de>So funktioniert's</span><span lang-tr>Nasıl çalışır?</span></div>
+  <h2><span lang-de>5 Schritte. Kein Chaos.</span><span lang-tr>5 adım. Kaos yok.</span></h2>
+  <div class="steps">
+    <ol>
+      <li><div><b><span lang-de>Brief fotografieren</span><span lang-tr>Mektubu fotoğrafla</span></b><span><span lang-de>Jede Seite mit dem Handy – oder ein PDF hochladen.</span><span lang-tr>Her sayfayı telefonla çek – ya da PDF yükle.</span></span></div></li>
+      <li><div><b><span lang-de>KI liest alles aus</span><span lang-tr>Yapay zekâ her şeyi okur</span></b><span><span lang-de>Absender, Betrag, Aktenzeichen und die Frist – mit der genauen Textstelle aus dem Brief.</span><span lang-tr>Gönderen, tutar, dosya numarası ve son tarih – mektuptaki tam cümleyle.</span></span></div></li>
+      <li><div><b><span lang-de>Sofort verstehen</span><span lang-tr>Hemen anla</span></b><span><span lang-de>In einfachem Deutsch, auf Türkisch oder Englisch. Auf Wunsch vorgelesen.</span><span lang-tr>Sade Almanca, Türkçe veya İngilizce. İstersen sesli okunur.</span></span></div></li>
+      <li><div><b><span lang-de>Wer kümmert sich?</span><span lang-tr>Kim ilgilenecek?</span></b><span><span lang-de>Brief einer Person zuteilen. Alle sehen, was offen und was erledigt ist.</span><span lang-tr>Mektubu birine ver. Herkes neyin açık, neyin bittiğini görür.</span></span></div></li>
+      <li><div><b><span lang-de>Antworten</span><span lang-tr>Cevap ver</span></b><span><span lang-de>Entwurf für Widerspruch, Ratenzahlung, Fristverlängerung oder Kündigung – in fertiger Briefform.</span><span lang-tr>İtiraz, taksit, süre uzatma veya fesih için hazır mektup taslağı.</span></span></div></li>
+    </ol>
+    <div class="wide-video"><video id="expl" controls playsinline preload="none" poster="media/expl_de.jpg" aria-label="Zettelfrei Erklärvideo"><source src="media/expl_de.mp4" type="video/mp4"></video></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="kicker"><span lang-de>Für wen?</span><span lang-tr>Kimin için?</span></div>
+  <h2><span lang-de>Für alle, die Post aus Deutschland bekommen.</span><span lang-tr>Almanya'dan mektup alan herkes için.</span></h2>
+  <div class="who">
+    <div class="card"><h3><span lang-de>Familien</span><span lang-tr>Aileler</span></h3><p><span lang-de>Bis zu 6 Personen teilen sich die Briefe – mit klaren Zuständigkeiten.</span><span lang-tr>6 kişiye kadar mektupları paylaşır – kimin ne yapacağı belli.</span></p></div>
+    <div class="card"><h3><span lang-de>Türkischsprachige Familien</span><span lang-tr>Türkçe konuşan aileler</span></h3><p><span lang-de>Jeder Brief auf Türkisch erklärt. Fachbegriffe bleiben auf Deutsch dabei.</span><span lang-tr>Her mektup Türkçe açıklanır. Almanca terimler de yanında kalır.</span></p></div>
+    <div class="card"><h3><span lang-de>Eltern &amp; Großeltern</span><span lang-tr>Anne-babalar ve büyükler</span></h3><p><span lang-de>Große Schrift, Vorlesen – und die Kinder helfen aus der Ferne mit.</span><span lang-tr>Büyük yazı, sesli okuma – çocuklar uzaktan yardım eder.</span></p></div>
+    <div class="card"><h3><span lang-de>Familienunternehmen</span><span lang-tr>Aile işletmeleri</span></h3><p><span lang-de>Zettelfrei Pro trennt Privat- und Firmenpost. Bald verfügbar.</span><span lang-tr>Zettelfrei Pro özel ve şirket postasını ayırır. Yakında.</span></p></div>
+  </div>
+</div></section>
+
+<section id="preise" style="padding-top:0"><div class="wrap">
+  <div class="kicker"><span lang-de>Preise</span><span lang-tr>Fiyatlar</span></div>
+  <h2><span lang-de>30 Tage kostenlos. Danach fair.</span><span lang-tr>30 gün ücretsiz. Sonra uygun fiyat.</span></h2>
+  <div class="prices">
+    <div class="price main">
+      <span class="badge"><span lang-de>Jetzt in der Beta</span><span lang-tr>Şimdi beta'da</span></span>
+      <h3>Zettelfrei Familie</h3>
+      <div class="amt">4,99 € <small><span lang-de>/ Monat · oder 44,99 € / Jahr</span><span lang-tr>/ ay · veya 44,99 € / yıl</span></small></div>
+      <ul>
+        <li><span lang-de>Bis zu 6 Personen</span><span lang-tr>6 kişiye kadar</span></li>
+        <li><span lang-de>Unbegrenzt Briefe</span><span lang-tr>Sınırsız mektup</span></li>
+        <li><span lang-de>KI-Erklärung auf Deutsch, Türkisch, Englisch</span><span lang-tr>Almanca, Türkçe, İngilizce açıklama</span></li>
+        <li><span lang-de>Fristen &amp; Frist-Rechner</span><span lang-tr>Süreler ve süre hesaplayıcı</span></li>
+        <li><span lang-de>Antwortbriefe mit KI</span><span lang-tr>Yapay zekâ ile cevap mektupları</span></li>
+      </ul>
+      <a class="btn pri" href="https://zettelfrei.xenosmart.de/"><span lang-de>30 Tage kostenlos testen</span><span lang-tr>30 gün ücretsiz dene</span></a>
+    </div>
+    <div class="price">
+      <span class="badge"><span lang-de>Bald</span><span lang-tr>Yakında</span></span>
+      <h3>Zettelfrei Pro</h3>
+      <div class="amt">19,90 € <small><span lang-de>/ Monat</span><span lang-tr>/ ay</span></small></div>
+      <ul>
+        <li><span lang-de>Für Familienunternehmen &amp; kleine GmbHs</span><span lang-tr>Aile işletmeleri ve küçük şirketler için</span></li>
+        <li><span lang-de>Privat- und Firmenpost getrennt</span><span lang-tr>Özel ve şirket postası ayrı</span></li>
+        <li><span lang-de>Rollen für Team &amp; Steuerberater</span><span lang-tr>Ekip ve vergi danışmanı için roller</span></li>
+        <li><span lang-de>E-Rechnungen empfangen, Export für den Steuerberater</span><span lang-tr>E-fatura alma, vergi danışmanı için dışa aktarım</span></li>
+        <li><span lang-de>Aufbewahrungsfristen im Blick</span><span lang-tr>Saklama süreleri takipte</span></li>
+      </ul>
+      <a class="btn ghost" href="mailto:info@xenosmart.de?subject=Zettelfrei%20Pro"><span lang-de>Auf die Warteliste</span><span lang-tr>Bekleme listesine yazıl</span></a>
+    </div>
+  </div>
+  <p style="margin-top:16px;color:var(--muted);font-size:.9rem"><span lang-de>Während der Beta ist Zettelfrei für Tester kostenlos. Bezahlt wird erst, wenn die Bezahlfunktion startet – vorher fragen wir dich.</span><span lang-tr>Beta süresince Zettelfrei test edenler için ücretsizdir. Ödeme sistemi başlamadan önce sana soracağız.</span></p>
+</div></section>
+
+<section class="trust"><div class="wrap">
+  <div class="kicker"><span lang-de>Vertrauen</span><span lang-tr>Güven</span></div>
+  <h2><span lang-de>Deine Briefe gehören dir.</span><span lang-tr>Mektupların sana ait.</span></h2>
+  <div class="grid">
+    <div><h3><span lang-de>Server in Deutschland</span><span lang-tr>Sunucu Almanya'da</span></h3><p style="color:var(--muted);margin-top:8px"><span lang-de>Briefe und Fotos werden auf unserem Server in Deutschland gespeichert.</span><span lang-tr>Mektuplar ve fotoğraflar Almanya'daki sunucumuzda saklanır.</span></p></div>
+    <div><h3><span lang-de>Nur deine Familie</span><span lang-tr>Sadece ailen</span></h3><p style="color:var(--muted);margin-top:8px"><span lang-de>Nur wer deinen Einladungscode hat, sieht eure Briefe. Kein Verkauf von Daten.</span><span lang-tr>Mektuplarınızı sadece davet kodunuzu bilenler görür. Veriler satılmaz.</span></p></div>
+    <div><h3><span lang-de>Transparent bei KI</span><span lang-tr>Yapay zekâda şeffaflık</span></h3><p style="color:var(--muted);margin-top:8px"><span lang-de>Zum Auslesen wird der Brief an einen KI-Dienst geschickt. Was genau passiert, steht im <a href="datenschutz.html">Datenschutz</a>.</span><span lang-tr>Okumak için mektup bir yapay zekâ hizmetine gönderilir. Ayrıntılar <a href="datenschutz.html">gizlilik</a> sayfasında.</span></p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap" style="max-width:820px">
+  <div class="kicker"><span lang-de>Fragen</span><span lang-tr>Sorular</span></div>
+  <h2 style="margin-bottom:22px"><span lang-de>Häufige Fragen</span><span lang-tr>Sık sorulan sorular</span></h2>
+  <details><summary><span lang-de>Brauche ich eine App aus dem App Store?</span><span lang-tr>App Store'dan uygulama indirmem gerekiyor mu?</span></summary><p><span lang-de>Nein. Zettelfrei läuft im Browser. Auf dem Handy kannst du es über „Zum Startbildschirm hinzufügen“ wie eine App ablegen. Apps für iPhone und Android folgen.</span><span lang-tr>Hayır. Zettelfrei tarayıcıda çalışır. Telefonda „Ana ekrana ekle“ ile uygulama gibi kullanabilirsin. iPhone ve Android uygulamaları gelecek.</span></p></details>
+  <details><summary><span lang-de>Was passiert nach 30 Tagen?</span><span lang-tr>30 gün sonra ne olur?</span></summary><p><span lang-de>Nichts Automatisches. Es wird nichts abgebucht. Deine Briefe bleiben gespeichert und lesbar. Weitermachen kannst du mit Zettelfrei Familie.</span><span lang-tr>Otomatik hiçbir şey olmaz. Para çekilmez. Mektupların kayıtlı ve okunabilir kalır. Zettelfrei Aile ile devam edebilirsin.</span></p></details>
+  <details><summary><span lang-de>Ist das eine Rechtsberatung?</span><span lang-tr>Bu hukuki danışmanlık mı?</span></summary><p><span lang-de>Nein. Zettelfrei erklärt Briefe und schlägt Fristen und Antworten vor. Bei wichtigen Fällen frag die Verbraucherzentrale, einen Anwalt oder Steuerberater.</span><span lang-tr>Hayır. Zettelfrei mektupları açıklar, süre ve cevap önerir. Önemli durumlarda Verbraucherzentrale'ye, bir avukata veya vergi danışmanına sor.</span></p></details>
+  <details><summary><span lang-de>Wie kommt meine Familie dazu?</span><span lang-tr>Ailem nasıl katılır?</span></summary><p><span lang-de>Nach der Anmeldung bekommst du einen Einladungscode. Deine Familie wählt „Mit Einladungscode beitreten“ und gibt ihn ein.</span><span lang-tr>Kayıttan sonra bir davet kodu alırsın. Ailen „Davet koduyla katıl“ seçip kodu girer.</span></p></details>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <div class="final">
+    <h2><span lang-de>Probier es heute aus.</span><span lang-tr>Bugün dene.</span></h2>
+    <p><span lang-de>30 Tage kostenlos, ohne Zahlungsdaten. In 2 Minuten eingerichtet.</span><span lang-tr>30 gün ücretsiz, ödeme bilgisi yok. 2 dakikada hazır.</span></p>
+    <a class="btn pri" href="https://zettelfrei.xenosmart.de/"><span lang-de>Jetzt kostenlos starten</span><span lang-tr>Şimdi ücretsiz başla</span></a>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <span>© 2026 Zettelfrei · ein Produkt von <a href="../">XenoSmart</a></span>
+  <span><a href="../impressum.html">Impressum</a> · <a href="datenschutz.html"><span lang-de>Datenschutz</span><span lang-tr>Gizlilik</span></a> · <a href="mailto:info@xenosmart.de">info@xenosmart.de</a></span>
+</div></footer>
+
+<script>
+(function(){
+  const set=(l)=>{ document.documentElement.lang=l; document.querySelectorAll("[data-lang]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===l)));
+    const sv=document.getElementById("spot"), ev=document.getElementById("expl");
+    [[sv,"spot"],[ev,"expl"]].forEach(([v,n])=>{ const src="media/"+n+"_"+l+".mp4"; if(!v.querySelector("source").src.endsWith(src)){ v.pause(); v.poster="media/"+n+"_"+l+".jpg"; v.querySelector("source").src=src; v.load(); } });
+    try{ localStorage.setItem("pw_lang",l); }catch(e){} };
+  document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>set(b.dataset.lang)));
+  let l="de"; try{ l=localStorage.getItem("pw_lang")||((navigator.language||"").startsWith("tr")?"tr":"de"); }catch(e){}
+  if(l==="tr") set("tr");
+})();
+</script>
+</body>
+</html>
