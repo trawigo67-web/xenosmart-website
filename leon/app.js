@@ -203,6 +203,19 @@ var I = {
 'prev': ['Vorheriges Gericht', 'Önceki yemek', 'Previous dish'],
 'next': ['Nächstes Gericht', 'Sonraki yemek', 'Next dish'],
 'close': ['Schließen', 'Kapat', 'Close'],
+'amb': ['Ambiente', 'Atmosfer', 'Ambience'],
+'amb.theme': ['Design', 'Tema', 'Design'],
+'amb.mode': ['Darstellung', 'Görünüm', 'Appearance'],
+'amb.music': ['Musik', 'Müzik', 'Music'],
+'amb.note': ['Ihre Auswahl gilt nur auf diesem Gerät.', 'Seçiminiz yalnızca bu cihazda geçerlidir.', 'Your choice only applies on this device.'],
+'amb.auto.s': ['passend zum Kalender', 'takvime göre', 'follows the calendar'],
+'amb.now': ['jetzt', 'şimdi', 'now'],
+'mode.dark': ['Dunkel', 'Koyu', 'Dark'],
+'mode.light': ['Hell', 'Açık', 'Light'],
+'mode.system': ['Wie Gerät', 'Cihaz gibi', 'Device'],
+'music.s': ['Leise Instrumentalmusik im Hintergrund', 'Arka planda kısık enstrümantal müzik', 'Quiet instrumental background music'],
+'music.on': ['Musik ausschalten', 'Müziği kapat', 'Turn music off'],
+'music.off': ['Musik einschalten', 'Müziği aç', 'Turn music on'],
 'pauseV': ['Video anhalten', 'Videoyu durdur', 'Pause video'],
 'playV': ['Video abspielen', 'Videoyu oynat', 'Play video'],
 'menuBtn': ['Menü', 'Menü', 'Menu'],
@@ -728,7 +741,7 @@ function rsvRender(focus) {
   p.setAttribute('data-step', RS.step);
   ticket();
   if (RS.step === 2) rsvLoad2();
-  if (focus) { var h = $('.rsv-q', p); if (h) { try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); } } var y = $('#rsvSteps').getBoundingClientRect().top + window.pageYOffset - hhNow() - 18; if (window.pageYOffset > y || p.getBoundingClientRect().top > window.innerHeight * 0.6) window.scrollTo({ top: Math.max(0, y), behavior: 'auto' }); }
+  if (focus) { var h = $('.rsv-q', p); if (h) { try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); } } var y = $('#rsvSteps').getBoundingClientRect().top + window.pageYOffset - hhNow() - 18; if (window.pageYOffset > y || p.getBoundingClientRect().top > window.innerHeight * 0.6) jumpTo(y); }
 }
 function rsvLoad2() {
   var c = RS.cfg, key = rsvKey(), ym = RS.ym;
@@ -927,6 +940,7 @@ function applyLang() {
   $('#totop').setAttribute('aria-label', t('totop')); $('#findBtn').setAttribute('aria-label', t('m.search'));
   $('#ppMinus').setAttribute('aria-label', t('less')); $('#ppPlus').setAttribute('aria-label', t('more'));
   splitWords(); renderBelt(); renderGroups(); renderMenu(); renderShow(); renderCats(); renderCev(); renderTable(); setStatus(); updGift(); rsvRender(); mineRender(); vidLabel();
+  if (typeof ambText === 'function' && AMB.t) { ambText(); ambPanel(); musUi(); }
   if (modalId) openItem(modalId);
   setupReveal();
 }
@@ -934,13 +948,17 @@ function applyLang() {
 /* ------------------------------------------------------------------ Navigation zwischen den Ansichten */
 var VIEWS = ['start', 'speisekarte', 'ueber-uns', 'reservieren', 'gutschein', 'vip-room', 'kontakt'], pendingGroup = null, curView = null;
 function navOpen(o) {
+  var hd = $('header.top'); if (o && hd) $('#nav').style.setProperty('--navtop', Math.round(Math.max(0, hd.getBoundingClientRect().bottom) + 14) + 'px');
   $('#nav').classList.toggle('open', o); $('#burger').setAttribute('aria-expanded', o ? 'true' : 'false');
   document.documentElement.style.overflow = o ? 'hidden' : '';
 }
+// Sofort springen: die Seite scrollt sonst wegen „scroll-behavior:smooth“ weich – Safari bricht das beim Seitenwechsel ab
+// und blieb unten stehen (z. B. Fußzeile statt Reservierung)
+function jumpTo(y) { var s = document.documentElement.style, o = s.scrollBehavior; s.scrollBehavior = 'auto'; window.scrollTo(0, Math.max(0, y)); s.scrollBehavior = o; }
 function scrollToGroup(id, smooth) {
   var el = document.getElementById(id); if (!el) return;
   var y = el.getBoundingClientRect().top + window.pageYOffset - (barsH() + 6);
-  window.scrollTo({ top: Math.max(0, y), behavior: smooth && !reduce ? 'smooth' : 'auto' });
+  if (smooth && !reduce) window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' }); else jumpTo(y);
 }
 function route() {
   var h = (location.hash || '').replace('#', ''); if (VIEWS.indexOf(h) < 0) h = 'start';
@@ -949,7 +967,7 @@ function route() {
     curView = h;
     VIEWS.forEach(function (v) { var el = document.getElementById('v-' + v); if (el) el.classList.toggle('on', v === h); });
     $$('nav.main a').forEach(function (a) { var on = a.getAttribute('href') === '#' + h; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-    window.scrollTo(0, 0);
+    jumpTo(0);
   }
   setHH(); setupReveal(); onScroll();
   if (h === 'speisekarte' && pendingGroup) { var g = pendingGroup; pendingGroup = null; setTimeout(function () { scrollToGroup(g, false); onScroll(); }, 60); }
@@ -1029,21 +1047,79 @@ function counters() {
   }, { threshold: 0.4 });
   ob.observe(box);
 }
+/* Bewegter Hintergrund im Bogen: Funken (Klassik), Schnee, Sterne, Blüten, Blätter, Lichtpunkte, Glitzer. */
+var FX = { kind: 'embers', light: false, rgb: '219,189,130', reset: null };
 function embers() {
   var c = $('#embers'); if (!c || reduce) return;
-  var x = c.getContext('2d'), P = [], W = 0, H = 0, i;
+  var x = c.getContext('2d'), P = [], B = [], W = 0, H = 0, i, nextBurst = 0;
   function size() { W = c.width = c.offsetWidth; H = c.height = c.offsetHeight; }
-  function nw(any) { return { x: W * (0.35 + Math.random() * 0.65), y: any ? Math.random() * H : H + 10, r: Math.random() * 1.8 + 0.4, vy: Math.random() * 0.7 + 0.25, vx: (Math.random() - 0.5) * 0.4, a: Math.random() * 0.7 + 0.2, ph: Math.random() * 6.28 }; }
-  size(); window.addEventListener('resize', size);
-  for (i = 0; i < 64; i++) P.push(nw(true));
+  function count() { return Math.max(24, Math.min(70, Math.round(W * H / 15000))); }
+  function nw(any) {
+    var k = FX.kind, r = Math.random;
+    if (k === 'embers') return { x: W * (0.35 + r() * 0.65), y: any ? r() * H : H + 10, r: r() * 1.8 + 0.4, vy: r() * 0.7 + 0.25, vx: (r() - 0.5) * 0.4, a: r() * 0.7 + 0.2, ph: r() * 6.28 };
+    if (k === 'stars') return { x: r() * W, y: r() * H * 0.9, r: r() * 1.3 + 0.5, a: r() * 0.6 + 0.3, ph: r() * 6.28, sp: 600 + r() * 1400 };
+    if (k === 'glints') return { x: r() * W, y: any ? r() * H : H + 20, r: r() * 5 + 2, vy: r() * 0.25 + 0.08, vx: (r() - 0.5) * 0.15, a: r() * 0.35 + 0.1, ph: r() * 6.28 };
+    if (k === 'sparkle') return { x: r() * W, y: any ? r() * H : H + 10, r: r() * 1.4 + 0.4, vy: r() * 0.5 + 0.15, vx: (r() - 0.5) * 0.3, a: r() * 0.7 + 0.3, ph: r() * 6.28 };
+    // fallend: Schnee, Blüten, Blätter
+    return { x: r() * W, y: any ? r() * H : -12, r: k === 'snow' ? r() * 2 + 0.7 : r() * 3 + 4, vy: k === 'snow' ? r() * 0.6 + 0.25 : r() * 0.5 + 0.35, vx: (r() - 0.5) * 0.3, a: r() * 0.5 + 0.4, ph: r() * 6.28, rot: r() * 6.28, vr: (r() - 0.5) * 0.03, hue: r() };
+  }
+  function fill() { P = []; B = []; for (i = 0; i < count(); i++) P.push(nw(true)); }
+  FX.reset = fill;
+  size(); fill();
+  window.addEventListener('resize', function () { size(); fill(); });
+  function burst() {
+    var cx = W * (0.2 + Math.random() * 0.6), cy = H * (0.12 + Math.random() * 0.3), n = 34, j;
+    for (j = 0; j < n; j++) { var ang = j / n * 6.283 + Math.random() * 0.2, sp = 0.9 + Math.random() * 1.6; B.push({ x: cx, y: cy, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp, life: 1, c: Math.random() < 0.3 ? '255,255,255' : FX.rgb }); }
+  }
+  function leafPath(s) { x.beginPath(); x.moveTo(0, -s); x.quadraticCurveTo(s * 0.9, -s * 0.2, 0, s); x.quadraticCurveTo(-s * 0.9, -s * 0.2, 0, -s); x.fill(); }
   (function tick(ts) {
     if (curView === 'start' && !document.hidden && window.pageYOffset < H + 200) {
-      x.clearRect(0, 0, W, H); x.globalCompositeOperation = 'lighter';
+      var k = FX.kind, lite = FX.light, p;
+      x.clearRect(0, 0, W, H); x.shadowBlur = 0;
+      x.globalCompositeOperation = lite || k === 'petals' || k === 'leaves' ? 'source-over' : 'lighter';
       for (i = 0; i < P.length; i++) {
-        var p = P[i]; p.y -= p.vy; p.x += p.vx + Math.sin(ts / 900 + p.ph) * 0.3; if (p.y < -10) P[i] = nw(false);
-        x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28);
-        x.fillStyle = 'rgba(240,190,110,' + (p.a * (0.6 + 0.4 * Math.sin(ts / 300 + p.ph))).toFixed(3) + ')';
-        x.shadowBlur = 10; x.shadowColor = 'rgba(255,170,80,.9)'; x.fill();
+        p = P[i];
+        if (k === 'embers') {
+          p.y -= p.vy; p.x += p.vx + Math.sin(ts / 900 + p.ph) * 0.3; if (p.y < -10) P[i] = nw(false);
+          x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28);
+          x.fillStyle = 'rgba(' + (lite ? '200,120,40' : '240,190,110') + ',' + (p.a * (lite ? 0.7 : 1) * (0.6 + 0.4 * Math.sin(ts / 300 + p.ph))).toFixed(3) + ')';
+          if (!lite) { x.shadowBlur = 10; x.shadowColor = 'rgba(255,170,80,.9)'; }
+          x.fill();
+        } else if (k === 'stars') {
+          var tw = p.a * (0.3 + 0.7 * Math.abs(Math.sin(ts / p.sp + p.ph)));
+          x.fillStyle = 'rgba(' + (lite ? FX.rgb : (p.r > 1.4 ? FX.rgb : '255,250,235')) + ',' + tw.toFixed(3) + ')';
+          if (p.r > 1.45) { var sz = p.r * 3.2; x.beginPath(); x.moveTo(p.x, p.y - sz); x.quadraticCurveTo(p.x, p.y, p.x + sz, p.y); x.quadraticCurveTo(p.x, p.y, p.x, p.y + sz); x.quadraticCurveTo(p.x, p.y, p.x - sz, p.y); x.quadraticCurveTo(p.x, p.y, p.x, p.y - sz); x.fill(); }
+          else { x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28); x.fill(); }
+        } else if (k === 'glints') {
+          p.y -= p.vy; p.x += p.vx + Math.sin(ts / 2400 + p.ph) * 0.2; if (p.y < -20) P[i] = nw(false);
+          var g = x.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2.4), al = p.a * (0.6 + 0.4 * Math.sin(ts / 1600 + p.ph));
+          g.addColorStop(0, 'rgba(' + FX.rgb + ',' + al.toFixed(3) + ')'); g.addColorStop(1, 'rgba(' + FX.rgb + ',0)');
+          x.fillStyle = g; x.beginPath(); x.arc(p.x, p.y, p.r * 2.4, 0, 6.28); x.fill();
+        } else if (k === 'sparkle') {
+          p.y -= p.vy; p.x += p.vx + Math.sin(ts / 700 + p.ph) * 0.25; if (p.y < -10) P[i] = nw(false);
+          x.fillStyle = 'rgba(' + FX.rgb + ',' + (p.a * (0.4 + 0.6 * Math.abs(Math.sin(ts / 250 + p.ph)))).toFixed(3) + ')';
+          x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28); x.fill();
+        } else {
+          p.y += p.vy; p.x += p.vx + Math.sin(ts / 1500 + p.ph) * (k === 'snow' ? 0.35 : 0.6); p.rot += p.vr;
+          if (p.y > H + 14) P[i] = nw(false);
+          if (k === 'snow') {
+            x.fillStyle = (lite ? 'rgba(90,125,165,' : 'rgba(255,255,255,') + (p.a * (lite ? 0.55 : 0.85)).toFixed(3) + ')';
+            x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.28); x.fill();
+          } else {
+            x.save(); x.translate(p.x, p.y); x.rotate(p.rot);
+            if (k === 'petals') { x.fillStyle = 'rgba(' + (p.hue < 0.5 ? (lite ? '176,74,107' : '235,169,188') : (lite ? '210,140,160' : '250,225,232')) + ',' + (p.a * 0.8).toFixed(3) + ')'; x.beginPath(); x.ellipse(0, 0, p.r, p.r * 0.55, 0, 0, 6.28); x.fill(); }
+            else { x.fillStyle = 'rgba(' + (p.hue < 0.33 ? '196,105,42' : p.hue < 0.66 ? '165,55,40' : '214,160,70') + ',' + (p.a * (lite ? 0.75 : 0.85)).toFixed(3) + ')'; leafPath(p.r); }
+            x.restore();
+          }
+        }
+      }
+      if (FX.kind === 'sparkle') {
+        if (ts > nextBurst) { burst(); nextBurst = ts + 3500 + Math.random() * 3500; }
+        for (i = B.length - 1; i >= 0; i--) {
+          var q = B[i]; q.x += q.vx; q.y += q.vy; q.vy += 0.018; q.vx *= 0.985; q.life -= 0.011;
+          if (q.life <= 0) { B.splice(i, 1); continue; }
+          x.fillStyle = 'rgba(' + q.c + ',' + (q.life * 0.9).toFixed(3) + ')'; x.beginPath(); x.arc(q.x, q.y, 1.3, 0, 6.28); x.fill();
+        }
       }
     }
     requestAnimationFrame(tick);
@@ -1115,6 +1191,285 @@ document.addEventListener('keydown', function (e) {
     else if (e.key === 'Tab') trap(e, $('#modal'));
   } else if (drawerOn && e.key === 'Tab') trap(e, $('#drawer'));
 });
+
+/* ------------------------------------------------------------------ Ambiente: Designs, Hell/Dunkel, Musik */
+var AMB_T = ['klassik', 'fruehling', 'sommer', 'herbst', 'winter', 'ramadan', 'weihnachten', 'silvester'];
+var AMB_N = {
+  auto: ['Automatisch', 'Otomatik', 'Automatic'], klassik: ['Leonn Klassik', 'Leonn Klasik', 'Leonn Classic'], fruehling: ['Frühling', 'İlkbahar', 'Spring'],
+  sommer: ['Sommer', 'Yaz', 'Summer'], herbst: ['Herbst', 'Sonbahar', 'Autumn'], winter: ['Winter', 'Kış', 'Winter'],
+  ramadan: ['Ramadan & Bayram', 'Ramazan & Bayram', 'Ramadan & Eid'], weihnachten: ['Weihnachten', 'Noel', 'Christmas'], silvester: ['Silvester', 'Yılbaşı', 'New Year’s Eve']
+};
+// Vorschau im Auswahlfeld: Hintergrund, Akzent, Zeichen
+var AMB_SW = { auto: ['#0B0A26', '#DBBD82', 'i-cal'], klassik: ['#0B0A26', '#DBBD82', 'd-spark'], fruehling: ['#0E1A17', '#EBA9BC', 'd-tulip'], sommer: ['#061A2C', '#74D6CC', 'd-sun'],
+  herbst: ['#1A0F12', '#E3A65A', 'd-leaf'], winter: ['#08162B', '#C9DDF0', 'd-flake'], ramadan: ['#0A0D2B', '#E8C56E', 'd-crescent'], weihnachten: ['#0B1A14', '#E3C27A', 'd-bauble'], silvester: ['#0B0B0F', '#E9D29C', 'd-spark'] };
+var AMB_FX = { klassik: 'embers', fruehling: 'petals', sommer: 'glints', herbst: 'leaves', winter: 'snow', ramadan: 'stars', weihnachten: 'snow', silvester: 'sparkle' };
+// Gruß über der Überschrift ({y} = Jahr)
+var AMB_HI = {
+  ramadan: ['Gesegneten Ramadan', 'Hayırlı Ramazanlar', 'Ramadan Mubarak'],
+  bayram: ['Frohes Ramadanfest', 'Ramazan Bayramınız mübarek olsun', 'Eid Mubarak'],
+  kurban: ['Frohes Opferfest', 'Kurban Bayramınız mübarek olsun', 'Eid al-Adha Mubarak'],
+  advent: ['Schöne Adventszeit', 'Mutlu Noeller', 'Season’s greetings'],
+  xmas: ['Frohe Weihnachten', 'Mutlu Noeller', 'Merry Christmas'],
+  nye: ['Guten Rutsch ins Jahr {y}', 'Mutlu yıllar · {y}', 'Happy New Year {y}'],
+  ny: ['Frohes neues Jahr {y}', 'Mutlu yıllar · {y}', 'Happy New Year {y}'],
+  winter: ['Gemütliche Wintertage', 'Keyifli kış günleri', 'Cosy winter days'],
+  fruehling: ['Willkommen, Frühling', 'Hoş geldin bahar', 'Hello, spring'],
+  sommer: ['Schöne Sommertage', 'Güzel yaz günleri', 'Sunny summer days'],
+  herbst: ['Goldene Herbsttage', 'Altın sonbahar günleri', 'Golden autumn days']
+};
+// Band unter der Startseite: Überschrift, Text, Knöpfe [Ziel, Beschriftung DE/TR/EN]
+var AMB_BAND = {
+  ramadan: { h: ['Iftar bei Leonn', 'Leonn’da iftar', 'Iftar at Leonn'], p: ['Das Fasten gemeinsam brechen, mit Familie und Freunden, in ruhiger Atmosphäre. Bitte reservieren Sie Ihren Tisch rechtzeitig.', 'Orucunuzu aileniz ve dostlarınızla, huzurlu bir ortamda açın. Lütfen masanızı zamanında ayırtın.', 'Break your fast together with family and friends in a calm atmosphere. Please book your table in good time.'], b: [['#reservieren', 'cta.res'], ['#speisekarte', 'cta.menu']] },
+  bayram: { h: ['Bayram bei Leonn', 'Leonn’da bayram', 'Eid at Leonn'], p: ['Feiern Sie mit der ganzen Familie. Für größere Gruppen gibt es unseren V.I.P Room.', 'Bayramı tüm ailenizle kutlayın. Kalabalık gruplar için V.I.P Room’umuz hazır.', 'Celebrate with the whole family. For larger groups there is our V.I.P Room.'], b: [['#reservieren', 'cta.res'], ['#vip-room', 'V.I.P Room']] },
+  weihnachten: { h: ['Weihnachtsfeier bei Leonn', 'Leonn’da yılsonu kutlaması', 'Christmas party at Leonn'], p: ['Mit Kollegen, Familie oder Freunden: Für Gruppen ab 6 Personen gibt es den V.I.P Room. Für die Feier bei Ihnen können Sie Catering anfragen.', 'İş arkadaşlarınız, aileniz veya dostlarınızla: 6 kişiden itibaren gruplar için V.I.P Room. Kendi mekânınızdaki kutlama için catering talep edebilirsiniz.', 'With colleagues, family or friends: groups of 6 or more can use the V.I.P Room. For a celebration at your place, you can request catering.'], b: [['#vip-room', 'V.I.P Room'], ['catering/', 'Catering']] },
+  silvester: { h: ['Festlicher Jahresausklang', 'Yıla güzel bir veda', 'A festive farewell to the year'], p: ['Ein besonderes Abendessen zum Jahresende. An den letzten Abenden des Jahres sind die Plätze begehrt, reservieren Sie früh.', 'Yılın son akşamlarında özel bir akşam yemeği. Bu akşamlarda yerler çabuk doluyor, erkenden ayırtın.', 'A special dinner to end the year. Tables are in demand on the last evenings of the year, so book early.'], b: [['#reservieren', 'cta.res'], ['#speisekarte', 'cta.menu']] },
+  winter: { h: ['Wärme für kalte Tage', 'Soğuk günlere sıcacık lezzetler', 'Warmth for cold days'], p: ['Suppen mit frischem Ballonbrot, Güveç aus dem Ofen und dazu ein Çay: genau das Richtige, wenn es draußen kalt ist.', 'Balon ekmekle çorbalar, fırından güveç ve yanında bir çay: dışarısı soğukken tam ihtiyacınız olan.', 'Soups with fresh balloon bread, güveç from the oven and a glass of çay: just right when it is cold outside.'], b: [['g2'], ['g5']] },
+  fruehling: { h: ['Frühstück im Frühling', 'Baharda kahvaltı', 'Breakfast in spring'], p: ['Breakfast Essentials mit frischem Gemüse, Käse, Oliven und hausgemachten Marmeladen, täglich bis 14 Uhr.', 'Taze sebze, peynir, zeytin ve ev yapımı reçellerle Breakfast Essentials, her gün saat 14:00’e kadar.', 'Breakfast Essentials with fresh vegetables, cheese, olives and homemade jams, daily until 2 pm.'], b: [['g1'], ['#reservieren', 'cta.res']] },
+  sommer: { h: ['Leicht durch den Sommer', 'Yaza hafif lezzetler', 'Light dishes for summer'], p: ['Frische Salate, Meze, Ayran und Limonata: leicht und erfrischend für warme Tage.', 'Taze salatalar, mezeler, ayran ve limonata: sıcak günler için hafif ve ferahlatıcı.', 'Fresh salads, meze, ayran and lemonade: light and refreshing for warm days.'], b: [['g2'], ['g3']] },
+  herbst: { h: ['Herbstzeit ist Güveç-Zeit', 'Sonbahar güveç zamanı', 'Autumn is güveç season'], p: ['Wenn die Tage kürzer werden: Güveç aus dem Ofen, Leonn Kuzu Çevirme vom Spieß und Künefe zum Abschluss.', 'Günler kısalırken: fırından güveç, şişte Leonn Kuzu Çevirme ve tatlı olarak künefe.', 'As the days grow shorter: güveç from the oven, Leonn Kuzu Çevirme from the spit and künefe to finish.'], b: [['g5'], ['g6']] }
+};
+var AMB = { pref: 'auto', site: 'auto', mode: 'dark', t: 'klassik', k: '', y: 0, open: false };
+function ambLight() { return document.documentElement.getAttribute('data-mode') === 'light'; }
+function ambResolve() {
+  var d = new Date(), m = d.getMonth() + 1, day = d.getDate(), y = d.getFullYear(), a = window.leonnAuto ? window.leonnAuto(d) : ['klassik', 'klassik'];
+  var t = AMB.pref !== 'auto' ? AMB.pref : (AMB.site !== 'auto' ? AMB.site : a[0]), k = t;
+  if (AMB_T.indexOf(t) < 0) t = k = 'klassik';
+  if (t === 'ramadan') k = a[0] === 'ramadan' ? a[1] : 'ramadan';
+  if (t === 'weihnachten') k = m === 12 && day >= 24 && day <= 26 ? 'xmas' : 'advent';
+  if (t === 'silvester') k = m === 1 && day === 1 ? 'ny' : 'nye';
+  AMB.t = t; AMB.k = k; AMB.y = t === 'silvester' && m >= 7 ? y + 1 : y; AMB.auto = a;
+}
+function ambSym(id, cls, st) { return '<svg class="' + (cls || '') + '"' + (st ? ' style="' + st + '"' : '') + ' aria-hidden="true"><use href="#' + id + '"/></svg>'; }
+// Schmuck: Lage kommt aus dem CSS (.m Hauptzeichen, .h1–.h3 hängend, .s1–.s3 klein), Größe hier (--w Breite, --ar Höhe/Breite)
+function ambD(id, cls, w, ar, extra) { return ambSym(id, cls, '--w:' + w + 'px;--ar:' + ar + ';' + (extra || '')); }
+function ambH(id, cls, len, w, ar, extra) { return '<span class="hang ' + cls + '" style="--l:' + len + 'px">' + ambD(id, id === 'd-lantern' ? 'lantern' : '', w, ar, extra) + '</span>'; }
+function ambDeco() {
+  var th = AMB.t, h = '';
+  if (th === 'ramadan') h = ambD('d-crescent', 'm bob', 92, 1) + ambH('d-lantern', 'h1', 26, 34, 2.4) + ambH('d-lantern', 'h2', 64, 40, 2.4) + ambH('d-lantern', 'h3', 14, 30, 2.4) + ambD('d-spark', 's1', 14, 1) + ambD('d-spark', 's2', 10, 1);
+  else if (th === 'weihnachten') h = ambH('d-bauble', 'h1', 22, 34, 1.55, '--c:#B3263A') + ambH('d-bauble', 'h2', 58, 40, 1.55) + ambH('d-bauble', 'h3', 10, 30, 1.55, '--c:#2E6B4A') + ambD('d-spark', 'm bob', 50, 1) + ambD('d-spark', 's1', 14, 1) + ambD('d-spark', 's3', 11, 1);
+  else if (th === 'silvester') h = '<span class="yr">' + AMB.y + '</span>' + ambD('d-spark', 'm bob', 46, 1) + ambD('d-spark', 's1', 12, 1) + ambD('d-spark', 's3 bob', 16, 1);
+  else if (th === 'winter') h = ambD('d-flake', 'm spin', 84, 1, 'opacity:.85') + ambD('d-flake', 's3 spin', 34, 1, 'opacity:.6;animation-duration:80s') + ambD('d-flake', 's1 spin', 24, 1, 'opacity:.5;animation-direction:reverse');
+  else if (th === 'fruehling') h = ambD('d-tulip', 'm bob', 58, 2) + ambD('d-tulip', 's3 bob', 34, 2, 'animation-delay:-3s');
+  else if (th === 'sommer') h = ambD('d-sun', 'm spin', 100, 1, 'animation-duration:90s') + ambH('d-nazar', 'h2', 30, 36, 1.23);
+  else if (th === 'herbst') h = ambD('d-pome', 'm bob', 80, 1.07) + ambD('d-leaf', 's3 bob', 32, 1, '--c:#C4692A;animation-delay:-2s') + ambD('d-leaf', 's1 bob', 22, 1, '--c:#A5372A;animation-delay:-4s');
+  var el = $('#deco'); if (el) el.innerHTML = h;
+  ambLayout();
+}
+// Tablet hochkant und Handy (einspaltig): freie Flächen neben dem Text ausmessen und den Schmuck nur dort hinsetzen.
+// Gemessen wird über offsetLeft/offsetTop, damit die Einblend-Animation der Überschrift das Ergebnis nicht verfälscht.
+var AMB_LQ = 0;
+function ambLayoutSoon() { if (AMB_LQ) return; AMB_LQ = (window.requestAnimationFrame || setTimeout)(function () { AMB_LQ = 0; ambLayout(); }); }
+function ambOff(el) { var x = 0, y = 0; for (var e = el; e; e = e.offsetParent) { x += e.offsetLeft; y += e.offsetTop; } return { x: x, y: y }; }
+function ambLayout() {
+  var box = $('#deco'); if (!box) return;
+  var kids = [].slice.call(box.querySelectorAll('svg.m, .hang, svg.s1, svg.s2, svg.s3'));
+  kids.forEach(function (e) { e.style.left = e.style.top = e.style.right = e.style.display = ''; e.style.removeProperty('--l'); e.style.removeProperty('--k'); });
+  if (!kids.length || !box.offsetWidth || window.innerWidth > 980) return;
+  var h = $('#heroH'), st = $('#status'), hi = $('#seasonHi'); if (!h || !st || !h.offsetHeight) return;
+  var W = box.offsetWidth, D = ambOff(box), k = parseFloat(getComputedStyle(box).getPropertyValue('--k')) || 1;
+  var rect = function (el) { var o = ambOff(el); return { l: o.x - D.x, t: o.y - D.y, r: o.x - D.x + el.offsetWidth, b: o.y - D.y + el.offsetHeight }; };
+  var H = rect(h), S = rect(st), G = hi && !hi.hidden && hi.offsetWidth ? rect(hi) : null, lines = [];
+  var add = function (r) { var L = lines.filter(function (x) { return Math.abs(x.t - r.t) < (r.b - r.t) / 2; })[0]; if (L) { L.r = Math.max(L.r, r.r); L.t = Math.min(L.t, r.t); L.b = Math.max(L.b, r.b); } else lines.push({ t: r.t, b: r.b, r: r.r }); };
+  var words = h.querySelectorAll('.w');
+  if (words.length) {
+    // Wortkästchen sind so hoch wie die Zeile; Ober- und Unterlängen der Schrift ragen darüber hinaus – einmal ausmessen
+    var cs = getComputedStyle(h), pr = document.createElement('div'), lh = words[0].offsetHeight;
+    pr.style.cssText = 'position:absolute;left:0;top:0;visibility:hidden;white-space:nowrap';
+    ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'letterSpacing'].forEach(function (p) { pr.style[p] = cs[p]; });
+    pr.innerHTML = '<span>Hg</span>'; box.appendChild(pr); var ov = Math.max(0, (pr.firstChild.getBoundingClientRect().height - lh) / 2); box.removeChild(pr);
+    [].forEach.call(words, function (w) { var r = rect(w); add({ t: r.t - ov, b: r.b + ov, r: r.r }); });
+  }
+  else { var g = document.createRange(), B = box.getBoundingClientRect(); g.selectNodeContents(h); [].forEach.call(g.getClientRects(), function (c) { if (c.width > 1) add({ t: c.top - B.top, b: c.bottom - B.top, r: c.right - B.left }); }); }
+  lines.sort(function (a, b) { return a.t - b.t; });
+  var gap = 14, right = W - 10;
+  var nat = function (svg) { var s = svg.style, w = parseFloat(s.getPropertyValue('--w')) || 40, ar = parseFloat(s.getPropertyValue('--ar')) || 1; return { w: w * k, h: w * ar * k }; };
+  // Hauptzeichen: rechts neben einer oder zwei Zeilen der Überschrift, so groß wie der freie Platz erlaubt
+  var m = box.querySelector('svg.m'), mz = null;
+  if (m) {
+    var n = nat(m);
+    for (var i = 0; i < lines.length; i++) for (var j = i; j < Math.min(lines.length, i + 2); j++) {
+      var x0 = Math.max.apply(null, lines.slice(i, j + 1).map(function (x) { return x.r; })) + gap, zw = right - x0, top = lines[i].t, bot = lines[j].b;
+      // Nachbarzeilen, die bis in diese Spalte reichen, begrenzen die Höhe (Schwingen der Animation eingerechnet)
+      if (i > 0 && lines[i - 1].r + gap > x0) top = Math.max(top, lines[i - 1].b);
+      if (j < lines.length - 1 && lines[j + 1].r + gap > x0) bot = Math.min(bot, lines[j + 1].t);
+      var f = Math.min(1, zw / n.w, (bot - top - 12) / n.h);
+      if (!mz || f > mz.f) mz = { f: f, x: x0 + zw / 2, y: (top + bot) / 2 };
+    }
+  }
+  // Bereich oberhalb der Überschrift, rechts neben Öffnungs-Chip und Gruß (dort hängt der Schmuck)
+  var hs = [].slice.call(box.querySelectorAll('.hang')), aL = Math.max(S.r, G ? G.r : 0) + gap, aW = right - aL, aB = H.t - 6;
+  if (m) {
+    // passt das Hauptzeichen nicht neben die Überschrift, rechts oben in diesen Bereich setzen
+    if (!mz || n.w * mz.f < 26) { var fa = Math.min(1, aW / n.w, (aB - 20) / n.h); if (n.w * fa >= 26) { mz = { f: fa, x: right - n.w * fa / 2, y: aB / 2 + 4 }; aW -= n.w * fa + 12; } }
+    if (mz && n.w * mz.f >= 26) { m.style.setProperty('--k', k * mz.f); m.style.right = 'auto'; m.style.left = Math.round(mz.x - n.w * mz.f / 2) + 'px'; m.style.top = Math.round(mz.y - n.h * mz.f / 2) + 'px'; }
+    else m.style.display = 'none';
+  }
+  var prio = hs.slice().sort(function (a, b) { return nat(b.querySelector('svg')).h - nat(a.querySelector('svg')).h; }), keep = [];
+  prio.forEach(function (e) { var need = keep.concat([e]).reduce(function (s, x) { return s + nat(x.querySelector('svg')).w + 12; }, 0); if (need <= aW) keep.push(e); });
+  var shown = hs.filter(function (e) { return keep.indexOf(e) >= 0; }), mag = [0.55, 1, 0.25];
+  hs.forEach(function (e) { if (shown.indexOf(e) < 0) e.style.display = 'none'; });
+  shown.forEach(function (e, i) {
+    var n = nat(e.querySelector('svg')), f = Math.min(1, (aB - 10) / n.h);
+    if (f < 0.6) { e.style.display = 'none'; return; }
+    var maxL = aB - n.h * f - 2, L = Math.max(8, maxL * mag[(hs.indexOf(e)) % 3]);
+    e.style.setProperty('--k', k * f); e.style.setProperty('--l', (L / (k * f)).toFixed(1) + 'px');
+    e.style.left = Math.round(aL + aW * (i + 0.5) / shown.length) + 'px';
+  });
+  // kleine Sterne: auf schmalen Bildschirmen weglassen, die Teilchen im Hintergrund reichen dort
+  [].forEach.call(box.querySelectorAll('svg.s1, svg.s2, svg.s3'), function (e) { e.style.display = 'none'; });
+}
+function ambText() {
+  var hi = $('#seasonHi'), band = $('#seasonBand'), th = AMB.t, k = AMB.k, g = AMB_HI[k], bd = AMB_BAND[k] || AMB_BAND[th];
+  if (hi) {
+    if (g && th !== 'klassik') { hi.innerHTML = ambSym(AMB_SW[th][2]) + '<span>' + esc(g[LI].replace('{y}', AMB.y)) + '</span>'; hi.hidden = false; }
+    else { hi.hidden = true; hi.innerHTML = ''; }
+  }
+  if (band) {
+    if (bd && th !== 'klassik') {
+      var btns = bd.b.map(function (x, i) {
+        var cls = 'btn' + (i ? ' ghost' : '');
+        if (/^g\d$/.test(x[0])) { var gr = GROUPS.filter(function (q) { return q.id === x[0]; })[0]; return '<a class="' + cls + '" href="#speisekarte" data-go="' + x[0] + '">' + esc(gr ? gr.n[LI] : t('cta.menu')) + '</a>'; }
+        return '<a class="' + cls + '" href="' + x[0] + '">' + esc(I[x[1]] ? I[x[1]][LI] : x[1]) + '</a>';
+      }).join('');
+      band.innerHTML = '<div class="wrap" data-rv>' + ambSym(AMB_SW[th][2], 'sb-ic') + '<div><p class="eyebrow">' + esc(AMB_N[th][LI]) + '</p><h2>' + esc(bd.h[LI]) + '</h2><p>' + esc(bd.p[LI]) + '</p></div><div class="cta">' + btns + '</div></div>';
+      band.hidden = false;
+    } else { band.hidden = true; band.innerHTML = ''; }
+  }
+}
+function ambPanel() {
+  var box = $('#ambThemes'); if (!box) return;
+  var list = ['auto'].concat(AMB_T);
+  box.innerHTML = list.map(function (k) {
+    var sw = AMB_SW[k], on = AMB.pref === k, sub = k === 'auto' ? '<small>' + esc(t('amb.now')) + ': ' + esc(AMB_N[AMB.pref === 'auto' ? AMB.t : (AMB.site !== 'auto' ? AMB.site : AMB.auto[0])][LI]) + '</small>' : '';
+    return '<button type="button" class="amb-t" role="radio" aria-checked="' + on + '" data-amb-t="' + k + '"><span class="swt" style="--b:' + sw[0] + ';--a:' + sw[1] + '">' + ambSym(sw[2], sw[2].indexOf('i-') === 0 ? 'ic' : '') + '</span><span>' + esc(AMB_N[k][LI]) + sub + '</span></button>';
+  }).join('');
+  $('#ambModes').innerHTML = [['dark', 'i-moon'], ['light', 'i-sun'], ['system', 'i-device']].map(function (m) {
+    return '<button type="button" class="amb-m" role="radio" aria-checked="' + (AMB.mode === m[0]) + '" data-amb-m="' + m[0] + '">' + ambSym(m[1], 'ic') + '<span>' + esc(t('mode.' + m[0])) + '</span></button>';
+  }).join('');
+  var mb = $('#ambMusic'); if (mb) mb.setAttribute('aria-checked', musPref() ? 'true' : 'false');
+  $('#ambBtn').setAttribute('aria-label', t('amb')); $('#ambX').setAttribute('aria-label', t('close'));
+}
+function ambApply(animate) {
+  ambResolve();
+  var de = document.documentElement, md = AMB.mode === 'system' ? (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : AMB.mode;
+  var changed = de.getAttribute('data-theme') !== AMB.t || de.getAttribute('data-mode') !== md;
+  if (animate && changed && !reduce) { de.classList.add('amb-switch'); clearTimeout(ambApply.tm); ambApply.tm = setTimeout(function () { de.classList.remove('amb-switch'); }, 800); }
+  de.setAttribute('data-theme', AMB.t); de.setAttribute('data-mode', md);
+  var cs = getComputedStyle(de), mt = document.querySelector('meta[name="theme-color"]');
+  if (mt) mt.setAttribute('content', (cs.getPropertyValue('--night') || '#0B0A26').trim());
+  FX.kind = AMB_FX[AMB.t] || 'embers'; FX.light = md === 'light'; FX.rgb = (cs.getPropertyValue('--gold-rgb') || '219,189,130').trim();
+  if (FX.reset && changed) FX.reset();
+  ambDeco(); ambText(); ambPanel(); setupReveal();
+}
+function ambOpen(o) {
+  var p = $('#amb'), b = $('#ambBtn'); if (!p) return;
+  var hd = $('header.top'); if (o && hd) p.style.setProperty('--ambtop', Math.round(Math.max(8, hd.getBoundingClientRect().bottom + 10)) + 'px');
+  AMB.open = o; p.hidden = !o; b.setAttribute('aria-expanded', o ? 'true' : 'false');
+  if (o) { ambPanel(); var f = p.querySelector('[aria-checked="true"]') || p.querySelector('button'); if (f) f.focus({ preventScroll: true }); }
+  else if (document.activeElement && p.contains(document.activeElement)) (b.offsetParent ? b : $('#burger')).focus();
+}
+function ambSiteDesign() {
+  // Einstellung des Restaurants (Admin-App): gilt für alle, die selbst nichts gewählt haben
+  if (!API || typeof apiCall !== 'function') return;
+  apiCall('/config').then(function (r) {
+    if (!r.ok || !r.j || !r.j.design) return;
+    var d = AMB_T.indexOf(r.j.design) >= 0 ? r.j.design : 'auto';
+    if (d !== AMB.site) { AMB.site = d; store('leonn-site-theme', d); if (AMB.pref === 'auto') ambApply(true); else ambPanel(); }
+  }, function () {});
+}
+
+/* Leise Hintergrundmusik: startet bei der ersten Berührung der Seite (Browser erlauben Ton erst danach), immer abschaltbar. */
+var MUS = { ctx: null, gain: null, src: null, buf: null, loading: false, on: false, started: false, failed: false, waits: [] }, MUS_VOL = 0.2;
+function musPref() { var v = store('leonn-music'); if (v) return v === 'on'; return !(navigator.connection && navigator.connection.saveData); }
+function musUi() {
+  var b = $('#music'), pref = musPref(); if (!b) return;
+  if (MUS.failed || !(window.AudioContext || window.webkitAudioContext)) { b.hidden = true; return; }
+  b.hidden = false;
+  b.setAttribute('aria-pressed', MUS.on ? 'true' : 'false');
+  b.setAttribute('aria-label', t(MUS.on ? 'music.on' : 'music.off'));
+  var mb = $('#ambMusic'); if (mb) mb.setAttribute('aria-checked', pref ? 'true' : 'false');
+}
+function musEnsure() {
+  var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
+  try {
+    if (!MUS.ctx) { MUS.ctx = new AC(); MUS.gain = MUS.ctx.createGain(); MUS.gain.gain.value = 0; MUS.gain.connect(MUS.ctx.destination); }
+    if (MUS.ctx.state !== 'running' && MUS.ctx.resume) MUS.ctx.resume();
+  } catch (e) { return false; }
+  return true;
+}
+function musLoad(cb) {
+  if (MUS.buf) { cb(); return; }
+  MUS.waits.push(cb); if (MUS.loading) return; MUS.loading = true;
+  fetch('audio/leonn-ambiente.mp3').then(function (r) { if (!r.ok) throw new Error('audio'); return r.arrayBuffer(); }).then(function (ab) {
+    return new Promise(function (res, rej) { MUS.ctx.decodeAudioData(ab, res, rej); });
+  }).then(function (b) { MUS.buf = b; MUS.loading = false; var w = MUS.waits; MUS.waits = []; w.forEach(function (f) { f(); }); })
+    .catch(function () { MUS.loading = false; MUS.failed = true; MUS.on = false; musUi(); });
+}
+function musPlay() {
+  if (!musEnsure()) return;
+  MUS.on = true; MUS.started = true; musUi();
+  musLoad(function () {
+    if (!MUS.on) return;
+    if (!MUS.src) { MUS.src = MUS.ctx.createBufferSource(); MUS.src.buffer = MUS.buf; MUS.src.loop = true; MUS.src.connect(MUS.gain); MUS.src.start(0); }
+    var g = MUS.gain.gain, now = MUS.ctx.currentTime; g.cancelScheduledValues(now); g.setValueAtTime(g.value, now); g.linearRampToValueAtTime(MUS_VOL, now + 3.5);
+  });
+}
+function musStop() {
+  MUS.on = false; musUi();
+  if (!MUS.ctx || !MUS.gain) return;
+  var g = MUS.gain.gain, now = MUS.ctx.currentTime; g.cancelScheduledValues(now); g.setValueAtTime(g.value, now); g.linearRampToValueAtTime(0, now + 0.8);
+  setTimeout(function () { if (!MUS.on && MUS.ctx && MUS.ctx.state === 'running' && MUS.ctx.suspend) MUS.ctx.suspend(); }, 900);
+}
+function musToggle() { if (MUS.on) { store('leonn-music', 'off'); musStop(); } else { store('leonn-music', 'on'); musPlay(); } }
+function musSwitch() { if (musPref()) { store('leonn-music', 'off'); musStop(); } else { store('leonn-music', 'on'); musPlay(); } }
+function musInit() {
+  musUi();
+  var first = function (e) {
+    if (e.target && e.target.closest && e.target.closest('#music,#ambMusic')) return;
+    off(); if (musPref() && !MUS.started) musPlay();
+  };
+  var evs = ['click', 'keydown', 'touchend'];
+  function off() { evs.forEach(function (n) { document.removeEventListener(n, first, true); }); }
+  evs.forEach(function (n) { document.addEventListener(n, first, true); });
+  document.addEventListener('visibilitychange', function () {
+    if (!MUS.ctx) return;
+    if (document.hidden) { if (MUS.ctx.state === 'running') MUS.ctx.suspend(); }
+    else if (MUS.on && MUS.ctx.resume) MUS.ctx.resume();
+  });
+}
+function ambInit() {
+  AMB.pref = store('leonn-theme') || 'auto'; AMB.site = store('leonn-site-theme') || 'auto'; AMB.mode = store('leonn-mode') || 'dark';
+  if (AMB.pref !== 'auto' && AMB_T.indexOf(AMB.pref) < 0) AMB.pref = 'auto';
+  if (['dark', 'light', 'system'].indexOf(AMB.mode) < 0) AMB.mode = 'dark';
+  ambApply(false);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(ambLayoutSoon); ['#deco', '#status', '#seasonHi', '#heroH'].forEach(function (s) { var e = $(s); if (e) ro.observe(e); }); }
+  else window.addEventListener('resize', ambLayoutSoon);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(ambLayoutSoon);
+  $('#ambBtn').addEventListener('click', function (e) { e.stopPropagation(); ambOpen(!AMB.open); });
+  var na = $('#navAmb'); if (na) na.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); navOpen(false); ambOpen(true); });
+  $('#ambX').addEventListener('click', function () { ambOpen(false); });
+  $('#amb').addEventListener('click', function (e) {
+    var el;
+    if ((el = e.target.closest('[data-amb-t]'))) { AMB.pref = el.getAttribute('data-amb-t'); store('leonn-theme', AMB.pref); ambApply(true); var f = $('[data-amb-t="' + AMB.pref + '"]'); if (f) f.focus(); }
+    else if ((el = e.target.closest('[data-amb-m]'))) { AMB.mode = el.getAttribute('data-amb-m'); store('leonn-mode', AMB.mode); ambApply(true); var g = $('[data-amb-m="' + AMB.mode + '"]'); if (g) g.focus(); }
+    else if (e.target.closest('#ambMusic')) musSwitch();
+  });
+  $('#amb').addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { ambOpen(false); return; }
+    var r = e.target.closest('[role="radio"]'); if (!r || ['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].indexOf(e.key) < 0) return;
+    var all = $$('[role="radio"]', r.parentNode), i = all.indexOf(r) + (e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : -1);
+    e.preventDefault(); all[(i + all.length) % all.length].click();
+  });
+  document.addEventListener('click', function (e) { if (AMB.open && !e.target.closest('#amb,#ambBtn')) ambOpen(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && AMB.open) ambOpen(false); });
+  if (window.matchMedia) { var mq = matchMedia('(prefers-color-scheme: light)'); var ch = function () { if (AMB.mode === 'system') ambApply(true); }; if (mq.addEventListener) mq.addEventListener('change', ch); else if (mq.addListener) mq.addListener(ch); }
+  $('#music').addEventListener('click', musToggle);
+  musInit();
+  ambSiteDesign();
+  // Tageswechsel (z. B. Silvester um Mitternacht): einmal pro Stunde neu bestimmen
+  setInterval(function () { var o = AMB.t + AMB.k; ambResolve(); if (o !== AMB.t + AMB.k) ambApply(true); }, 3600000);
+}
+
 function init() {
   var sl = store('leonn-lang'); if (sl && LANGS.indexOf(sl) >= 0) LI = LANGS.indexOf(sl);
   $('#q').addEventListener('input', function () { query = this.value.trim(); renderMenu(); });
@@ -1128,7 +1483,7 @@ function init() {
   $('#skip').addEventListener('click', function (e) { e.preventDefault(); $('#main').focus(); });
   $('#findBtn').addEventListener('click', function () {
     var f = $('#fbar'), y = f.getBoundingClientRect().top + window.pageYOffset - (hhNow() + $('#mbar').offsetHeight);
-    window.scrollTo({ top: Math.max(0, y), behavior: 'auto' }); $('#q').focus();
+    jumpTo(y); $('#q').focus();
   });
   $('#showPrev').addEventListener('click', function () { showGo(showI - 1); });
   $('#showNext').addEventListener('click', function () { showGo(showI + 1); });
@@ -1142,7 +1497,7 @@ function init() {
   $('#showStage').addEventListener('pointerdown', function (e) { sx = e.clientX; });
   $('#showStage').addEventListener('pointerup', function (e) { if (sx == null) return; var dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 44) showGo(showI + (dx < 0 ? 1 : -1)); });
   window.addEventListener('hashchange', route);
-  initRes(); initGift(); initVideo();
+  initRes(); initGift(); initVideo(); ambInit();
   applyLang(); showGo(0, true); route();
   counters(); embers(); pointerFx(); showAuto();
   setInterval(setStatus, 60000);

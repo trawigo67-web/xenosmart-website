@@ -73,6 +73,8 @@ const T = {
   'cancel.toast': ['Storniert vom Gast: {x}', 'Misafir iptal etti: {x}'],
   test: ['Testbetrieb', 'Test aşaması'], live: ['Live', 'Canlı'], 'live.q': ['Wirklich live schalten?', 'Canlıya alınsın mı?'], 'test.q': ['Zurück auf Test?', 'Teste dönülsün mü?'], 'test.s': ['Testbetrieb', 'Test'],
   'more.mode': ['Betrieb', 'Çalışma şekli'],
+  'more.design': ['Design der Webseite', 'Web sitesi tasarımı'], 'design.p': ['Gilt für alle Gäste, die auf der Seite nichts anderes wählen. „Automatisch“ wechselt nach Jahreszeit und zu Ramadan & Bayram, Weihnachten und Silvester.', 'Sitede başka bir seçim yapmayan tüm misafirler için geçerlidir. „Otomatik“ mevsime göre ve Ramazan & Bayram, Noel ve yılbaşında değişir.'],
+  'ds.auto': ['Automatisch', 'Otomatik'], 'ds.klassik': ['Leonn Klassik', 'Leonn Klasik'], 'ds.fruehling': ['Frühling', 'İlkbahar'], 'ds.sommer': ['Sommer', 'Yaz'], 'ds.herbst': ['Herbst', 'Sonbahar'], 'ds.winter': ['Winter', 'Kış'], 'ds.ramadan': ['Ramadan & Bayram', 'Ramazan & Bayram'], 'ds.weihnachten': ['Weihnachten', 'Noel'], 'ds.silvester': ['Silvester', 'Yılbaşı'],
   'more.mode.p': ['Im Testbetrieb sehen Gäste den Hinweis, dass Reservierungen noch nicht gelten. Auf „Live“ stellen, sobald ihr das System wirklich nutzt.', 'Test aşamasında misafirler rezervasyonların henüz geçerli olmadığı uyarısını görür. Sistemi gerçekten kullanmaya başlayınca “Canlı” yapın.'],
   'more.times': ['Reservierungszeiten', 'Rezervasyon saatleri'],
   first: ['Erste Zeit', 'İlk saat'], last: ['Letzte Zeit', 'Son saat'], step: ['Raster (Min.)', 'Aralık (dk)'], dur: ['Aufenthalt (Min.)', 'Kalış süresi (dk)'],
@@ -349,6 +351,7 @@ function moreHtml() {
   let wd = ''; for (let i = 1; i <= 7; i++) { const g = i % 7; wd += '<button type="button" class="chipb" data-a="wd" data-v="' + g + '" aria-pressed="' + c.closedWeekdays.includes(g) + '">' + esc(new Date(2024, 0, i).toLocaleDateString(LOC[LI], { weekday: 'short' }).replace('.', '')) + '</button>'; }
   const st = S.stats;
   return '<section class="card"><h2>' + esc(t('more.mode')) + '</h2><div class="seg"><button type="button" data-a="mode" data-v="test" aria-pressed="' + (c.mode === 'test') + '">' + esc(t('test')) + '</button><button type="button" data-a="mode" data-v="live" aria-pressed="' + (c.mode === 'live') + '">' + esc(t('live')) + '</button></div><p class="hint">' + esc(t('more.mode.p')) + '</p></section>' +
+    '<section class="card"><h2>' + esc(t('more.design')) + '</h2><p class="hint">' + esc(t('design.p')) + '</p><div class="chips">' + ['auto', 'klassik', 'fruehling', 'sommer', 'herbst', 'winter', 'ramadan', 'weihnachten', 'silvester'].map((d) => '<button type="button" class="chipb" data-a="design" data-v="' + d + '" aria-pressed="' + ((c.design || 'auto') === d) + '">' + esc(t('ds.' + d)) + '</button>').join('') + '</div></section>' +
     '<section class="card"><h2>' + esc(t('more.push')) + '</h2><p class="hint">' + esc(t('push.p')) + '</p><div class="btns"><button type="button" class="btn" data-a="push">' + esc(t(S.pushOn ? 'push.off' : 'push.on')) + '</button>' + (S.pushOn ? '<button type="button" class="btn line" data-a="pushtest">' + esc(t('push.test')) + '</button>' : '') + '</div><p class="hint" id="pushMsg">' + (S.pushOn ? esc(t('push.ok')) : '') + '</p></section>' +
     '<section class="card"><h2>' + esc(t('more.app')) + '</h2>' + (standalone ? '<p class="hint">' + esc(t('app.done')) + '</p>' : (S.deferred ? '<div class="btns"><button type="button" class="btn" data-a="install">' + esc(t('app.btn')) + '</button></div>' : '') + '<p class="hint">' + esc(t('app.ios')) + '</p><p class="hint">' + esc(t('app.and')) + '</p>') + '</section>' +
     '<form id="cfgForm" novalidate><section class="card"><h2>' + esc(t('more.seats')) + '</h2>' + (isDefault ? '<p class="hint warn">' + esc(t('placeholder')) + '</p>' : '') + num('seats', t('seats'), 1, 500) + num('perSlot', t('perSlot'), 1, 500) + num('maxParty', t('maxParty'), 1, 40) + '</section>' +
@@ -735,6 +738,7 @@ document.addEventListener('click', async (e) => {
   else if (a === 'pp') { const p = $('#fPers'); p.value = Math.max(1, Math.min(99, (+p.value || 1) + (+v))); refreshSlots(); }
   else if (a === 'farea' || a === 'fsrc') { $$('[data-a="' + a + '"]', el.parentNode).forEach((x) => x.setAttribute('aria-pressed', x === el ? 'true' : 'false')); if (a === 'farea') refreshSlots(); }
   else if (a === 'force') saveForm(true);
+  else if (a === 'design') { if ((S.cfg.design || 'auto') !== v) await cfgSave(Object.assign(cfgRead(), { design: v })); }
   else if (a === 'mode') {   // Umschalten erst nach einem zweiten Tipp, damit es nicht versehentlich passiert
     if (S.cfg.mode === v) return;
     if (el.dataset.sure) await cfgSave(Object.assign(cfgRead(), { mode: v }));

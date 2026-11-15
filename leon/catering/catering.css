@@ -125,7 +125,7 @@ p{margin:0}
 .cat{display:flex;flex-direction:column;gap:12px}
 .cat h3{font-size:28px;font-weight:600;display:flex;justify-content:space-between;align-items:baseline;gap:4px 12px;flex-wrap:wrap}
 .cat h3 small{font-family:var(--body);font-weight:400;font-size:14px;color:var(--mute)}
-.dishes{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
+.dishes{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(290px,100%),1fr));gap:10px}
 .dish{text-align:left;display:grid;grid-template-columns:24px 56px minmax(0,1fr) auto;gap:12px;align-items:start;border:1px solid var(--line);background:var(--deep);padding:14px;transition:border-color .2s,background .2s}
 .dish:hover{border-color:var(--line2)}
 .dish .box{width:24px;height:24px;border:1px solid var(--mute);display:grid;place-items:center;font-size:15px;line-height:1;color:transparent;margin-top:2px}
