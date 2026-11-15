@@ -50,7 +50,7 @@ chown -R 1000:1000 "$DIR/data"
 if [ ! -f "$DIR/.env" ]; then
   cp "$DIR/.env.example" "$DIR/.env"; chmod 600 "$DIR/.env"
 fi
-if ! grep -qE '^(OPENAI|GEMINI)_API_KEY=.+' "$DIR/.env"; then
+if ! grep -qE '^(ANTHROPIC|OPENAI|GEMINI)_API_KEY=.+' "$DIR/.env"; then
   echo
   echo ">>> KI-Schluessel: am einfachsten spaeter im Browser unter https://$DOMAIN/admin eintragen."
   echo ">>> Hier einfach Enter druecken (oder Claude sk-ant-..., OpenAI sk-..., Gemini AIza... einfuegen)."
