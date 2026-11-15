@@ -65,6 +65,11 @@ section{padding:72px 0}
 .steps li span{color:var(--muted)}
 .wide-video{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9}
 .wide-video video{width:100%;height:100%;display:block}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.facts .card{padding:18px}
+.facts .num{font-size:2rem}
+.facts p{margin-top:6px;font-size:.95rem}
+.src{margin-top:14px;color:var(--muted);font-size:.8rem;line-height:1.5}
 .who{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
 .prices{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:30px;max-width:860px}
 .price{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:12px}
@@ -130,6 +135,21 @@ html[lang="tr"] [lang-de]{display:none} html[lang="tr"] [lang-tr]{display:revert
     <div class="card"><div class="num">2</div><h3><span lang-de>Verpasste Fristen</span><span lang-tr>Kaçırılan süreler</span></h3><p><span lang-de>Einspruch, Zahlung, Widerspruch: Wer eine Frist verpasst, zahlt oft drauf.</span><span lang-tr>İtiraz, ödeme, ret: Süreyi kaçıran çoğu zaman fazladan öder.</span></p></div>
     <div class="card"><div class="num">3</div><h3><span lang-de>Chaos in der Familie</span><span lang-tr>Ailede karmaşa</span></h3><p><span lang-de>Briefe liegen auf dem Küchentisch. Wer hat was erledigt? Niemand weiß es.</span><span lang-tr>Mektuplar mutfak masasında. Kim neyi halletti? Kimse bilmiyor.</span></p></div>
   </div>
+</div></section>
+
+<section id="kosten" style="padding-top:0"><div class="wrap">
+  <div class="kicker"><span lang-de>Was Papierkram kostet</span><span lang-tr>Kâğıt işinin bedeli</span></div>
+  <h2><span lang-de>Ein vergessener Brief kann teuer werden.</span><span lang-tr>Unutulan bir mektup pahalıya patlayabilir.</span></h2>
+  <div class="steps">
+    <div class="facts">
+      <div class="card"><div class="num"><span lang-de>53 %</span><span lang-tr>%53</span></div><p><span lang-de>der Menschen in Deutschland zahlen Rechnungen zu spät.</span><span lang-tr>Almanya'da insanların yarısından fazlası faturalarını geç ödüyor.</span></p></div>
+      <div class="card"><div class="num"><span lang-de>39 Mio.</span><span lang-tr>39 milyon</span></div><p><span lang-de>neue Inkasso-Fälle im Jahr 2025 – über ein Drittel davon unter 50 €.</span><span lang-tr>2025'te yeni Inkasso dosyası – üçte birinden fazlası 50 €'nun altında.</span></p></div>
+      <div class="card"><div class="num">30,90 €</div><p><span lang-de>kostet schon die einfachste Inkasso-Gebühr – mehr als 6 Monate Zettelfrei (29,94 €).</span><span lang-tr>en basit Inkasso ücreti bile – 6 aylık Zettelfrei'den (29,94 €) fazla.</span></p></div>
+      <div class="card"><div class="num"><span lang-de>25 €</span><span lang-tr>25 €</span></div><p><span lang-de>Verspätungszuschlag pro Monat (mindestens), wenn die Steuererklärung zu spät kommt.</span><span lang-tr>vergi beyannamesi gecikirse her ay en az bu kadar gecikme zammı.</span></p></div>
+    </div>
+    <div class="wide-video"><video id="kostenv" controls playsinline preload="none" poster="media/kosten_de.jpg" aria-label="Zettelfrei: Was kostet ein vergessener Brief?"><source src="media/kosten_de.mp4" type="video/mp4"></video></div>
+  </div>
+  <p class="src"><span lang-de>Quellen:</span><span lang-tr>Kaynaklar:</span> <a href="https://www.intrum.com/press/press-releases/press-release-article/?id=31fc8cb5-ff51-40e5-9fa6-7245c521c8cd" rel="noopener">Intrum European Consumer Payment Report 2026</a> · <a href="https://www.inkasso.de/newsdetail/branchenreport-2025-der-inkassowirtschaft" rel="noopener">BDIU Branchenreport 2025</a> · <a href="https://www.gesetze-im-internet.de/rvg/__13.html" rel="noopener">§ 13 RVG</a> · <a href="https://ao.bundesfinanzministerium.de/ao/2026/Abgabenordnung/Vierter-Teil/Zweiter-Abschnitt/Zweiter-Unterabschnitt/Paragraf-152/inhalt.html" rel="noopener">§ 152 AO</a>. <span lang-de>Inkasso-Gebühr bei einer Forderung von 50–500 €, einfachster Fall, Stand 2026. Beispiele – im Einzelfall abweichend.</span><span lang-tr>Inkasso ücreti: 50–500 € alacak, en basit durum, 2026. Örneklerdir – duruma göre değişir.</span></p>
 </div></section>
 
 <section id="so-gehts" style="padding-top:0"><div class="wrap">
@@ -230,8 +250,8 @@ html[lang="tr"] [lang-de]{display:none} html[lang="tr"] [lang-tr]{display:revert
 <script>
 (function(){
   const set=(l)=>{ document.documentElement.lang=l; document.querySelectorAll("[data-lang]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.lang===l)));
-    const sv=document.getElementById("spot"), ev=document.getElementById("expl");
-    [[sv,"spot"],[ev,"expl"]].forEach(([v,n])=>{ const src="media/"+n+"_"+l+".mp4"; if(!v.querySelector("source").src.endsWith(src)){ v.pause(); v.poster="media/"+n+"_"+l+".jpg"; v.querySelector("source").src=src; v.load(); } });
+    const sv=document.getElementById("spot"), ev=document.getElementById("expl"), kv=document.getElementById("kostenv");
+    [[sv,"spot"],[ev,"expl"],[kv,"kosten"]].forEach(([v,n])=>{ const src="media/"+n+"_"+l+".mp4"; if(!v.querySelector("source").src.endsWith(src)){ v.pause(); v.poster="media/"+n+"_"+l+".jpg"; v.querySelector("source").src=src; v.load(); } });
     try{ localStorage.setItem("pw_lang",l); }catch(e){} };
   document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>set(b.dataset.lang)));
   let l="de"; try{ l=localStorage.getItem("pw_lang")||((navigator.language||"").startsWith("tr")?"tr":"de"); }catch(e){}
