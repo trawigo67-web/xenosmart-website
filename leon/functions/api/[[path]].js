@@ -1,6 +1,8 @@
-// Leonn Reservierung – Schnittstelle (Cloudflare Pages Functions + D1)
+// Leonn Reservierung und Catering – Schnittstelle (Cloudflare Pages Functions + D1)
 // Öffentlich:  /api/config, /api/month, /api/day, /api/reserve, /api/r/<token>[/cancel]
-// Geschützt:   /api/admin/…  (PIN-Anmeldung, Sitzung per Bearer-Token)
+//              /api/catering/config, /api/catering/request, /api/catering/r/<token>[/accept|/cancel]
+// Geschützt:   /api/admin/…  (PIN-Anmeldung, Sitzung per Bearer-Token), Catering unter /api/admin/catering[/<id>]
+import { RULES as CR, DISHES as CDISHES, OCCASIONS as COCC, calc as catCalc, timeOk as catTimeOk } from '../../catering/core.js';
 
 const DEFAULTS = {
   mode: 'test',              // 'test' = Testbetrieb, 'live' = echter Betrieb
@@ -37,7 +39,20 @@ const SCHEMA = [
   'CREATE TABLE IF NOT EXISTS hits (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, ih TEXT NOT NULL, ts INTEGER NOT NULL)',
   'CREATE INDEX IF NOT EXISTS idx_hits ON hits(kind, ts)',
   "CREATE TABLE IF NOT EXISTS push (endpoint TEXT PRIMARY KEY, th TEXT NOT NULL DEFAULT '', created_at INTEGER NOT NULL, p256dh TEXT NOT NULL DEFAULT '', auth TEXT NOT NULL DEFAULT '', lang TEXT NOT NULL DEFAULT 'de')",
+  // Catering-Anfragen: total und deposit in Cent; data = gespeicherte Auswahl mit den Preisen zum Zeitpunkt der Anfrage
+  `CREATE TABLE IF NOT EXISTS catering (
+     id INTEGER PRIMARY KEY AUTOINCREMENT, code TEXT NOT NULL UNIQUE, token TEXT NOT NULL UNIQUE,
+     date TEXT NOT NULL, time TEXT NOT NULL, guests INTEGER NOT NULL, occasion TEXT NOT NULL DEFAULT '',
+     name TEXT NOT NULL, phone TEXT NOT NULL DEFAULT '', email TEXT NOT NULL DEFAULT '', address TEXT NOT NULL DEFAULT '', note TEXT NOT NULL DEFAULT '',
+     lang TEXT NOT NULL DEFAULT 'de', status TEXT NOT NULL DEFAULT 'pending', total INTEGER NOT NULL DEFAULT 0, deposit INTEGER NOT NULL DEFAULT 0,
+     data TEXT NOT NULL DEFAULT '{}', admin_note TEXT NOT NULL DEFAULT '', test INTEGER NOT NULL DEFAULT 0,
+     created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL)`,
+  'CREATE INDEX IF NOT EXISTS idx_cat_status ON catering(status, date)',
+  'CREATE INDEX IF NOT EXISTS idx_cat_updated ON catering(updated_at)',
+  "CREATE TABLE IF NOT EXISTS clog (id INTEGER PRIMARY KEY AUTOINCREMENT, cat_id INTEGER NOT NULL, ts INTEGER NOT NULL, action TEXT NOT NULL, who TEXT NOT NULL DEFAULT '')",
+  'CREATE INDEX IF NOT EXISTS idx_clog ON clog(cat_id)',
 ];
+const CSTATUSES = ['pending', 'offered', 'confirmed', 'paid', 'done', 'declined', 'cancelled'];
 const ORIGINS = [/^https:\/\/(www\.)?xenosmart\.de$/, /^https:\/\/([a-z0-9-]+\.)?leonn[a-z0-9-]*\.pages\.dev$/, /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/];
 const PUSH_HOSTS = /(^|\.)(fcm\.googleapis\.com|push\.services\.mozilla\.com|web\.push\.apple\.com|notify\.windows\.com)$/;
 const SESSION_DAYS = 45;
@@ -172,6 +187,10 @@ function pushText(msg, lang) {
   if (!msg || msg.k === 'test') return { title: 'Leonn', body: tr ? 'Bildirimler çalışıyor.' : 'Mitteilungen funktionieren.', tag: 'leonn-test' };
   let when = msg.date;
   try { when = new Intl.DateTimeFormat(tr ? 'tr-TR' : 'de-DE', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }).format(new Date(msg.date + 'T12:00:00Z')); } catch (e) {}
+  if (msg.k === 'cnew' || msg.k === 'caccept' || msg.k === 'ccancel') {
+    const ct = msg.k === 'cnew' ? (tr ? 'Yeni catering talebi' : 'Neue Catering-Anfrage') : msg.k === 'caccept' ? (tr ? 'Catering teklifi kabul edildi' : 'Catering-Angebot angenommen') : (tr ? 'Catering iptal edildi' : 'Catering storniert');
+    return { title: ct, body: when + ' · ' + msg.guests + (tr ? ' misafir' : ' Gäste'), tag: 'leonn-' + msg.k + '-' + (msg.id || 0) };
+  }
   const title = msg.k === 'cancel' ? (tr ? 'Misafir iptal etti' : 'Gast hat storniert') : msg.k === 'auto' ? (tr ? 'Yeni rezervasyon' : 'Neue Reservierung') : (tr ? 'Yeni rezervasyon talebi' : 'Neue Reservierungsanfrage');
   const body = when + ' · ' + msg.time + (tr ? '' : ' Uhr') + ' · ' + msg.persons + (tr ? ' kişi' : (msg.persons === 1 ? ' Person' : ' Personen')) + (msg.area === 'v' ? ' · V.I.P Room' : '');
   return { title, body, tag: 'leonn-' + msg.k + '-' + (msg.id || 0) };
@@ -241,6 +260,8 @@ async function cleanup(env, kv, S, now) {
     env.DB.prepare('DELETE FROM sessions WHERE expires_at < ?').bind(t),
     env.DB.prepare("UPDATE reservations SET name = '–', phone = '', email = '', note = '', admin_note = '', token = 'x' || id || '-' || code WHERE date < ? AND name <> '–'").bind(addDays(now.date, -Math.max(7, S.keepDays))),
     env.DB.prepare('DELETE FROM log WHERE ts < ?').bind(t - 400 * 864e5),
+    env.DB.prepare("UPDATE catering SET name = '–', phone = '', email = '', address = '', note = '', admin_note = '', token = 'x' || id || '-' || code WHERE date < ? AND name <> '–'").bind(addDays(now.date, -Math.max(7, S.keepDays))),
+    env.DB.prepare('DELETE FROM clog WHERE ts < ?').bind(t - 400 * 864e5),
   ]);
 }
 
@@ -346,6 +367,83 @@ async function apiGuest(ctx, env, kv, request, token, action) {
   return bad('not_found', 404);
 }
 
+/* ---------------------------------------------------------------- Catering (öffentlicher Teil) */
+const catData = (r) => { try { const d = JSON.parse(r.data); return d && typeof d === 'object' ? d : {}; } catch (e) { return {}; } };
+const pubCat = (r) => { const d = catData(r); return { code: r.code, date: r.date, time: r.time, guests: r.guests, occasion: r.occasion, name: r.name, status: r.status, test: !!r.test, lang: r.lang, total: r.total, deposit: r.deposit, data: { lines: d.lines || [], extra: d.extra || [], pp: d.pp || 0, food: d.food || 0, disc: d.disc || 0, rate: d.rate || 0, grams: d.grams || 0 } }; };
+const admCat = (r) => ({ id: r.id, code: r.code, token: r.token, date: r.date, time: r.time, guests: r.guests, occasion: r.occasion, name: r.name, phone: r.phone, email: r.email, address: r.address, note: r.note, lang: r.lang, status: r.status, total: r.total, deposit: r.deposit, data: catData(r), admin_note: r.admin_note, test: !!r.test, created_at: r.created_at, updated_at: r.updated_at });
+async function newCatCode(env) {
+  const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  for (let i = 0; i < 6; i++) {
+    const b = rnd(5); let c = 'C'; for (const x of b) c += A[x % A.length];
+    if (!(await db.first(env, 'SELECT id FROM catering WHERE code = ?', c))) return c;
+  }
+  return 'C' + b64u(rnd(6)).replace(/[^A-Za-z0-9]/g, 'X').toUpperCase();
+}
+async function catInfo(env) {
+  const o = await db.first(env, "SELECT COUNT(*) AS n FROM catering WHERE status = 'pending'"), u = await db.first(env, 'SELECT MAX(updated_at) AS u FROM catering');
+  return { open: o ? o.n : 0, ts: (u && u.u) || 0 };
+}
+async function apiCatConfig(env, kv) {
+  const S = cfgOf(kv), now = berlin();
+  return J({ mode: S.mode, today: now.date, phone: S.phone, minGuests: CR.minGuests, maxGuests: CR.maxGuests, leadDays: CR.leadDays, maxDays: CR.maxDays });
+}
+async function apiCatRequest(ctx, env, kv, request) {
+  let b; try { b = await request.json(); } catch (e) { return bad('json'); }
+  if (!b || typeof b !== 'object') return bad('json');
+  const S = cfgOf(kv), now = berlin();
+  if (clean(b.web, 50) || !(Number(b.el) > 2500)) return bad('blocked', 400);
+  const ih = await ipHash(request, kv, env), t = Date.now();
+  if (await hitCount(env, 'cat', t - 3600e3, ih) >= 4 || await hitCount(env, 'cat', t - 864e5, ih) >= 8 || await hitCount(env, 'cat', t - 864e5) >= 200) return bad('rate', 429);
+  const date = String(b.date || ''), time = String(b.time || ''), guests = intIn(b.guests, CR.minGuests, CR.maxGuests), f = [];
+  if (!isDate(date) || date < addDays(now.date, CR.leadDays) || date > addDays(now.date, CR.maxDays)) f.push('date');
+  if (!catTimeOk(time)) f.push('time');
+  if (!guests) f.push('guests');
+  const known = new Set(CDISHES.map((d) => d.id));
+  const sel = Array.isArray(b.sel) ? [...new Set(b.sel.filter((x) => typeof x === 'string' && known.has(x)))] : [];
+  if (sel.length < CR.minDishes) f.push('sel');
+  if (b.consent !== true) f.push('consent');
+  const { o, err } = readGuest(b, false);
+  if (o.phone.replace(/\D/g, '').length < 6) err.push('phone');
+  const address = clean(b.address, 160);
+  if (address.length < 5) err.push('address');
+  const fields = [...new Set(f.concat(err))];
+  if (fields.length) return bad('fields', 400, { fields });
+  // Preis immer hier berechnen, nie eine Summe aus dem Browser übernehmen
+  const c = catCalc({ guests, sel, drinks: b.drinks, ware: b.ware, staff: b.staff, hours: b.hours, deko: b.deko === true, deliv: b.deliv });
+  const occasion = COCC.includes(b.occasion) ? b.occasion : 'Sonstiges';
+  const dup = await db.first(env, "SELECT code, token, status, test, total, deposit FROM catering WHERE date = ? AND guests = ? AND phone = ? AND total = ? AND status IN ('pending','offered') AND created_at > ?", date, guests, o.phone, c.total, t - 10 * 60e3);
+  if (dup) return J({ ok: true, code: dup.code, token: dup.token, status: dup.status, test: !!dup.test, total: dup.total, deposit: dup.deposit });
+  const code = await newCatCode(env), token = b64u(rnd(24)), test = S.mode === 'live' ? 0 : 1;
+  const data = JSON.stringify({ sel: c.order.sel, drinks: c.order.drinks, ware: c.order.ware, staff: c.order.staff, hours: c.order.hours, deko: c.order.deko, deliv: c.order.deliv, pp: c.pp, grams: c.grams, rate: c.rate, food: c.food, disc: c.disc, lines: c.lines, extra: c.extra });
+  const ins = await db.run(env, 'INSERT INTO catering (code, token, date, time, guests, occasion, name, phone, email, address, note, lang, status, total, deposit, data, test, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+    code, token, date, time, guests, occasion, o.name, o.phone, o.email, address, o.note, o.lang, 'pending', c.total, c.dep, data, test, t, t);
+  const id = ins.meta && ins.meta.last_row_id;
+  await env.DB.batch([
+    env.DB.prepare('INSERT INTO clog (cat_id, ts, action, who) VALUES (?, ?, ?, ?)').bind(id || 0, t, 'created', 'web'),
+    env.DB.prepare('INSERT INTO hits (kind, ih, ts) VALUES (?, ?, ?)').bind('cat', ih, t),
+  ]);
+  ctx.waitUntil(pushAll(env, kv, { k: 'cnew', id, date, guests }));
+  return J({ ok: true, code, token, status: 'pending', test: !!test, total: c.total, deposit: c.dep });
+}
+async function apiCatGuest(ctx, env, kv, request, token, action) {
+  if (!/^[A-Za-z0-9_-]{20,60}$/.test(token)) return bad('not_found', 404);
+  const r = await db.first(env, 'SELECT * FROM catering WHERE token = ?', token);
+  if (!r) return bad('not_found', 404);
+  const now = berlin(), future = r.date > now.date;
+  const canCancel = future && (r.status === 'pending' || r.status === 'offered'), canAccept = future && r.status === 'offered';
+  if (!action) return J(Object.assign(pubCat(r), { canCancel, canAccept }));
+  if (request.method !== 'POST' || (action !== 'cancel' && action !== 'accept')) return bad('not_found', 404);
+  if (action === 'cancel' ? !canCancel : !canAccept) return bad('state', 409);
+  const t = Date.now(), status = action === 'cancel' ? 'cancelled' : 'confirmed';
+  await env.DB.batch([
+    env.DB.prepare('UPDATE catering SET status = ?, updated_at = ? WHERE id = ?').bind(status, t, r.id),
+    env.DB.prepare('INSERT INTO clog (cat_id, ts, action, who) VALUES (?, ?, ?, ?)').bind(r.id, t, action === 'cancel' ? 'cancelled_guest' : 'accepted_guest', 'web'),
+  ]);
+  ctx.waitUntil(pushAll(env, kv, { k: action === 'cancel' ? 'ccancel' : 'caccept', id: r.id, date: r.date, guests: r.guests }));
+  r.status = status;
+  return J(Object.assign(pubCat(r), { canCancel: false, canAccept: false }));
+}
+
 /* ---------------------------------------------------------------- Admin-Teil */
 function cfgPatch(S, b) {
   const out = Object.assign({}, S), err = [];
@@ -419,13 +517,13 @@ async function admin(ctx, env, kv, request, url, seg, rest) {
     if (!isDate(from) || !isDate(to)) return bad('date');
     const rows = await db.all(env, 'SELECT * FROM reservations WHERE date >= ? AND date <= ? ORDER BY date, time, id LIMIT 1500', from, to);
     const pend = await db.all(env, "SELECT * FROM reservations WHERE status = 'pending' AND date >= ? ORDER BY date, time, id LIMIT 300", now.date);
-    return J({ rows: rows.map(admRes), pending: pend.map(admRes), today: now.date, time: now.time, ts: Date.now(), mode: S.mode });
+    return J({ rows: rows.map(admRes), pending: pend.map(admRes), today: now.date, time: now.time, ts: Date.now(), mode: S.mode, cat: await catInfo(env) });
   }
   if (seg === 'poll' && m === 'GET') {
     const since = Number(url.searchParams.get('since')) || 0;
     const rows = await db.all(env, 'SELECT * FROM reservations WHERE updated_at > ? ORDER BY updated_at LIMIT 300', since);
     const p = await db.first(env, "SELECT COUNT(*) AS n FROM reservations WHERE status = 'pending' AND date >= ?", now.date);
-    return J({ rows: rows.map(admRes), pending: p ? p.n : 0, today: now.date, time: now.time, ts: Date.now(), mode: S.mode });
+    return J({ rows: rows.map(admRes), pending: p ? p.n : 0, today: now.date, time: now.time, ts: Date.now(), mode: S.mode, cat: await catInfo(env) });
   }
   if (seg === 'counts' && m === 'GET') {
     const from = url.searchParams.get('from') || now.date, to = url.searchParams.get('to') || addDays(from, 41);
@@ -453,9 +551,10 @@ async function admin(ctx, env, kv, request, url, seg, rest) {
   }
   if (seg === 'purge' && m === 'POST') {
     if (b.what !== 'test') return bad('fields');
-    const ids = await db.all(env, 'SELECT id FROM reservations WHERE test = 1');
-    await env.DB.batch([env.DB.prepare('DELETE FROM log WHERE res_id IN (SELECT id FROM reservations WHERE test = 1)'), env.DB.prepare('DELETE FROM reservations WHERE test = 1')]);
-    return J({ ok: true, removed: ids.length });
+    const ids = await db.all(env, 'SELECT id FROM reservations WHERE test = 1'), cids = await db.all(env, 'SELECT id FROM catering WHERE test = 1');
+    await env.DB.batch([env.DB.prepare('DELETE FROM log WHERE res_id IN (SELECT id FROM reservations WHERE test = 1)'), env.DB.prepare('DELETE FROM reservations WHERE test = 1'),
+      env.DB.prepare('DELETE FROM clog WHERE cat_id IN (SELECT id FROM catering WHERE test = 1)'), env.DB.prepare('DELETE FROM catering WHERE test = 1')]);
+    return J({ ok: true, removed: ids.length + cids.length });
   }
   if (seg === 'vapid' && m === 'GET') return J({ key: (await vapid(env, kv)).pub });
   if (seg === 'push') {
@@ -470,6 +569,35 @@ async function admin(ctx, env, kv, request, url, seg, rest) {
       return J({ ok: true });
     }
     if (m === 'DELETE') { await db.run(env, 'DELETE FROM push WHERE endpoint = ?', ep); return J({ ok: true }); }
+  }
+  if (seg === 'catering') {
+    const id = rest[0] ? Number(rest[0]) : 0;
+    if (!rest[0] && m === 'GET') {
+      // alles Offene, dazu alles ab 30 Tagen zurück
+      const rows = await db.all(env, "SELECT * FROM catering WHERE status IN ('pending','offered','confirmed','paid') OR date >= ? ORDER BY date, time, id LIMIT 400", addDays(now.date, -30));
+      return J({ rows: rows.map(admCat), today: now.date, ts: Date.now(), mode: S.mode, cat: await catInfo(env) });
+    }
+    if (!Number.isInteger(id) || id < 1) return bad('not_found', 404);
+    const r = await db.first(env, 'SELECT * FROM catering WHERE id = ?', id);
+    if (!r) return bad('not_found', 404);
+    if (m === 'GET') return J({ row: admCat(r), log: await db.all(env, 'SELECT ts, action, who FROM clog WHERE cat_id = ? ORDER BY ts, id', id) });
+    if (m === 'DELETE') {
+      await env.DB.batch([env.DB.prepare('DELETE FROM clog WHERE cat_id = ?').bind(id), env.DB.prepare('DELETE FROM catering WHERE id = ?').bind(id)]);
+      return J({ ok: true });
+    }
+    if (m === 'PATCH') {
+      const set = {}, acts = [];
+      if (b.status !== undefined) { if (!CSTATUSES.includes(b.status)) return bad('fields', 400, { fields: ['status'] }); if (b.status !== r.status) { set.status = b.status; acts.push(b.status); } }
+      if (b.admin_note !== undefined) { const v = cleanMulti(b.admin_note, 600); if (v !== r.admin_note) { set.admin_note = v; acts.push('note'); } }
+      const keys = Object.keys(set), t = Date.now();
+      if (keys.length) {
+        const stmts = [env.DB.prepare('UPDATE catering SET ' + keys.map((k) => k + ' = ?').join(', ') + ', updated_at = ? WHERE id = ?').bind(...keys.map((k) => set[k]), t, id)];
+        for (const a of acts) stmts.push(env.DB.prepare('INSERT INTO clog (cat_id, ts, action, who) VALUES (?, ?, ?, ?)').bind(id, t, a, who));
+        await env.DB.batch(stmts);
+      }
+      return J({ ok: true, row: admCat(await db.first(env, 'SELECT * FROM catering WHERE id = ?', id)), log: await db.all(env, 'SELECT ts, action, who FROM clog WHERE cat_id = ? ORDER BY ts, id', id) });
+    }
+    return bad('not_found', 404);
   }
   if (seg === 'pushtest' && m === 'POST') { await pushAll(env, kv, { k: 'test' }); const n = await db.first(env, 'SELECT COUNT(*) AS n FROM push'); return J({ ok: true, devices: n ? n.n : 0 }); }
 
@@ -557,6 +685,9 @@ export async function onRequest(ctx) {
         else if (p[0] === 'day' && m === 'GET') res = await apiDay(env, kv, url);
         else if (p[0] === 'reserve' && m === 'POST') res = await apiReserve(ctx, env, kv, request);
         else if (p[0] === 'r' && p[1]) res = await apiGuest(ctx, env, kv, request, p[1], p[2] || '');
+        else if (p[0] === 'catering' && p[1] === 'config' && m === 'GET') res = await apiCatConfig(env, kv);
+        else if (p[0] === 'catering' && p[1] === 'request' && m === 'POST') res = await apiCatRequest(ctx, env, kv, request);
+        else if (p[0] === 'catering' && p[1] === 'r' && p[2]) res = await apiCatGuest(ctx, env, kv, request, p[2], p[3] || '');
         else if (p[0] === 'admin' && p[1]) res = await admin(ctx, env, kv, request, url, p[1], p.slice(2));
         else res = bad('not_found', 404);
       }
