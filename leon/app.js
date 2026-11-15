@@ -203,16 +203,6 @@ var I = {
 'prev': ['Vorheriges Gericht', 'Önceki yemek', 'Previous dish'],
 'next': ['Nächstes Gericht', 'Sonraki yemek', 'Next dish'],
 'close': ['Schließen', 'Kapat', 'Close'],
-'amb': ['Ambiente', 'Atmosfer', 'Ambience'],
-'amb.theme': ['Design', 'Tema', 'Design'],
-'amb.mode': ['Darstellung', 'Görünüm', 'Appearance'],
-'amb.music': ['Musik', 'Müzik', 'Music'],
-'amb.note': ['Ihre Auswahl gilt nur auf diesem Gerät.', 'Seçiminiz yalnızca bu cihazda geçerlidir.', 'Your choice only applies on this device.'],
-'amb.auto.s': ['passend zum Kalender', 'takvime göre', 'follows the calendar'],
-'amb.now': ['jetzt', 'şimdi', 'now'],
-'mode.dark': ['Dunkel', 'Koyu', 'Dark'],
-'mode.light': ['Hell', 'Açık', 'Light'],
-'mode.system': ['Wie Gerät', 'Cihaz gibi', 'Device'],
 'music.s': ['Leise Instrumentalmusik im Hintergrund', 'Arka planda kısık enstrümantal müzik', 'Quiet instrumental background music'],
 'music.on': ['Musik ausschalten', 'Müziği kapat', 'Turn music off'],
 'music.off': ['Musik einschalten', 'Müziği aç', 'Turn music on'],
@@ -940,7 +930,7 @@ function applyLang() {
   $('#totop').setAttribute('aria-label', t('totop')); $('#findBtn').setAttribute('aria-label', t('m.search'));
   $('#ppMinus').setAttribute('aria-label', t('less')); $('#ppPlus').setAttribute('aria-label', t('more'));
   splitWords(); renderBelt(); renderGroups(); renderMenu(); renderShow(); renderCats(); renderCev(); renderTable(); setStatus(); updGift(); rsvRender(); mineRender(); vidLabel();
-  if (typeof ambText === 'function' && AMB.t) { ambText(); ambPanel(); musUi(); }
+  if (typeof ambText === 'function' && AMB.t) { ambText(); musUi(); }
   if (modalId) openItem(modalId);
   setupReveal();
 }
@@ -1228,11 +1218,12 @@ var AMB_BAND = {
   sommer: { h: ['Leicht durch den Sommer', 'Yaza hafif lezzetler', 'Light dishes for summer'], p: ['Frische Salate, Meze, Ayran und Limonata: leicht und erfrischend für warme Tage.', 'Taze salatalar, mezeler, ayran ve limonata: sıcak günler için hafif ve ferahlatıcı.', 'Fresh salads, meze, ayran and lemonade: light and refreshing for warm days.'], b: [['g2'], ['g3']] },
   herbst: { h: ['Herbstzeit ist Güveç-Zeit', 'Sonbahar güveç zamanı', 'Autumn is güveç season'], p: ['Wenn die Tage kürzer werden: Güveç aus dem Ofen, Leonn Kuzu Çevirme vom Spieß und Künefe zum Abschluss.', 'Günler kısalırken: fırından güveç, şişte Leonn Kuzu Çevirme ve tatlı olarak künefe.', 'As the days grow shorter: güveç from the oven, Leonn Kuzu Çevirme from the spit and künefe to finish.'], b: [['g5'], ['g6']] }
 };
-var AMB = { pref: 'auto', site: 'auto', mode: 'dark', t: 'klassik', k: '', y: 0, open: false };
+// Design und Hell/Dunkel bestimmt allein das Restaurant (Admin-App → Mehr → Design der Webseite); Gäste können es nicht ändern.
+var AMB = { site: 'auto', scheme: 'dark', t: 'klassik', k: '', y: 0 };
 function ambLight() { return document.documentElement.getAttribute('data-mode') === 'light'; }
 function ambResolve() {
   var d = new Date(), m = d.getMonth() + 1, day = d.getDate(), y = d.getFullYear(), a = window.leonnAuto ? window.leonnAuto(d) : ['klassik', 'klassik'];
-  var t = AMB.pref !== 'auto' ? AMB.pref : (AMB.site !== 'auto' ? AMB.site : a[0]), k = t;
+  var t = AMB.site !== 'auto' ? AMB.site : a[0], k = t;
   if (AMB_T.indexOf(t) < 0) t = k = 'klassik';
   if (t === 'ramadan') k = a[0] === 'ramadan' ? a[1] : 'ramadan';
   if (t === 'weihnachten') k = m === 12 && day >= 24 && day <= 26 ? 'xmas' : 'advent';
@@ -1336,22 +1327,9 @@ function ambText() {
     } else { band.hidden = true; band.innerHTML = ''; }
   }
 }
-function ambPanel() {
-  var box = $('#ambThemes'); if (!box) return;
-  var list = ['auto'].concat(AMB_T);
-  box.innerHTML = list.map(function (k) {
-    var sw = AMB_SW[k], on = AMB.pref === k, sub = k === 'auto' ? '<small>' + esc(t('amb.now')) + ': ' + esc(AMB_N[AMB.pref === 'auto' ? AMB.t : (AMB.site !== 'auto' ? AMB.site : AMB.auto[0])][LI]) + '</small>' : '';
-    return '<button type="button" class="amb-t" role="radio" aria-checked="' + on + '" data-amb-t="' + k + '"><span class="swt" style="--b:' + sw[0] + ';--a:' + sw[1] + '">' + ambSym(sw[2], sw[2].indexOf('i-') === 0 ? 'ic' : '') + '</span><span>' + esc(AMB_N[k][LI]) + sub + '</span></button>';
-  }).join('');
-  $('#ambModes').innerHTML = [['dark', 'i-moon'], ['light', 'i-sun'], ['system', 'i-device']].map(function (m) {
-    return '<button type="button" class="amb-m" role="radio" aria-checked="' + (AMB.mode === m[0]) + '" data-amb-m="' + m[0] + '">' + ambSym(m[1], 'ic') + '<span>' + esc(t('mode.' + m[0])) + '</span></button>';
-  }).join('');
-  var mb = $('#ambMusic'); if (mb) mb.setAttribute('aria-checked', musPref() ? 'true' : 'false');
-  $('#ambBtn').setAttribute('aria-label', t('amb')); $('#ambX').setAttribute('aria-label', t('close'));
-}
 function ambApply(animate) {
   ambResolve();
-  var de = document.documentElement, md = AMB.mode === 'system' ? (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : AMB.mode;
+  var de = document.documentElement, md = AMB.scheme === 'system' ? (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : AMB.scheme;
   var changed = de.getAttribute('data-theme') !== AMB.t || de.getAttribute('data-mode') !== md;
   if (animate && changed && !reduce) { de.classList.add('amb-switch'); clearTimeout(ambApply.tm); ambApply.tm = setTimeout(function () { de.classList.remove('amb-switch'); }, 800); }
   de.setAttribute('data-theme', AMB.t); de.setAttribute('data-mode', md);
@@ -1359,22 +1337,15 @@ function ambApply(animate) {
   if (mt) mt.setAttribute('content', (cs.getPropertyValue('--night') || '#0B0A26').trim());
   FX.kind = AMB_FX[AMB.t] || 'embers'; FX.light = md === 'light'; FX.rgb = (cs.getPropertyValue('--gold-rgb') || '219,189,130').trim();
   if (FX.reset && changed) FX.reset();
-  ambDeco(); ambText(); ambPanel(); setupReveal();
+  ambDeco(); ambText(); setupReveal();
 }
-function ambOpen(o) {
-  var p = $('#amb'), b = $('#ambBtn'); if (!p) return;
-  var hd = $('header.top'); if (o && hd) p.style.setProperty('--ambtop', Math.round(Math.max(8, hd.getBoundingClientRect().bottom + 10)) + 'px');
-  AMB.open = o; p.hidden = !o; b.setAttribute('aria-expanded', o ? 'true' : 'false');
-  if (o) { ambPanel(); var f = p.querySelector('[aria-checked="true"]') || p.querySelector('button'); if (f) f.focus({ preventScroll: true }); }
-  else if (document.activeElement && p.contains(document.activeElement)) (b.offsetParent ? b : $('#burger')).focus();
-}
-function ambSiteDesign() {
-  // Einstellung des Restaurants (Admin-App): gilt für alle, die selbst nichts gewählt haben
+function ambSite() {
+  // Einstellung des Restaurants laden; gemerkt wird sie nur, damit die Seite beim nächsten Öffnen gleich richtig aussieht
   if (!API || typeof apiCall !== 'function') return;
   apiCall('/config').then(function (r) {
-    if (!r.ok || !r.j || !r.j.design) return;
-    var d = AMB_T.indexOf(r.j.design) >= 0 ? r.j.design : 'auto';
-    if (d !== AMB.site) { AMB.site = d; store('leonn-site-theme', d); if (AMB.pref === 'auto') ambApply(true); else ambPanel(); }
+    if (!r.ok || !r.j) return;
+    var d = AMB_T.indexOf(r.j.design) >= 0 ? r.j.design : 'auto', sc = ['dark', 'light', 'system'].indexOf(r.j.scheme) >= 0 ? r.j.scheme : 'dark';
+    if (d !== AMB.site || sc !== AMB.scheme) { AMB.site = d; AMB.scheme = sc; store('leonn-site-theme', d); store('leonn-site-scheme', sc); ambApply(true); }
   }, function () {});
 }
 
@@ -1387,7 +1358,6 @@ function musUi() {
   b.hidden = false;
   b.setAttribute('aria-pressed', MUS.on ? 'true' : 'false');
   b.setAttribute('aria-label', t(MUS.on ? 'music.on' : 'music.off'));
-  var mb = $('#ambMusic'); if (mb) mb.setAttribute('aria-checked', pref ? 'true' : 'false');
 }
 function musEnsure() {
   var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
@@ -1421,11 +1391,10 @@ function musStop() {
   setTimeout(function () { if (!MUS.on && MUS.ctx && MUS.ctx.state === 'running' && MUS.ctx.suspend) MUS.ctx.suspend(); }, 900);
 }
 function musToggle() { if (MUS.on) { store('leonn-music', 'off'); musStop(); } else { store('leonn-music', 'on'); musPlay(); } }
-function musSwitch() { if (musPref()) { store('leonn-music', 'off'); musStop(); } else { store('leonn-music', 'on'); musPlay(); } }
 function musInit() {
   musUi();
   var first = function (e) {
-    if (e.target && e.target.closest && e.target.closest('#music,#ambMusic')) return;
+    if (e.target && e.target.closest && e.target.closest('#music')) return;
     off(); if (musPref() && !MUS.started) musPlay();
   };
   var evs = ['click', 'keydown', 'touchend'];
@@ -1438,36 +1407,19 @@ function musInit() {
   });
 }
 function ambInit() {
-  AMB.pref = store('leonn-theme') || 'auto'; AMB.site = store('leonn-site-theme') || 'auto'; AMB.mode = store('leonn-mode') || 'dark';
-  if (AMB.pref !== 'auto' && AMB_T.indexOf(AMB.pref) < 0) AMB.pref = 'auto';
-  if (['dark', 'light', 'system'].indexOf(AMB.mode) < 0) AMB.mode = 'dark';
+  AMB.site = store('leonn-site-theme') || 'auto'; AMB.scheme = store('leonn-site-scheme') || 'dark';
+  if (AMB.site !== 'auto' && AMB_T.indexOf(AMB.site) < 0) AMB.site = 'auto';
+  if (['dark', 'light', 'system'].indexOf(AMB.scheme) < 0) AMB.scheme = 'dark';
   ambApply(false);
   if (window.ResizeObserver) { var ro = new ResizeObserver(ambLayoutSoon); ['#deco', '#status', '#seasonHi', '#heroH'].forEach(function (s) { var e = $(s); if (e) ro.observe(e); }); }
   else window.addEventListener('resize', ambLayoutSoon);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(ambLayoutSoon);
-  $('#ambBtn').addEventListener('click', function (e) { e.stopPropagation(); ambOpen(!AMB.open); });
-  var na = $('#navAmb'); if (na) na.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); navOpen(false); ambOpen(true); });
-  $('#ambX').addEventListener('click', function () { ambOpen(false); });
-  $('#amb').addEventListener('click', function (e) {
-    var el;
-    if ((el = e.target.closest('[data-amb-t]'))) { AMB.pref = el.getAttribute('data-amb-t'); store('leonn-theme', AMB.pref); ambApply(true); var f = $('[data-amb-t="' + AMB.pref + '"]'); if (f) f.focus(); }
-    else if ((el = e.target.closest('[data-amb-m]'))) { AMB.mode = el.getAttribute('data-amb-m'); store('leonn-mode', AMB.mode); ambApply(true); var g = $('[data-amb-m="' + AMB.mode + '"]'); if (g) g.focus(); }
-    else if (e.target.closest('#ambMusic')) musSwitch();
-  });
-  $('#amb').addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { ambOpen(false); return; }
-    var r = e.target.closest('[role="radio"]'); if (!r || ['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].indexOf(e.key) < 0) return;
-    var all = $$('[role="radio"]', r.parentNode), i = all.indexOf(r) + (e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : -1);
-    e.preventDefault(); all[(i + all.length) % all.length].click();
-  });
-  document.addEventListener('click', function (e) { if (AMB.open && !e.target.closest('#amb,#ambBtn')) ambOpen(false); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && AMB.open) ambOpen(false); });
-  if (window.matchMedia) { var mq = matchMedia('(prefers-color-scheme: light)'); var ch = function () { if (AMB.mode === 'system') ambApply(true); }; if (mq.addEventListener) mq.addEventListener('change', ch); else if (mq.addListener) mq.addListener(ch); }
+  if (window.matchMedia) { var mq = matchMedia('(prefers-color-scheme: light)'); var ch = function () { if (AMB.scheme === 'system') ambApply(true); }; if (mq.addEventListener) mq.addEventListener('change', ch); else if (mq.addListener) mq.addListener(ch); }
   $('#music').addEventListener('click', musToggle);
   musInit();
-  ambSiteDesign();
-  // Tageswechsel (z. B. Silvester um Mitternacht): einmal pro Stunde neu bestimmen
-  setInterval(function () { var o = AMB.t + AMB.k; ambResolve(); if (o !== AMB.t + AMB.k) ambApply(true); }, 3600000);
+  ambSite();
+  // stündlich: Tageswechsel (z. B. Silvester um Mitternacht) und eine neue Einstellung des Restaurants übernehmen
+  setInterval(function () { var o = AMB.t + AMB.k; ambResolve(); if (o !== AMB.t + AMB.k) ambApply(true); ambSite(); }, 3600000);
 }
 
 function init() {

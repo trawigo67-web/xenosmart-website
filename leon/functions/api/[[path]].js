@@ -16,8 +16,9 @@ const DEFAULTS = {
   maxDays: 60,               // höchstens … Tage im Voraus
   closedDates: [], closedWeekdays: [],
   autoConfirm: false,
-  keepDays: 60,
-  design: 'auto',             // Design der Webseite (Ambiente): auto = nach Kalender              // Gästedaten … Tage nach dem Termin entfernen
+  keepDays: 60,              // Gästedaten … Tage nach dem Termin entfernen
+  design: 'auto',            // Design der Webseite: auto = nach Kalender. Nur das Restaurant wählt es (Admin-App), Gäste nicht.
+  scheme: 'dark',            // Hell/Dunkel der Webseite: dark, light oder system (= wie das Gerät des Gastes eingestellt ist)
   phone: '02443 9124069',
 };
 const ACTIVE = ['pending', 'confirmed', 'seated', 'done'];
@@ -269,7 +270,7 @@ async function cleanup(env, kv, S, now) {
 /* ---------------------------------------------------------------- Öffentlicher Teil */
 async function apiConfig(env, kv) {
   const S = cfgOf(kv), now = berlin();
-  return J({ mode: S.mode, firstSlot: S.firstSlot, lastSlot: S.lastSlot, slotMin: S.slotMin, maxParty: S.maxParty, vip: S.vip, vipMin: S.vipMin, vipMax: S.vipMax, maxDays: S.maxDays, phone: S.phone, autoConfirm: S.autoConfirm, design: DESIGNS.includes(S.design) ? S.design : 'auto', today: now.date, now: now.time });
+  return J({ mode: S.mode, firstSlot: S.firstSlot, lastSlot: S.lastSlot, slotMin: S.slotMin, maxParty: S.maxParty, vip: S.vip, vipMin: S.vipMin, vipMax: S.vipMax, maxDays: S.maxDays, phone: S.phone, autoConfirm: S.autoConfirm, design: DESIGNS.includes(S.design) ? S.design : 'auto', scheme: SCHEMES.includes(S.scheme) ? S.scheme : 'dark', today: now.date, now: now.time });
 }
 function readParty(url, S) {
   const area = url.searchParams.get('area') === 'v' ? 'v' : 'r';
@@ -447,6 +448,7 @@ async function apiCatGuest(ctx, env, kv, request, token, action) {
 
 /* ---------------------------------------------------------------- Admin-Teil */
 const DESIGNS = ['auto', 'klassik', 'fruehling', 'sommer', 'herbst', 'winter', 'ramadan', 'weihnachten', 'silvester'];
+const SCHEMES = ['dark', 'light', 'system'];
 function cfgPatch(S, b) {
   const out = Object.assign({}, S), err = [];
   const num = (k, a, z) => { if (b[k] !== undefined) { const n = intIn(b[k], a, z); if (n === null) err.push(k); else out[k] = n; } };
@@ -460,6 +462,7 @@ function cfgPatch(S, b) {
   num('leadMin', 0, 2880); num('maxDays', 1, 365); num('keepDays', 7, 730); bool('autoConfirm');
   if (b.phone !== undefined) out.phone = clean(b.phone, 30);
   if (b.design !== undefined) { if (DESIGNS.includes(b.design)) out.design = b.design; else err.push('design'); }
+  if (b.scheme !== undefined) { if (SCHEMES.includes(b.scheme)) out.scheme = b.scheme; else err.push('scheme'); }
   if (b.closedDates !== undefined) { if (Array.isArray(b.closedDates) && b.closedDates.length <= 200 && b.closedDates.every(isDate)) out.closedDates = [...new Set(b.closedDates)].sort(); else err.push('closedDates'); }
   if (b.closedWeekdays !== undefined) { if (Array.isArray(b.closedWeekdays) && b.closedWeekdays.every((x) => Number.isInteger(x) && x >= 0 && x <= 6)) out.closedWeekdays = [...new Set(b.closedWeekdays)].sort(); else err.push('closedWeekdays'); }
   if (!(toMin(out.firstSlot) <= toMin(out.lastSlot))) err.push('lastSlot');
