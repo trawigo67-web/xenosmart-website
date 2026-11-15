@@ -34,10 +34,21 @@ jobs:
           now = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
           json.dump({'ozEur': round(p, 2), 'updatedAt': now, 'source': src}, open('markaistanbul/price.json', 'w'))
           print(src, 'EUR/oz:', p)
+          # Verlauf fuer das spaetere 30-Tage-Diagramm: ein Wert pro Tag (Feingold EUR/g), der letzte des Tages zaehlt
+          from zoneinfo import ZoneInfo
+          heute = datetime.datetime.now(ZoneInfo('Europe/Berlin')).strftime('%Y-%m-%d')
+          try:
+              h = json.load(open('markaistanbul/gecmis.json'))
+          except Exception:
+              h = []
+          h = [x for x in h if x.get('t') != heute] + [{'t': heute, 'g': round(p / 31.1034768, 2)}]
+          h = sorted(h, key=lambda x: x['t'])[-400:]
+          json.dump(h, open('markaistanbul/gecmis.json', 'w'), separators=(',', ':'))
+          print('Verlauf:', len(h), 'Tage')
           EOF
       - name: Speichern
         run: |
           git config user.name "Çeyrekmatik Bot"
           git config user.email "actions@users.noreply.github.com"
-          git add markaistanbul/price.json
+          git add markaistanbul/price.json markaistanbul/gecmis.json
           git diff --cached --quiet || (git commit -m "Goldpreis aktualisiert" && git push)
