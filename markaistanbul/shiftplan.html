@@ -1017,7 +1017,7 @@ function openPerson(pid) {
   $("psPal").innerHTML = PCOL.map((c) => `<button data-act="ps-col" data-v="${c}" style="background:${c}" aria-label="Renk"></button>`).join("");
   $("psShopBox").hidden = shops().length < 2;
   psRender(); show("ps");
-  if (!p) setTimeout(() => $("psName").focus(), 50);
+  if (!p) setTimeout(() => { const a = document.activeElement; if (!a || !$("ps").contains(a) || a === $("ps")) $("psName").focus(); }, 50);
 }
 function psRender() {
   document.querySelectorAll("#psPal button").forEach((b) => b.classList.toggle("on", b.dataset.v === PS.color));
