@@ -1432,6 +1432,70 @@ const I18N = {
   backup_never: ['Noch keine Sicherung: Die Daten liegen nur auf diesem Gerät. Lade einmal pro Woche eine Sicherung herunter.', 'Henüz yedek yok: Veriler sadece bu cihazda. Haftada bir yedek indir.', 'No backup yet: the data only lives on this device. Download a backup once a week.'],
   backup_old: ['Letzte Sicherung vor {n} Tagen – die Daten liegen nur auf diesem Gerät.', 'Son yedek {n} gün önce – veriler sadece bu cihazda.', 'Last backup {n} days ago – the data only lives on this device.'],
   backup_now: ['Jetzt sichern', 'Şimdi yedekle', 'Back up now'],
+  st_team: ['Team-Datenbank', 'Ekip veritabanı', 'Team database'],
+  st_offline: ['Offline', 'Çevrimdışı', 'Offline'],
+  st_off_pending: ['Offline – wartet', 'Çevrimdışı – bekliyor', 'Offline – waiting'],
+  offline_banner: ['Keine Verbindung: Du siehst den letzten Stand. Änderungen werden gespeichert, sobald wieder Internet da ist.', 'Bağlantı yok: Son durumu görüyorsun. Değişiklikler internet gelince kaydedilir.', 'No connection: you are seeing the last saved state. Changes will be saved once you are back online.'],
+  login_h: ['Anmelden', 'Giriş yap', 'Sign in'],
+  login_p: ['Melde dich an, um den gemeinsamen Schichtplan zu öffnen.', 'Ortak vardiya planını açmak için giriş yap.', 'Sign in to open the shared shift plan.'],
+  login_go: ['Anmelden', 'Giriş yap', 'Sign in'],
+  login_bad: ['Name oder Passwort stimmt nicht.', 'İsim veya şifre yanlış.', 'Name or password is wrong.'],
+  login_locked: ['Zu viele Versuche. Bitte in 15 Minuten noch einmal.', 'Çok fazla deneme. Lütfen 15 dakika sonra tekrar dene.', 'Too many attempts. Please try again in 15 minutes.'],
+  login_off: ['Keine Verbindung zur Team-Datenbank. Prüfe das Internet und versuche es noch einmal.', 'Ekip veritabanına bağlanılamıyor. İnterneti kontrol edip tekrar dene.', 'Can’t reach the team database. Check the internet connection and try again.'],
+  retry: ['Erneut versuchen', 'Tekrar dene', 'Try again'],
+  try_local: ['Ohne Anmeldung ausprobieren (Beispiel, nur auf diesem Gerät)', 'Giriş yapmadan dene (örnek, sadece bu cihazda)', 'Try without signing in (example, this device only)'],
+  try_banner: ['Testmodus: Alles bleibt auf diesem Gerät und kommt nicht in die Team-Datenbank.', 'Deneme modu: Her şey bu cihazda kalır, ekip veritabanına gitmez.', 'Test mode: everything stays on this device and does not go into the team database.'],
+  to_login: ['Zur Anmeldung', 'Girişe git', 'Go to sign-in'],
+  setup_h: ['Team-Datenbank einrichten', 'Ekip veritabanını kur', 'Set up the team database'],
+  setup_p: ['Einmalig: Gib den Einrichtungscode ein und lege deinen Zugang als Chef an. Danach legst du in den Einstellungen Zugänge für dein Team an.', 'Bir kerelik: Kurulum kodunu gir ve yönetici erişimini oluştur. Sonra Ayarlar’da ekibin için erişimler oluşturursun.', 'One time: enter the setup code and create your admin access. Afterwards you create access for your team in Settings.'],
+  setup_code: ['Einrichtungscode', 'Kurulum kodu', 'Setup code'],
+  setup_go: ['Einrichten', 'Kur', 'Set up'],
+  setup_bad: ['Der Einrichtungscode stimmt nicht oder ist abgelaufen.', 'Kurulum kodu yanlış veya süresi dolmuş.', 'The setup code is wrong or has expired.'],
+  setup_already: ['Die Team-Datenbank ist schon eingerichtet. Bitte anmelden.', 'Ekip veritabanı zaten kurulu. Lütfen giriş yap.', 'The team database is already set up. Please sign in.'],
+  your_name: ['Dein Name', 'Adın', 'Your name'],
+  f_pass: ['Passwort', 'Şifre', 'Password'],
+  f_pass2: ['Passwort wiederholen', 'Şifreyi tekrarla', 'Repeat password'],
+  pass_rule: ['Mindestens 8 Zeichen. Am besten den Vorschlag nehmen oder einen kurzen Satz.', 'En az 8 karakter. En iyisi öneriyi al ya da kısa bir cümle kullan.', 'At least 8 characters. Best take the suggestion or a short sentence.'],
+  pass_short: ['Das Passwort braucht mindestens 8 Zeichen.', 'Şifre en az 8 karakter olmalı.', 'The password needs at least 8 characters.'],
+  pass_mismatch: ['Die beiden Passwörter sind nicht gleich.', 'İki şifre aynı değil.', 'The two passwords don’t match.'],
+  name_bad: ['Bitte einen Namen mit 2 bis 40 Zeichen eingeben.', 'Lütfen 2–40 karakterlik bir isim gir.', 'Please enter a name with 2 to 40 characters.'],
+  name_taken: ['Diesen Namen gibt es schon.', 'Bu isim zaten var.', 'This name already exists.'],
+  session_end: ['Bitte neu anmelden.', 'Lütfen yeniden giriş yap.', 'Please sign in again.'],
+  acc_h: ['Zugang und Team', 'Erişim ve ekip', 'Access and team'],
+  acc_me: ['Angemeldet als {n} ({r})', '{n} olarak giriş yapıldı ({r})', 'Signed in as {n} ({r})'],
+  logout: ['Abmelden', 'Çıkış yap', 'Sign out'],
+  pw_change: ['Passwort ändern', 'Şifreyi değiştir', 'Change password'],
+  pw_old: ['Bisheriges Passwort', 'Mevcut şifre', 'Current password'],
+  pw_old_bad: ['Das bisherige Passwort stimmt nicht.', 'Mevcut şifre yanlış.', 'The current password is wrong.'],
+  pw_new: ['Neues Passwort', 'Yeni şifre', 'New password'],
+  pw_changed: ['Passwort geändert. Andere Geräte mit diesem Zugang sind abgemeldet.', 'Şifre değiştirildi. Bu erişimle açık olan diğer cihazlar çıkış yaptı.', 'Password changed. Other devices using this access have been signed out.'],
+  pw_suggest: ['Vorschlag', 'Öneri', 'Suggest'],
+  role_admin: ['Chef', 'Yönetici', 'Admin'],
+  role_edit: ['Planen', 'Planlama', 'Planner'],
+  role_view: ['Nur ansehen', 'Sadece görüntüleme', 'View only'],
+  role_admin_d: ['alles, auch Zugänge verwalten', 'her şey, erişimleri de yönetir', 'everything, including access'],
+  role_edit_d: ['Pläne, Personal und Einstellungen bearbeiten', 'plan, personel ve ayarları düzenler', 'edit plans, staff and settings'],
+  role_view_d: ['Pläne nur ansehen', 'planları sadece görür', 'only view plans'],
+  acc_role: ['Rolle', 'Rol', 'Role'],
+  acc_last: ['Zuletzt angemeldet', 'Son giriş', 'Last sign-in'],
+  acc_never: ['noch nie', 'henüz yok', 'never'],
+  acc_blocked: ['gesperrt', 'engelli', 'blocked'],
+  acc_block: ['Sperren', 'Engelle', 'Block'],
+  acc_unblock: ['Freigeben', 'Engeli kaldır', 'Unblock'],
+  acc_reset: ['Neues Passwort', 'Yeni şifre', 'New password'],
+  acc_new: ['Neuer Zugang', 'Yeni erişim', 'New access'],
+  acc_create: ['Zugang anlegen', 'Erişim oluştur', 'Create access'],
+  acc_created: ['Der Zugang für {n} ist angelegt.', '{n} için erişim oluşturuldu.', 'Access for {n} has been created.'],
+  acc_pw_set: ['Das neue Passwort für {n} gilt ab sofort. Alte Anmeldungen sind beendet.', '{n} için yeni şifre hemen geçerli. Eski girişler kapatıldı.', 'The new password for {n} applies right away. Old sign-ins have ended.'],
+  acc_share: ['Gib Name und Passwort persönlich oder per Privatnachricht weiter, nicht in eine Gruppe. Das Passwort wird hier nicht noch einmal angezeigt.', 'İsim ve şifreyi bizzat ya da özel mesajla ilet, gruba yazma. Şifre burada bir daha gösterilmez.', 'Pass on the name and password in person or by private message, not in a group. The password won’t be shown again.'],
+  acc_hint: ['Jede Person bekommt einen eigenen Zugang. Wer gesperrt wird oder ein neues Passwort bekommt, ist sofort auf allen Geräten abgemeldet.', 'Her kişi kendi erişimini alır. Engellenen ya da yeni şifre verilen kişi tüm cihazlarda hemen çıkış yapar.', 'Everyone gets their own access. Anyone who is blocked or gets a new password is signed out on all devices right away.'],
+  last_admin: ['Mindestens ein aktiver Chef-Zugang muss bleiben.', 'En az bir aktif yönetici erişimi kalmalı.', 'At least one active admin access must remain.'],
+  ro_role: ['Dein Zugang darf den Plan nur ansehen.', 'Erişimin planı sadece görüntüleyebilir.', 'Your access can only view the plan.'],
+  conflict: ['{n} hat das gerade auch geändert. Du siehst jetzt den neuesten Stand – bitte deine letzte Änderung prüfen.', '{n} bunu az önce değiştirdi. Şimdi en güncel hali görüyorsun – lütfen son değişikliğini kontrol et.', '{n} just changed this too. You now see the latest version – please check your last change.'],
+  remote_change: ['Aktualisiert von {n}', '{n} güncelledi', 'Updated by {n}'],
+  err_too_large: ['Zu viele Daten auf einmal – bitte die Woche aufteilen.', 'Bir seferde çok fazla veri – lütfen haftayı böl.', 'Too much data at once – please split the week.'],
+  onb_team: ['Alles wird in der Team-Datenbank gespeichert – alle mit Zugang sehen denselben Plan.', 'Her şey ekip veritabanına kaydedilir – erişimi olan herkes aynı planı görür.', 'Everything is saved in the team database – everyone with access sees the same plan.'],
+  import_local: ['Daten von diesem Gerät übernehmen ({n} Mitarbeiter)', 'Bu cihazdaki verileri aktar ({n} personel)', 'Take over data from this device ({n} staff)'],
   backup_dl: ['Sicherung herunterladen', 'Yedeği indir', 'Download backup'],
   backup_copy: ['Sicherung kopieren', 'Yedeği kopyala', 'Copy backup'],
   backup_load: ['Sicherung einspielen', 'Yedeği geri yükle', 'Restore backup'],
@@ -1830,7 +1894,7 @@ function weekModel(wk) {
 const Store = {
   db: null, unsub: {}, q: {}, localTimer: null,
   async start() {
-    if (IS_WEB) { A.caps.downloads = webDownloads; return this.startLocal(); }
+    if (IS_WEB) return this.startWeb();
     const db = await useCap('db');
     if (db) { this.db = db; A.mode = 'loading'; this.subscribeBase(); }
     else this.startLocal();
@@ -1930,6 +1994,9 @@ const Store = {
         if (del) await this.db.doc(path).delete(); else await this.db.doc(path).set(data);
       } catch (e) {
         if (e && e.code === 'unavailable' && !retried) { retried = true; await sleep(800 + Math.random() * 800); if (del) q.del = true; else if (!q.next) q.next = data; continue; }
+        // Gleichzeitig von jemand anderem geändert: dessen Stand gilt, unsere Warteschlange verfällt
+        if (e && e.code === 'conflict') { q.next = null; q.del = false; toast(t('conflict', { n: e.by || '?' }), 'warn'); bump(); render(); break; }
+        if (e && e.code === 'unauthenticated') { q.next = null; q.del = false; break; }
         this.writeError(e); break;
       }
     }
@@ -1940,6 +2007,8 @@ const Store = {
     if (code === 'invalid_argument' && A.caps.user) { A.canWrite = false; A.roReason = 'ro_view'; toast(t('err_readonly'), 'err'); }
     else if (code === 'quota_exceeded') toast(t('err_quota'), 'err');
     else if (code === 'revoked') { A.canWrite = false; A.roReason = 'ro_revoked'; toast(t('err_readonly'), 'err'); }
+    else if (code === 'permission_denied') { A.canWrite = false; A.roReason = 'ro_role'; toast(t('err_readonly'), 'err'); }
+    else if (code === 'too_large') toast(t('err_too_large'), 'err');
     else toast(t('err_save') + (code ? ' (' + code + ')' : ''), 'err');
     render();
   },
@@ -2284,6 +2353,273 @@ function toast(msg, kind) {
   setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }, kind === 'err' ? 6000 : 3800);
 }
 
+/* ---------------- Team-Datenbank (eigene Domain) ----------------
+   Auf xenosmart.de / nirvanamechernich.com / *.pages.dev spricht die App mit der Cloudflare-Funktion
+   „schichtplan-api“. RemoteDB bildet dabei genau die Datenbank-Schnittstelle nach, die der Store auch im
+   Claude-Umfeld benutzt (doc/collection/onSnapshot/set/delete). Der letzte Stand liegt zusätzlich im Gerät
+   (IndexedDB), damit die App auch ohne Netz aufgeht; nicht gespeicherte Änderungen werden nachgeschickt. */
+const API_HOST = 'https://nirvana-reservierung.pages.dev';
+const AUTH_KEY = 'sp-auth', TRY_KEY = 'sp-try';
+const Remote = {
+  base: '',
+  pickBase() {
+    if (!IS_WEB || location.protocol === 'file:') return '';
+    const h = location.hostname;
+    if (/\.pages\.dev$/.test(h) || h === 'localhost' || h === '127.0.0.1') return location.origin + '/schichtplan-api';
+    if (/(^|\.)xenosmart\.de$/.test(h) || /(^|\.)nirvanamechernich\.com$/.test(h)) return API_HOST + '/schichtplan-api';
+    return '';
+  },
+  loadAuth() {
+    try { const a = JSON.parse(lsGet(AUTH_KEY) || 'null'); return a && a.token && a.base === this.base ? a : null; } catch (e) { return null; }
+  },
+  saveAuth(a) { lsSet(AUTH_KEY, JSON.stringify(Object.assign({}, a, { base: this.base }))); },
+  clearAuth() { try { localStorage.removeItem(AUTH_KEY); } catch (e) { /* egal */ } },
+  async api(method, p, payload, token) {
+    const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 20000);
+    let res;
+    try {
+      res = await fetch(this.base + p, {
+        method, cache: 'no-store', credentials: 'omit', signal: ctl.signal,
+        headers: Object.assign({ 'Content-Type': 'application/json' }, token ? { Authorization: 'Bearer ' + token } : {}),
+        body: payload ? JSON.stringify(payload) : undefined
+      });
+    } catch (e) { throw { code: 'unavailable' }; } finally { clearTimeout(tm); }
+    let j = null; try { j = await res.json(); } catch (e) { j = null; }
+    if (!res.ok) throw Object.assign({}, j || {}, { code: (j && j.error) || ('http_' + res.status), status: res.status });
+    if (!j) throw { code: 'unavailable' };
+    return j;
+  },
+  call(method, p, payload) { return this.api(method, p, payload, A.auth && A.auth.token); }
+};
+
+function RemoteDB(auth) {
+  const cache = new Map(), docL = new Map(), colL = new Set(), inflight = new Set();
+  const cacheKey = 'remote|' + Remote.base + '|' + auth.id, me = auth.name;
+  let seq = 0, synced = false, syncing = false, again = false, timer = null, persistT = null, stopped = false;
+  let lastToast = 0;
+  const live = c => !!(c && !c.del && c.data != null);
+  const inColl = (coll, p) => p.startsWith(coll + '/') && p.indexOf('/', coll.length + 1) < 0;
+  const snapDoc = p => {
+    const c = cache.get(p), ex = live(c);
+    return { id: p.slice(p.lastIndexOf('/') + 1), exists: ex, data: () => (ex ? clone(c.data) : undefined), metadata: { fromCache: !synced, hasPendingWrites: !!(c && c.pending) } };
+  };
+  const cmp = { '>=': (x, v) => x >= v, '<=': (x, v) => x <= v, '>': (x, v) => x > v, '<': (x, v) => x < v, '==': (x, v) => x === v };
+  const qsnap = (coll, where) => {
+    let docs = [];
+    for (const [p, c] of cache) if (inColl(coll, p) && live(c)) docs.push(snapDoc(p));
+    for (const [f, op, v] of where) docs = docs.filter(d => (cmp[op] || (() => true))((d.data() || {})[f], v));
+    return { docs, size: docs.length, empty: !docs.length, metadata: { fromCache: !synced, hasPendingWrites: false }, docChanges: () => [] };
+  };
+  function notify(paths, all) {
+    const set = new Set(paths);
+    for (const [p, ls] of docL) if (all || set.has(p)) for (const fn of [...ls]) { try { fn(snapDoc(p)); } catch (e) { console.error(e); } }
+    for (const l of [...colL]) if (all || [...set].some(p => inColl(l.coll, p))) { try { l.fn(qsnap(l.coll, l.where)); } catch (e) { console.error(e); } }
+  }
+  function persistSoon() {
+    clearTimeout(persistT);
+    persistT = setTimeout(() => { if (!stopped) IDB.set(cacheKey, { seq, at: Date.now(), docs: [...cache.entries()] }).catch(() => { /* Gerätespeicher voll: egal */ }); }, 1200);
+  }
+  function setOnline(on) {
+    if (A.offline === !on) return;
+    A.offline = !on; if (on) A.slow = false; render();
+  }
+  function waitRetry(n) {
+    return new Promise(res => {
+      const done = () => { clearTimeout(tm); window.removeEventListener('online', done); res(); };
+      const tm = setTimeout(done, Math.min(30000, 1500 * Math.pow(2, n)));
+      window.addEventListener('online', done);
+    });
+  }
+  async function write(path, data, del) {
+    inflight.add(path);
+    try { return await writeNow(path, data, del); } finally { inflight.delete(path); }
+  }
+  async function writeNow(path, data, del) {
+    const prev = cache.get(path);
+    const base = prev ? prev.ver : 0;
+    cache.set(path, { data: del ? null : clone(data), ver: base, seq: prev ? prev.seq : 0, at: Date.now(), by: me, del: !!del, pending: true });
+    notify([path]); persistSoon();
+    for (let n = 0; !stopped; n++) {
+      try {
+        const r = await Remote.api('POST', '/doc', del ? { path, base, del: true } : { path, base, data }, auth.token);
+        const cur = cache.get(path);
+        if (cur && cur.pending) { cur.ver = r.ver; cur.seq = Math.max(cur.seq || 0, r.seq || 0); cur.at = r.at; cur.pending = false; }
+        setOnline(true); persistSoon();
+        return;
+      } catch (e) {
+        if (e.code === 'conflict') {
+          const d = e.doc;
+          // Antwort ging verloren, der Server hat aber schon unseren Stand: kein echter Konflikt
+          if (d && d.by === me && !!d.del === !!del && (del || JSON.stringify(d.data) === JSON.stringify(data))) {
+            cache.set(path, { data: d.del ? null : d.data, ver: d.ver, seq: d.seq, at: d.at, by: d.by, del: !!d.del });
+            persistSoon(); return;
+          }
+          if (d) cache.set(path, { data: d.del ? null : d.data, ver: d.ver, seq: d.seq, at: d.at, by: d.by, del: !!d.del });
+          else cache.delete(path);
+          notify([path]); persistSoon();
+          throw { code: 'conflict', by: (d && d.by) || '' };
+        }
+        if (e.code === 'unauthenticated') { Store.authLost(); throw e; }
+        if (e.code !== 'unavailable' && !(e.status >= 500)) {
+          // Dauerhafter Fehler (z. B. keine Schreibrechte): zurück auf den letzten bestätigten Stand
+          if (prev) cache.set(path, prev); else cache.delete(path);
+          notify([path]); persistSoon();
+          throw e;
+        }
+        setOnline(false);
+        await waitRetry(n);
+      }
+    }
+  }
+  async function syncNow() {
+    if (stopped) return;
+    if (syncing) { again = true; return; }
+    syncing = true;
+    try {
+      const r = await Remote.api('GET', '/sync?since=' + seq, null, auth.token);
+      if (r.reset) { cache.clear(); seq = 0; synced = false; again = true; return; }   // Datenbank neu: alles frisch laden
+      const changed = [], lost = [], by = new Set();
+      for (const d of r.docs || []) {
+        const c = cache.get(d.path);
+        if (c && c.ver >= d.ver) { if (!c.pending && d.seq > (c.seq || 0)) c.seq = d.seq; continue; }
+        if (c && c.pending && d.by === me) continue;          // unser eigener Schreibvorgang ist unterwegs
+        if (c && c.pending && !inflight.has(d.path)) lost.push(d.path);   // laufende Schreibvorgänge melden den Konflikt selbst
+        cache.set(d.path, { data: d.del ? null : d.data, ver: d.ver, seq: d.seq, at: d.at, by: d.by, del: !!d.del });
+        changed.push(d.path);
+        if (d.by && d.by !== me) by.add(d.by);
+      }
+      seq = Math.max(seq, r.seq || 0);
+      const first = !synced; synced = true;
+      setOnline(true);
+      if (first) notify([], true); else if (changed.length) notify(changed);
+      if (first || changed.length) persistSoon();
+      if (lost.length) toast(t('conflict', { n: [...by].join(', ') || '?' }), 'warn');
+      else if (!first && by.size && !changed.some(p => inflight.has(p)) && changed.some(p => p === 'weeks/' + A.wk || p === 'app/staff') && Date.now() - lastToast > 20000) { lastToast = Date.now(); toast(t('remote_change', { n: [...by].join(', ') }), 'info'); }
+      if (first) for (const [p, c] of cache) if (c.pending && !inflight.has(p)) { if (c.del) Store.remove(p); else Store.write(p, c.data); }   // Offline-Änderungen nachschicken
+    } catch (e) {
+      if (e.code === 'unauthenticated') Store.authLost();
+      else setOnline(false);
+    } finally {
+      syncing = false;
+      if (again) { again = false; syncNow(); }
+    }
+  }
+  function schedule() {
+    clearTimeout(timer);
+    if (stopped) return;
+    timer = setTimeout(async () => { await syncNow(); schedule(); }, document.hidden ? 30000 : (A.offline ? 10000 : 5000));
+  }
+  const wake = () => { if (!document.hidden) { syncNow(); schedule(); } };
+  const doc = path => ({
+    id: path.slice(path.lastIndexOf('/') + 1), path,
+    get: async () => snapDoc(path),
+    set: data => write(path, data, false),
+    delete: () => write(path, null, true),
+    onSnapshot: next => {
+      let s = docL.get(path); if (!s) docL.set(path, s = new Set());
+      s.add(next); setTimeout(() => { if (s.has(next)) next(snapDoc(path)); }, 0);
+      return () => s.delete(next);
+    },
+    collection: c => coll(path + '/' + c)
+  });
+  const coll = (c, where) => {
+    where = where || [];
+    return {
+      path: c,
+      where: (f, op, v) => coll(c, where.concat([[f, op, v]])), orderBy: () => coll(c, where), limit: () => coll(c, where),
+      get: async () => qsnap(c, where),
+      doc: id => doc(c + '/' + id),
+      onSnapshot: next => {
+        const l = { coll: c, where, fn: next }; colL.add(l);
+        setTimeout(() => { if (colL.has(l)) next(qsnap(c, where)); }, 0);
+        return () => colL.delete(l);
+      }
+    };
+  };
+  return {
+    remote: true, doc, collection: c => coll(c),
+    async init() {
+      try {
+        const c = await IDB.get(cacheKey);
+        if (c && c.docs) { for (const [p, d] of c.docs) cache.set(p, d); seq = c.seq || 0; A.lastSync = c.at || null; }
+      } catch (e) { /* kein Zwischenstand */ }
+    },
+    start() {
+      document.addEventListener('visibilitychange', wake);
+      window.addEventListener('online', wake);
+      window.addEventListener('focus', wake);
+      syncNow(); schedule();
+    },
+    stop() {
+      stopped = true; clearTimeout(timer); clearTimeout(persistT);
+      document.removeEventListener('visibilitychange', wake);
+      window.removeEventListener('online', wake);
+      window.removeEventListener('focus', wake);
+    },
+    forget() { return IDB.set(cacheKey, null).catch(() => { /* egal */ }); },
+    pendingCount() { let n = 0; for (const c of cache.values()) if (c.pending) n++; return n; }
+  };
+}
+
+/* ---- Store-Erweiterung für die eigene Domain ---- */
+Object.assign(Store, {
+  async startWeb() {
+    A.caps.downloads = webDownloads;
+    Remote.base = Remote.pickBase();
+    let tryMode = false; try { tryMode = sessionStorage.getItem(TRY_KEY) === '1'; } catch (e) { /* egal */ }
+    if (!Remote.base) return this.startLocal();
+    if (tryMode) { A.tryMode = true; return this.startLocal(); }
+    const au = Remote.loadAuth();
+    if (au) return this.startRemote(au);
+    return this.showLogin();
+  },
+  async showLogin(msg) {
+    A.mode = 'login'; A.login = { busy: false, err: msg || '', setup: null, offline: false };
+    A.lang = A.lang || pickLang(); render();
+    try { const s = await Remote.api('GET', '/status'); A.login.setup = !!s.setup; }
+    catch (e) {
+      if (e.status === 404) { Remote.base = ''; return this.startLocal(); }   // hier gibt es keine Team-Datenbank
+      A.login.offline = true;
+    }
+    render();
+  },
+  async startRemote(au) {
+    A.auth = au;
+    const db = RemoteDB(au);
+    await db.init();
+    this.db = db; A.mode = 'loading';
+    A.canWrite = au.role !== 'view'; A.roReason = au.role === 'view' ? 'ro_role' : '';
+    this.subscribeBase();
+    db.start();
+    Remote.call('GET', '/me').then(r => {
+      if (!r || !r.account) return;
+      Object.assign(au, r.account); Remote.saveAuth(au); A.auth = au;
+      A.canWrite = au.role !== 'view'; A.roReason = au.role === 'view' ? 'ro_role' : '';
+      render();
+    }).catch(e => { if (e.code === 'unauthenticated') this.authLost(); });
+    // Gerätebestand aus dem lokalen Modus merken, um ihn bei leerer Team-Datenbank anbieten zu können
+    this.readLocal().then(({ d }) => { if (d && d.cfg && !d.cfg.demo && Object.keys(d.staff || {}).length) { A.localOffer = d; render(); } }).catch(() => { /* egal */ });
+  },
+  authLost() {
+    if (A.mode === 'login') return;
+    const db = this.db;
+    Remote.clearAuth();
+    if (db && db.stop) { db.stop(); db.forget(); }
+    for (const k of Object.keys(this.unsub)) { try { this.unsub[k](); } catch (e) { /* egal */ } delete this.unsub[k]; }
+    this.db = null; this.q = {};
+    Object.assign(A, { cfg: null, staff: null, abs: {}, evt: {}, weeks: {}, wkReady: {}, stats: {}, sent: {}, auth: null, modal: null, drawer: null, offline: false, pending: 0 });
+    this.showLogin(t('session_end'));
+  },
+  async logout() {
+    const db = this.db;
+    if (db && db.stop) db.stop();
+    try { await Remote.call('POST', '/logout'); } catch (e) { /* trotzdem abmelden */ }
+    if (db && db.forget) await db.forget();
+    Remote.clearAuth();
+    location.reload();
+  }
+});
+
 /* ==========================================================================
    App: Darstellung (HTML-Strings, alles über esc() abgesichert)
    ========================================================================== */
@@ -2337,10 +2673,12 @@ function renderSoft() { clearTimeout(softTimer); softTimer = setTimeout(render, 
 function renderStatus() {
   const el = $('#status'); if (!el) return;
   let cls = 'ok', txt = t('st_saved');
-  if (A.mode === 'loading') { cls = 'busy'; txt = t('st_loading'); }
+  if (A.mode === 'login') { cls = 'local'; txt = t('st_team'); }
+  else if (A.offline) { cls = 'off'; txt = t(A.pending > 0 ? 'st_off_pending' : 'st_offline'); }
+  else if (A.mode === 'loading') { cls = 'busy'; txt = t('st_loading'); }
   else if (A.pending > 0) { cls = 'busy'; txt = t('st_saving'); }
   else if (!A.canWrite) { cls = 'ro'; txt = t('st_readonly'); }
-  else if (A.mode === 'local') { cls = 'local'; txt = t('st_local'); }
+  else if (A.mode === 'local' || (A.mode === 'empty' && !Store.db)) { cls = 'local'; txt = t('st_local'); }
   el.className = 'status ' + cls; el.textContent = txt;
 }
 
@@ -2354,7 +2692,9 @@ function viewHeader() {
 }
 function viewBanners() {
   let h = '';
-  if (A.slow) h += '<div class="banner warn">' + ic('warn') + '<span>' + esc(t('slow')) + '</span></div>';
+  if (A.slow && !A.offline) h += '<div class="banner warn">' + ic('warn') + '<span>' + esc(t('slow')) + '</span></div>';
+  if (A.offline && A.mode !== 'login') h += '<div class="banner warn">' + ic('warn') + '<span>' + esc(t('offline_banner')) + '</span></div>';
+  if (A.tryMode) h += '<div class="banner demo">' + ic('info') + '<span>' + esc(t('try_banner')) + '</span><button class="btn sm" data-a="to-login">' + esc(t('to_login')) + '</button></div>';
   if (!A.cfg || A.mode === 'empty') return h;
   if (!A.canWrite) h += '<div class="banner ro">' + ic('info') + '<span>' + esc(t(A.roReason || 'ro_view')) + '</span></div>';
   if (A.mode === 'local' && !A.cfg.demo && Object.keys(A.staff || {}).length) {
@@ -2365,6 +2705,7 @@ function viewBanners() {
   return h;
 }
 function viewMain() {
+  if (A.mode === 'login') return viewLogin();
   if (A.mode === 'loading' && !A.cfg) return viewLoading();
   if (A.mode === 'empty' || !A.cfg) return viewOnboarding();
   if (A.staff === null) return viewLoading();
@@ -2378,6 +2719,53 @@ function viewMain() {
     default: return viewPlan();
   }
 }
+function viewLogin() {
+  const L0 = A.login || {};
+  const fld = (id, label, type, ac, val, enter) => '<label class="fld"><span>' + esc(label) + '</span><input id="' + id + '" type="' + type + '" autocomplete="' + ac + '"' + (val ? ' value="' + esc(val) + '"' : '') + (enter ? ' data-enter="' + enter + '"' : '') + ' autocapitalize="off" spellcheck="false"></label>';
+  const langs = '<div class="langs big" role="group">' + UI_LANGS.map(l => '<button class="lg' + (A.lang === l ? ' on' : '') + '" data-a="lang" data-l="' + l + '">' + esc({ tr: 'Türkçe', de: 'Deutsch', en: 'English' }[l]) + '</button>').join('') + '</div>';
+  let h = '<section class="onb"><div class="card narrow login">';
+  if (L0.offline) {
+    h += '<h1>' + esc(t('login_h')) + '</h1><p class="lead">' + esc(t('login_off')) + '</p>' + langs + '<div class="row gap"><button class="btn primary" data-a="login-retry">' + esc(t('retry')) + '</button></div>';
+  } else if (L0.setup === false) {
+    h += '<h1>' + esc(t('setup_h')) + '</h1><p class="lead">' + esc(t('setup_p')) + '</p>' + langs + '<form class="lgform" novalidate>' +
+      fld('suCode', t('setup_code'), 'text', 'one-time-code', L0.code) + fld('suName', t('your_name'), 'text', 'username', L0.name) +
+      fld('suPass', t('f_pass'), 'password', 'new-password') + fld('suPass2', t('f_pass2'), 'password', 'new-password') +
+      '<p class="hint">' + esc(t('pass_rule')) + '</p><div class="row gap"><button class="btn primary" data-a="setup-go"' + (L0.busy ? ' disabled' : '') + '>' + esc(t('setup_go')) + '</button></div></form>';
+  } else if (L0.setup === true) {
+    h += '<h1>' + esc(t('login_h')) + '</h1><p class="lead">' + esc(t('login_p')) + '</p>' + langs + '<form class="lgform" novalidate>' +
+      fld('lgName', t('name'), 'text', 'username', L0.name) + fld('lgPass', t('f_pass'), 'password', 'current-password') +
+      '<div class="row gap"><button class="btn primary" data-a="login-go"' + (L0.busy ? ' disabled' : '') + '>' + esc(t('login_go')) + '</button></div></form>';
+  } else h += '<div class="loader" aria-hidden="true"></div><p>' + esc(t('st_loading')) + '</p>';
+  if (L0.err) h += '<p class="err" role="alert">' + esc(L0.err) + '</p>';
+  h += '<p class="hint"><button class="linkbtn" data-a="try-local">' + esc(t('try_local')) + '</button></p>';
+  return h + '</div></section>';
+}
+function fmtDT(ms) { return new Intl.DateTimeFormat(LOCALE[A.lang], { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' }).format(new Date(ms)); }
+function loadAccounts() {
+  if (A.accLoading) return;
+  A.accLoading = true;
+  Remote.call('GET', '/accounts').then(r => { A.accounts = r.accounts || []; })
+    .catch(e => { A.accounts = A.accounts || []; toast(t('error') + ' (' + (e.code || '?') + ')', 'err'); })
+    .finally(() => { A.accLoading = false; render(); });
+}
+function viewAccess() {
+  const au = A.auth; if (!au) return '';
+  let h = '<div class="card" id="access"><h2>' + esc(t('acc_h')) + '</h2><p>' + esc(t('acc_me', { n: au.name, r: t('role_' + au.role) })) + '</p>' +
+    '<div class="row gap wrap"><button class="btn" data-a="pw-open">' + esc(t('pw_change')) + '</button><button class="btn" data-a="logout">' + esc(t('logout')) + '</button></div>';
+  if (au.role === 'admin') {
+    if (!A.accounts) { setTimeout(loadAccounts, 0); h += '<p class="hint">' + esc(t('st_loading')) + '</p>'; }
+    else {
+      h += '<div class="tablewrap"><table class="acc"><thead><tr><th>' + esc(t('name')) + '</th><th>' + esc(t('acc_role')) + '</th><th>' + esc(t('acc_last')) + '</th><th></th></tr></thead><tbody>' +
+        A.accounts.map(a => '<tr' + (a.active ? '' : ' class="off"') + '><td><b>' + esc(a.name) + '</b>' + (a.active ? '' : ' <span class="tag">' + esc(t('acc_blocked')) + '</span>') + '</td>' +
+          '<td><select data-f="acc-role" data-id="' + a.id + '" aria-label="' + esc(t('acc_role')) + '">' + ['admin', 'edit', 'view'].map(r => '<option value="' + r + '"' + (a.role === r ? ' selected' : '') + '>' + esc(t('role_' + r)) + '</option>').join('') + '</select></td>' +
+          '<td>' + esc(a.last ? fmtDT(a.last) : t('acc_never')) + '</td>' +
+          '<td class="acts"><button class="btn sm" data-a="acc-pw" data-id="' + a.id + '">' + esc(t('acc_reset')) + '</button><button class="btn sm" data-a="acc-toggle" data-id="' + a.id + '">' + esc(a.active ? t('acc_block') : t('acc_unblock')) + '</button></td></tr>').join('') +
+        '</tbody></table></div><div class="row gap"><button class="btn primary" data-a="acc-new">' + esc(t('acc_new')) + '</button></div>' +
+        '<ul class="ticks small">' + ['admin', 'edit', 'view'].map(r => '<li><b>' + esc(t('role_' + r)) + ':</b> ' + esc(t('role_' + r + '_d')) + '</li>').join('') + '</ul><p class="hint">' + esc(t('acc_hint')) + '</p>';
+    }
+  }
+  return h + '</div>';
+}
 function viewLoading() {
   return '<section class="center"><div class="loader" aria-hidden="true"></div><p>' + esc(t('st_loading')) + '</p></section>';
 }
@@ -2389,7 +2777,8 @@ function viewOnboarding() {
     '<label class="fld"><span>' + esc(t('biz_name')) + '</span><input id="onbBiz" value="NIRVANA Mechernich" autocomplete="organization"></label>' +
     '<div class="row gap"><button class="btn primary" data-a="onb-demo">' + ic('people') + esc(t('onb_demo')) + '</button><button class="btn" data-a="onb-empty">' + esc(t('onb_empty')) + '</button></div>' +
     '<ul class="ticks"><li>' + esc(t('onb_f1')) + '</li><li>' + esc(t('onb_f2')) + '</li><li>' + esc(t('onb_f3')) + '</li><li>' + esc(t('onb_f4')) + '</li></ul>' +
-    (A.localEmpty ? '<p class="hint">' + esc(t('onb_local')) + '</p>' : '') +
+    (A.localOffer && Store.db ? '<div class="row gap"><button class="btn" data-a="import-local">' + ic('dl') + '<span>' + esc(t('import_local', { n: Object.keys(A.localOffer.staff || {}).length })) + '</span></button></div>' : '') +
+    (A.localEmpty ? '<p class="hint">' + esc(t('onb_local')) + '</p>' : (A.auth ? '<p class="hint">' + esc(t('onb_team')) + '</p>' : '')) +
     '</div></section>';
 }
 
@@ -2882,6 +3271,7 @@ function viewSettings() {
   const num = (id, v, step, min, max) => '<input type="number" id="' + id + '" value="' + esc(v) + '" step="' + (step || 1) + '"' + (min != null ? ' min="' + min + '"' : '') + (max != null ? ' max="' + max + '"' : '') + '>';
   const chk = (id, on) => '<input type="checkbox" id="' + id + '"' + (on ? ' checked' : '') + '>';
   let h = '<section class="settings"><div class="bar1"><h1>' + esc(t('tab_settings')) + '</h1><div class="spacer"></div><button class="btn primary" data-a="cfg-save">' + ic('check') + '<span>' + esc(t('save')) + '</span></button></div>';
+  h += viewAccess();
   h += '<div class="card"><h2>' + esc(t('business')) + '</h2><div class="frow"><label class="fld grow"><span>' + esc(t('biz_name')) + '</span><input id="sBiz" value="' + esc(c.biz) + '"></label>' +
     '<label class="fld"><span>' + esc(t('state')) + '</span><select id="sState">' + C.STATES.map(s => '<option value="' + s + '"' + (c.state === s ? ' selected' : '') + '>' + esc(t('st_' + s)) + '</option>').join('') + '</select></label>' +
     '<label class="fld"><span>' + esc(t('default_lang')) + '</span><select id="sLang">' + UI_LANGS.map(l => '<option value="' + l + '"' + (c.lang === l ? ' selected' : '') + '>' + esc({ tr: 'Türkçe', de: 'Deutsch', en: 'English' }[l]) + '</option>').join('') + '</select></label></div></div>';
@@ -3126,6 +3516,21 @@ function viewModal() {
     case 'special':
       return modalShell(t('special_add'), '<div class="frow"><label class="fld grow"><span>' + esc(t('name')) + '</span><input id="spName" maxlength="60"></label></div><div class="frow"><label class="fld"><span>' + esc(t('from')) + '</span><input type="date" id="spFrom" value="' + todayISO() + '"></label><label class="fld"><span>' + esc(t('to')) + '</span><input type="date" id="spTo" value="' + todayISO() + '"></label><label class="fld sm"><span>' + esc(t('f_day')) + '</span><input type="number" id="spFd" step="0.05" min="0.3" max="3" value="1.2"></label><label class="fld sm"><span>' + esc(t('f_eve')) + '</span><input type="number" id="spFe" step="0.05" min="0.3" max="3" value="1.2"></label></div><p class="hint">' + esc(t('special_hint')) + '</p>',
         '<button class="btn" data-a="mclose">' + esc(t('cancel')) + '</button><button class="btn primary" data-a="special-save">' + esc(t('save')) + '</button>');
+    case 'pw':
+      return modalShell(t('pw_change'), pwFld('pwOld', t('pw_old'), 'current-password') + pwFld('pwNew', t('pw_new'), 'new-password', true) + pwFld('pwNew2', t('f_pass2'), 'new-password') + '<p class="hint">' + esc(t('pass_rule')) + '</p>' + (md.err ? '<p class="err" role="alert">' + esc(md.err) + '</p>' : ''),
+        '<button class="btn" data-a="mclose">' + esc(t('cancel')) + '</button><button class="btn primary" data-a="pw-save"' + (md.busy ? ' disabled' : '') + '>' + esc(t('save')) + '</button>');
+    case 'accnew':
+      return modalShell(t('acc_new'), '<label class="fld"><span>' + esc(t('name')) + '</span><input id="anName" autocomplete="off" maxlength="40" value="' + esc(md.name || '') + '"></label>' +
+        '<label class="fld"><span>' + esc(t('acc_role')) + '</span><select id="anRole">' + ['edit', 'view', 'admin'].map(r => '<option value="' + r + '"' + ((md.role || 'edit') === r ? ' selected' : '') + '>' + esc(t('role_' + r)) + ' (' + esc(t('role_' + r + '_d')) + ')</option>').join('') + '</select></label>' +
+        pwFld('anPass', t('f_pass'), 'new-password', true) + '<p class="hint">' + esc(t('pass_rule')) + '</p>' + (md.err ? '<p class="err" role="alert">' + esc(md.err) + '</p>' : ''),
+        '<button class="btn" data-a="mclose">' + esc(t('cancel')) + '</button><button class="btn primary" data-a="acc-create"' + (md.busy ? ' disabled' : '') + '>' + esc(t('acc_create')) + '</button>');
+    case 'accpw':
+      return modalShell(t('acc_reset') + ': ' + md.name, pwFld('apPass', t('pw_new'), 'new-password', true) + '<p class="hint">' + esc(t('pass_rule')) + '</p>' + (md.err ? '<p class="err" role="alert">' + esc(md.err) + '</p>' : ''),
+        '<button class="btn" data-a="mclose">' + esc(t('cancel')) + '</button><button class="btn primary" data-a="accpw-save"' + (md.busy ? ' disabled' : '') + '>' + esc(t('save')) + '</button>');
+    case 'accdone':
+      return modalShell(md.name, '<p>' + esc(t(md.isNew ? 'acc_created' : 'acc_pw_set', { n: md.name })) + '</p><div class="pwshow"><span>' + esc(t('name')) + '</span><b>' + esc(md.name) + '</b><span>' + esc(t('f_pass')) + '</span><b class="mono">' + esc(md.pw) + '</b></div>' +
+        '<p class="hint">' + esc(t('acc_share')) + '</p>',
+        '<button class="btn" data-a="copy-login" data-v="' + esc(location.origin + location.pathname + '\n' + t('name') + ': ' + md.name + '\n' + t('f_pass') + ': ' + md.pw) + '">' + ic('copy') + '<span>' + esc(t('copy')) + '</span></button><button class="btn primary" data-a="mclose">' + esc(t('close')) + '</button>');
     case 'text':
       return modalShell(md.title, '<textarea class="bigtext" id="mText" readonly dir="auto">' + esc(md.text) + '</textarea>', '<button class="btn" data-a="mclose">' + esc(t('close')) + '</button><button class="btn primary" data-a="copy-mtext">' + ic('copy') + '<span>' + esc(t('copy')) + '</span></button>');
     case 'restore':
@@ -3522,6 +3927,83 @@ async function mailAll(ids) {
   if (ok) toast(t('mail_ok', { n: ok }), 'ok');
 }
 
+/* ---- Anmeldung und Zugänge (eigene Domain) ---- */
+function pwFld(id, label, ac, gen) {
+  return '<label class="fld"><span>' + esc(label) + '</span><span class="pwrow"><input id="' + id + '" type="password" autocomplete="' + ac + '" autocapitalize="off" spellcheck="false">' +
+    (gen ? '<button class="btn sm" type="button" data-a="pw-gen" data-for="' + id + '">' + esc(t('pw_suggest')) + '</button>' : '') + '</span></label>';
+}
+function genPw() {
+  const abc = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789', r = new Uint8Array(12);
+  crypto.getRandomValues(r);
+  const s = Array.from(r, x => abc[x % abc.length]).join('');
+  return s.slice(0, 4) + '-' + s.slice(4, 8) + '-' + s.slice(8);
+}
+const ERR_KEYS = { login_bad: 'login_bad', locked: 'login_locked', unavailable: 'login_off', setup_bad: 'setup_bad', name_bad: 'name_bad', pass_short: 'pass_short', name_taken: 'name_taken', last_admin: 'last_admin', already: 'setup_already', permission_denied: 'err_readonly', unauthenticated: 'session_end' };
+function errText(e) { const c = (e && e.code) || ''; return ERR_KEYS[c] ? t(ERR_KEYS[c]) : t('error') + (c ? ' (' + c + ')' : ''); }
+const inVal = id => { const el = $('#' + id); return el ? el.value : ''; };
+async function doLogin() {
+  const L0 = A.login; if (!L0 || L0.busy) return;
+  const name = inVal('lgName').trim(), pw = inVal('lgPass');
+  L0.name = name;
+  if (!name || !pw) { L0.err = t('login_bad'); render(); return; }
+  L0.busy = true; L0.err = ''; render();
+  try {
+    const r = await Remote.api('POST', '/login', { name, password: pw });
+    Remote.saveAuth(Object.assign({ token: r.token }, r.account));
+    try { sessionStorage.removeItem(TRY_KEY); } catch (e) { /* egal */ }
+    location.reload();
+  } catch (e) { L0.busy = false; L0.err = errText(e); render(); }
+}
+async function doSetup() {
+  const L0 = A.login; if (!L0 || L0.busy) return;
+  const code = inVal('suCode').trim(), name = inVal('suName').trim(), pw = inVal('suPass'), pw2 = inVal('suPass2');
+  L0.code = code; L0.name = name;
+  if (name.length < 2 || name.length > 40) { L0.err = t('name_bad'); render(); return; }
+  if (pw.length < 8) { L0.err = t('pass_short'); render(); return; }
+  if (pw !== pw2) { L0.err = t('pass_mismatch'); render(); return; }
+  L0.busy = true; L0.err = ''; render();
+  try {
+    const r = await Remote.api('POST', '/setup', { code, name, password: pw });
+    Remote.saveAuth(Object.assign({ token: r.token }, r.account));
+    location.reload();
+  } catch (e) { L0.busy = false; L0.err = errText(e); if (e.code === 'already') L0.setup = true; render(); }
+}
+async function savePw() {
+  const md = A.modal; if (!md || md.busy) return;
+  const old = inVal('pwOld'), pw = inVal('pwNew'), pw2 = inVal('pwNew2');
+  if (pw.length < 8) { md.err = t('pass_short'); render(); return; }
+  if (pw !== pw2) { md.err = t('pass_mismatch'); render(); return; }
+  md.busy = true; md.err = ''; render();
+  try { await Remote.call('POST', '/password', { old, password: pw }); A.modal = null; toast(t('pw_changed'), 'ok'); }
+  catch (e) { md.busy = false; md.err = e.code === 'login_bad' ? t('pw_old_bad') : errText(e); }
+  render();
+}
+async function createAcc() {
+  const md = A.modal; if (!md || md.busy) return;
+  const name = inVal('anName').trim(), role = inVal('anRole') || 'edit', pw = inVal('anPass');
+  md.name = name; md.role = role;
+  if (name.length < 2 || name.length > 40) { md.err = t('name_bad'); render(); return; }
+  if (pw.length < 8) { md.err = t('pass_short'); render(); return; }
+  md.busy = true; md.err = ''; render();
+  try { const r = await Remote.call('POST', '/accounts', { name, role, password: pw }); A.accounts = r.accounts; A.modal = { type: 'accdone', name, pw, isNew: true }; }
+  catch (e) { md.busy = false; md.err = errText(e); }
+  render();
+}
+async function resetAccPw() {
+  const md = A.modal; if (!md || md.busy) return;
+  const pw = inVal('apPass');
+  if (pw.length < 8) { md.err = t('pass_short'); render(); return; }
+  md.busy = true; md.err = ''; render();
+  try { const r = await Remote.call('POST', '/accounts/' + md.id, { password: pw }); A.accounts = r.accounts; A.modal = { type: 'accdone', name: md.name, pw, isNew: false }; }
+  catch (e) { md.busy = false; md.err = errText(e); }
+  render();
+}
+async function updAcc(id, patch) {
+  try { const r = await Remote.call('POST', '/accounts/' + id, patch); A.accounts = r.accounts; toast(t('saved'), 'ok'); }
+  catch (e) { toast(errText(e), 'err'); A.accounts = null; }
+  render();
+}
+
 /* ==========================================================================
    App: Klicks, Eingaben, Tastatur, Start
    ========================================================================== */
@@ -3724,6 +4206,22 @@ const ACT = {
   'notify-save': () => { const n = Object.assign({}, A.cfg.notify || {}, { weekDay: +val('nWeekDay'), weekTime: val('nWeekTime') || '18:00', daily: checked('nDaily'), dailyTime: val('nDailyTime') || '10:00', footer: {} }); for (const l of MSG_LANGS) { const v = val('foot_' + l).trim(); if (v) n.footer[l] = v; } saveCfg({ notify: n }); toast(t('saved'), 'ok'); },
   'cfg-save': () => { saveCfg(readSettings()); toast(t('saved'), 'ok'); },
   'sur-3b': () => { const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; }; set('sNightFrom', '20:00'); set('sNight', 25); set('sSun', 50); set('sHol', 125); set('sX150', 150); const on = document.getElementById('sOn'); if (on) on.checked = true; toast(t('sur_3b_set'), 'ok'); },
+  'login-go': () => doLogin(),
+  'setup-go': () => doSetup(),
+  'login-retry': () => Store.showLogin(),
+  'try-local': () => { try { sessionStorage.setItem(TRY_KEY, '1'); } catch (e) { /* egal */ } location.reload(); },
+  'to-login': () => { try { sessionStorage.removeItem(TRY_KEY); } catch (e) { /* egal */ } location.reload(); },
+  'logout': () => Store.logout(),
+  'pw-open': () => { A.modal = { type: 'pw' }; render(); },
+  'pw-save': () => savePw(),
+  'pw-gen': el => { const inp = $('#' + el.dataset.for); if (inp) { inp.value = genPw(); inp.type = 'text'; inp.focus(); } },
+  'acc-new': () => { A.modal = { type: 'accnew' }; render(); },
+  'acc-create': () => createAcc(),
+  'acc-pw': el => { const a = (A.accounts || []).find(x => x.id === +el.dataset.id); if (a) { A.modal = { type: 'accpw', id: a.id, name: a.name }; render(); } },
+  'accpw-save': () => resetAccPw(),
+  'acc-toggle': el => { const a = (A.accounts || []).find(x => x.id === +el.dataset.id); if (a) updAcc(a.id, { active: !a.active }); },
+  'copy-login': el => copyText(el.dataset.v),
+  'import-local': () => { const d = A.localOffer; if (d) { A.localOffer = null; restoreData(d); } },
   'backup-dl': async () => { const d = await backupData(); if (await saveFile(t('file_backup') + '-' + todayISO() + '.json', JSON.stringify(d))) { lsSet(BACKUP_KEY, todayISO()); render(); } },
   'backup-copy': async () => { const d = await backupData(); if (await copyText(JSON.stringify(d))) { lsSet(BACKUP_KEY, todayISO()); render(); } },
   'demo-end': () => { A.modal = { type: 'demoend' }; render(); },
@@ -3764,6 +4262,7 @@ document.addEventListener('change', ev => {
   if (!f) return;
   if (f === 'tct') { A.tct = el.value; render(); }
   else if (f === 'sendDay') { A.sendDay = el.value; render(); }
+  else if (f === 'acc-role') updAcc(+el.dataset.id, { role: el.value });
   else if (f === 'emp-lang') updEmp(el.dataset.id, { lang: el.value });
   else if (f === 'emp-ch') updEmp(el.dataset.id, { ch: el.value });
   else if (f === 'emp-phone') updEmp(el.dataset.id, { phone: el.value.trim() });
@@ -3786,6 +4285,7 @@ document.addEventListener('keydown', ev => {
   }
   if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.matches && ev.target.matches('tr[data-a],[tabindex][data-a]')) { ev.preventDefault(); ev.target.click(); }
   if (ev.key === 'Enter' && ev.target.id === 'aiText' && !ev.shiftKey) { ev.preventDefault(); aiSend(ev.target.value); }
+  if (ev.key === 'Enter' && ev.target.dataset && ev.target.dataset.enter && ACT[ev.target.dataset.enter]) { ev.preventDefault(); ACT[ev.target.dataset.enter](ev.target, ev); }
 });
 window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (TABS.some(([id]) => id === h) && h !== A.view) { A.view = h; A.drawer = null; render(); } });
 
@@ -3808,6 +4308,7 @@ render = function () {
 
 function init() {
   document.addEventListener('submit', e => e.preventDefault(), true);   // Formulare nie abschicken (keine Inline-Handler wegen CSP)
+  window.addEventListener('beforeunload', e => { if (A.pending > 0 && Store.db && Store.db.remote) { e.preventDefault(); e.returnValue = ''; } });
   if (IS_WEB && 'serviceWorker' in navigator && (location.protocol === 'https:' || /^(localhost|127\.0\.0\.1)$/.test(location.hostname))) {
     navigator.serviceWorker.register('sw.js').catch(() => { /* ohne Offline-Hülle weiter */ });
   }
