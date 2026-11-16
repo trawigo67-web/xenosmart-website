@@ -1,0 +1,12 @@
+# marka22.de – Cloudflare-Pages-Projekt "marka22-site" (Projekt-Wurzel = dieser Ordner markaistanbul/)
+# Seit 16.11.2026 ist diese Datei die Quelle der Einstellungen (Bindungen) von marka22-site;
+# im Cloudflare-Dashboard sind diese Felder dann nur noch lesbar. Name muss zum Projekt passen.
+# SHIFT_DB = Datenbank des Shift Plans (functions/shiftplan-api, Seite shiftplan.html).
+name = "marka22-site"
+pages_build_output_dir = "."
+compatibility_date = "2026-11-01"
+
+[[d1_databases]]
+binding = "SHIFT_DB"
+database_name = "marka-shiftplan"
+database_id = "9be94886-32c3-4c7e-b2d1-09992b78e4cd"

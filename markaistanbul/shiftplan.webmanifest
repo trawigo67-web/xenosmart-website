@@ -1,0 +1,30 @@
+{
+ "name": "Marka Istanbul – Shift Plan",
+ "short_name": "Shift Plan",
+ "description": "Marka Istanbul haftalık çalışma planı",
+ "id": "./shiftplan",
+ "start_url": "./shiftplan",
+ "scope": "./shiftplan",
+ "display": "standalone",
+ "background_color": "#fbf4df",
+ "theme_color": "#1c1c1a",
+ "lang": "tr",
+ "icons": [
+  {
+   "src": "icon-shift-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-shift-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-shift-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

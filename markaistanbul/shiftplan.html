@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<script>if(/(^|\.)xenosmart\.de$/.test(location.hostname)){location.replace("https://marka22.de/"+location.pathname.split("/").pop()+location.search+location.hash)}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marka Istanbul – Shift Plan</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1c1c1a">
+<link rel="manifest" href="shiftplan.webmanifest">
+<link rel="icon" type="image/png" href="icon-shift-192.png">
+<link rel="apple-touch-icon" href="apple-touch-shift.png">
+<meta name="apple-mobile-web-app-title" content="Shift Plan">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link href="fonts/fonts.css" rel="stylesheet">
+<style>
+:root{--cop:#b8913a;--cop2:#8f6b1e;--cop3:#d9bd72;--line:#e8dcb8;--bg2:#fbf7ea;--muted:#857d6c;--txt:#1d1d1f;
+  --grad:linear-gradient(135deg,#8f6b1e 0%,#e6c86e 45%,#b8913a 70%,#7a5a17 100%);
+  --ok:#1f8a55;--warn:#d98a00;--bad:#c62828;--blue:#2f6db3;--zband:#1c1c1a;--zline:#c9a647}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{background:#1c1c1a}
+body{font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--txt);-webkit-font-smoothing:antialiased;font-size:15px;min-height:100vh;
+  background:radial-gradient(120% 70% at 50% 35%,#fffdf6 0%,#fbf4df 70%,#f5e9c4 100%) fixed;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer;color:inherit}
+button:disabled{opacity:.45;cursor:default}
+.zband{position:sticky;top:0;z-index:20;background:var(--zband);height:calc(10px + env(safe-area-inset-top));border-bottom:2px solid var(--zline)}
+.wrap{position:relative;max-width:720px;margin:0 auto;padding:4px 12px calc(96px + env(safe-area-inset-bottom))}
+header{text-align:center;margin:0 0 10px}
+img.zlock{display:block;width:min(58%,230px);height:auto;margin:8px auto 0}
+.apt{font-family:Cinzel,Georgia,serif;font-weight:600;font-size:12.5px;letter-spacing:7px;color:var(--cop2);margin-top:5px}
+.orn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:5px}
+.orn i{display:block;height:1px;width:42px;background:var(--cop3)}
+.orn b{display:block;width:6px;height:6px;background:var(--cop);transform:rotate(45deg)}
+.topbtn{position:absolute;right:12px;top:8px;z-index:3}
+.topbtn button{background:#fff;border:1px solid var(--line);border-radius:50%;width:40px;height:40px;font-size:19px;line-height:1;color:var(--cop2);box-shadow:0 1px 4px rgba(31,26,20,.06)}
+.status{font-size:12px;color:var(--muted);text-align:center;min-height:16px;margin:0 0 4px}
+.status.bad{color:var(--bad);font-weight:600}
+/* Navigation Tag / Woche / Monat */
+.dnav{display:flex;align-items:stretch;gap:8px;margin:2px 0 10px}
+.dnav>button{flex:none;width:46px;border-radius:14px;border:1px solid var(--line);background:#fff;font-size:24px;color:var(--cop2);line-height:1}
+.dnav .dt{flex:1;text-align:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:7px 8px;position:relative;box-shadow:0 1px 3px rgba(31,26,20,.04)}
+.dnav .dt b{display:block;font-size:16px}
+.dnav .dt span{display:block;font-size:12.5px;color:var(--muted);margin-top:1px}
+.dnav .dt input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;border:0;padding:0}
+.back{display:block;margin:-4px auto 10px;border:0;background:none;color:var(--cop2);font-weight:700;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.hol{text-align:center;font-size:13px;font-weight:700;color:#8a5a00;background:#fff4dc;border:1px solid #f0d9a0;border-radius:12px;padding:7px 10px;margin-bottom:10px}
+.banner{display:block;width:100%;text-align:left;border:1.5px solid #c9a647;background:#fff8e6;color:#8a5a00;border-radius:14px;padding:12px 14px;margin-bottom:10px;font-weight:700;font-size:13.5px;line-height:1.4}
+.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.sum div{border:1px solid var(--line);border-radius:14px;padding:8px 2px 7px;text-align:center;background:linear-gradient(180deg,#fff,#fdf7f0)}
+.sum b{display:block;font-size:22px;font-weight:700;line-height:1.1}
+.sum span{font-size:9.5px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+.sum .k-is b{color:var(--ok)}.sum .k-hasta b{color:var(--bad)}.sum .k-izin b{color:var(--blue)}.sum .k-yok b{color:#9e9e9e}
+.quick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px}
+.quick button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 4px;font-weight:700;font-size:13px;box-shadow:0 1px 3px rgba(31,26,20,.04)}
+/* Karten */
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px 6px 18px;margin-bottom:10px;box-shadow:0 2px 10px rgba(31,26,20,.05);position:relative;overflow:hidden}
+.card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--shc,#ddd)}
+.card .ch{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.card .ch[data-act]{cursor:pointer}
+.card .ch b{font-family:Cinzel,Georgia,serif;font-size:15px;letter-spacing:3px;font-weight:600}
+.card .ch .cnt{font-size:12px;color:var(--muted)}
+.oc{font-size:11px;font-weight:700;border-radius:20px;padding:3px 9px;color:#fff;background:var(--ok);margin-left:auto}
+.oc.cl{background:#9e9e9e}
+.ch .ed{border:0;background:none;color:var(--muted);font-size:15px;padding:0 2px}
+.lead{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:#fffaf0;border:1px solid #ecd9a6;border-radius:12px;padding:8px 10px;margin:6px 0 4px;font-size:14px}
+.lead small{margin-left:auto;color:var(--cop2);font-weight:700;font-size:12px}
+.star{color:var(--cop)}
+.warnb{display:flex;align-items:center;gap:8px;width:100%;border:1.5px solid #e6a23c;background:#fff4e0;color:#8a5a00;border-radius:12px;padding:9px 10px;margin:6px 0 4px;font-weight:700;font-size:13.5px;text-align:left}
+div.warnb{cursor:default}
+.prow{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid #f3ead2;cursor:pointer;position:relative}
+.prow:first-of-type,.card .ch+.prow,.lead+.prow,.warnb+.prow{border-top:0}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none;background:var(--c,#b8913a)}
+.prow .nm{flex:1;font-weight:600;min-width:0}
+.prow .nt{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:1px}
+.prow .tm{font-variant-numeric:tabular-nums;font-size:14px;color:#3c372d;white-space:nowrap}
+.prow .exd{position:absolute;left:-12px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:#c9a647}
+.badge{font-size:11px;font-weight:700;border-radius:20px;padding:4px 9px;white-space:nowrap}
+.b-is{background:#e3f3ea;color:#17683f}.b-bos{background:#efede7;color:#6f6a5e}.b-izin{background:#dfeafb;color:#1d4f91}
+.b-hasta{background:#fbe0e0;color:#a61d1d}.b-diger{background:#ebe4f7;color:#4b3591}.b-kapali{background:#ebebeb;color:#666}.b-plansiz{background:#fff3dc;color:#8a5a00}
+.empty{color:var(--muted);font-size:13.5px;padding:6px 0 10px}
+/* Woche */
+.gridwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -12px 6px;padding:0 9px 4px}
+table.wk{border-collapse:separate;border-spacing:3px;width:100%;min-width:368px;table-layout:fixed}
+table.wk th,table.wk td{font-weight:400}
+table.wk thead th{font-size:11px;color:var(--muted);padding:5px 0 4px;text-align:center;border-radius:10px;cursor:pointer;line-height:1.15}
+table.wk thead th b{display:block;font-size:15px;color:var(--txt);font-weight:700}
+table.wk thead th small{display:block;font-size:9px;color:#b26a00;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+table.wk thead th.td{background:var(--grad);color:#fff}
+table.wk thead th.td b,table.wk thead th.td small{color:#fff}
+table.wk th.pn{width:68px;text-align:left;padding:2px 3px;position:sticky;left:0;z-index:1;background:#fdf8ea;border-radius:10px;cursor:pointer;line-height:1.2}
+table.wk thead th.pn{cursor:default;background:none}
+table.wk th.pn b{display:flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden}
+table.wk th.pn small{display:block;color:var(--muted);font-size:10.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-left:14px}
+table.wk th.pn .full{display:none}
+td.c{height:52px;border-radius:10px;text-align:center;vertical-align:middle;cursor:pointer;position:relative;padding:2px 1px;line-height:1.15;border:1px solid transparent;overflow:hidden}
+td.c .s1{display:block;font-weight:700;font-size:13px}
+td.c .s2{display:block;font-size:9.5px;color:#4f4a3f;margin-top:2px;letter-spacing:-.2px;word-break:break-word}
+td.c.k-is{background:var(--tint);border-color:var(--tintb)}
+td.c.k-bos{background:#f3f1ec;color:#a29c8e}
+td.c.k-kapali{background:repeating-linear-gradient(135deg,#f0efed 0 5px,#e6e5e2 5px 10px);color:#8d8d8d}
+td.c.k-kapali .s1{font-weight:600;font-size:10.5px}
+td.c.k-izin{background:#dfeafb;color:#1d4f91}
+td.c.k-hasta{background:#fbe0e0;color:#a61d1d}
+td.c.k-diger{background:#ebe4f7;color:#4b3591}
+td.c.k-plansiz{background:#fff;border:1.5px dashed #e3b766;color:#c58a1a}
+td.c.k-na{background:none;cursor:default}
+td.c .ld{position:absolute;top:1px;right:3px;font-size:10px;color:#a8873a}
+td.c.ex:after{content:"";position:absolute;left:3px;top:3px;width:6px;height:6px;border-radius:50%;background:#c9a647;box-shadow:0 0 0 1.5px #fff}
+td.c.tdc{box-shadow:inset 0 0 0 2px rgba(184,145,58,.6)}
+table.wk tfoot th.pn{background:none;cursor:default}
+table.wk tfoot th.pn b{font-size:11px;color:var(--muted);font-weight:700;white-space:normal}
+table.wk tfoot td{font-size:10px;text-align:center;color:var(--muted);padding:4px 0;border-radius:9px;cursor:pointer;background:rgba(255,255,255,.75);border:1px solid #f0e6c8;line-height:1.2;overflow:hidden;white-space:nowrap}
+table.wk tfoot td b{display:block;font-size:13px;color:var(--txt)}
+table.wk tfoot td.w{background:#fff1dc;color:#b26a00;border-color:#f3cf93}
+table.wk tfoot td.w b{color:#b26a00}
+table.wk tfoot td.cl{color:#c9c3b4;background:none;border-color:transparent}
+.legend{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:11.5px;color:var(--muted);margin:4px 0 12px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 10px}
+.actions button{border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 6px;font-weight:700;font-size:13px}
+.actions button.pri{background:#1f8a55;color:#fff;border-color:transparent}
+/* Ekip */
+.sec{display:flex;align-items:baseline;justify-content:space-between;margin:2px 2px 10px}
+.sec b{font-family:Cinzel,Georgia,serif;letter-spacing:4px;font-size:15px;font-weight:600;color:var(--cop2)}
+.sec span{font-size:12.5px;color:var(--muted)}
+.pc{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:8px;cursor:pointer;box-shadow:0 2px 10px rgba(31,26,20,.04)}
+.pc .av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12.5px;flex:none;background:var(--c);letter-spacing:.5px}
+.pc .pi{flex:1;min-width:0}
+.pc .pi b{display:block;font-size:15px}
+.pc .pi .kod{font-size:11px;color:var(--cop2);border:1px solid var(--line);border-radius:20px;padding:1px 7px;margin-left:4px;font-weight:700;vertical-align:2px}
+.pc .pi small{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.35}
+.pc .mv{display:flex;flex-direction:column;gap:4px}
+.pc .mv button{border:1px solid var(--line);background:#fff;border-radius:8px;width:32px;height:28px;font-size:11px;color:var(--muted)}
+.stat{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.stat span{font-size:11px;border-radius:20px;padding:2px 8px;font-weight:600}
+details.more{margin:10px 0;border:1px solid var(--line);border-radius:14px;padding:0 12px;background:#fff}
+details.more>summary{cursor:pointer;padding:13px 2px;font-weight:600;color:var(--cop2);list-style:none}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"▸ "}
+details.more[open]>summary::before{content:"▾ "}
+/* Özet */
+.segc{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+table.oz{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:13.5px}
+table.oz th{font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:700;padding:9px 4px;text-align:center;background:#fffaf0;border-bottom:1px solid var(--line)}
+table.oz th:first-child,table.oz td:first-child{text-align:left;padding-left:10px}
+table.oz td{padding:10px 4px;text-align:center;border-top:1px solid #f3ead2;font-variant-numeric:tabular-nums}
+table.oz tr:first-child td{border-top:0}
+table.oz td.h{color:var(--bad);font-weight:700}table.oz td.i{color:var(--blue);font-weight:700}
+table.oz tfoot td{font-weight:700;background:#fffaf0;border-top:1px solid var(--line)}
+.rlist{background:#fff;border:1px solid var(--line);border-radius:14px;padding:4px 12px;margin-top:10px}
+.rlist h4{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--cop2);margin:10px 0 4px}
+.rlist div{font-size:13.5px;padding:6px 0;border-top:1px solid #f3ead2}
+.rlist h4+div{border-top:0}
+.rlist div span{color:var(--muted)}
+/* Tab-Leiste */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:15;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(31,26,20,.06)}
+.tabbar .in{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;max-width:520px;margin:0 auto}
+.tabbar button{border:0;background:none;padding:6px 2px 5px;border-radius:12px;font-size:11.5px;font-weight:700;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px}
+.tabbar svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button.on{color:var(--cop2);background:#fff6ec}
+/* Blätter (Formulare) */
+.sheet{position:fixed;inset:0;background:#fffcf3;z-index:30;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch}
+.sheet.on{display:block}
+.sheet::before{content:"";position:sticky;top:0;z-index:5;display:block;height:calc(10px + env(safe-area-inset-top));margin-bottom:calc(-10px - env(safe-area-inset-top));background:var(--zband);border-bottom:2px solid var(--zline)}
+.sheet .in{max-width:620px;margin:0 auto;padding:calc(22px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom))}
+#login{z-index:50;background:radial-gradient(120% 70% at 50% 35%,#fffdf6 0%,#fbf4df 70%,#f5e9c4 100%)}
+#login .in{max-width:420px;padding-top:calc(34px + env(safe-area-inset-top))}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px}
+.sh h2{font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--cop2)}
+.x{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:14px;color:var(--muted);flex:none}
+fieldset{border:1px solid var(--line);border-radius:16px;padding:8px 14px 14px;margin-bottom:12px;background:linear-gradient(180deg,#fff,#fffaf5);box-shadow:0 1px 4px rgba(31,26,20,.04)}
+legend{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cop2);font-weight:700;padding:3px 10px;background:#fff;border:1px solid var(--line);border-radius:20px}
+label{display:block;font-size:12px;color:var(--muted);margin:10px 0 5px}
+input,select,textarea{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--txt);padding:11px 12px;border-radius:10px;font-size:16px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--cop)}
+input[type=time],input[type=date]{min-height:46px;-webkit-appearance:none;appearance:none}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600;color:var(--muted)}
+.seg button.on{background:var(--grad);color:#fff;border-color:transparent}
+.stb{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.stb button{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:12px 4px;font-size:14px;font-weight:700;color:var(--muted)}
+.stb button.on{color:#fff}
+.stb .on.s-is{background:#1f8a55;border-color:#1f8a55}.stb .on.s-bos{background:#8d877a;border-color:#8d877a}.stb .on.s-izin{background:#2f6db3;border-color:#2f6db3}
+.stb .on.s-hasta{background:#c62828;border-color:#c62828}.stb .on.s-diger{background:#6a4fb3;border-color:#6a4fb3}
+.btn{display:block;width:100%;background:var(--grad);color:#fff;border:0;padding:14px;border-radius:14px;font-weight:700;font-size:15px;margin-top:12px;text-align:center;text-decoration:none}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--muted)}
+.btn.danger{background:#fff;border:1px solid var(--bad);color:var(--bad)}
+.btn.wa{background:#1f8a55}
+.err{color:var(--bad);font-size:13px;margin-top:8px}
+.err:empty{display:none}
+.note{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:6px}
+.who{display:flex;align-items:center;gap:10px;margin:2px 0 4px}
+.who b{font-size:19px}
+.when{font-size:14px;color:var(--muted);margin-bottom:8px}
+.defi{font-size:13px;color:#5b5446;background:var(--bg2);border:1px dashed var(--line);border-radius:12px;padding:8px 10px;margin:4px 0 2px;line-height:1.45}
+.defi b{color:var(--cop2)}
+.ldt{display:flex;align-items:center;gap:10px;width:100%;margin-top:12px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 12px;font-size:14px;font-weight:600;color:var(--muted);text-align:left}
+.ldt .box{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;flex:none}
+.ldt.on{border-color:var(--cop);background:#fff6ec;color:var(--cop2)}
+.ldt.on .box{background:var(--cop);border-color:var(--cop)}
+.ldt small{margin-left:auto;font-weight:500;font-size:12px}
+.pal{display:flex;gap:8px;flex-wrap:wrap}
+.pal button{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.pal button.on{box-shadow:0 0 0 2.5px var(--txt)}
+/* Wochenmuster im Personenblatt */
+.pr{border-top:1px solid #f1e8cf;padding:9px 0}
+.pr:first-child{border-top:0}
+.pr .t{display:flex;align-items:center;gap:10px}
+.pr .t b{width:84px;font-size:14px}
+.sw{position:relative;width:48px;height:28px;border-radius:20px;background:#ddd6c4;border:0;flex:none;transition:background .15s}
+.sw:after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s}
+.sw.on{background:var(--ok)}
+.sw.on:after{left:23px}
+.pr .t span{font-size:13px;color:var(--muted)}
+.pr .t .ldb{margin-left:auto;border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 9px;font-size:12.5px;color:var(--muted);font-weight:600}
+.pr .t .ldb.on{background:#fff6ec;border-color:var(--cop);color:var(--cop2)}
+.pr .d{display:flex;gap:6px;margin-top:7px;align-items:center;flex-wrap:wrap}
+.pr .d .seg button{padding:8px 11px;font-size:13px}
+.pr .d .tt{display:flex;gap:6px;align-items:center;flex:1 1 210px}
+.pr .d .tt input{flex:1;min-width:0;width:auto;padding:8px;font-size:15px;min-height:42px}
+.pr .d i{color:var(--muted);font-style:normal}
+.qf{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.qf button{border:1px dashed var(--cop);background:#fff;color:var(--cop2);border-radius:10px;padding:8px 10px;font-size:13px;font-weight:600}
+.shopset{border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:8px;background:#fff}
+.shopset .r1{display:flex;gap:8px;align-items:center}
+.shopset .r1 span{font-size:12px;color:var(--muted);white-space:nowrap}
+.shopset .r1 button{flex:none;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 11px;color:var(--bad)}
+.days7{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.days7 button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 0;font-size:12px;font-weight:700;color:var(--muted)}
+.days7 button.on{background:#e3f3ea;border-color:#9fd2b5;color:#17683f}
+.preset{display:grid;grid-template-columns:1fr 92px 92px 40px;gap:6px;margin-bottom:6px;align-items:center}
+.preset input{padding:9px 8px;font-size:15px}
+.preset button{border:1px solid var(--line);background:#fff;border-radius:10px;height:42px;color:var(--bad)}
+.addb{border:1px dashed var(--cop);background:none;color:var(--cop2);border-radius:12px;padding:10px 12px;font-weight:700;font-size:13.5px;width:100%;margin-top:4px}
+.tog{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:14px;color:var(--txt)}
+.wl{display:grid;gap:6px}
+.wl button{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 12px;font-size:14.5px;font-weight:600}
+.wl button small{margin-left:auto;color:var(--muted);font-weight:500;font-size:12.5px}
+/* Modal, Toast */
+.modal{position:fixed;inset:0;background:rgba(20,18,14,.45);display:none;align-items:flex-end;justify-content:center;z-index:60;padding:12px 12px calc(12px + env(safe-area-inset-bottom))}
+.modal.on{display:flex}
+.modal .box{background:#fffcf3;border-radius:20px;padding:16px;max-width:460px;width:100%;max-height:82vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+.modal h3{font-size:12.5px;letter-spacing:2px;text-transform:uppercase;color:var(--cop2);margin:2px 2px 12px;line-height:1.4}
+.modal p{line-height:1.5;margin:0 2px 14px;font-size:15px}
+.modal .opts{display:grid;gap:6px}
+.modal .opts button{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;font-size:15px;font-weight:600}
+.modal .opts button small{margin-left:auto;color:var(--muted);font-weight:500;font-size:12px;text-align:right}
+.modal .opts button.on{border-color:var(--cop);background:#fff6ec}
+.modal .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.modal .row2 .btn{margin-top:0}
+.toast{position:fixed;left:50%;top:calc(20px + env(safe-area-inset-top));transform:translateX(-50%);background:var(--txt);color:#fff;padding:11px 16px;border-radius:20px;font-weight:600;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:70;max-width:90vw;text-align:center}
+.toast.on{opacity:1}
+/* iPad (A16) und andere Tablets: gleiche Anordnung, größer */
+@media (min-width:768px) and (pointer:coarse){.wrap,.sheet .in,.modal .box,.toast,.tabbar .in{zoom:1.2}}
+@media (min-width:1024px) and (pointer:coarse){.wrap,.sheet .in,.modal .box,.toast,.tabbar .in{zoom:1.35}}
+/* Drucken (Hafta): A4 quer */
+@media print{
+  @page{size:A4 landscape;margin:10mm}
+  html,body{background:#fff!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .zband,.tabbar,.topbtn,.status,.dnav>button,.back,.actions,.wk-note,.sheet,.modal,.toast,#v-bugun,#v-ekip,#v-ozet,img.zlock,.orn{display:none!important}
+  .wrap{max-width:none;padding:0}
+  header{margin:0 0 4mm}
+  .dnav .dt{border:0;box-shadow:none}
+  .dnav .dt input{display:none}
+  .gridwrap{overflow:visible;margin:0;padding:0}
+  table.wk{min-width:0;border-spacing:2px}
+  table.wk th.pn{width:44mm;position:static;background:none}
+  table.wk th.pn .full{display:block;font-size:11px;color:#1d1d1f}
+  table.wk th.pn small{display:none}
+  td.c{height:auto;padding:5px 2px}
+  td.c .s2{font-size:10px}
+}
+</style>
+</head>
+<body>
+<div class="zband"></div>
+
+<!-- Anmeldung -->
+<div class="sheet on" id="login"><div class="in">
+  <img class="zlock" src="lockup.png" alt="Zen Diamond × Marka Istanbul" style="width:min(86%,320px)">
+  <div class="apt" style="text-align:center;margin-top:10px">SHIFT PLAN</div>
+  <div class="orn" style="margin-bottom:18px"><i></i><b></b><i></i></div>
+  <fieldset id="lgBox"><legend>Giriş</legend>
+    <label for="lgPw">Şifre</label><input id="lgPw" type="password" autocomplete="current-password">
+    <p class="note">Yunus Emre Bilgin için – haftalık çalışma planı.</p>
+    <button class="btn" id="lgGo">Giriş</button>
+    <div class="err" id="lgErr"></div>
+  </fieldset>
+  <fieldset id="suBox" hidden><legend>İlk kurulum</legend>
+    <p class="note">Bir kez yapılır. Size verilen kurulum kodunu girin ve kendinize bir şifre belirleyin.</p>
+    <label for="suCode">Kurulum kodu</label><input id="suCode" autocomplete="off" autocapitalize="characters" style="text-transform:uppercase">
+    <label for="suPw">Yeni şifre (en az 8 karakter)</label><input id="suPw" type="password" autocomplete="new-password">
+    <label for="suPw2">Şifre tekrar</label><input id="suPw2" type="password" autocomplete="new-password">
+    <button class="btn" id="suGo">Kurulumu tamamla</button>
+    <div class="err" id="suErr"></div>
+  </fieldset>
+  <p class="note" id="noSetup" hidden style="text-align:center">Kurulum henüz hazır değil. Timur'dan kurulum kodunu isteyin.</p>
+  <button class="btn ghost" data-act="install" data-inst hidden>📲 Shift Plan'ı telefona yükle</button>
+  <p class="note" data-insthint style="text-align:center">📲 Uygulama olarak ekleyin: iPhone'da Paylaş → „Ana Ekrana Ekle“, Android'de menü ⋮ → „Uygulamayı yükle“.</p>
+</div></div>
+
+<div class="wrap">
+  <div class="topbtn"><button data-act="settings" aria-label="Ayarlar" title="Ayarlar">⚙︎</button></div>
+  <header>
+    <img class="zlock" src="lockup.png" alt="Zen Diamond × Marka Istanbul">
+    <div class="apt">SHIFT PLAN</div>
+    <div class="orn"><i></i><b></b><i></i></div>
+  </header>
+  <div class="status" id="conn"></div>
+  <section id="v-bugun"></section>
+  <section id="v-hafta" hidden></section>
+  <section id="v-ekip" hidden></section>
+  <section id="v-ozet" hidden></section>
+</div>
+
+<nav class="tabbar"><div class="in">
+  <button data-v="bugun"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="12" cy="15.5" r="2.2" fill="currentColor" stroke="none"/></svg>Bugün</button>
+  <button data-v="hafta"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9.5h18M9 9.5V21M15 9.5V21M3 15.25h18"/></svg>Hafta</button>
+  <button data-v="ekip"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.6"/><path d="M15.6 14.2c3 .2 5.4 2.6 5.4 5.8"/></svg>Ekip</button>
+  <button data-v="ozet"><svg viewBox="0 0 24 24"><path d="M4 20h16"/><rect x="5" y="11" width="3.6" height="7" rx="1"/><rect x="10.2" y="5.5" width="3.6" height="12.5" rx="1"/><rect x="15.4" y="13" width="3.6" height="5" rx="1"/></svg>Özet</button>
+</div></nav>
+
+<!-- Ein Tag einer Person -->
+<div class="sheet" id="es"><div class="in">
+  <div class="sh"><h2>Günlük plan</h2><button class="x" data-close="es">Kapat</button></div>
+  <div class="who"><i class="dot" id="esDot"></i><b id="esName"></b></div>
+  <div class="when" id="esWhen"></div>
+  <div class="defi" id="esDef"></div>
+  <label>Durum</label>
+  <div class="stb" id="esSt"></div>
+  <div id="esWork">
+    <div id="esShopBox"><label>Dükkân</label><div class="seg" id="esShop"></div></div>
+    <label>Saat</label>
+    <div class="seg" id="esPre" style="margin-bottom:8px"></div>
+    <div class="g2"><input type="time" id="esA" aria-label="Başlangıç"><input type="time" id="esB" aria-label="Bitiş"></div>
+    <button type="button" class="ldt" id="esLead" data-act="es-lead"><span class="box">✓</span><span>★ O gün dükkân sorumlusu</span><small id="esLeadInfo"></small></button>
+  </div>
+  <div id="esRange">
+    <label>Kaç gün?</label>
+    <div class="seg" id="esDays"></div>
+    <input type="date" id="esUntil" style="margin-top:8px" hidden aria-label="Son gün">
+    <p class="note" id="esRangeNote">Sadece kişinin çalışacağı günlere yazılır; boş günleri değişmez.</p>
+  </div>
+  <label for="esNote">Not</label><input id="esNote" maxlength="200" placeholder="isteğe bağlı">
+  <div class="err" id="esErr"></div>
+  <button class="btn" data-act="es-save" id="esSave">Kaydet</button>
+  <button class="btn ghost" data-act="es-reset" id="esReset">↺ Haftalık düzene döndür</button>
+</div></div>
+
+<!-- Dükkân günü -->
+<div class="sheet" id="sd"><div class="in">
+  <div class="sh"><h2>Dükkân günü</h2><button class="x" data-close="sd">Kapat</button></div>
+  <div class="who"><i class="dot" id="sdDot"></i><b id="sdName"></b></div>
+  <div class="when" id="sdWhen"></div>
+  <label>Dükkân o gün</label>
+  <div class="seg" id="sdOpen"></div>
+  <p class="note" id="sdAuto"></p>
+  <label>★ Sorumlu</label>
+  <div class="wl" id="sdLead"></div>
+  <label for="sdNote">Not (ör. envanter sayımı, bayram)</label><input id="sdNote" maxlength="200">
+  <button class="btn" data-act="sd-save">Kaydet</button>
+</div></div>
+
+<!-- Woche einer Person -->
+<div class="sheet" id="pw"><div class="in">
+  <div class="sh"><h2>Kişinin haftası</h2><button class="x" data-close="pw">Kapat</button></div>
+  <div class="who"><i class="dot" id="pwDot"></i><b id="pwName"></b></div>
+  <div class="when" id="pwWhen"></div>
+  <div class="wl" id="pwList"></div>
+  <button class="btn wa" data-act="pw-send" id="pwSend">📤 Kişiye WhatsApp'tan gönder</button>
+  <button class="btn ghost" data-act="pw-edit">✎ Kişi ve haftalık düzen</button>
+</div></div>
+
+<!-- Person -->
+<div class="sheet" id="ps"><div class="in">
+  <div class="sh"><h2 id="psTitle">Kişi</h2><button class="x" data-close="ps">Kapat</button></div>
+  <fieldset><legend>Kişi</legend>
+    <label for="psName">Ad soyad *</label><input id="psName" maxlength="60" autocomplete="off">
+    <div class="g2">
+      <div><label for="psCode">Kısa ad</label><input id="psCode" maxlength="8" placeholder="ör. YEB" style="text-transform:uppercase" autocomplete="off"></div>
+      <div><label for="psRole">Görev</label><input id="psRole" maxlength="30" list="dlRole" placeholder="ör. Satış" autocomplete="off"></div>
+    </div>
+    <datalist id="dlRole"><option>Satış</option><option>Kasa</option><option>Usta</option><option>Yönetici</option><option>Stajyer</option><option>Minijob</option></datalist>
+    <label for="psPhone">Telefon (WhatsApp, isteğe bağlı)</label><input id="psPhone" type="tel" inputmode="tel" maxlength="30" placeholder="0176 1234567">
+    <label>Renk</label><div class="pal" id="psPal"></div>
+    <div id="psShopBox"><label>Ana dükkân</label><div class="seg" id="psShop"></div></div>
+    <div class="g2">
+      <div><label for="psSince">İşe başlama</label><input id="psSince" type="date"></div>
+      <div><label for="psUntil">Ayrılış (varsa)</label><input id="psUntil" type="date"></div>
+    </div>
+  </fieldset>
+  <fieldset><legend>Haftalık düzen</legend>
+    <p class="note" style="margin-top:2px">Her hafta kendiliğinden uygulanır. Tek tek günleri sonra Hafta ekranından değiştirirsiniz. ★ = o gün dükkân sorumlusu.</p>
+    <div class="qf" id="psQuick"></div>
+    <div id="psRows"></div>
+    <div id="psFromBox"><label for="psFrom">Bu düzen şu tarihten itibaren geçerli</label><input id="psFrom" type="date"><p class="note">Önceki haftalar eski düzende kalır.</p></div>
+  </fieldset>
+  <div class="err" id="psErr"></div>
+  <button class="btn" data-act="ps-save">Kaydet</button>
+  <button class="btn danger" data-act="ps-del" id="psDel">Kişiyi sil</button>
+</div></div>
+
+<!-- Einstellungen -->
+<div class="sheet" id="set"><div class="in">
+  <div class="sh"><h2>Ayarlar</h2><button class="x" data-close="set">Kapat</button></div>
+  <fieldset><legend>Dükkânlar</legend>
+    <p class="note" style="margin-top:2px">Açık günlere dokunun. Kapalı günlerde kimse planlanmaz (istisna: Hafta ekranından elle).</p>
+    <div id="setShops"></div>
+    <button class="addb" data-act="set-addshop">＋ Dükkân ekle</button>
+    <label class="tog"><input type="checkbox" id="setHol" style="width:auto"> Resmî tatillerde (NRW) dükkânlar kapalı</label>
+  </fieldset>
+  <fieldset><legend>Saat şablonları</legend>
+    <p class="note" style="margin-top:2px">Plan girerken tek dokunuşla seçilir.</p>
+    <div id="setPre" style="margin-top:8px"></div>
+    <button class="addb" data-act="set-addpre">＋ Şablon ekle</button>
+  </fieldset>
+  <div class="err" id="setErr"></div>
+  <button class="btn" data-act="set-save">Ayarları kaydet</button>
+  <fieldset style="margin-top:18px"><legend>Şifre değiştir</legend>
+    <label for="pwOld">Mevcut şifre</label><input id="pwOld" type="password" autocomplete="current-password">
+    <label for="pwNew">Yeni şifre (en az 8 karakter)</label><input id="pwNew" type="password" autocomplete="new-password">
+    <button class="btn ghost" data-act="pw-change">Şifreyi değiştir</button>
+    <p class="note">Değiştirince diğer cihazlardaki girişler kapanır.</p>
+  </fieldset>
+  <button class="btn ghost" data-act="install" data-inst hidden>📲 Shift Plan'ı telefona yükle</button>
+  <p class="note" data-insthint style="text-align:center">📲 Uygulama olarak ekleyin: iPhone'da Paylaş → „Ana Ekrana Ekle“, Android'de menü ⋮ → „Uygulamayı yükle“.</p>
+  <button class="btn danger" data-act="logout">Çıkış yap</button>
+  <p class="note" style="text-align:center;margin-top:14px">Marka Istanbul · Keupstraße 52-54, Köln</p>
+</div></div>
+
+<div class="modal" id="modal"><div class="box" id="mbox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ---------- Grundlagen ---------- */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const API = "/shiftplan-api";
+const GUN = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"];
+const GK = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
+const AY = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+const ST = { is: "Çalışıyor", bos: "Boş gün", izin: "İzinli", hasta: "Hasta", diger: "Diğer", kapali: "Dükkân kapalı", plansiz: "Planlanmadı" };
+const ABSENT = ["izin", "hasta", "diger"];
+const PCOL = ["#b8913a", "#2f6db3", "#1f8a55", "#c2185b", "#6a4fb3", "#d98a00", "#00897b", "#5d4037", "#455a64", "#e64a19"];
+const SHC = [{ c: "#b8913a", t: "#f7eed5", b: "#e6d29c" }, { c: "#00897b", t: "#dcf1ee", b: "#a9d9d2" }, { c: "#8d6e63", t: "#efe7e3", b: "#d4c2bb" },
+  { c: "#5c6bc0", t: "#e6e8f6", b: "#c3c9ec" }, { c: "#ef6c00", t: "#fdebd9", b: "#f6c79a" }, { c: "#7cb342", t: "#ecf5e1", b: "#c8e1a8" }];
+
+/* Datum (immer lokale Zeit, Format YYYY-MM-DD) */
+const pad = (n) => String(n).padStart(2, "0");
+const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parseD = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d, 12); };
+const addD = (s, n) => { const d = parseD(s); d.setDate(d.getDate() + n); return ymd(d); };
+const today = () => ymd(new Date());
+const wd = (s) => (parseD(s).getDay() + 6) % 7; // 0 = Pazartesi
+const mondayOf = (s) => addD(s, -wd(s));
+const monthEnd = (mo) => { const [y, m] = mo.split("-").map(Number); return ymd(new Date(y, m, 0, 12)); };
+const addMonth = (mo, n) => { const [y, m] = mo.split("-").map(Number); const d = new Date(y, m - 1 + n, 1, 12); return ymd(d).slice(0, 7); };
+const dayDiff = (a, b) => Math.round((parseD(b) - parseD(a)) / 864e5);
+const isDateStr = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s || "");
+function isoWeek(s) {
+  const d = parseD(s), t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  t.setUTCDate(t.getUTCDate() + 3 - ((t.getUTCDay() + 6) % 7));
+  const y = new Date(Date.UTC(t.getUTCFullYear(), 0, 4));
+  return 1 + Math.round(((t - y) / 864e5 - 3 + ((y.getUTCDay() + 6) % 7)) / 7);
+}
+const fmtLong = (s) => { const d = parseD(s); return `${d.getDate()} ${AY[d.getMonth()]} ${d.getFullYear()}`; };
+const fmtDM = (s) => `${+s.slice(8)}.${s.slice(5, 7)}.`;
+function weekLabel(m) {
+  const a = parseD(m), b = parseD(addD(m, 6));
+  return a.getMonth() === b.getMonth() ? `${a.getDate()}–${b.getDate()} ${AY[b.getMonth()]} ${b.getFullYear()}`
+    : `${a.getDate()} ${AY[a.getMonth()]} – ${b.getDate()} ${AY[b.getMonth()]} ${b.getFullYear()}`;
+}
+/* Gesetzliche Feiertage NRW (Köln) */
+const HC = {};
+function holidays(y) {
+  if (HC[y]) return HC[y];
+  const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3),
+    h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451),
+    mo = Math.floor((h + l - 7 * m + 114) / 31), da = ((h + l - 7 * m + 114) % 31) + 1;
+  const E = `${y}-${pad(mo)}-${pad(da)}`, H = {};
+  H[`${y}-01-01`] = "Neujahr"; H[addD(E, -2)] = "Karfreitag"; H[addD(E, 1)] = "Ostermontag"; H[`${y}-05-01`] = "Tag der Arbeit";
+  H[addD(E, 39)] = "Christi Himmelfahrt"; H[addD(E, 50)] = "Pfingstmontag"; H[addD(E, 60)] = "Fronleichnam";
+  H[`${y}-10-03`] = "Tag der Deutschen Einheit"; H[`${y}-11-01`] = "Allerheiligen"; H[`${y}-12-25`] = "1. Weihnachtstag"; H[`${y}-12-26`] = "2. Weihnachtstag";
+  return (HC[y] = H);
+}
+const holiday = (s) => holidays(+s.slice(0, 4))[s] || "";
+/* Zeiten */
+const cT = (t) => (!t ? "" : t.endsWith(":00") ? String(+t.slice(0, 2)) : t.replace(/^0/, ""));
+const tShort = (a, b) => (a || b ? `${cT(a) || "?"}–${cT(b) || "?"}` : "");
+const tLong = (a, b) => (a || b ? `${a || "?"}–${b || "?"}` : "");
+const mins = (t) => +t.slice(0, 2) * 60 + +t.slice(3, 5);
+const hrs = (a, b) => (a && b && mins(b) > mins(a) ? (mins(b) - mins(a)) / 60 : 0);
+const nf = (n) => (Math.round(n * 10) / 10).toLocaleString("tr-TR");
+
+/* ---------- Zustand ---------- */
+let TOKEN = null; try { TOKEN = localStorage.getItem("mi_shift_tok"); } catch (e) {}
+const S = { cfg: null, staff: [], E: new Map(), D: new Map(), ver: 0 };
+let view = "bugun", curDay = today(), curWeek = mondayOf(today()), curMonth = today().slice(0, 7), ozMode = "ay", followToday = true;
+try { const v = localStorage.getItem("mi_shift_view"); if (["bugun", "hafta", "ekip", "ozet"].includes(v)) view = v; } catch (e) {}
+
+/* ---------- Schnittstelle ---------- */
+async function api(method, path, body) {
+  const r = await fetch(API + path, { method, cache: "no-store",
+    headers: Object.assign({ "Content-Type": "application/json" }, TOKEN ? { Authorization: "Bearer " + TOKEN } : {}),
+    body: body ? JSON.stringify(body) : undefined });
+  let j = {}; try { j = await r.json(); } catch (e) {}
+  if (r.status === 401 && TOKEN && !/^\/(login|setup|status)/.test(path)) logout(true);
+  if (!r.ok) { const e = new Error(j.error || "HTTP " + r.status); e.status = r.status; e.code = j.error; e.j = j; throw e; }
+  return j;
+}
+function merge(j, from, to) {
+  S.cfg = j.cfg; S.staff = j.staff;
+  for (const k of [...S.E.keys()]) { const d = k.slice(0, 10); if (d >= from && d <= to) S.E.delete(k); }
+  for (const k of [...S.D.keys()]) { const d = k.slice(0, 10); if (d >= from && d <= to) S.D.delete(k); }
+  for (const e of j.entries) S.E.set(e.date + "|" + e.staff, e);
+  for (const d of j.days) S.D.set(d.date + "|" + d.shop, d);
+}
+function rangeFor() {
+  if (view === "bugun") { const m = mondayOf(curDay); return [m, addD(m, 6)]; }
+  if (view === "hafta") return [addD(curWeek, -7), addD(curWeek, 6)];
+  const mo = view === "ozet" ? curMonth : today().slice(0, 7);
+  return [mo + "-01", monthEnd(mo)];
+}
+let reqNo = 0;
+async function refresh() {
+  if (!TOKEN) return;
+  const [from, to] = rangeFor(), v = S.ver, my = ++reqNo;
+  if (!S.cfg) setConn("Yükleniyor…");
+  try {
+    const j = await api("GET", `/data?from=${from}&to=${to}`);
+    if (v !== S.ver || my !== reqNo) return; // inzwischen gespeichert oder weitergeblättert
+    merge(j, from, to); setConn(""); render();
+  } catch (e) { if (e.status !== 401) setConn("Bağlantı yok – internet bağlantısını kontrol edin.", true); }
+}
+async function ensureRange(from, to) { // vor Mehrfach-Änderungen: Einträge des Zeitraums sicher laden
+  for (let a = from; a <= to; a = addD(a, 90)) {
+    const b = addD(a, 89) < to ? addD(a, 89) : to;
+    merge(await api("GET", `/data?from=${a}&to=${b}`), a, b);
+  }
+}
+function setConn(t, bad) { const c = $("conn"); c.textContent = t; c.classList.toggle("bad", !!bad); }
+
+/* ---------- Berechnung ---------- */
+const shops = () => S.cfg.shops;
+const shopOf = (id) => S.cfg.shops.find((s) => s.id === id);
+const shopName = (id) => (shopOf(id) || { name: id }).name;
+const shopCol = (id) => SHC[Math.max(0, S.cfg.shops.findIndex((s) => s.id === id)) % SHC.length];
+const pById = (id) => S.staff.find((p) => p.id === id);
+const activeOn = (p, d) => (!p.since || d >= p.since) && (!p.until || d <= p.until);
+const staffOn = (d) => S.staff.filter((p) => activeOn(p, d));
+const pcol = (p) => p.color || PCOL[(p.id - 1) % PCOL.length];
+const kisa = (p) => p.code || p.name.split(/\s+/)[0];
+const ini = (p) => (p.code || p.name.split(/\s+/).map((w) => w[0]).join("")).slice(0, 3).toLocaleUpperCase("tr");
+function shortName(p) { // für WhatsApp-Texte: Vorname, bei gleichem Vornamen zwei Wörter
+  const w = p.name.split(/\s+/), f = w[0].toLocaleLowerCase("tr");
+  return S.staff.some((q) => q.id !== p.id && q.name.split(/\s+/)[0].toLocaleLowerCase("tr") === f) ? w.slice(0, 2).join(" ") : w[0];
+}
+function closedInfo(d, shopId) {
+  const r = S.D.get(d + "|" + shopId), sh = shopOf(shopId);
+  if (r && r.closed === 1) return { closed: true, why: r.note || "Bugün kapalı", man: 1 };
+  if (r && r.closed === 0) return { closed: false, why: "", man: 0 };
+  if (sh && !sh.open[wd(d)]) return { closed: true, why: GUN[wd(d)] + " günleri kapalı" };
+  const h = S.cfg.holidays ? holiday(d) : "";
+  if (h) return { closed: true, why: "Resmî tatil: " + h };
+  return { closed: false, why: "" };
+}
+function verOf(p, d) { let v = null; for (const x of p.pattern || []) { if (x.from <= d) v = x; else break; } return v; }
+function defOf(p, d) { // nach Wochenmuster, ohne Einzeländerung
+  const v = verOf(p, d);
+  if (!v) return { status: "plansiz" };
+  const x = v.d[wd(d)];
+  if (!x) return { status: "bos" };
+  const c = closedInfo(d, x.shop);
+  if (c.closed) return { status: "kapali", shop: x.shop, why: c.why };
+  return { status: "is", shop: x.shop, a: x.a, b: x.b, lead: x.lead };
+}
+function eff(p, d) { // tatsächlich: Einzeländerung oder Wochenmuster
+  const e = S.E.get(d + "|" + p.id);
+  if (!e) return defOf(p, d);
+  const o = { status: e.status, shop: e.shop, a: e.t_from, b: e.t_to, note: e.note, ex: true };
+  if (e.status === "is") { const df = defOf(p, d); o.lead = df.status === "is" && df.shop === e.shop ? df.lead : 0; }
+  return o;
+}
+const workersAt = (d, shopId) => staffOn(d).map((p) => ({ p, e: eff(p, d) })).filter((x) => x.e.status === "is" && x.e.shop === shopId);
+function leadOf(d, shopId) {
+  const w = workersAt(d, shopId), r = S.D.get(d + "|" + shopId);
+  if (r && r.lead === 0) return null;
+  if (r && r.lead) { const x = w.find((x) => x.p.id === r.lead); if (x) return { p: x.p, man: 1 }; }
+  const x = w.find((x) => x.e.lead);
+  return x ? { p: x.p, man: 0 } : null;
+}
+function countStats(p, from, to) {
+  const s = { act: 0, is: 0, h: 0, izin: 0, hasta: 0, diger: 0, bos: 0, kapali: 0, plansiz: 0 };
+  for (let d = from; d <= to; d = addD(d, 1)) {
+    if (!activeOn(p, d)) continue;
+    const e = eff(p, d); s.act++; s[e.status]++;
+    if (e.status === "is") s.h += hrs(e.a, e.b);
+  }
+  return s;
+}
+function absRanges(p, from, to) { // zusammenhängende Abwesenheiten (über freie Tage hinweg)
+  const out = []; let cur = null, gap = [];
+  for (let d = from; d <= to; d = addD(d, 1)) {
+    if (!activeOn(p, d)) continue;
+    const e = eff(p, d);
+    if (ABSENT.includes(e.status)) {
+      if (cur && cur.st === e.status) { cur.b = d; cur.n++; }
+      else { cur = { st: e.status, a: d, b: d, n: 1 }; out.push(cur); }
+      gap = [];
+    } else if (cur && (e.status === "bos" || e.status === "kapali")) gap.push(d);
+    else cur = null;
+  }
+  return out;
+}
+function leadDays(dd) { // ★-Tage als "Pzt–Cmt" bzw. "Pzt, Çar"
+  const out = []; let i = 0;
+  while (i < 7) { if (!(dd[i] && dd[i].lead)) { i++; continue; } let j = i; while (j + 1 < 7 && dd[j + 1] && dd[j + 1].lead) j++; out.push(j - i >= 2 ? GK[i] + "–" + GK[j] : j > i ? GK[i] + ", " + GK[j] : GK[i]); i = j + 1; }
+  return out.join(", ");
+}
+function patSummary(p) {
+  const t = today(), v = verOf(p, t) || (p.pattern || [])[0];
+  if (!v) return "Haftalık düzen girilmedi";
+  const multi = shops().length > 1;
+  const lab = (x) => (x ? `${multi ? x.shop + " " : ""}${tShort(x.a, x.b)}`.trim() || "çalışır" : "boş");
+  const parts = []; let i = 0;
+  while (i < 7) { let j = i; while (j + 1 < 7 && lab(v.d[j + 1]) === lab(v.d[i])) j++; parts.push(`${GK[i]}${j > i ? "–" + GK[j] : ""} ${lab(v.d[i])}`); i = j + 1; }
+  return parts.join(" · ") + (leadDays(v.d) ? ` · ★ ${leadDays(v.d)}` : "") + (v.from > t ? ` (${fmtDM(v.from)} itibaren)` : "");
+}
+
+/* ---------- Anzeige ---------- */
+function render() {
+  document.querySelectorAll(".tabbar button").forEach((b) => b.classList.toggle("on", b.dataset.v === view));
+  for (const v of ["bugun", "hafta", "ekip", "ozet"]) $("v-" + v).hidden = v !== view;
+  if (!S.cfg) return;
+  ({ bugun: rBugun, hafta: rHafta, ekip: rEkip, ozet: rOzet })[view]();
+}
+function navBox(kind, inner, val) {
+  return `<div class="dnav"><button data-nav="${kind}" data-dir="-1" aria-label="Önceki">‹</button><div class="dt">${inner}<input type="${kind === "month" ? "month" : "date"}" data-pick="${kind}" value="${val}" aria-label="Tarih seç"></div><button data-nav="${kind}" data-dir="1" aria-label="Sonraki">›</button></div>`;
+}
+function rBugun() {
+  const d = curDay, t = today(), list = staffOn(d).map((p) => ({ p, e: eff(p, d) }));
+  const cnt = (k) => list.filter((x) => x.e.status === k).length;
+  let h = navBox("day", `<b>${d === t ? "Bugün · " : d === addD(t, 1) ? "Yarın · " : ""}${GUN[wd(d)]}</b><span>${fmtLong(d)}</span>`, d);
+  if (d !== t) h += `<button class="back" data-act="gotoday">↩ Bugüne dön</button>`;
+  const hol = holiday(d);
+  if (hol) h += `<div class="hol">🎌 Resmî tatil: ${esc(hol)}</div>`;
+  if (!S.staff.length) h += `<button class="banner" data-act="addp">＋ Önce ekibi ekleyin: dokunun ve ilk kişiyi girin.</button>`;
+  const noPat = S.staff.filter((p) => activeOn(p, t) && !(p.pattern || []).length);
+  if (noPat.length) h += `<button class="banner" data-act="goto-ekip">⚙︎ Haftalık düzeni girilmemiş: ${esc(noPat.map(shortName).join(", "))}. Dokunun → Ekip ekranında kişiye dokunup çalışma günlerini girin.</button>`;
+  h += `<div class="sum"><div class="k-is"><b>${cnt("is")}</b><span>Çalışıyor</span></div><div class="k-hasta"><b>${cnt("hasta")}</b><span>Hasta</span></div><div class="k-izin"><b>${cnt("izin")}</b><span>İzinli</span></div><div class="k-yok"><b>${list.length - cnt("is") - cnt("hasta") - cnt("izin")}</b><span>Boş/diğer</span></div></div>`;
+  h += `<div class="quick"><button data-act="q-hasta">🤒 Hasta bildir</button><button data-act="q-izin">🌴 İzin gir</button><button data-act="share-day">📤 Paylaş</button></div>`;
+  for (const sh of shops()) {
+    const c = closedInfo(d, sh.id), w = list.filter((x) => x.e.status === "is" && x.e.shop === sh.id), ld = leadOf(d, sh.id);
+    h += `<div class="card" style="--shc:${shopCol(sh.id).c}"><div class="ch" data-act="shopday" data-shop="${esc(sh.id)}" data-d="${d}"><b>${esc(sh.name.toLocaleUpperCase("tr"))}</b><span class="oc${c.closed ? " cl" : ""}">${c.closed ? "Kapalı" : "Açık"}</span><button class="ed" aria-label="Dükkân günü">✎</button></div>`;
+    if (c.closed && !w.length) h += `<div class="empty">${esc(c.why)}</div>`;
+    else {
+      if (w.length && ld) h += `<button class="lead" data-act="lead" data-shop="${esc(sh.id)}" data-d="${d}"><span class="star">★</span><span>Sorumlu: <b>${esc(ld.p.name)}</b></span><small>değiştir</small></button>`;
+      else if (w.length) h += `<button class="warnb" data-act="lead" data-shop="${esc(sh.id)}" data-d="${d}">⚠ Sorumlu yok – dokunun, birini seçin</button>`;
+      else h += `<div class="warnb">⚠ Bu dükkânda o gün kimse planlanmadı</div>`;
+      const r = S.D.get(d + "|" + sh.id);
+      if (r && r.note && r.closed !== 1) h += `<div class="empty" style="padding:4px 0">📝 ${esc(r.note)}</div>`;
+      for (const x of w) h += prow(x, d, ld && ld.p.id === x.p.id, false);
+    }
+    h += `</div>`;
+  }
+  const order = ["hasta", "izin", "diger", "kapali", "bos", "plansiz", "is"];
+  const off = list.filter((x) => x.e.status !== "is" || !shopOf(x.e.shop)).sort((a, b) => order.indexOf(a.e.status) - order.indexOf(b.e.status));
+  h += `<div class="card" style="--shc:#c9c1ad"><div class="ch"><b>${d === t ? "BUGÜN YOK" : "O GÜN YOK"}</b><span class="cnt">${off.length} kişi</span></div>`;
+  if (!off.length) h += `<div class="empty">${list.length ? "Herkes çalışıyor 👍" : "Kimse yok."}</div>`;
+  for (const x of off) h += prow(x, d, false, true);
+  h += `</div>`;
+  $("v-bugun").innerHTML = h;
+}
+function prow(x, d, isLead, badge) {
+  const e = x.e;
+  const right = badge ? `<span class="badge b-${e.status}">${esc(e.status === "is" ? shopName(e.shop) : ST[e.status])}</span>` : `<span class="tm">${esc(tLong(e.a, e.b))}</span>`;
+  const sub = e.note ? `<span class="nt">📝 ${esc(e.note)}</span>` : e.status === "kapali" ? `<span class="nt">${esc(e.why || "")}</span>` : "";
+  return `<div class="prow" data-act="entry" data-p="${x.p.id}" data-d="${d}">${e.ex ? '<i class="exd" title="Bu gün için değiştirildi"></i>' : ""}<i class="dot" style="--c:${pcol(x.p)}"></i><span class="nm">${esc(x.p.name)}${isLead ? ' <span class="star">★</span>' : ""}${sub}</span>${right}</div>`;
+}
+function rHafta() {
+  const m = curWeek, t = today(), days = [0, 1, 2, 3, 4, 5, 6].map((i) => addD(m, i)), isThis = m === mondayOf(t);
+  const multi = shops().length > 1;
+  let h = navBox("week", `<b>${isoWeek(m)}. hafta${isThis ? " · bu hafta" : ""}</b><span>${weekLabel(m)}</span>`, m);
+  if (!isThis) h += `<button class="back" data-act="gothisweek">↩ Bu haftaya dön</button>`;
+  const ppl = S.staff.filter((p) => days.some((d) => activeOn(p, d)));
+  h += `<div class="gridwrap"><table class="wk"><thead><tr><th class="pn"></th>`;
+  for (const d of days) { const hol = holiday(d); h += `<th class="${d === t ? "td" : ""}" data-act="openday" data-d="${d}">${GK[wd(d)]}<b>${+d.slice(8)}</b>${hol ? "<small>tatil</small>" : ""}</th>`; }
+  h += `</tr></thead><tbody>`;
+  if (!ppl.length) h += `<tr><td colspan="8" class="empty" style="text-align:center;padding:18px">Ekip boş – Ekip ekranından kişi ekleyin.</td></tr>`;
+  for (const p of ppl) {
+    h += `<tr><th class="pn" data-act="pweek" data-p="${p.id}"><b><i class="dot" style="--c:${pcol(p)}"></i>${esc(kisa(p))}</b><small>${esc(p.code ? p.name.split(/\s+/)[0] : p.role || "")}</small><span class="full">${esc(p.name)}</span></th>`;
+    for (const d of days) {
+      if (!activeOn(p, d)) { h += `<td class="c k-na"></td>`; continue; }
+      const e = eff(p, d), cl = (d === t ? " tdc" : "") + (e.ex ? " ex" : ""), L = `data-act="entry" data-p="${p.id}" data-d="${d}"`;
+      if (e.status === "is") {
+        const sc = shopCol(e.shop), ld = leadOf(d, e.shop);
+        h += `<td class="c k-is${cl}" ${L} style="--tint:${sc.t};--tintb:${sc.b}">${ld && ld.p.id === p.id ? '<span class="ld">★</span>' : ""}<span class="s1">${esc(multi || !e.shop ? e.shop || "?" : "✓")}</span><span class="s2">${esc(tShort(e.a, e.b))}</span></td>`;
+      } else {
+        const lab = { bos: "–", izin: "İzin", hasta: "Hasta", diger: "Diğer", kapali: "kapalı", plansiz: "?" }[e.status];
+        h += `<td class="c k-${e.status}${cl}" ${L}><span class="s1">${lab}</span>${e.note && e.status !== "bos" ? `<span class="s2">${esc(e.note.slice(0, 12))}</span>` : ""}</td>`;
+      }
+    }
+    h += `</tr>`;
+  }
+  h += `</tbody><tfoot>`;
+  for (const sh of shops()) {
+    h += `<tr><th class="pn"><b>${esc(sh.name)}</b></th>`;
+    for (const d of days) {
+      const c = closedInfo(d, sh.id), w = workersAt(d, sh.id), ld = leadOf(d, sh.id), A = `data-shop="${esc(sh.id)}" data-d="${d}"`;
+      if (c.closed && !w.length) { h += `<td class="cl" data-act="shopday" ${A}>kapalı</td>`; continue; }
+      if (!w.length) { h += `<td class="w" data-act="shopday" ${A}><b>0</b>⚠ kimse</td>`; continue; }
+      h += `<td class="${ld ? "" : "w"}" data-act="lead" ${A}><b>${w.length}</b>${ld ? "★" + esc(kisa(ld.p)) : "⚠ sor."}</td>`;
+    }
+    h += `</tr>`;
+  }
+  h += `</tfoot></table></div><div class="legend">`;
+  if (multi) for (const sh of shops()) { const c = shopCol(sh.id); h += `<span><i style="background:${c.t};border:1px solid ${c.b}"></i>${esc(sh.id)} = ${esc(sh.name)}</span>`; }
+  h += `<span><i style="background:#dfeafb"></i>İzinli</span><span><i style="background:#fbe0e0"></i>Hasta</span><span><i style="background:#ebe4f7"></i>Diğer</span><span><i style="background:#f3f1ec"></i>Boş gün</span><span>★ Sorumlu</span><span><i style="background:#c9a647;width:7px;height:7px;border-radius:50%"></i>Bu hafta değiştirildi</span></div>`;
+  h += `<div class="actions"><button class="pri" data-act="share-week">📤 WhatsApp'ta paylaş</button><button data-act="print">🖨 Yazdır / PDF</button><button data-act="copy-week">📋 Geçen haftayı kopyala</button><button data-act="reset-week">↺ Haftalık düzene döndür</button></div>`;
+  h += `<p class="note wk-note">Kutuya dokunun: dükkân, saat, boş gün, izin, hasta. İsme dokunun: kişinin haftası (WhatsApp'tan gönderilebilir). Alt satırlar: dükkânda kaç kişi var ve ★ sorumlu; turuncu = eksik.</p>`;
+  $("v-hafta").innerHTML = h;
+}
+function rEkip() {
+  const t = today(), from = t.slice(0, 7) + "-01";
+  const act = S.staff.filter((p) => !p.until || p.until >= t), gone = S.staff.filter((p) => p.until && p.until < t);
+  let h = `<div class="sec"><b>EKİP</b><span>${act.length} kişi · bu ay bugüne kadar</span></div>`;
+  if (!S.staff.length) h += `<div class="empty">Henüz kimse eklenmedi.</div>`;
+  act.forEach((p, i) => (h += pcard(p, i, act.length, from, t)));
+  h += `<button class="btn" data-act="addp">＋ Kişi ekle</button>`;
+  if (gone.length) { h += `<details class="more"><summary>Ayrılanlar (${gone.length})</summary>`; gone.forEach((p) => (h += pcard(p, -1, 0))); h += `</details>`; }
+  h += `<p class="note">Kişiye dokunun: ad, renk, telefon ve haftalık düzen (hangi gün, hangi dükkân, hangi saat, ★ sorumlu). Haftalık düzen her hafta kendiliğinden uygulanır; tek tek günleri Hafta veya Bugün ekranından değiştirirsiniz.</p>`;
+  $("v-ekip").innerHTML = h;
+}
+function pcard(p, i, n, from, to) {
+  let stats = "";
+  if (from && from <= to) {
+    const s = countStats(p, from, to);
+    stats = `<div class="stat"><span class="b-is">${s.is} gün çalıştı</span>${s.hasta ? `<span class="b-hasta">${s.hasta} gün hasta</span>` : ""}${s.izin ? `<span class="b-izin">${s.izin} gün izin</span>` : ""}${s.diger ? `<span class="b-diger">${s.diger} diğer</span>` : ""}</div>`;
+  }
+  const info = [p.role, p.shop && shopOf(p.shop) ? shopName(p.shop) : "", p.until ? "ayrılış " + fmtDM(p.until) + p.until.slice(0, 4) : ""].filter(Boolean).join(" · ");
+  return `<div class="pc" data-act="editp" data-p="${p.id}"><span class="av" style="--c:${pcol(p)}">${esc(ini(p))}</span><div class="pi"><b>${esc(p.name)}${p.code ? `<span class="kod">${esc(p.code)}</span>` : ""}</b>${info ? `<small>${esc(info)}</small>` : ""}<small>${esc(patSummary(p))}</small>${stats}</div>${i >= 0 ? `<div class="mv"><button data-act="up" data-p="${p.id}" ${i === 0 ? "disabled" : ""} aria-label="Yukarı">▲</button><button data-act="down" data-p="${p.id}" ${i === n - 1 ? "disabled" : ""} aria-label="Aşağı">▼</button></div>` : ""}</div>`;
+}
+function ozRange() {
+  const from = curMonth + "-01", end = monthEnd(curMonth), t = today();
+  return [from, ozMode === "bugun" && t >= from && t <= end ? t : end];
+}
+function rOzet() {
+  const [from, to] = ozRange(), [y, m] = curMonth.split("-").map(Number);
+  let h = navBox("month", `<b>${AY[m - 1]} ${y}</b><span>Aylık özet · ${fmtDM(from)}–${fmtDM(to)}</span>`, curMonth);
+  h += `<div class="seg segc"><button data-act="oz-ay" class="${ozMode !== "bugun" ? "on" : ""}">Tüm ay (plan)</button><button data-act="oz-bugun" class="${ozMode === "bugun" ? "on" : ""}">Bugüne kadar</button></div>`;
+  const rows = S.staff.map((p) => ({ p, s: countStats(p, from, to) })).filter((r) => r.s.act > 0);
+  const tot = { is: 0, h: 0, izin: 0, hasta: 0, diger: 0 };
+  h += `<table class="oz"><thead><tr><th>Kişi</th><th>Çalıştı</th><th>Saat</th><th>İzin</th><th>Hasta</th><th>Diğer</th></tr></thead><tbody>`;
+  for (const r of rows) {
+    for (const k in tot) tot[k] += r.s[k];
+    h += `<tr><td><i class="dot" style="--c:${pcol(r.p)}"></i> ${esc(kisa(r.p))}</td><td>${r.s.is}</td><td>${nf(r.s.h)}</td><td class="${r.s.izin ? "i" : ""}">${r.s.izin || "–"}</td><td class="${r.s.hasta ? "h" : ""}">${r.s.hasta || "–"}</td><td>${r.s.diger || "–"}</td></tr>`;
+  }
+  if (!rows.length) h += `<tr><td colspan="6" class="empty" style="text-align:center">Bu ay için kimse yok.</td></tr>`;
+  h += `</tbody>`;
+  if (rows.length > 1) h += `<tfoot><tr><td>Toplam</td><td>${tot.is}</td><td>${nf(tot.h)}</td><td>${tot.izin || "–"}</td><td>${tot.hasta || "–"}</td><td>${tot.diger || "–"}</td></tr></tfoot>`;
+  h += `</table>`;
+  const lists = { hasta: [], izin: [], diger: [] };
+  for (const r of rows) for (const g of absRanges(r.p, from, to)) lists[g.st].push(`<div><b>${esc(r.p.name)}</b> <span>${g.a === g.b ? fmtDM(g.a) : fmtDM(g.a) + "–" + fmtDM(g.b)} · ${g.n} iş günü</span></div>`);
+  if (lists.hasta.length + lists.izin.length + lists.diger.length) {
+    h += `<div class="rlist">`;
+    if (lists.hasta.length) h += `<h4>🤒 Hasta</h4>` + lists.hasta.join("");
+    if (lists.izin.length) h += `<h4>🌴 İzin</h4>` + lists.izin.join("");
+    if (lists.diger.length) h += `<h4>Diğer</h4>` + lists.diger.join("");
+    h += `</div>`;
+  }
+  h += `<div class="actions" style="margin-top:12px"><button class="pri" data-act="share-month">📤 Paylaş</button><button data-act="csv">⬇ Excel (CSV)</button></div>`;
+  h += `<p class="note">Sayılar plana göredir. İzin ve hasta, sadece kişinin çalışacağı günlerde sayılır. Saat = planlanan çalışma saati (mola düşülmeden). Excel dosyası muhasebe için gün gün listedir.</p>`;
+  $("v-ozet").innerHTML = h;
+}
+
+/* ---------- Blätter, Modal, Toast ---------- */
+const stack = []; let popSkip = 0;
+function show(id) {
+  $(id).classList.add("on"); $(id).scrollTop = 0; document.body.style.overflow = "hidden";
+  if (!stack.includes(id)) { stack.push(id); try { history.pushState({ sheet: id }, ""); } catch (e) {} }
+}
+function hide(id, fromPop) {
+  $(id).classList.remove("on");
+  const i = stack.indexOf(id);
+  if (i >= 0) { stack.splice(i, 1); if (!fromPop) { popSkip++; history.back(); } }
+  if (!stack.length) document.body.style.overflow = "";
+}
+// Zurück-Taste (Android/iPhone-Wischen) schließt erst Fenster und Blätter statt die App
+let modalRes = null, modalVal, modalPending = false, modalHist = false;
+addEventListener("popstate", () => {
+  if (modalPending) { modalPending = false; const r = modalRes; modalRes = null; if (r) r(modalVal); return; }
+  if ($("modal").classList.contains("on")) { $("modal").classList.remove("on"); modalHist = false; const r = modalRes; modalRes = null; if (r) r(undefined); return; }
+  if (popSkip) { popSkip--; return; }
+  const id = stack[stack.length - 1]; if (id) hide(id, true);
+});
+addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  if ($("modal").classList.contains("on")) closeModal(undefined);
+  else if (stack.length) hide(stack[stack.length - 1]);
+});
+let toastT = 0;
+function toast(t) { const e = $("toast"); e.textContent = t; e.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(() => e.classList.remove("on"), 2600); }
+function openModal(html, res) {
+  $("mbox").innerHTML = html; $("modal").classList.add("on"); modalRes = res;
+  try { history.pushState({ modal: 1 }, ""); modalHist = true; } catch (e) { modalHist = false; }
+}
+function closeModal(v) { // Antwort kommt nach dem Zurückspringen in der Verlaufsliste
+  $("modal").classList.remove("on");
+  if (modalHist) { modalHist = false; modalVal = v; modalPending = true; history.back(); return; }
+  const r = modalRes; modalRes = null; if (r) r(v);
+}
+$("modal").addEventListener("click", (e) => {
+  if (e.target === $("modal")) return closeModal(undefined);
+  const b = e.target.closest("[data-mv]"); if (!b) return;
+  closeModal(b.dataset.mv === "__cancel" ? undefined : JSON.parse(b.dataset.mv));
+});
+function choose(title, opts, cancel) {
+  return new Promise((res) => openModal(`<h3>${esc(title)}</h3><div class="opts">${opts.map((o) => `<button data-mv='${esc(JSON.stringify(o.v))}' class="${o.on ? "on" : ""}">${o.dot ? `<i class="dot" style="--c:${o.dot}"></i>` : ""}${esc(o.label)}${o.sub ? `<small>${esc(o.sub)}</small>` : ""}</button>`).join("")}</div><button class="btn ghost" data-mv="__cancel">${esc(cancel || "Vazgeç")}</button>`, res));
+}
+function confirmBox(text, ok, danger) {
+  return new Promise((res) => openModal(`<p>${esc(text)}</p><div class="row2"><button class="btn ghost" data-mv="__cancel">Vazgeç</button><button class="btn${danger ? " danger" : ""}" data-mv="true">${esc(ok || "Tamam")}</button></div>`, (v) => res(!!v)));
+}
+
+/* ---------- Speichern (erst lokal, dann Server) ---------- */
+function localEntry(e) { if (e.del) S.E.delete(e.date + "|" + e.staff); else S.E.set(e.date + "|" + e.staff, e); }
+function localDay(r) { if (r.closed === null && r.lead === null && !r.note) S.D.delete(r.date + "|" + r.shop); else S.D.set(r.date + "|" + r.shop, r); }
+async function commit(ops, msg) { // ops: {set:[], del:[], days:[]}
+  S.ver++;
+  const set = ops.set || [], del = ops.del || [], days = ops.days || [];
+  set.forEach(localEntry); del.forEach((x) => localEntry({ date: x.date, staff: x.staff, del: 1 })); days.forEach(localDay);
+  render();
+  try {
+    if (set.length + del.length + days.length) await api("POST", "/bulk", { set, del, days });
+    if (msg) toast(msg);
+  } catch (e) { toast(e.status === 401 ? "Oturum kapandı" : "Kaydedilemedi – bağlantıyı kontrol edin"); }
+  S.ver++; refresh();
+}
+function dayRec(d, shopId) { const r = S.D.get(d + "|" + shopId); return { date: d, shop: shopId, closed: r ? r.closed ?? null : null, lead: r ? r.lead ?? null : null, note: r ? r.note || "" : "" }; }
+
+/* ---------- Tag einer Person bearbeiten ---------- */
+const ES = {};
+function openEntry(pid, d, preset) {
+  const p = pById(pid); if (!p || !S.cfg) return;
+  const e = eff(p, d), df = defOf(p, d), pre = (S.cfg.presets || [])[0] || { a: "", b: "" };
+  let st = preset || e.status;
+  if (st === "kapali") st = "bos";
+  if (st === "plansiz") st = "is";
+  const shop = e.status === "is" ? e.shop : df.shop || p.shop || shops()[0].id;
+  const a = e.status === "is" ? e.a : df.status === "is" ? df.a : pre.a, b = e.status === "is" ? e.b : df.status === "is" ? df.b : pre.b;
+  Object.assign(ES, { pid, d, st, shop, days: 1, wasLead: false, lead: false });
+  $("esDot").style.setProperty("--c", pcol(p)); $("esName").textContent = p.name;
+  $("esWhen").textContent = `${GUN[wd(d)]}, ${fmtLong(d)}`;
+  const dfTxt = df.status === "is" ? `${shopName(df.shop)} · ${tLong(df.a, df.b)}${df.lead ? " · ★" : ""}` : df.status === "kapali" ? `${shopName(df.shop)} – ${df.why}` : ST[df.status];
+  $("esDef").innerHTML = `Haftalık düzen: <b>${esc(dfTxt)}</b>${e.ex ? `<br>Bu gün için değiştirildi → <b>${esc(e.status === "is" ? shopName(e.shop) + " · " + tLong(e.a, e.b) : ST[e.status])}</b>` : ""}`;
+  $("esA").value = a || ""; $("esB").value = b || ""; $("esNote").value = e.ex ? e.note || "" : "";
+  $("esUntil").value = addD(d, 6); $("esUntil").min = d; $("esErr").textContent = "";
+  $("esReset").hidden = !e.ex;
+  $("esSt").innerHTML = ["is", "bos", "izin", "hasta", "diger"].map((k) => `<button data-act="es-st" data-v="${k}" class="s-${k}">${{ is: "Çalışıyor", bos: "Boş gün", izin: "🌴 İzinli", hasta: "🤒 Hasta", diger: "Diğer" }[k]}</button>`).join("");
+  $("esShopBox").hidden = shops().length < 2;
+  $("esPre").innerHTML = (S.cfg.presets || []).map((x, i) => `<button data-act="es-pre" data-i="${i}">${esc(x.name)} <small>${esc(tShort(x.a, x.b))}</small></button>`).join("");
+  $("esDays").innerHTML = [[1, "Sadece bu gün"], [2, "2 gün"], [3, "3 gün"], [7, "1 hafta"], [14, "2 hafta"], ["until", "Tarihe kadar…"]].map(([v, l]) => `<button data-act="es-days" data-v="${v}">${l}</button>`).join("");
+  esLeadInit(); esRefresh(); show("es");
+}
+function esLeadInit() { const ld = leadOf(ES.d, ES.shop); ES.wasLead = !!(ld && ld.p.id === ES.pid); ES.lead = ES.wasLead; }
+function esRefresh() {
+  const st = ES.st;
+  document.querySelectorAll("#esSt button").forEach((b) => b.classList.toggle("on", b.dataset.v === st));
+  $("esWork").hidden = st !== "is";
+  $("esRange").hidden = !ABSENT.includes(st);
+  document.querySelectorAll("#esShop button").forEach((b) => b.classList.toggle("on", b.dataset.v === ES.shop));
+  $("esShop").innerHTML = shops().map((s) => `<button data-act="es-shop" data-v="${esc(s.id)}" class="${s.id === ES.shop ? "on" : ""}">${esc(s.name)}</button>`).join("");
+  document.querySelectorAll("#esDays button").forEach((b) => b.classList.toggle("on", String(ES.days) === b.dataset.v));
+  $("esUntil").hidden = ES.days !== "until";
+  const a = $("esA").value, b = $("esB").value;
+  document.querySelectorAll("#esPre button").forEach((x) => { const p = S.cfg.presets[+x.dataset.i]; x.classList.toggle("on", p.a === a && p.b === b); });
+  $("esLead").classList.toggle("on", ES.lead);
+  const ld = leadOf(ES.d, ES.shop);
+  $("esLeadInfo").textContent = ES.lead ? "" : ld ? "şu an: " + kisa(ld.p) : "şu an kimse";
+  $("esNote").placeholder = st === "hasta" ? "isteğe bağlı – hastalık sebebi yazmayın" : "isteğe bağlı";
+  $("esSave").textContent = st === "hasta" ? "Hasta olarak kaydet" : st === "izin" ? "İzin olarak kaydet" : "Kaydet";
+}
+async function esSave() {
+  const p = pById(ES.pid), d = ES.d, st = ES.st, note = $("esNote").value.trim(), df = defOf(p, d);
+  const err = (t) => { $("esErr").textContent = t; };
+  const set = [], del = [], days = [];
+  let leadAsk = null; // danach neuen Sorumlu fragen
+  const before = eff(p, d), beforeLead = before.status === "is" && (leadOf(d, before.shop) || { p: {} }).p.id === p.id ? before.shop : null;
+  if (st === "is") {
+    const a = $("esA").value, b = $("esB").value;
+    if (!ES.shop) return err("Dükkân seçin.");
+    if (a && b && mins(b) <= mins(a)) return err("Bitiş saati başlangıçtan sonra olmalı.");
+    if (df.status === "is" && df.shop === ES.shop && (df.a || "") === a && (df.b || "") === b && !note) del.push({ date: d, staff: p.id });
+    else set.push({ date: d, staff: p.id, status: "is", shop: ES.shop, t_from: a, t_to: b, note });
+    if (ES.lead !== ES.wasLead) days.push(Object.assign(dayRec(d, ES.shop), { lead: ES.lead ? p.id : 0 }));
+    if (beforeLead && beforeLead !== ES.shop) leadAsk = beforeLead;
+    if (!ES.lead && ES.wasLead) leadAsk = ES.shop;
+  } else if (st === "bos") {
+    if ((df.status === "bos" || df.status === "kapali") && !note) del.push({ date: d, staff: p.id });
+    else set.push({ date: d, staff: p.id, status: "bos", note });
+    if (beforeLead) leadAsk = beforeLead;
+  } else {
+    let end = d;
+    if (ES.days === "until") { end = $("esUntil").value; if (!isDateStr(end) || end < d) return err("Son günü seçin (bu günden sonra)."); }
+    else end = addD(d, ES.days - 1);
+    if (dayDiff(d, end) > 62) return err("En fazla 2 ay seçilebilir.");
+    $("esSave").disabled = true;
+    try { if (end > d) await ensureRange(d, end); } catch (e) { $("esSave").disabled = false; return err("Bağlantı yok – tekrar deneyin."); }
+    $("esSave").disabled = false;
+    for (let x = d; x <= end; x = addD(x, 1)) {
+      if (!activeOn(p, x)) continue;
+      if (x !== d) { const ex = eff(p, x); if (!(ex.status === "is" || ex.status === "plansiz" || ABSENT.includes(ex.status))) continue; }
+      set.push({ date: x, staff: p.id, status: st, note });
+    }
+    if (beforeLead) leadAsk = beforeLead;
+  }
+  hide("es");
+  const n = set.filter((x) => x.status === st).length;
+  await commit({ set, del, days }, st === "is" || st === "bos" ? "Kaydedildi ✔" : `${ST[st]} kaydedildi ✔${n > 1 ? ` (${n} iş günü)` : ""}`);
+  if (leadAsk && workersAt(d, leadAsk).length && !leadOf(d, leadAsk)) {
+    const still = workersAt(d, leadAsk).some((x) => x.p.id === p.id);
+    pickLead(d, leadAsk, `${shopName(leadAsk)} · ${GK[wd(d)]} ${fmtDM(d)}: ${still ? "" : shortName(p) + " yok – "}yeni sorumlu kim?`);
+  }
+}
+async function esReset() {
+  const p = pById(ES.pid), d = ES.d;
+  hide("es");
+  await commit({ del: [{ date: d, staff: p.id }] }, "Haftalık düzene döndü ✔");
+}
+async function pickLead(d, shopId, title) {
+  const w = workersAt(d, shopId), r = S.D.get(d + "|" + shopId), cur = leadOf(d, shopId);
+  if (!w.length) return toast("O gün bu dükkânda çalışan yok");
+  const opts = w.map((x) => ({ v: x.p.id, label: x.p.name, sub: tLong(x.e.a, x.e.b), dot: pcol(x.p), on: cur && cur.p.id === x.p.id }));
+  if (r && r.lead !== null && r.lead !== undefined) opts.push({ v: "auto", label: "Haftalık düzene göre (otomatik)" });
+  const v = await choose(title || `${shopName(shopId)} · ${GUN[wd(d)]} ${fmtDM(d)} – sorumlu kim?`, opts);
+  if (v === undefined) return;
+  await commit({ days: [Object.assign(dayRec(d, shopId), { lead: v === "auto" ? null : v })] }, "Sorumlu kaydedildi ✔");
+}
+
+/* ---------- Ladentag ---------- */
+const SD = {};
+function openShopDay(d, shopId) {
+  const sh = shopOf(shopId); if (!sh) return;
+  const r = dayRec(d, shopId);
+  Object.assign(SD, { d, shop: shopId, closed: r.closed, lead: r.lead });
+  $("sdDot").style.setProperty("--c", shopCol(shopId).c); $("sdName").textContent = sh.name;
+  $("sdWhen").textContent = `${GUN[wd(d)]}, ${fmtLong(d)}`;
+  $("sdNote").value = r.note;
+  sdRefresh(); show("sd");
+}
+function sdRefresh() {
+  const save = S.D.get(SD.d + "|" + SD.shop);
+  S.D.delete(SD.d + "|" + SD.shop); const auto = closedInfo(SD.d, SD.shop); if (save) S.D.set(SD.d + "|" + SD.shop, save);
+  $("sdOpen").innerHTML = [[null, "Otomatik"], [0, "Açık"], [1, "Kapalı"]].map(([v, l]) => `<button data-act="sd-open" data-v="${v}" class="${SD.closed === v ? "on" : ""}">${l}</button>`).join("");
+  $("sdAuto").textContent = "Otomatik: " + (auto.closed ? "kapalı (" + auto.why + ")" : "açık") + ".";
+  const w = workersAt(SD.d, SD.shop);
+  let h = `<button data-act="sd-lead" data-v="null" class="${SD.lead === null ? "on" : ""}" style="${SD.lead === null ? "border-color:var(--cop);background:#fff6ec" : ""}">Haftalık düzene göre<small>otomatik</small></button>`;
+  for (const x of w) { const on = SD.lead === x.p.id; h += `<button data-act="sd-lead" data-v="${x.p.id}" style="${on ? "border-color:var(--cop);background:#fff6ec" : ""}"><i class="dot" style="--c:${pcol(x.p)}"></i>${on ? "★ " : ""}${esc(x.p.name)}<small>${esc(tLong(x.e.a, x.e.b))}</small></button>`; }
+  if (!w.length) h += `<p class="note">O gün bu dükkânda kimse planlanmadı.</p>`;
+  $("sdLead").innerHTML = h;
+}
+async function sdSave() {
+  hide("sd");
+  await commit({ days: [{ date: SD.d, shop: SD.shop, closed: SD.closed, lead: SD.lead, note: $("sdNote").value.trim() }] }, "Kaydedildi ✔");
+}
+
+/* ---------- Woche einer Person ---------- */
+let PW = null;
+function openPWeek(pid) {
+  const p = pById(pid); if (!p) return; PW = pid;
+  const m = curWeek;
+  $("pwDot").style.setProperty("--c", pcol(p)); $("pwName").textContent = p.name;
+  $("pwWhen").textContent = `${isoWeek(m)}. hafta · ${weekLabel(m)}`;
+  let h = "";
+  for (let i = 0; i < 7; i++) {
+    const d = addD(m, i);
+    if (!activeOn(p, d)) continue;
+    const e = eff(p, d), ld = e.status === "is" ? leadOf(d, e.shop) : null;
+    const txt = e.status === "is" ? `${shopName(e.shop)} · ${tLong(e.a, e.b)}${ld && ld.p.id === p.id ? " ★" : ""}` : ST[e.status];
+    h += `<button data-act="entry" data-p="${p.id}" data-d="${d}"><span class="badge b-${e.status}" style="min-width:44px;text-align:center">${GK[wd(d)]}</span>${+d.slice(8)} ${AY[parseD(d).getMonth()].slice(0, 3)}<small>${esc(txt)}</small></button>`;
+  }
+  $("pwList").innerHTML = h;
+  $("pwSend").textContent = p.phone ? `📤 ${shortName(p)}'a WhatsApp'tan gönder` : "📤 WhatsApp'ta paylaş";
+  show("pw");
+}
+function personWeekText(p, m) {
+  const L = [`Merhaba ${shortName(p)}, ${isoWeek(m)}. hafta çalışma planın (${weekLabel(m)}):`, ""];
+  for (let i = 0; i < 7; i++) {
+    const d = addD(m, i); if (!activeOn(p, d)) continue;
+    const e = eff(p, d), ld = e.status === "is" ? leadOf(d, e.shop) : null;
+    const txt = e.status === "is" ? `${shopName(e.shop)} ${tLong(e.a, e.b)}${ld && ld.p.id === p.id ? " ★ sorumlu" : ""}` : e.status === "kapali" ? "dükkân kapalı" : ST[e.status].toLocaleLowerCase("tr");
+    L.push(`${GK[wd(d)]} ${fmtDM(d)}: ${txt}`);
+  }
+  L.push("", "Marka Istanbul");
+  return L.join("\n");
+}
+
+/* ---------- Person + Wochenmuster ---------- */
+const PS = {};
+function openPerson(pid) {
+  const p = pid ? pById(pid) : null, t = today();
+  const v = p ? verOf(p, t) || (p.pattern || []).find((x) => x.from > t) || null : null;
+  Object.assign(PS, { id: p ? p.id : null, color: p ? pcol(p) : PCOL[S.staff.length % PCOL.length], shop: p && p.shop ? p.shop : shops()[0].id,
+    d: v ? v.d.map((x) => (x ? Object.assign({}, x) : null)) : [null, null, null, null, null, null, null], had: !!(p && (p.pattern || []).length) });
+  PS.orig = JSON.stringify(PS.d);
+  $("psTitle").textContent = p ? "Kişiyi düzenle" : "Yeni kişi";
+  $("psName").value = p ? p.name : ""; $("psCode").value = p ? p.code : ""; $("psRole").value = p ? p.role : ""; $("psPhone").value = p ? p.phone : "";
+  $("psSince").value = p ? p.since : ""; $("psUntil").value = p ? p.until : "";
+  $("psFrom").value = PS.had ? t : mondayOf(t);
+  $("psDel").hidden = !p; $("psErr").textContent = "";
+  $("psPal").innerHTML = PCOL.map((c) => `<button data-act="ps-col" data-v="${c}" style="background:${c}" aria-label="Renk"></button>`).join("");
+  $("psShopBox").hidden = shops().length < 2;
+  psRender(); show("ps");
+  if (!p) setTimeout(() => $("psName").focus(), 50);
+}
+function psRender() {
+  document.querySelectorAll("#psPal button").forEach((b) => b.classList.toggle("on", b.dataset.v === PS.color));
+  $("psShop").innerHTML = shops().map((s) => `<button data-act="ps-shop" data-v="${esc(s.id)}" class="${s.id === PS.shop ? "on" : ""}">${esc(s.name)}</button>`).join("");
+  const pre = (S.cfg.presets || [])[0];
+  $("psQuick").innerHTML = (pre ? `<button data-act="ps-q6">Pzt–Cmt ${esc(tShort(pre.a, pre.b))}</button>` : "") + `<button data-act="ps-qsame">Hepsine ilk günün saati</button><button data-act="ps-qnone">Hepsini boş yap</button>`;
+  const multi = shops().length > 1;
+  $("psRows").innerHTML = PS.d.map((x, i) => `<div class="pr"><div class="t"><b>${GUN[i]}</b><button class="sw${x ? " on" : ""}" data-act="ps-sw" data-i="${i}" aria-label="Çalışır"></button><span>${x ? "Çalışır" : "Boş gün"}</span>${x ? `<button class="ldb${x.lead ? " on" : ""}" data-act="ps-ld" data-i="${i}">★ Sorumlu</button>` : ""}</div>${x ? `<div class="d">${multi ? `<div class="seg">${shops().map((s) => `<button data-act="ps-dshop" data-i="${i}" data-v="${esc(s.id)}" class="${s.id === x.shop ? "on" : ""}">${esc(s.id)}</button>`).join("")}</div>` : ""}<div class="tt"><input type="time" data-ps="a" data-i="${i}" value="${esc(x.a)}" aria-label="Başlangıç"><i>–</i><input type="time" data-ps="b" data-i="${i}" value="${esc(x.b)}" aria-label="Bitiş"></div></div>` : ""}</div>`).join("");
+  $("psFromBox").hidden = PS.had && JSON.stringify(PS.d) === PS.orig;
+}
+function psDayOn(i) { const pre = (S.cfg.presets || [])[0] || { a: "", b: "" }; PS.d[i] = { shop: PS.shop, a: pre.a, b: pre.b, lead: 0 }; }
+async function psSave() {
+  const err = (t) => { $("psErr").textContent = t; $("psErr").scrollIntoView({ block: "center" }); };
+  const name = $("psName").value.trim();
+  if (!name) return err("Ad soyad girin.");
+  const since = $("psSince").value, until = $("psUntil").value;
+  if (since && until && until < since) return err("Ayrılış tarihi işe başlamadan önce olamaz.");
+  for (let i = 0; i < 7; i++) { const x = PS.d[i]; if (x && x.a && x.b && mins(x.b) <= mins(x.a)) return err(`${GUN[i]}: bitiş saati başlangıçtan sonra olmalı.`); }
+  const p = PS.id ? pById(PS.id) : null;
+  let pattern = p ? (p.pattern || []).slice() : [];
+  const dirty = JSON.stringify(PS.d) !== PS.orig;
+  if (dirty || (!pattern.length && PS.d.some(Boolean))) {
+    let from = $("psFrom").value || today();
+    if (!isDateStr(from)) return err("Geçerlilik tarihini seçin.");
+    if (since && from < since) from = since;
+    pattern = pattern.filter((v) => v.from < from).concat([{ from, d: PS.d }]);
+  }
+  const body = { name, code: $("psCode").value.trim().toLocaleUpperCase("tr"), role: $("psRole").value.trim(), phone: $("psPhone").value.trim(), color: PS.color, shop: PS.shop, since, until, pattern };
+  try {
+    if (p) await api("PUT", "/staff/" + p.id, body); else await api("POST", "/staff", body);
+    hide("ps"); toast("Kaydedildi ✔"); S.ver++; refresh();
+  } catch (e) { err(e.code === "full" ? "En fazla 80 kişi." : "Kaydedilemedi – bağlantıyı kontrol edin."); }
+}
+async function psDel() {
+  const p = pById(PS.id); if (!p) return;
+  if (!(await confirmBox(`${p.name} ve bütün plan kayıtları silinsin mi? Kişi işten ayrıldıysa silmek yerine "Ayrılış" tarihini girin; geçmiş haftalar korunur.`, "Sil", true))) return;
+  try { await api("DELETE", "/staff/" + p.id); hide("ps"); toast("Silindi"); S.ver++; refresh(); } catch (e) { toast("Silinemedi"); }
+}
+async function move(pid, dir) {
+  const t = today(), act = S.staff.filter((p) => !p.until || p.until >= t), i = act.findIndex((p) => p.id === pid), j = i + dir;
+  if (i < 0 || j < 0 || j >= act.length) return;
+  [act[i], act[j]] = [act[j], act[i]];
+  const ids = act.map((p) => p.id).concat(S.staff.filter((p) => !act.includes(p)).map((p) => p.id));
+  S.staff.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id)); S.ver++; render();
+  try { await api("PUT", "/order", { ids }); } catch (e) { toast("Sıra kaydedilemedi"); }
+  S.ver++; refresh();
+}
+
+/* ---------- Ganze Woche ---------- */
+async function copyWeek() {
+  const m = curWeek, pm = addD(m, -7);
+  if (!(await confirmBox(`Geçen haftanın çalışma düzeni (dükkân, saat, boş günler, sorumlular) ${isoWeek(m)}. haftaya kopyalansın mı? Bu haftadaki izin/hasta kayıtları korunur.`, "Kopyala"))) return;
+  try { await ensureRange(pm, addD(m, 6)); } catch (e) { return toast("Bağlantı yok"); }
+  const set = [], del = [], days = [];
+  for (let i = 0; i < 7; i++) {
+    const s = addD(pm, i), t = addD(m, i);
+    for (const p of S.staff) {
+      if (!activeOn(p, t)) continue;
+      const cur = S.E.get(t + "|" + p.id);
+      if (cur && ABSENT.includes(cur.status)) continue;
+      const src = S.E.get(s + "|" + p.id);
+      if (src && (src.status === "is" || src.status === "bos")) set.push({ date: t, staff: p.id, status: src.status, shop: src.shop, t_from: src.t_from, t_to: src.t_to, note: "" });
+      else if (cur) del.push({ date: t, staff: p.id });
+    }
+    for (const sh of shops()) { // Sorumlu nur übernehmen, wenn er bewusst gewählt war (nicht nur Ersatz für einen Abwesenden)
+      const sr = S.D.get(s + "|" + sh.id), tr = dayRec(t, sh.id);
+      const manual = sr && sr.lead !== null && sr.lead !== undefined, autoThere = workersAt(s, sh.id).some((x) => x.e.lead);
+      const lead = manual && autoThere ? sr.lead : null;
+      if (tr.lead !== lead) days.push(Object.assign(tr, { lead }));
+    }
+  }
+  if (!set.length && !del.length && !days.length) return toast("Geçen hafta haftalık düzenle aynıydı – değişecek bir şey yok");
+  await commit({ set, del, days }, "Geçen hafta kopyalandı ✔");
+}
+async function resetWeek() {
+  const m = curWeek;
+  if (!(await confirmBox(`${isoWeek(m)}. haftadaki çalışma değişiklikleri silinsin ve herkes haftalık düzenine dönsün mü? İzin/hasta kayıtları ve dükkân notları kalır.`, "Döndür", true))) return;
+  const del = [], days = [];
+  for (let i = 0; i < 7; i++) {
+    const t = addD(m, i);
+    for (const p of S.staff) { const cur = S.E.get(t + "|" + p.id); if (cur && (cur.status === "is" || cur.status === "bos")) del.push({ date: t, staff: p.id }); }
+    for (const sh of shops()) { const tr = dayRec(t, sh.id); if (tr.lead !== null) days.push(Object.assign(tr, { lead: null })); }
+  }
+  if (!del.length && !days.length) return toast("Bu hafta zaten haftalık düzende");
+  await commit({ del, days }, "Haftalık düzene döndü ✔");
+}
+
+/* ---------- Teilen, CSV ---------- */
+async function shareText(text, phone) {
+  const num = waNum(phone), touch = matchMedia("(pointer:coarse)").matches;
+  if (!num && touch && navigator.share) { try { await navigator.share({ text }); return; } catch (e) { if (e.name === "AbortError") return; } }
+  window.open((num ? `https://wa.me/${num}` : "https://wa.me/") + "?text=" + encodeURIComponent(text), "_blank");
+}
+function waNum(p) { let s = String(p || "").replace(/[^\d+]/g, ""); if (!s) return ""; if (s.startsWith("+")) return s.slice(1); if (s.startsWith("00")) return s.slice(2); if (s.startsWith("0")) return "49" + s.slice(1); return s; }
+function dayLines(d, L) {
+  let any = false;
+  for (const sh of shops()) {
+    const c = closedInfo(d, sh.id), w = workersAt(d, sh.id), ld = leadOf(d, sh.id);
+    if (c.closed && !w.length) continue;
+    any = true;
+    const ws = w.map((x) => `${ld && ld.p.id === x.p.id ? "★" : ""}${shortName(x.p)} ${tShort(x.e.a, x.e.b)}`.trim());
+    L.push(`${sh.name}: ${ws.length ? ws.join(", ") : "⚠ kimse yok"}`);
+  }
+  if (!any) L.push("Kapalı" + (holiday(d) ? ` (${holiday(d)})` : ""));
+  const off = staffOn(d).filter((p) => ABSENT.includes(eff(p, d).status));
+  if (off.length) L.push("Yok: " + off.map(shortName).join(", "));
+}
+function dayText(d) { const L = [`*Marka Istanbul – ${GUN[wd(d)]}, ${fmtLong(d)}*`, ""]; dayLines(d, L); L.push("", "★ = sorumlu"); return L.join("\n"); }
+function weekText(m) {
+  const L = [`*Marka Istanbul – Shift Plan*`, `*${isoWeek(m)}. hafta · ${weekLabel(m)}*`, ""];
+  for (let i = 0; i < 7; i++) { const d = addD(m, i); L.push(`*${GK[wd(d)]} ${fmtDM(d)}*`); dayLines(d, L); L.push(""); }
+  L.push("★ = sorumlu");
+  return L.join("\n");
+}
+function monthText() {
+  const [from, to] = ozRange(), [y, m] = curMonth.split("-").map(Number);
+  const L = [`*Marka Istanbul – ${AY[m - 1]} ${y} özeti*`, `(${fmtDM(from)}–${fmtDM(to)}, plana göre)`, ""];
+  for (const p of S.staff) {
+    const s = countStats(p, from, to); if (!s.act) continue;
+    L.push(`${p.name}: ${s.is} gün, ${nf(s.h)} saat${s.izin ? `, ${s.izin} gün izin` : ""}${s.hasta ? `, ${s.hasta} gün hasta` : ""}${s.diger ? `, ${s.diger} gün diğer` : ""}`);
+  }
+  return L.join("\n");
+}
+function csv() {
+  const [from, to] = ozRange(), q = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const L = [["Tarih", "Gün", "Kişi", "Kısa ad", "Durum", "Dükkân", "Başlangıç", "Bitiş", "Saat", "Sorumlu", "Not"].join(";")];
+  for (let d = from; d <= to; d = addD(d, 1)) for (const p of S.staff) {
+    if (!activeOn(p, d)) continue;
+    const e = eff(p, d), ld = e.status === "is" ? leadOf(d, e.shop) : null;
+    L.push([`${d.slice(8)}.${d.slice(5, 7)}.${d.slice(0, 4)}`, GUN[wd(d)], p.name, p.code, ST[e.status], e.shop ? shopName(e.shop) : "", e.status === "is" ? e.a || "" : "", e.status === "is" ? e.b || "" : "",
+      e.status === "is" ? nf(hrs(e.a, e.b)) : "", ld && ld.p.id === p.id ? "evet" : "", e.note || ""].map(q).join(";"));
+  }
+  const blob = new Blob(["\ufeff" + L.join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `shiftplan-${curMonth}.csv`;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+
+/* ---------- Einstellungen ---------- */
+let SET = null;
+function openSettings() {
+  if (!S.cfg) return;
+  SET = JSON.parse(JSON.stringify(S.cfg));
+  $("setHol").checked = !!SET.holidays; $("setErr").textContent = ""; $("pwOld").value = $("pwNew").value = "";
+  setRender(); show("set");
+}
+function setRender() {
+  $("setShops").innerHTML = SET.shops.map((s, i) => `<div class="shopset"><div class="r1"><input data-set="sname" data-i="${i}" value="${esc(s.name)}" maxlength="30" aria-label="Dükkân adı"><span>kod ${esc(s.id)}</span>${SET.shops.length > 1 ? `<button data-act="set-delshop" data-i="${i}" aria-label="Sil">✕</button>` : ""}</div><div class="days7">${GK.map((g, k) => `<button data-act="set-day" data-i="${i}" data-k="${k}" class="${s.open[k] ? "on" : ""}">${g}</button>`).join("")}</div></div>`).join("");
+  $("setPre").innerHTML = SET.presets.map((p, i) => `<div class="preset"><input data-set="pname" data-i="${i}" value="${esc(p.name)}" maxlength="20" aria-label="Ad"><input type="time" data-set="pa" data-i="${i}" value="${esc(p.a)}" aria-label="Başlangıç"><input type="time" data-set="pb" data-i="${i}" value="${esc(p.b)}" aria-label="Bitiş"><button data-act="set-delpre" data-i="${i}" aria-label="Sil">✕</button></div>`).join("") || `<p class="note">Şablon yok.</p>`;
+}
+function newShopId(name) {
+  const ids = SET.shops.map((s) => s.id);
+  let base = (name.match(/\d+/) || [""])[0] || name.toLocaleUpperCase("tr").normalize("NFD").replace(/[^A-Z0-9]/g, "").slice(0, 3) || "D";
+  base = base.slice(0, 6); let id = base, n = 2;
+  while (ids.includes(id)) id = base + n++;
+  return id;
+}
+async function setSave() {
+  $("setErr").textContent = "";
+  SET.holidays = $("setHol").checked ? 1 : 0;
+  for (const p of SET.presets) if (!/^\d\d:\d\d$/.test(p.a) || !/^\d\d:\d\d$/.test(p.b) || mins(p.b) <= mins(p.a)) return ($("setErr").textContent = `Şablon „${p.name}“: saatleri kontrol edin.`);
+  for (const s of SET.shops) if (!s.name.trim()) return ($("setErr").textContent = "Dükkân adı boş olamaz.");
+  try { const j = await api("PUT", "/cfg", SET); S.cfg = j.cfg; hide("set"); toast("Ayarlar kaydedildi ✔"); render(); S.ver++; refresh(); }
+  catch (e) { $("setErr").textContent = "Kaydedilemedi – bağlantıyı kontrol edin."; }
+}
+async function pwChange() {
+  const o = $("pwOld").value, n = $("pwNew").value;
+  if (n.length < 8) return toast("Yeni şifre en az 8 karakter olmalı");
+  try { await api("POST", "/password", { old: o, password: n }); $("pwOld").value = $("pwNew").value = ""; toast("Şifre değiştirildi ✔"); }
+  catch (e) { toast(e.code === "wrong" ? "Mevcut şifre yanlış" : e.code === "locked" ? `Çok fazla deneme – ${e.j.min} dk bekleyin` : "Değiştirilemedi"); }
+}
+
+/* ---------- Bedienung ---------- */
+function setView(v) { view = v; try { localStorage.setItem("mi_shift_view", v); } catch (e) {} render(); scrollTo(0, 0); refresh(); }
+function nav(kind, dir) {
+  if (kind === "day") curDay = addD(curDay, dir);
+  if (kind === "week") curWeek = addD(curWeek, 7 * dir);
+  if (kind === "month") curMonth = addMonth(curMonth, dir);
+  followToday = curDay === today() && curWeek === mondayOf(today());
+  render(); refresh();
+}
+document.addEventListener("change", (ev) => {
+  const t = ev.target;
+  if (t.dataset.pick) {
+    const v = t.value; if (!v) return;
+    if (t.dataset.pick === "day" && isDateStr(v)) curDay = v;
+    if (t.dataset.pick === "week" && isDateStr(v)) curWeek = mondayOf(v);
+    if (t.dataset.pick === "month" && /^\d{4}-\d{2}$/.test(v)) curMonth = v;
+    followToday = curDay === today() && curWeek === mondayOf(today());
+    render(); refresh();
+  }
+});
+document.addEventListener("input", (ev) => {
+  const t = ev.target;
+  if (t.dataset.ps) { const x = PS.d[+t.dataset.i]; if (x) { x[t.dataset.ps] = t.value; $("psFromBox").hidden = PS.had && JSON.stringify(PS.d) === PS.orig; } }
+  if (t.dataset.set && SET) {
+    const i = +t.dataset.i;
+    if (t.dataset.set === "sname") SET.shops[i].name = t.value;
+    if (t.dataset.set === "pname") SET.presets[i].name = t.value;
+    if (t.dataset.set === "pa") SET.presets[i].a = t.value;
+    if (t.dataset.set === "pb") SET.presets[i].b = t.value;
+  }
+  if (t.id === "esA" || t.id === "esB") esRefresh();
+});
+document.addEventListener("click", async (ev) => {
+  const c = ev.target.closest("[data-close]"); if (c) return hide(c.dataset.close);
+  const vb = ev.target.closest("[data-v]:not([data-act])"); if (vb && vb.closest(".tabbar")) return setView(vb.dataset.v);
+  const nb = ev.target.closest("[data-nav]"); if (nb) return nav(nb.dataset.nav, +nb.dataset.dir);
+  const pk = ev.target.closest("[data-pick]"); if (pk) { try { pk.showPicker(); } catch (e) {} return; }
+  const b = ev.target.closest("[data-act]"); if (!b) return;
+  const a = b.dataset.act, pid = +b.dataset.p, d = b.dataset.d;
+  switch (a) {
+    case "gotoday": curDay = today(); followToday = true; render(); refresh(); break;
+    case "gothisweek": curWeek = mondayOf(today()); followToday = true; render(); refresh(); break;
+    case "openday": curDay = d; view = "bugun"; render(); refresh(); scrollTo(0, 0); break;
+    case "goto-ekip": setView("ekip"); break;
+    case "entry": openEntry(pid, d); break;
+    case "pweek": openPWeek(pid); break;
+    case "lead": pickLead(d, b.dataset.shop); break;
+    case "shopday": openShopDay(d, b.dataset.shop); break;
+    case "q-hasta": case "q-izin": {
+      const st = a === "q-hasta" ? "hasta" : "izin", list = staffOn(curDay);
+      if (!list.length) return toast("Önce ekibi ekleyin");
+      const rank = { is: 0, plansiz: 1, izin: 2, hasta: 2, diger: 2, bos: 3, kapali: 3 };
+      const opts = list.map((p) => { const e = eff(p, curDay); return { v: p.id, label: p.name, dot: pcol(p), r: rank[e.status], sub: e.status === "is" ? `${shopName(e.shop)} ${tShort(e.a, e.b)}` : ST[e.status] }; })
+        .sort((x, y) => x.r - y.r);
+      const v = await choose(st === "hasta" ? `Kim hasta? (${GK[wd(curDay)]} ${fmtDM(curDay)})` : `Kim izinli? (${GK[wd(curDay)]} ${fmtDM(curDay)}'den itibaren)`, opts);
+      if (v !== undefined) openEntry(v, curDay, st);
+      break;
+    }
+    case "share-day": shareText(dayText(curDay)); break;
+    case "share-week": shareText(weekText(curWeek)); break;
+    case "share-month": shareText(monthText()); break;
+    case "print": window.print(); break;
+    case "copy-week": copyWeek(); break;
+    case "reset-week": resetWeek(); break;
+    case "csv": csv(); break;
+    case "oz-ay": ozMode = "ay"; render(); break;
+    case "oz-bugun": ozMode = "bugun"; render(); break;
+    case "addp": openPerson(null); break;
+    case "editp": if (!ev.target.closest(".mv")) openPerson(pid); break;
+    case "up": ev.stopPropagation(); move(pid, -1); break;
+    case "down": ev.stopPropagation(); move(pid, 1); break;
+    case "settings": openSettings(); break;
+    case "logout": hide("set"); try { await api("POST", "/logout"); } catch (e) {} logout(false); break;
+    case "install": doInstall(); break;
+    /* Tag einer Person */
+    case "es-st": ES.st = b.dataset.v; if (ES.st === "is") esLeadInit(); esRefresh(); break;
+    case "es-shop": ES.shop = b.dataset.v; esLeadInit(); esRefresh(); break;
+    case "es-pre": { const p = S.cfg.presets[+b.dataset.i]; $("esA").value = p.a; $("esB").value = p.b; esRefresh(); break; }
+    case "es-days": ES.days = b.dataset.v === "until" ? "until" : +b.dataset.v; esRefresh(); break;
+    case "es-lead": ES.lead = !ES.lead; esRefresh(); break;
+    case "es-save": esSave(); break;
+    case "es-reset": esReset(); break;
+    /* Ladentag */
+    case "sd-open": SD.closed = b.dataset.v === "null" ? null : +b.dataset.v; sdRefresh(); break;
+    case "sd-lead": SD.lead = b.dataset.v === "null" ? null : +b.dataset.v; sdRefresh(); break;
+    case "sd-save": sdSave(); break;
+    /* Woche einer Person */
+    case "pw-send": { const p = pById(PW); if (p) shareText(personWeekText(p, curWeek), p.phone); break; }
+    case "pw-edit": { const id = PW; hide("pw"); openPerson(id); break; }
+    /* Person */
+    case "ps-col": PS.color = b.dataset.v; psRender(); break;
+    case "ps-shop": PS.shop = b.dataset.v; psRender(); break;
+    case "ps-sw": { const i = +b.dataset.i; if (PS.d[i]) PS.d[i] = null; else psDayOn(i); psRender(); break; }
+    case "ps-ld": { const i = +b.dataset.i; if (PS.d[i]) PS.d[i].lead = PS.d[i].lead ? 0 : 1; psRender(); break; }
+    case "ps-dshop": { const i = +b.dataset.i; if (PS.d[i]) PS.d[i].shop = b.dataset.v; psRender(); break; }
+    case "ps-q6": for (let i = 0; i < 7; i++) { if (i < 6) { const lead = PS.d[i] ? PS.d[i].lead : 0; psDayOn(i); PS.d[i].lead = lead; } else PS.d[i] = null; } psRender(); break;
+    case "ps-qsame": { const f = PS.d.find(Boolean); if (!f) return toast("Önce bir günü açın"); PS.d.forEach((x) => { if (x) { x.shop = f.shop; x.a = f.a; x.b = f.b; } }); psRender(); break; }
+    case "ps-qnone": PS.d = PS.d.map(() => null); psRender(); break;
+    case "ps-save": psSave(); break;
+    case "ps-del": psDel(); break;
+    /* Einstellungen */
+    case "set-day": { const s = SET.shops[+b.dataset.i]; s.open[+b.dataset.k] = s.open[+b.dataset.k] ? 0 : 1; setRender(); break; }
+    case "set-addshop": { if (SET.shops.length >= 6) return toast("En fazla 6 dükkân"); const name = `Dükkân ${SET.shops.length + 1}`; SET.shops.push({ id: newShopId(name), name, open: [1, 1, 1, 1, 1, 1, 0] }); setRender(); break; }
+    case "set-delshop": { const s = SET.shops[+b.dataset.i]; if (await confirmBox(`${s.name} silinsin mi? Bu dükkâna yazılmış planlar dükkânsız kalır.`, "Sil", true)) { SET.shops.splice(+b.dataset.i, 1); setRender(); } break; }
+    case "set-addpre": if (SET.presets.length >= 8) return toast("En fazla 8 şablon"); SET.presets.push({ name: "Yeni", a: "10:00", b: "19:00" }); setRender(); break;
+    case "set-delpre": SET.presets.splice(+b.dataset.i, 1); setRender(); break;
+    case "set-save": setSave(); break;
+    case "pw-change": pwChange(); break;
+  }
+});
+
+/* ---------- Anmeldung ---------- */
+const devName = () => { const u = navigator.userAgent; return /iPad/.test(u) ? "iPad" : /iPhone/.test(u) ? "iPhone" : /Android/.test(u) ? "Android" : /Windows/.test(u) ? "Windows" : /Mac/.test(u) ? "Mac" : "Tarayıcı"; };
+function afterLogin(tok) {
+  TOKEN = tok; try { localStorage.setItem("mi_shift_tok", tok); } catch (e) {}
+  $("login").classList.remove("on"); $("lgPw").value = ""; start();
+}
+function logout(expired) {
+  TOKEN = null; try { localStorage.removeItem("mi_shift_tok"); } catch (e) {}
+  S.cfg = null; S.staff = []; S.E.clear(); S.D.clear();
+  stack.slice().forEach((id) => hide(id, true));
+  $("login").classList.add("on"); $("lgErr").textContent = expired ? "Oturum sona erdi, tekrar giriş yapın." : "";
+  checkSetup();
+}
+async function checkSetup() {
+  try {
+    const st = await api("GET", "/status");
+    $("lgBox").hidden = !st.setup; $("suBox").hidden = st.setup || !st.canSetup; $("noSetup").hidden = st.setup || st.canSetup;
+  } catch (e) { $("lgErr").textContent = "Sunucuya ulaşılamadı."; }
+}
+$("lgGo").onclick = async () => {
+  $("lgErr").textContent = ""; $("lgGo").disabled = true;
+  try { const j = await api("POST", "/login", { password: $("lgPw").value, device: devName() }); afterLogin(j.token); }
+  catch (e) { $("lgErr").textContent = e.code === "wrong" ? `Şifre yanlış.${e.j.left <= 2 ? ` ${e.j.left} deneme hakkı kaldı.` : ""}` : e.code === "locked" ? `Çok fazla deneme – ${e.j.min} dakika sonra tekrar deneyin.` : e.code === "nosetup" ? "Kurulum yapılmamış." : "Bağlantı hatası."; }
+  finally { $("lgGo").disabled = false; }
+};
+$("lgPw").addEventListener("keydown", (e) => { if (e.key === "Enter") $("lgGo").click(); });
+$("suGo").onclick = async () => {
+  $("suErr").textContent = "";
+  if ($("suPw").value.length < 8) return ($("suErr").textContent = "Şifre en az 8 karakter olmalı.");
+  if ($("suPw").value !== $("suPw2").value) return ($("suErr").textContent = "Şifreler aynı değil.");
+  $("suGo").disabled = true;
+  try { const j = await api("POST", "/setup", { code: $("suCode").value, password: $("suPw").value, device: devName() }); afterLogin(j.token); toast("Kurulum tamam ✔ Hoş geldiniz"); }
+  catch (e) { $("suErr").textContent = e.code === "code" ? "Kurulum kodu yanlış." : e.code === "already" ? "Kurulum zaten yapılmış – giriş yapın." : e.code === "locked" ? `Çok fazla deneme – ${e.j.min} dakika bekleyin.` : "Hata, tekrar deneyin."; }
+  finally { $("suGo").disabled = false; }
+};
+
+/* ---------- App-Installation ---------- */
+let instEv = null;
+const standalone = () => { try { return matchMedia("(display-mode: standalone)").matches || navigator.standalone; } catch (e) { return false; } };
+if (standalone()) document.querySelectorAll("[data-insthint]").forEach((e) => (e.hidden = true));
+addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); instEv = e; document.querySelectorAll("[data-inst]").forEach((x) => (x.hidden = false)); document.querySelectorAll("[data-insthint]").forEach((x) => (x.hidden = true)); });
+async function doInstall() { if (!instEv) return; instEv.prompt(); await instEv.userChoice; instEv = null; document.querySelectorAll("[data-inst]").forEach((x) => (x.hidden = true)); }
+
+/* ---------- Start ---------- */
+let poll = 0;
+function start() {
+  render(); refresh();
+  if (!poll) poll = setInterval(() => { if (!document.hidden && TOKEN) refresh(); }, 30000);
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden || !TOKEN) return;
+  if (followToday && curDay !== today()) { curDay = today(); curWeek = mondayOf(curDay); }
+  refresh();
+});
+(function () {
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+  if (TOKEN) { $("login").classList.remove("on"); start(); return; }
+  checkSetup();
+})();
+</script>
+<script src="tema.js"></script><script>ZTema.auto()</script>
+</body>
+</html>
