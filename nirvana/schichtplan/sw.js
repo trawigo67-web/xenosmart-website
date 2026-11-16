@@ -1,7 +1,7 @@
 // NIRVANA Schichtplan – hält die App bereit, damit sie auch bei schwachem Netz sofort aufgeht.
 // Die Plandaten liegen nur im Gerät (IndexedDB) und kommen nie in diesen Zwischenspeicher.
-const V = 'nirvana-schichtplan-a09d48f9ba';
-const SHELL = ['./', 'app.js?v=a09d48f9ba', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'favicon-32.png'];
+const V = 'nirvana-schichtplan-d7220a65c2';
+const SHELL = ['./', 'app.js?v=d7220a65c2', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'favicon-32.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(V).then((c) => c.addAll(SHELL)).catch(() => {})); self.skipWaiting(); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== V && k.startsWith('nirvana-schichtplan')).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', (e) => {

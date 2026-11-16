@@ -353,6 +353,14 @@
     return Object.assign({}, input, { empMap, absBy, year: y, sunAllowed: sunInYear - minFree, hist: input.hist || {} });
   }
 
+  /* Hat der Mitarbeiter genau diese Zeit über seinen Rückmelde-Link abgesagt? (ctx.declined: emp → [{d,s,e,note}]) */
+  function declinedHit(ctx, empId, sh) {
+    const list = ctx.declined && ctx.declined[empId];
+    if (!list) return null;
+    const s = absS(sh), e = absE(sh);
+    for (const x of list) if (x.d === sh.d || x.d === addDays(sh.d, -1)) { if (absS(x) < e && absE(x) > s) return x; }
+    return null;
+  }
   /* Zustand pro Mitarbeiter aus allen bekannten Schichten */
   function buildState(ctx, shifts) {
     const S = {};
@@ -403,6 +411,7 @@
     if (sh.loc && emp.locs && emp.locs.length && !emp.locs.includes(sh.loc)) return 'r_loc';
     const ab = absenceOn(ctx.absBy, emp.id, sh.d);
     if (ab && ab.k !== 'wunsch') return 'r_abs_' + ab.k;
+    if (declinedHit(ctx, emp.id, sh)) return 'r_declined';
     const youth = ageOn(emp.birth, sh.d) < 18;
     const s = absS(sh), e = absE(sh), base = dayNum(sh.d) * 1440;
     if (!(opt && opt.ignoreAvail)) {
@@ -663,6 +672,8 @@
         const ab = absenceOn(ctx.absBy, e.id, sh.d);
         if (ab && ab.k !== 'wunsch') push('err', 'c_abs', { emp: e.id, shiftId: sh.id, d: sh.d, k: ab.k });
         if (ab && ab.k === 'wunsch') push('warn', 'c_wish', { emp: e.id, shiftId: sh.id, d: sh.d });
+        const dl = declinedHit(ctx, e.id, sh);
+        if (dl) push('err', 'c_declined', { emp: e.id, shiftId: sh.id, d: sh.d, v: sh.s, m: dl.note || '' });
         const av = availOn(e, sh.d), base = dayNum(sh.d) * 1440;
         if (!av) push('warn', 'c_avail', { emp: e.id, shiftId: sh.id, d: sh.d });
         else if (absS(sh) - base < av.f || absE(sh) - base > av.t) push('warn', 'c_avail_time', { emp: e.id, shiftId: sh.id, d: sh.d });
@@ -802,6 +813,20 @@
     fa: { label: 'دری (Dari)', rtl: true, hi: 'سلام {n}،', week: 'تقسیم اوقات کاری شما برای هفتهٔ {w} ({r}) – {b}:', upd: 'به‌روز شد – تقسیم اوقات کاری شما برای هفتهٔ {w} ({r}) – {b}:', off: 'رخصتی', tot: 'مجموع: {h} ساعت', tom: 'یادآوری: فردا ({d}) شما {t} کار دارید.', tom2: 'تا فردا!', none: 'شما در هفتهٔ {w} ({r}) نوبت کاری ندارید.', days: ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'], loc: 'de-DE' },
     ps: { label: 'پښتو (Pashto)', rtl: true, hi: 'سلام {n}،', week: 'د {w} اونۍ ({r}) لپاره ستاسو د کار مهالویش – {b}:', upd: 'تازه شوی – د {w} اونۍ ({r}) لپاره ستاسو د کار مهالویش – {b}:', off: 'رخصتي', tot: 'ټول: {h} ساعته', tom: 'یادونه: سبا ({d}) تاسو {t} کار کوئ.', tom2: 'تر سبا پورې!', none: 'تاسو د {w} اونۍ ({r}) کې هېڅ کاري نوبت نه لرئ.', days: ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'], loc: 'de-DE' }
   };
+  /* Rückmeldung der Mitarbeiter (persönlicher Link): Texte in allen Nachrichtensprachen */
+  const MSG_R = {
+    de: { ask: 'Bitte kurz bestätigen oder absagen:', remind: 'kurze Erinnerung: Bitte bestätige deine Schichten für KW {w}:', r_title: 'Dein Schichtplan', r_week: 'KW {w} ({r})', r_intro: 'bitte sag kurz, ob du kommst:', r_ok: 'Ich komme', r_no: 'Kann nicht', r_all: 'Alle bestätigen', r_reason: 'Grund (freiwillig)', r_send: 'Senden', r_saved: 'Danke! Deine Antwort ist angekommen.', r_bad: 'Dieser Link gilt nicht mehr. Bitte frag deine Schichtleitung.', r_err: 'Keine Verbindung. Bitte noch einmal versuchen.', r_past: 'vorbei', r_okd: 'bestätigt', r_nod: 'abgesagt', brk: '{m} Min. Pause' },
+    tr: { ask: 'Lütfen kısaca onayla ya da gelemiyorsan bildir:', remind: 'kısa hatırlatma: Lütfen {w}. hafta vardiyalarını onayla:', r_title: 'Vardiya planın', r_week: '{w}. hafta ({r})', r_intro: 'lütfen gelip gelemeyeceğini kısaca bildir:', r_ok: 'Geliyorum', r_no: 'Gelemiyorum', r_all: 'Hepsini onayla', r_reason: 'Sebep (isteğe bağlı)', r_send: 'Gönder', r_saved: 'Teşekkürler! Cevabın ulaştı.', r_bad: 'Bu bağlantı artık geçerli değil. Lütfen vardiya sorumluna sor.', r_err: 'Bağlantı yok. Lütfen tekrar dene.', r_past: 'geçti', r_okd: 'onaylandı', r_nod: 'gelemiyorum', brk: '{m} dk mola' },
+    en: { ask: 'Please confirm, or let us know if you can’t make it:', remind: 'quick reminder: please confirm your shifts for week {w}:', r_title: 'Your schedule', r_week: 'Week {w} ({r})', r_intro: 'please let us know if you can come:', r_ok: 'I’ll be there', r_no: 'I can’t', r_all: 'Confirm all', r_reason: 'Reason (optional)', r_send: 'Send', r_saved: 'Thanks! Your answer has been received.', r_bad: 'This link is no longer valid. Please ask your shift manager.', r_err: 'No connection. Please try again.', r_past: 'over', r_okd: 'confirmed', r_nod: 'declined', brk: '{m} min break' },
+    ar: { ask: 'يرجى التأكيد، أو إخبارنا إذا لم تستطع الحضور:', remind: 'تذكير: يرجى تأكيد مناوباتك للأسبوع {w}:', r_title: 'جدول مناوباتك', r_week: 'الأسبوع {w} ({r})', r_intro: 'يرجى إخبارنا إذا كنت ستحضر:', r_ok: 'سأحضر', r_no: 'لا أستطيع', r_all: 'تأكيد الكل', r_reason: 'السبب (اختياري)', r_send: 'إرسال', r_saved: 'شكراً! تم استلام ردك.', r_bad: 'هذا الرابط لم يعد صالحاً. يرجى سؤال مسؤول المناوبات.', r_err: 'لا يوجد اتصال. يرجى المحاولة مرة أخرى.', r_past: 'انتهى', r_okd: 'تم التأكيد', r_nod: 'تم الاعتذار', brk: 'استراحة {m} دقيقة' },
+    ku: { ask: 'Ji kerema xwe piştrast bike, an jî bêje ku tu nikarî:', remind: 'bîranîn: ji kerema xwe xebatên xwe yên hefteya {w} piştrast bike:', r_title: 'Plana te ya xebatê', r_week: 'Hefteya {w} ({r})', r_intro: 'ji kerema xwe bêje ka tu têyî an na:', r_ok: 'Ez têm', r_no: 'Nikarim', r_all: 'Hemûyan piştrast bike', r_reason: 'Sedem (ne mecbûrî)', r_send: 'Bişîne', r_saved: 'Spas! Bersiva te gihîşt.', r_bad: 'Ev girêdan êdî ne derbasdar e. Ji kerema xwe ji berpirsê xebatê bipirse.', r_err: 'Girêdan tune. Ji kerema xwe dîsa biceribîne.', r_past: 'derbas bû', r_okd: 'piştrast bû', r_nod: 'nayê', brk: '{m} deqe bêhnvedan' },
+    ckb: { ask: 'تکایە پشتڕاستی بکەرەوە، یان بڵێ ئەگەر ناتوانیت بێیت:', remind: 'بیرخستنەوە: تکایە کارەکانی هەفتەی {w} پشتڕاست بکەرەوە:', r_title: 'خشتەی کارەکەت', r_week: 'هەفتەی {w} ({r})', r_intro: 'تکایە پێمان بڵێ دێیت یان نا:', r_ok: 'دێم', r_no: 'ناتوانم', r_all: 'هەمووی پشتڕاست بکەرەوە', r_reason: 'هۆکار (ئارەزوومەندانە)', r_send: 'ناردن', r_saved: 'سوپاس! وەڵامەکەت گەیشت.', r_bad: 'ئەم بەستەرە ئیتر کار ناکات. تکایە لە بەرپرسی کار بپرسە.', r_err: 'پەیوەندی نییە. تکایە دووبارە هەوڵ بدەرەوە.', r_past: 'تەواو بوو', r_okd: 'پشتڕاستکرایەوە', r_nod: 'نایەت', brk: '{m} خولەک پشوو' },
+    sq: { ask: 'Të lutem konfirmo, ose na trego nëse nuk mundesh:', remind: 'kujtesë: të lutem konfirmo turnet e tua për javën {w}:', r_title: 'Orari yt i punës', r_week: 'Java {w} ({r})', r_intro: 'të lutem na trego nëse vjen:', r_ok: 'Vij', r_no: 'Nuk mundem', r_all: 'Konfirmo të gjitha', r_reason: 'Arsyeja (sipas dëshirës)', r_send: 'Dërgo', r_saved: 'Faleminderit! Përgjigja jote arriti.', r_bad: 'Kjo lidhje nuk vlen më. Të lutem pyet përgjegjësin e turneve.', r_err: 'Nuk ka lidhje. Të lutem provo përsëri.', r_past: 'kaloi', r_okd: 'konfirmuar', r_nod: 'nuk vjen', brk: '{m} min pushim' },
+    sr: { ask: 'Molim te potvrdi ili javi ako ne možeš:', remind: 'podsetnik: molim te potvrdi svoje smene za {w}. nedelju:', r_title: 'Tvoj raspored smena', r_week: '{w}. nedelja ({r})', r_intro: 'molim te javi nam da li dolaziš:', r_ok: 'Dolazim', r_no: 'Ne mogu', r_all: 'Potvrdi sve', r_reason: 'Razlog (nije obavezno)', r_send: 'Pošalji', r_saved: 'Hvala! Tvoj odgovor je stigao.', r_bad: 'Ovaj link više ne važi. Pitaj svog šefa smene.', r_err: 'Nema veze. Pokušaj ponovo.', r_past: 'prošlo', r_okd: 'potvrđeno', r_nod: 'ne dolazi', brk: '{m} min pauze' },
+    fa: { ask: 'لطفاً تأیید کنید، یا اگر نمی‌توانید بیایید اطلاع دهید:', remind: 'یادآوری: لطفاً نوبت‌های کاری هفتهٔ {w} را تأیید کنید:', r_title: 'تقسیم اوقات کاری شما', r_week: 'هفتهٔ {w} ({r})', r_intro: 'لطفاً به ما بگویید که می‌آیید یا نه:', r_ok: 'می‌آیم', r_no: 'نمی‌توانم', r_all: 'تأیید همه', r_reason: 'دلیل (اختیاری)', r_send: 'ارسال', r_saved: 'تشکر! جواب شما رسید.', r_bad: 'این لینک دیگر معتبر نیست. لطفاً از مسئول نوبت‌ها بپرسید.', r_err: 'اتصال نیست. لطفاً دوباره کوشش کنید.', r_past: 'گذشت', r_okd: 'تأیید شد', r_nod: 'نمی‌آید', brk: '{m} دقیقه استراحت' },
+    ps: { ask: 'مهرباني وکړئ تایید کړئ، یا خبر راکړئ که نشئ راتلای:', remind: 'یادونه: مهرباني وکړئ د {w} اونۍ کاري نوبتونه تایید کړئ:', r_title: 'ستاسو د کار مهالویش', r_week: '{w} اونۍ ({r})', r_intro: 'مهرباني وکړئ موږ ته ووایاست چې راځئ که نه:', r_ok: 'راځم', r_no: 'نشم راتلای', r_all: 'ټول تایید کړئ', r_reason: 'لامل (اختیاري)', r_send: 'ولېږئ', r_saved: 'مننه! ستاسو ځواب ورسېد.', r_bad: 'دا لینک نور اعتبار نه لري. مهرباني وکړئ له خپل مسؤل څخه وپوښتئ.', r_err: 'اړیکه نشته. مهرباني وکړئ بیا هڅه وکړئ.', r_past: 'تېر شو', r_okd: 'تایید شو', r_nod: 'نه راځي', brk: '{m} دقیقې دمه' }
+  };
+  for (const l in MSG_R) Object.assign(MSG[l], MSG_R[l]);
   /* Bereichsnamen für Nachrichtensprachen ohne eigene Rollennamen */
   const AREA_MSG = {
     lead: { ar: 'الإدارة', ku: 'Rêveberî', ckb: 'بەڕێوەبەرایەتی', sq: 'Drejtimi', sr: 'Rukovodstvo', fa: 'مدیریت', ps: 'مدیریت' },
@@ -813,6 +838,7 @@
     clean: { ar: 'التنظيف', ku: 'Paqijî', ckb: 'پاککردنەوە', sq: 'Pastrimi', sr: 'Čišćenje', fa: 'نظافت', ps: 'پاکاري' }
   };
   const fill = (s, v) => s.replace(/\{(\w+)\}/g, (m, k) => (v[k] != null ? v[k] : ''));
+  const ltr = (M, x) => (M && M.rtl ? '\u2066' + x + '\u2069' : x);   // Zahlen/Daten in RTL-Sprachen isolieren
   const ddmm = d => d.slice(8, 10) + '.' + d.slice(5, 7) + '.';
   const firstName = n => String(n || '').trim().split(/\s+/)[0] || '';
   function nameOf(obj, lang) { if (!obj) return ''; if (typeof obj === 'string') return obj; return obj[lang] || obj.de || obj.tr || obj.en || ''; }
@@ -828,7 +854,7 @@
   function weekMessage(emp, shifts, wk, cfg, opt) {
     const lang = MSG[emp.lang] ? emp.lang : 'de', M = MSG[lang];
     const dates = weekDates(wkStart(wk)), mine = empWeekShifts(emp, shifts, dates);
-    const w = +wk.split('-W')[1], r = ddmm(dates[0]) + '–' + ddmm(dates[6]);
+    const w = +wk.split('-W')[1], r = ltr(M, ddmm(dates[0]) + '–' + ddmm(dates[6]));
     const lines = [fill(M.hi, { n: firstName(emp.name) })];
     if (!mine.length) { lines.push(fill(M.none, { w, r })); }
     else {
@@ -836,22 +862,24 @@
       let tot = 0;
       for (const d of dates) {
         const day = mine.filter(s => s.d === d);
-        const head = M.days[dow(d)] + ' ' + ddmm(d);
+        const head = M.days[dow(d)] + ' ' + ltr(M, ddmm(d));
         if (!day.length) { lines.push(head + '  ' + M.off); continue; }
-        for (const s of day) { tot += netH(s); lines.push(head + '  ' + s.s + '–' + s.e + '  ' + shiftLabel(s, cfg, lang) + (s.n ? ' (' + s.n + ')' : '')); }
+        for (const s of day) { tot += netH(s); lines.push(head + '  ' + ltr(M, s.s + '–' + s.e) + '  ' + shiftLabel(s, cfg, lang) + (s.n ? ' (' + s.n + ')' : '')); }
       }
       lines.push(fill(M.tot, { h: (Math.round(tot * 10) / 10).toLocaleString(M.loc) }));
+      if (opt && opt.link) lines.push('', M.ask, opt.link);
     }
     const foot = cfg.notify && cfg.notify.footer && cfg.notify.footer[lang];
     if (foot) lines.push('', foot);
     return lines.join('\n');
   }
-  function dayMessage(emp, shifts, d, cfg) {
+  function dayMessage(emp, shifts, d, cfg, opt) {
     const lang = MSG[emp.lang] ? emp.lang : 'de', M = MSG[lang];
     const mine = shifts.filter(s => s.emp === emp.id && s.d === d).sort((a, b) => absS(a) - absS(b));
     if (!mine.length) return '';
-    const t = mine.map(s => s.s + '–' + s.e + ' (' + shiftLabel(s, cfg, lang) + ')').join(', ');
-    const lines = [fill(M.hi, { n: firstName(emp.name) }) + ' ' + fill(M.tom, { d: M.days[dow(d)] + ' ' + ddmm(d), t }), M.tom2];
+    const t = mine.map(s => ltr(M, s.s + '–' + s.e) + ' (' + shiftLabel(s, cfg, lang) + ')').join(', ');
+    const lines = [fill(M.hi, { n: firstName(emp.name) }) + ' ' + fill(M.tom, { d: M.days[dow(d)] + ' ' + ltr(M, ddmm(d)), t }), M.tom2];
+    if (opt && opt.link) lines.push('', M.ask, opt.link);
     const foot = cfg.notify && cfg.notify.footer && cfg.notify.footer[lang];
     if (foot) lines.push('', foot);
     return lines.join('\n');
@@ -870,7 +898,8 @@
     easter, holidays, holidayOf, STATES, builtinSpecials, specialsFor, MINWAGE, MINIJOB, minWage, minijobCap, ageOn, legalBreak, suggestBreak,
     grossMin, netMin, netH, absS, absE, isLate, isEarly, isEve, salaried, defaultMaxDays, hardWeekMax, weekTarget, availOn, absenceOn,
     shiftCost, dayFactors, dayRevenue, baseTarget, fitBreak, doAssign, doUnassign, demandForWeek, eventSlots, syncDemand, demandDiff, uid, buildCtx, buildState, canWork, scoreFor, WEIGHTS,
-    autoPlan, candidates, checkWeek, weekStats, histFrom, MSG, AREA_MSG, weekMessage, dayMessage, msgHash, empWeekShifts, normPhone, nameOf, hashStr, rng, firstName, ddmm
+    autoPlan, candidates, checkWeek, weekStats, histFrom, MSG, AREA_MSG, weekMessage, dayMessage, msgHash, empWeekShifts, normPhone, nameOf, hashStr, rng, firstName, ddmm,
+    fillMsg: fill, shiftLabel, declinedHit, ltrMsg: ltr
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.Core = api;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -1496,6 +1525,26 @@ const I18N = {
   err_too_large: ['Zu viele Daten auf einmal – bitte die Woche aufteilen.', 'Bir seferde çok fazla veri – lütfen haftayı böl.', 'Too much data at once – please split the week.'],
   onb_team: ['Alles wird in der Team-Datenbank gespeichert – alle mit Zugang sehen denselben Plan.', 'Her şey ekip veritabanına kaydedilir – erişimi olan herkes aynı planı görür.', 'Everything is saved in the team database – everyone with access sees the same plan.'],
   import_local: ['Daten von diesem Gerät übernehmen ({n} Mitarbeiter)', 'Bu cihazdaki verileri aktar ({n} personel)', 'Take over data from this device ({n} staff)'],
+  r_declined: ['hat genau diese Zeit abgesagt', 'tam bu saat için gelemeyeceğini bildirdi', 'declined exactly this time'],
+  c_declined: ['{name} kann {d} um {v} nicht{m} – bitte Ersatz wählen', '{name} {d} {v} gelemiyor{m} – lütfen yerine birini seç', '{name} can’t make {d} at {v}{m} – please pick a replacement'],
+  decl_h: ['Absagen über den Rückmelde-Link ({n}) – Ersatz wählen:', 'Geri bildirim bağlantısıyla iptaller ({n}) – yerine birini seç:', 'Declined via the reply link ({n}) – pick a replacement:'],
+  decl_btn: ['{n}, {d} {s}', '{n}, {d} {s}', '{n}, {d} {s}'],
+  decl_toast: ['{n} kann {d} um {s} nicht{r}', '{n} {d} {s} gelemiyor{r}', '{n} can’t make {d} at {s}{r}'],
+  unconf_h: ['Für heute und morgen fehlen noch {n} Bestätigungen.', 'Bugün ve yarın için {n} onay eksik.', '{n} confirmations are still missing for today and tomorrow.'],
+  to_send: ['Zum Versand', 'Gönderime git', 'Go to sending'],
+  col_reply: ['Rückmeldung', 'Geri bildirim', 'Reply'],
+  rp_all_ok: ['alles bestätigt', 'hepsi onaylandı', 'all confirmed'],
+  rp_part: ['{c} von {n} bestätigt', '{n} vardiyadan {c} onaylandı', '{c} of {n} confirmed'],
+  rp_no: ['{n} abgesagt', '{n} iptal', '{n} declined'],
+  rp_none: ['noch keine Antwort', 'henüz cevap yok', 'no answer yet'],
+  rp_ok_at: ['Bestätigt am {d}', '{d} tarihinde onaylandı', 'Confirmed on {d}'],
+  rp_no_at: ['Abgesagt am {d}', '{d} tarihinde iptal etti', 'Declined on {d}'],
+  rp_wait: ['Noch keine Rückmeldung zu dieser Schicht.', 'Bu vardiya için henüz geri bildirim yok.', 'No reply to this shift yet.'],
+  rp_pick: ['Wähle unten einen Ersatz', 'Aşağıdan yerine birini seç', 'Pick a replacement below'],
+  remind: ['Erinnern', 'Hatırlat', 'Remind'],
+  remind_all: ['Ohne Antwort erinnern ({n})', 'Cevap vermeyenleri hatırlat ({n})', 'Remind those without reply ({n})'],
+  links_wait: ['Persönliche Rückmelde-Links werden vorbereitet …', 'Kişisel geri bildirim bağlantıları hazırlanıyor …', 'Preparing personal reply links …'],
+  links_none: ['Ohne Verbindung zur Team-Datenbank gehen die Nachrichten ohne Rückmelde-Link raus.', 'Ekip veritabanına bağlantı yokken mesajlar geri bildirim bağlantısı olmadan gider.', 'Without a connection to the team database, messages go out without a reply link.'],
   backup_dl: ['Sicherung herunterladen', 'Yedeği indir', 'Download backup'],
   backup_copy: ['Sicherung kopieren', 'Yedeği kopyala', 'Copy backup'],
   backup_load: ['Sicherung einspielen', 'Yedeği geri yükle', 'Restore backup'],
@@ -1780,7 +1829,7 @@ function backupAge() { const lb = lsGet(BACKUP_KEY); return lb ? Math.round((C.p
 const A = {
   lang: null, view: 'plan', wk: C.wkId(todayISO()), mode: 'loading', canWrite: true, roReason: '',
   planView: (window.innerWidth < 760 ? 'day' : 'staff'), dayIdx: (C.dow(todayISO()) + 6) % 7, area: '', q: '', tq: '', tct: '',
-  cfg: null, staff: null, abs: {}, evt: {}, weeks: {}, wkReady: {}, stats: {}, sent: {},
+  cfg: null, staff: null, abs: {}, evt: {}, weeks: {}, wkReady: {}, stats: {}, sent: {}, resp: {}, links: {}, linksBusy: {},
   drawer: null, modal: null, undo: [], ver: 0, caps: {}, pending: 0, slow: false,
   ai: { open: false, busy: false, log: [], ctl: null, plan: null, listening: false },
   sendMode: 'week', sendDay: null, sendCh: '', repArea: '', affected: null, gmail: null
@@ -1839,6 +1888,43 @@ const roleShort = r => { const ro = roleById(r); return ro ? (L(ro.sh) || L(ro.n
 /* ---------------- Wochenmodell ---------------- */
 let MC = {};
 function bump() { A.ver++; MC = {}; }
+/* ---- Rückmeldungen (persönliche Links) ---- */
+const skey = s => s.d + '|' + s.s + '|' + s.e;
+function replyOf(wk, sh) { const r = A.resp[wk]; return sh && sh.emp && r && r.emps && r.emps[sh.emp] ? r.emps[sh.emp][skey(sh)] || null : null; }
+function replyCount(m, empId) {
+  const today = todayISO(); let n = 0, ok = 0, no = 0, open = 0, soon = 0;
+  for (const s of m.shifts) {
+    if (s.emp !== empId || !m.dates.includes(s.d)) continue;
+    n++; const a = replyOf(m.wk, s);
+    if (a && a.s === 'ok') ok++; else if (a && a.s === 'no') no++; else if (s.d >= today) { open++; if (s.d <= C.addDays(today, 1)) soon++; }
+  }
+  return { n, ok, no, open, soon };
+}
+function newDeclines(wk, prev, next) {
+  const was = (prev && prev.emps) || {}, now = (next && next.emps) || {};
+  const m = weekModel(wk), out = [];
+  for (const id in now) for (const k in now[id]) {
+    const a = now[id][k]; if (!a || a.s !== 'no') continue;
+    const b = was[id] && was[id][k]; if (b && b.s === 'no') continue;
+    if (!m.shifts.some(s => s.emp === id && skey(s) === k)) continue;
+    const [d, st] = k.split('|'), e = emp(id);
+    out.push(t('decl_toast', { n: e ? e.name : '?', d: fmtDay(d, { weekday: 'short', day: '2-digit', month: '2-digit' }), s: st, r: a.note ? ' (' + a.note + ')' : '' }));
+  }
+  for (const msg of out.slice(0, 3)) toast(msg, 'warn');
+}
+function linkFor(wk, empId) { const l = A.links[wk]; return l && l[empId] ? location.origin + location.pathname + '#r=' + l[empId] : ''; }
+function ensureLinks(wk) {
+  if (!(Store.db && Store.db.remote) || !A.auth || A.auth.role === 'view' || A.links[wk] || A.linksBusy[wk]) return;
+  A.linksBusy[wk] = true;
+  Remote.call('POST', '/links', { wk, emps: Object.keys(A.staff || {}) })
+    .then(r => { A.links[wk] = r.links || {}; })
+    .catch(() => { /* ohne Links weiter */ })
+    .finally(() => { A.linksBusy[wk] = false; bump(); render(); });
+}
+function remindText(e, wk) {
+  const M = C.MSG[e.lang] || C.MSG.de, link = linkFor(wk, e.id);
+  return C.fillMsg(M.hi, { n: C.firstName(e.name) }) + ' ' + C.fillMsg(M.remind, { w: +wk.split('-W')[1] }) + '\n' + link;
+}
 function weekModel(wk) {
   const key = wk + '|' + A.ver;
   if (MC[key]) return MC[key];
@@ -1863,7 +1949,14 @@ function weekModel(wk) {
   const prev = (A.weeks[C.wkShift(wk, -1)] || {}).shifts || [];
   const next = (A.weeks[C.wkShift(wk, 1)] || {}).shifts || [];
   const hist = C.histFrom(Object.values(A.stats || {}), wk);
-  const input = { cfg, staff, absences, dates, shifts, prev, next, hist };
+  // Absagen über den Rückmelde-Link: gelten für genau diese Zeit als „kann nicht“
+  const replies = (A.resp[wk] && A.resp[wk].emps) || {};
+  const declined = {};
+  for (const id in replies) for (const k in replies[id]) {
+    const a = replies[id][k]; if (!a || a.s !== 'no') continue;
+    const [d, s, e] = k.split('|'); (declined[id] = declined[id] || []).push({ d, s, e, note: a.note || '', at: a.at });
+  }
+  const input = { cfg, staff, absences, dates, shifts, prev, next, hist, declined };
   const issues = C.checkWeek(input);
   const ctx = C.buildCtx(input);
   const S = C.buildState(ctx, shifts);
@@ -1951,7 +2044,7 @@ const Store = {
     if (A.mode === 'local' || !this.db) return;
     for (const k of Object.keys(this.unsub)) {
       if (k.startsWith('wk:') && !want.has(k.slice(3))) { this.unsub[k](); delete this.unsub[k]; }
-      if (k.startsWith('sent:') && k.slice(5) !== wk) { this.unsub[k](); delete this.unsub[k]; }
+      if ((k.startsWith('sent:') && k.slice(5) !== wk) || (k.startsWith('resp:') && k.slice(5) !== wk)) { this.unsub[k](); delete this.unsub[k]; }
     }
     for (const w of want) {
       if (this.unsub['wk:' + w]) continue;
@@ -1962,6 +2055,17 @@ const Store = {
       });
     }
     if (!this.unsub['sent:' + wk]) this.sub('sent:' + wk, this.db.doc('sent/' + wk), s => { A.sent[wk] = s.exists ? s.data() : null; bump(); render(); });
+    // Rückmeldungen der Mitarbeiter (schreibt nur der Server über die persönlichen Links)
+    if (this.db.remote && !this.unsub['resp:' + wk]) {
+      let first = true;
+      this.sub('resp:' + wk, this.db.doc('resp/' + wk), s => {
+        const prev = A.resp[wk], next = s.exists ? s.data() : null;
+        A.resp[wk] = next;
+        if (!first && !s.metadata.fromCache) newDeclines(wk, prev, next);
+        if (!s.metadata.fromCache) first = false;
+        bump(); render();
+      });
+    }
   },
   sub(key, ref, next, err) {
     if (this.unsub[key]) this.unsub[key]();
@@ -2568,10 +2672,37 @@ Object.assign(Store, {
     Remote.base = Remote.pickBase();
     let tryMode = false; try { tryMode = sessionStorage.getItem(TRY_KEY) === '1'; } catch (e) { /* egal */ }
     if (!Remote.base) return this.startLocal();
+    const rm = /^#r=([A-Za-z0-9_.-]{20,200})$/.exec(location.hash || '');
+    if (rm) return this.startReply(rm[1]);
     if (tryMode) { A.tryMode = true; return this.startLocal(); }
     const au = Remote.loadAuth();
     if (au) return this.startRemote(au);
     return this.showLogin();
+  },
+  async startReply(token) {
+    let guess = ''; try { guess = localStorage.getItem('sp-rlang') || ''; } catch (e) { /* egal */ }
+    if (!C.MSG[guess]) { const nl = String(navigator.language || '').slice(0, 2).toLowerCase(); guess = C.MSG[nl] ? nl : (nl === 'ku' ? 'ku' : 'de'); }
+    A.mode = 'reply'; A.reply = { token, loading: true, lang: guess };
+    render();
+    try {
+      const r = await Remote.api('POST', '/reply/get', { token });
+      let lang = ''; try { lang = localStorage.getItem('sp-rlang') || ''; } catch (e) { /* egal */ }
+      A.reply = Object.assign(r, { token, lang: C.MSG[lang] ? lang : (C.MSG[r.emp.lang] ? r.emp.lang : 'de'), note: {}, busy: {} });
+    } catch (e) {
+      A.reply = { token, lang: guess, err: e.code === 'link_bad' || e.code === 'link_old' || e.status === 404 || e.status === 410 ? 'r_bad' : 'r_err' };
+    }
+    render();
+  },
+  async replySend(items) {
+    const R = A.reply; if (!R || R.err) return;
+    for (const it of items) R.busy[it.k] = true;
+    R.msg = ''; render();
+    try {
+      const r = await Remote.api('POST', '/reply/set', { token: R.token, items });
+      R.answers = r.answers || R.answers; R.msg = 'r_saved'; R.msgErr = false;
+    } catch (e) { R.msg = 'r_err'; R.msgErr = true; }
+    for (const it of items) delete R.busy[it.k];
+    render();
   },
   async showLogin(msg) {
     A.mode = 'login'; A.login = { busy: false, err: msg || '', setup: null, offline: false };
@@ -2683,6 +2814,11 @@ function renderStatus() {
 }
 
 function viewHeader() {
+  if (A.mode === 'reply') {
+    const R = A.reply || {};
+    return '<header class="top rtop"><div class="brand"><span class="logo">' + esc(R.biz || 'Schichtplan') + '</span></div><nav class="tabs"></nav>' +
+      (R.lang ? '<div class="tools"><select class="rlang" data-f="r-lang" aria-label="Language">' + MSG_LANGS.map(l => '<option value="' + l + '"' + (R.lang === l ? ' selected' : '') + '>' + esc(C.MSG[l].label) + '</option>').join('') + '</select></div>' : '') + '</header>';
+  }
   const biz = (A.cfg && A.cfg.biz) || '';
   const tabs = A.cfg && A.mode !== 'empty' ? TABS.map(([id, k]) => '<a href="#' + id + '" class="tab' + (A.view === id ? ' on' : '') + '" data-a="tab" data-v="' + id + '"' + (A.view === id ? ' aria-current="page"' : '') + '>' + esc(t(k)) + '</a>').join('') : '';
   const langs = UI_LANGS.map(l => '<button class="lg' + (A.lang === l ? ' on' : '') + '" data-a="lang" data-l="' + l + '" aria-pressed="' + (A.lang === l) + '">' + l.toUpperCase() + '</button>').join('');
@@ -2705,6 +2841,7 @@ function viewBanners() {
   return h;
 }
 function viewMain() {
+  if (A.mode === 'reply') return viewReply();
   if (A.mode === 'login') return viewLogin();
   if (A.mode === 'loading' && !A.cfg) return viewLoading();
   if (A.mode === 'empty' || !A.cfg) return viewOnboarding();
@@ -2718,6 +2855,62 @@ function viewMain() {
     case 'regeln': return viewSettings();
     default: return viewPlan();
   }
+}
+/* ---- Rückmeldungen im Plan ---- */
+function replyMark(wk, sh) {
+  const a = replyOf(wk, sh); if (!a) return '';
+  return a.s === 'ok' ? '<i class="rp ok" title="' + esc(t('rp_ok_at', { d: fmtDT(a.at) })) + '">' + ic('check', 'mini') + '</i>'
+    : '<i class="rp no" title="' + esc(t('rp_no_at', { d: fmtDT(a.at) }) + (a.note ? ': ' + a.note : '')) + '">' + ic('x', 'mini') + '</i>';
+}
+function replyBanners(m) {
+  if (!(Store.db && Store.db.remote)) return '';
+  let h = '';
+  const decl = m.issues.filter(i => i.code === 'c_declined');
+  if (decl.length) {
+    h += '<div class="banner bad decl">' + ic('err') + '<span>' + esc(t('decl_h', { n: decl.length })) + '</span><div class="row gap wrap">' +
+      decl.slice(0, 6).map(i => { const e = emp(i.emp); return '<button class="btn sm" data-a="shift" data-id="' + esc(i.shiftId) + '">' + esc(t('decl_btn', { n: e ? shortName(e) : '?', d: fmtDay(i.d, { weekday: 'short' }), s: i.v })) + '</button>'; }).join('') + '</div></div>';
+  }
+  const today = todayISO(), tom = C.addDays(today, 1);
+  const inUse = A.resp[m.wk] && A.resp[m.wk].emps && Object.keys(A.resp[m.wk].emps).length;   // nur, wenn das Team die Links schon nutzt
+  if (inUse && (m.dates.includes(today) || m.dates.includes(tom))) {
+    const miss = m.shifts.filter(s => s.emp && (s.d === today || s.d === tom) && !replyOf(m.wk, s)).length;
+    if (miss) h += '<div class="banner info">' + ic('info') + '<span>' + esc(t('unconf_h', { n: miss })) + '</span><button class="btn sm" data-a="tab" data-v="versand">' + esc(t('to_send')) + '</button></div>';
+  }
+  return h;
+}
+/* ---- Antwortseite für Mitarbeiter (persönlicher Link) ---- */
+function viewReply() {
+  const R = A.reply || {};
+  if (R.loading) return '<section class="reply"><div class="card narrow"><div class="loader" aria-hidden="true"></div></div></section>';
+  const M = C.MSG[R.lang] || C.MSG.de;
+  if (R.err) return '<section class="reply" dir="' + (M.rtl ? 'rtl' : 'ltr') + '"><div class="card narrow"><p class="lead">' + esc(M[R.err] || M.r_bad) + '</p>' +
+    (R.err === 'r_err' ? '<div class="row gap"><button class="btn primary" data-a="r-retry">' + ic('undo') + '</button></div>' : '') + '</div></section>';
+  const dates = C.weekDates(C.wkStart(R.wk)), w = +R.wk.split('-W')[1], range = C.ltrMsg(M, C.ddmm(dates[0]) + '–' + C.ddmm(dates[6]));
+  const today = todayISO(), ans = R.answers || {};
+  const cfg = { roles: R.roles || [] };
+  let h = '<section class="reply" dir="' + (M.rtl ? 'rtl' : 'ltr') + '"><div class="card narrow">' +
+    '<h1>' + esc(M.r_title) + '</h1><p class="sub">' + esc(C.fillMsg(M.r_week, { w, r: range })) + '</p>';
+  if (!R.shifts.length) return h + '<p class="lead">' + esc(C.fillMsg(M.hi, { n: C.firstName(R.emp.name) }) + ' ' + C.fillMsg(M.none, { w, r: range })) + '</p></div></section>';
+  h += '<p class="lead">' + esc(C.fillMsg(M.hi, { n: C.firstName(R.emp.name) }) + ' ' + M.r_intro) + '</p>';
+  const openKeys = R.shifts.filter(s => s.d >= today && !ans[s.k]).map(s => s.k);
+  if (openKeys.length > 1) h += '<div class="row gap"><button class="btn primary big" data-a="r-all">' + ic('check') + '<span>' + esc(M.r_all) + '</span></button></div>';
+  h += '<ul class="rlist">';
+  for (const s of R.shifts.slice().sort((a, b) => (a.d + a.s).localeCompare(b.d + b.s))) {
+    const a = ans[s.k], past = s.d < today, busy = R.busy && R.busy[s.k];
+    const day = M.days[C.dow(s.d)] + ' ' + C.ltrMsg(M, C.ddmm(s.d));
+    const label = C.shiftLabel(s, cfg, R.lang) + (s.b ? ', ' + C.fillMsg(M.brk, { m: s.b }) : '') + (s.n ? ' (' + s.n + ')' : '');
+    h += '<li class="ritem' + (a ? ' ' + a.s : '') + (past ? ' past' : '') + '"><div class="when"><b>' + esc(day) + '</b><span class="tm" dir="ltr">' + esc(s.s + '–' + s.e) + '</span><small>' + esc(label) + '</small></div>';
+    if (past) h += '<div class="rstate">' + esc(a ? (a.s === 'ok' ? M.r_okd : M.r_nod) : M.r_past) + '</div>';
+    else {
+      h += '<div class="racts"><button class="btn ok' + (a && a.s === 'ok' ? ' on' : '') + '" data-a="r-ans" data-k="' + esc(s.k) + '" data-s="ok"' + (busy ? ' disabled' : '') + '>' + ic('check') + '<span>' + esc(M.r_ok) + '</span></button>' +
+        '<button class="btn no' + (a && a.s === 'no' ? ' on' : '') + '" data-a="r-ans" data-k="' + esc(s.k) + '" data-s="no"' + (busy ? ' disabled' : '') + '>' + ic('x') + '<span>' + esc(M.r_no) + '</span></button></div>';
+      if (a && a.s === 'no') h += '<div class="rnote"><input id="rn_' + esc(s.k.replace(/[^0-9a-z]/gi, '')) + '" dir="auto" maxlength="200" placeholder="' + esc(M.r_reason) + '" value="' + esc((R.note && R.note[s.k] != null) ? R.note[s.k] : (a.note || '')) + '"><button class="btn sm" data-a="r-note" data-k="' + esc(s.k) + '">' + esc(M.r_send) + '</button></div>';
+    }
+    h += '</li>';
+  }
+  h += '</ul>';
+  if (R.msg) h += '<p class="' + (R.msgErr ? 'err' : 'okmsg') + '" role="status">' + esc(M[R.msg] || '') + '</p>';
+  return h + '</div></section>';
 }
 function viewLogin() {
   const L0 = A.login || {};
@@ -2810,6 +3003,7 @@ function viewPlan() {
     '<button class="btn" data-a="publish">' + ic('send') + '<span>' + esc(pub ? t('unpublish') : t('publish')) + '</span></button>' +
     '<button class="btn primary" data-a="autoplan">' + ic('spark') + '<span>' + esc(t('autoplan')) + '</span></button></div>';
   if (!weekReady(A.wk)) h += '<div class="banner">' + esc(t('wait_load')) + '</div>';
+  h += replyBanners(m);
   if (m.diff.plus || m.diff.minus) h += '<div class="banner info">' + ic('info') + '<span>' + esc(t('demand_changed', { p: m.diff.plus, m: m.diff.minus })) + '</span><button class="btn sm" data-a="apply-demand">' + esc(t('apply')) + '</button></div>';
   h += '<div class="kpis">' +
     kpi(t('k_cov'), pct(cov / 100), t('k_cov_sub', { f: m.filled, n: m.total }), m.total - m.filled ? 'warn' : 'good', '', cov) +
@@ -2861,7 +3055,7 @@ function chipShift(sh, m, mode) {
   const a = sh.a || roleArea(sh.r);
   const label = mode === 'name' ? esc(shortName(emp(sh.emp))) : esc(roleShort(sh.r));
   return '<button class="sc ' + arCls(a) + (sh.lk ? ' lk' : '') + (bad ? ' bad' : wrn ? ' wrn' : '') + (sh.t && sh.t.startsWith('ev:') ? ' evs' : '') + '" data-a="shift" data-id="' + esc(sh.id) + '" title="' + esc(shiftName(sh) + ' ' + sh.s + '–' + sh.e) + '">' +
-    '<b>' + sh.s + '–' + sh.e + '</b><span>' + label + '</span>' + (sh.lk ? ic('lock', 'mini') : '') + (bad ? ic('err', 'mini') : '') + '</button>';
+    '<b>' + sh.s + '–' + sh.e + '</b><span>' + label + '</span>' + replyMark(m.wk, sh) + (sh.lk ? ic('lock', 'mini') : '') + (bad ? ic('err', 'mini') : '') + '</button>';
 }
 function shortName(e) {
   if (!e) return '?';
@@ -2945,7 +3139,7 @@ function chipName(sh, m) {
   const iss = m.issueBy[sh.id] || [];
   const bad = iss.some(i => i.sev === 'err'), wrn = iss.some(i => i.sev === 'warn');
   const custom = sh.cust ? ' <small>' + sh.s + '–' + sh.e + '</small>' : '';
-  return '<button class="sn ' + arCls(sh.a || roleArea(sh.r)) + (sh.lk ? ' lk' : '') + (bad ? ' bad' : wrn ? ' wrn' : '') + '" data-a="shift" data-id="' + esc(sh.id) + '">' + esc(shortName(emp(sh.emp))) + custom + '</button>';
+  return '<button class="sn ' + arCls(sh.a || roleArea(sh.r)) + (sh.lk ? ' lk' : '') + (bad ? ' bad' : wrn ? ' wrn' : '') + '" data-a="shift" data-id="' + esc(sh.id) + '">' + replyMark(m.wk, sh) + esc(shortName(emp(sh.emp))) + custom + '</button>';
 }
 function viewDay(m) {
   const i = Math.max(0, Math.min(6, A.dayIdx)), d = m.dates[i];
@@ -2962,7 +3156,7 @@ function viewDay(m) {
     const e = emp(s.emp);
     if (A.q && (!e || !String(e.name).toLocaleLowerCase(LOCALE[A.lang]).includes(A.q.toLocaleLowerCase(LOCALE[A.lang])))) continue;
     const iss = m.issueBy[s.id] || [];
-    h += '<button class="dl-row ' + arCls(a) + (s.emp ? '' : ' open') + (iss.some(x => x.sev === 'err') ? ' bad' : '') + '" data-a="shift" data-id="' + esc(s.id) + '"><span class="tm">' + s.s + '–' + s.e + '</span><span class="sn2">' + esc(shiftName(s)) + '</span><span class="who">' + (e ? esc(e.name) : '<em>' + esc(t('open')) + '</em>') + '</span>' + (s.lk ? ic('lock', 'mini') : '') + '</button>';
+    h += '<button class="dl-row ' + arCls(a) + (s.emp ? '' : ' open') + (iss.some(x => x.sev === 'err') ? ' bad' : '') + '" data-a="shift" data-id="' + esc(s.id) + '"><span class="tm">' + s.s + '–' + s.e + '</span><span class="sn2">' + esc(shiftName(s)) + '</span><span class="who">' + (e ? replyMark(m.wk, s) + esc(e.name) : '<em>' + esc(t('open')) + '</em>') + '</span>' + (s.lk ? ic('lock', 'mini') : '') + '</button>';
   }
   if (!list.length) h += '<div class="empty">' + esc(t('no_shifts')) + '</div>';
   return h + '</div></div>';
@@ -3146,7 +3340,10 @@ function viewSend() {
   const tomorrow = C.addDays(todayISO(), 1);
   const sd = A.sendDay || (m.dates.includes(tomorrow) ? tomorrow : m.dates[0]);
   const mode = A.sendMode;
+  ensureLinks(m.wk);
   const rows = sendRows(m, mode, sd);
+  const remote = !!(Store.db && Store.db.remote);
+  const remindIds = remote ? rows.filter(r => r.reach && r.ch !== 'mail' && r.rp && r.rp.open && linkFor(m.wk, r.e.id)).map(r => r.e.id) : [];
   const nSent = rows.filter(r => r.sent).length, nChanged = rows.filter(r => r.changed).length, nNo = rows.filter(r => !r.reach).length;
   let h = '<section class="send"><div class="bar1">' + weekNav(m) + '<div class="seg" role="group">' +
     [['week', 'sm_week'], ['day', 'sm_day'], ['changes', 'sm_changes']].map(([v, k]) => '<button class="' + (mode === v ? 'on' : '') + '" data-a="send-mode" data-v="' + v + '">' + esc(t(k)) + '</button>').join('') + '</div>' +
@@ -3159,8 +3356,10 @@ function viewSend() {
   h += '<div class="row gap wrap actions">' +
     '<button class="btn primary" data-a="queue"' + (waRows.length ? '' : ' disabled') + '>' + ic('chat') + '<span>' + esc(t('queue_btn', { n: waRows.length })) + '</span></button>' +
     (A.gmail ? '<button class="btn" data-a="mail-all"' + (mailRows.length ? '' : ' disabled') + '>' + ic('mail') + '<span>' + esc(t('mail_all', { n: mailRows.length })) + '</span></button>' : '') +
+    (remote ? '<button class="btn" data-a="queue-remind"' + (remindIds.length ? '' : ' disabled') + '>' + ic('chat') + '<span>' + esc(t('remind_all', { n: remindIds.length })) + '</span></button>' : '') +
     '<button class="btn" data-a="team-text">' + ic('copy') + '<span>' + esc(t('team_text')) + '</span></button></div>';
-  h += '<div class="tablewrap"><table class="tbl sendtbl"><thead><tr><th>' + esc(t('employee')) + '</th><th>' + esc(t('msg_lang')) + '</th><th>' + esc(t('channel')) + '</th><th>' + esc(t('contact')) + '</th><th>' + esc(t('status')) + '</th><th class="r">' + esc(t('actions')) + '</th></tr></thead><tbody>';
+  if (remote && !A.links[m.wk]) h += '<p class="hint">' + esc(t(A.linksBusy[m.wk] ? 'links_wait' : 'links_none')) + '</p>';
+  h += '<div class="tablewrap"><table class="tbl sendtbl"><thead><tr><th>' + esc(t('employee')) + '</th><th>' + esc(t('msg_lang')) + '</th><th>' + esc(t('channel')) + '</th><th>' + esc(t('contact')) + '</th><th>' + esc(t('status')) + '</th>' + (remote ? '<th>' + esc(t('col_reply')) + '</th>' : '') + '<th class="r">' + esc(t('actions')) + '</th></tr></thead><tbody>';
   for (const r of rows) {
     const e = r.e;
     const status = r.changed ? '<span class="pill warn">' + esc(t('changed_after')) + '</span>' : r.sent ? '<span class="pill good">' + esc(t('sent_at', { d: fmtDay(r.sentAt.slice(0, 10)) })) + '</span>' : '<span class="pill">' + esc(t('not_sent')) + '</span>';
@@ -3171,11 +3370,12 @@ function viewSend() {
     h += '<tr><td><b>' + esc(e.name) + '</b><details class="pv"><summary>' + esc(t('preview')) + '</summary><pre dir="auto">' + esc(r.text) + '</pre></details></td>' +
       '<td><select class="inl" data-f="emp-lang" data-id="' + esc(e.id) + '" aria-label="' + esc(t('msg_lang')) + '">' + MSG_LANGS.map(l => '<option value="' + l + '"' + (e.lang === l ? ' selected' : '') + '>' + esc(C.MSG[l].label) + '</option>').join('') + '</select></td>' +
       '<td><select class="inl" data-f="emp-ch" data-id="' + esc(e.id) + '" aria-label="' + esc(t('channel')) + '">' + ['wa', 'sms', 'mail', 'none'].map(c => '<option value="' + c + '"' + ((e.ch || 'wa') === c ? ' selected' : '') + '>' + esc(t('ch_' + c)) + '</option>').join('') + '</select></td>' +
-      '<td>' + contact + '</td><td>' + status + '</td><td class="r nowrap">' + wa + sms + mail +
+      '<td>' + contact + '</td><td>' + status + '</td>' + (remote ? '<td>' + replyCell(r) + '</td>' : '') + '<td class="r nowrap">' + wa + sms + mail +
+      (remote && r.phone && r.rp && r.rp.open && linkFor(m.wk, e.id) && r.sent ? '<a class="btn sm ghost" href="https://wa.me/' + r.phone + '?text=' + encodeURIComponent(remindText(e, m.wk)) + '" target="_blank" rel="noopener" title="' + esc(t('remind')) + '">' + ic('chat') + '<span>' + esc(t('remind')) + '</span></a>' : '') +
       '<button class="btn sm ghost" data-a="copy-msg" data-id="' + esc(e.id) + '" title="' + esc(t('copy')) + '" aria-label="' + esc(t('copy')) + '">' + ic('copy') + '</button>' +
       '<button class="btn sm ghost" data-a="toggle-sent" data-id="' + esc(e.id) + '" title="' + esc(r.sent ? t('mark_unsent') : t('mark_sent')) + '" aria-label="' + esc(r.sent ? t('mark_unsent') : t('mark_sent')) + '">' + ic(r.sent ? 'x' : 'check') + '</button></td></tr>';
   }
-  if (!rows.length) h += '<tr><td colspan="6" class="empty">' + esc(mode === 'changes' ? t('no_changes') : t('no_recipients')) + '</td></tr>';
+  if (!rows.length) h += '<tr><td colspan="' + (remote ? 7 : 6) + '" class="empty">' + esc(mode === 'changes' ? t('no_changes') : t('no_recipients')) + '</td></tr>';
   h += '</tbody></table></div>';
   // Automatik
   const n = A.cfg.notify || {};
@@ -3189,6 +3389,13 @@ function viewSend() {
     '<ul class="ticks"><li>' + esc(t('auto_o1')) + '</li><li>' + esc(t('auto_o2')) + '</li><li>' + esc(t('auto_o3')) + '</li></ul></div>';
   return h + '</section>';
 }
+function replyCell(r) {
+  const c = r.rp; if (!c || !c.n) return '<span class="muted">–</span>';
+  if (c.no) return '<span class="pill bad">' + esc(t('rp_no', { n: c.no })) + '</span>';
+  if (c.ok === c.n) return '<span class="pill good">' + esc(t('rp_all_ok')) + '</span>';
+  if (c.ok) return '<span class="pill">' + esc(t('rp_part', { c: c.ok, n: c.n })) + '</span>';
+  return '<span class="pill' + (c.soon ? ' warn' : '') + '">' + esc(t('rp_none')) + '</span>';
+}
 function sendRows(m, mode, d) {
   const sent = A.sent[m.wk] || {};
   const out = [];
@@ -3201,12 +3408,13 @@ function sendRows(m, mode, d) {
     const hash = C.msgHash(e, m.shifts, m.dates);
     const changed = !!prev && prev.h !== hash;
     if (mode === 'changes' && !changed) continue;
-    const text = mode === 'day' ? C.dayMessage(e, m.shifts, d, A.cfg) : C.weekMessage(e, m.shifts, m.wk, A.cfg, { update: mode === 'changes' || changed });
+    const link = linkFor(m.wk, e.id);
+    const text = mode === 'day' ? C.dayMessage(e, m.shifts, d, A.cfg, { link }) : C.weekMessage(e, m.shifts, m.wk, A.cfg, { update: mode === 'changes' || changed, link });
     const phone = C.normPhone(e.phone);
     const ch = e.ch || 'wa';
     const sentAt = mode === 'day' ? (((sent.dm || {})[d] || {})[e.id] || '') : (prev ? prev.at : '');
     const upToDate = mode === 'day' ? !!sentAt : mode === 'changes' ? false : (!!prev && !changed);
-    out.push({ e, text, phone, ch, reach: ch === 'mail' ? !!e.email : !!phone, sent: upToDate, changed: mode !== 'day' && changed, sentAt });
+    out.push({ e, text, phone, ch, reach: ch === 'mail' ? !!e.email : !!phone, sent: upToDate, changed: mode !== 'day' && changed, sentAt, rp: replyCount(m, e.id) });
   }
   return out;
 }
@@ -3364,6 +3572,10 @@ function drawerShift(d) {
     b += '<div class="assigned ' + arCls(sh.a || roleArea(sh.r)) + '"><div><b>' + esc(e.name) + '</b><small>' + esc(t('ct_' + e.ct)) + ' · ' + nf(st.wh, 1) + (st.target ? ' / ' + nf(st.target, 1) : '') + ' h</small></div>' +
       '<div class="row gap"><button class="btn sm" data-a="lock" data-id="' + esc(sh.id) + '">' + ic('lock') + '<span>' + esc(sh.lk ? t('unlock') : t('lock')) + '</span></button><button class="btn sm" data-a="unassign" data-id="' + esc(sh.id) + '">' + ic('x') + '<span>' + esc(t('remove')) + '</span></button></div></div>';
   } else b += '<div class="assigned open"><b>' + esc(t('open_shift')) + '</b><small>' + esc(t('pick_below')) + '</small></div>';
+  if (e && Store.db && Store.db.remote) {
+    const a = replyOf(d.wk, sh);
+    b += '<div class="rpbox ' + (a ? a.s : 'wait') + '">' + (a ? ic(a.s === 'ok' ? 'check' : 'x') + '<span>' + esc(t(a.s === 'ok' ? 'rp_ok_at' : 'rp_no_at', { d: fmtDT(a.at) }) + (a.note ? ': ' + a.note : '') + (a.s === 'no' ? '. ' + t('rp_pick') : '')) + '</span>' : ic('info') + '<span>' + esc(t('rp_wait')) + '</span>') + '</div>';
+  }
   if (iss.length) b += '<ul class="issues">' + iss.map(i => '<li class="' + i.sev + '">' + ic(i.sev === 'err' ? 'err' : i.sev === 'warn' ? 'warn' : 'info') + '<span>' + esc(issueText(i)) + '</span></li>').join('') + '</ul>';
   b += '<h3>' + esc(e ? t('swap_with') : t('suggestions')) + '</h3>';
   if (cand.ok.length) {
@@ -3616,7 +3828,8 @@ function modalImport(md) {
 function modalQueue(md) {
   const m = weekModel(A.wk);
   const rows = sendRows(m, A.sendMode, A.sendDay || C.addDays(todayISO(), 1)).filter(r => md.ids.includes(r.e.id));
-  const r = rows.find(x => x.e.id === md.ids[md.i]);
+  let r = rows.find(x => x.e.id === md.ids[md.i]);
+  if (r && md.kind === 'remind') r = Object.assign({}, r, { text: remindText(r.e, A.wk) });
   if (!r) return modalShell(t('queue_h'), '<p class="okmsg">' + ic('check') + esc(t('queue_done')) + '</p>', '<button class="btn primary" data-a="mclose">' + esc(t('close')) + '</button>');
   const wa = r.ch === 'sms' ? 'sms:+' + r.phone + '?&body=' + encodeURIComponent(r.text) : 'https://wa.me/' + r.phone + '?text=' + encodeURIComponent(r.text);
   return modalShell(t('queue_h'), '<p class="qprog">' + esc(t('queue_prog', { i: md.i + 1, n: md.ids.length })) + '</p><h3>' + esc(r.e.name) + ' <small>' + esc(C.MSG[r.e.lang] ? C.MSG[r.e.lang].label : '') + '</small></h3><pre class="msg" dir="auto">' + esc(r.text) + '</pre><p class="hint">' + esc(t('queue_hint')) + '</p>',
@@ -4196,7 +4409,17 @@ const ACT = {
   'special-del': el => saveCfg({ specials: (A.cfg.specials || []).filter(x => x.id !== el.dataset.id) }),
   'send-mode': el => { A.sendMode = el.dataset.v; render(); },
   queue: () => { const ids = needSendIds(); if (!ids.length) return toast(t('queue_done'), 'ok'); A.modal = { type: 'queue', ids, i: 0 }; render(); },
-  'queue-send': el => { markSent(A.wk, el.dataset.id, A.sendMode === 'day' ? 'day' : 'week', { ch: 'wa', d: A.sendDay || C.addDays(todayISO(), 1) }); setTimeout(() => { if (A.modal && A.modal.type === 'queue') { A.modal.i++; render(); } }, 250); },
+  'queue-remind': () => {
+    const m = weekModel(A.wk);
+    const ids = sendRows(m, A.sendMode, A.sendDay || C.addDays(todayISO(), 1)).filter(r => r.reach && r.ch !== 'mail' && r.rp && r.rp.open && linkFor(m.wk, r.e.id)).map(r => r.e.id);
+    if (!ids.length) return;
+    A.modal = { type: 'queue', ids, i: 0, kind: 'remind' }; render();
+  },
+  'r-ans': el => { const R = A.reply, k = el.dataset.k, s = el.dataset.s; if (!R || R.busy[k]) return; Store.replySend([{ k, s, note: s === 'no' ? (R.note[k] != null ? R.note[k] : ((R.answers[k] || {}).note || '')) : '' }]); },
+  'r-note': el => { const R = A.reply, k = el.dataset.k; if (!R) return; const inp = $('#rn_' + k.replace(/[^0-9a-z]/gi, '')); R.note[k] = inp ? inp.value : ''; Store.replySend([{ k, s: 'no', note: R.note[k] }]); },
+  'r-all': () => { const R = A.reply; if (!R) return; const today = todayISO(); const items = R.shifts.filter(s => s.d >= today && !R.answers[s.k]).map(s => ({ k: s.k, s: 'ok' })); if (items.length) Store.replySend(items); },
+  'r-retry': () => { if (A.reply) Store.startReply(A.reply.token); },
+  'queue-send': el => { if (A.modal && A.modal.kind === 'remind') { setTimeout(() => { if (A.modal && A.modal.type === 'queue') { A.modal.i++; render(); } }, 250); return; } markSent(A.wk, el.dataset.id, A.sendMode === 'day' ? 'day' : 'week', { ch: 'wa', d: A.sendDay || C.addDays(todayISO(), 1) }); setTimeout(() => { if (A.modal && A.modal.type === 'queue') { A.modal.i++; render(); } }, 250); },
   'queue-skip': () => { A.modal.i++; render(); },
   'sent-link': el => { markSent(A.wk, el.dataset.id, A.sendMode === 'day' ? 'day' : 'week', { ch: el.dataset.ch, d: A.sendDay || C.addDays(todayISO(), 1) }); },
   'copy-msg': el => { const m = weekModel(A.wk); const r = sendRows(m, A.sendMode, A.sendDay || C.addDays(todayISO(), 1)).find(x => x.e.id === el.dataset.id); if (r) copyText(r.text); },
@@ -4256,6 +4479,7 @@ document.addEventListener('input', ev => {
   const f = ev.target.dataset && ev.target.dataset.f;
   if (f === 'q') { A.q = ev.target.value; render(); }
   else if (f === 'tq') { A.tq = ev.target.value; render(); }
+  else if (ev.target.id && ev.target.id.startsWith('rn_') && A.reply) { const li = ev.target.closest('.ritem'); const b = li && li.querySelector('[data-a="r-note"]'); if (b) A.reply.note[b.dataset.k] = ev.target.value; }
 });
 document.addEventListener('change', ev => {
   const el = ev.target, f = el.dataset && el.dataset.f;
@@ -4263,6 +4487,7 @@ document.addEventListener('change', ev => {
   if (f === 'tct') { A.tct = el.value; render(); }
   else if (f === 'sendDay') { A.sendDay = el.value; render(); }
   else if (f === 'acc-role') updAcc(+el.dataset.id, { role: el.value });
+  else if (f === 'r-lang' && A.reply) { A.reply.lang = el.value; try { localStorage.setItem('sp-rlang', el.value); } catch (e) { /* egal */ } render(); }
   else if (f === 'emp-lang') updEmp(el.dataset.id, { lang: el.value });
   else if (f === 'emp-ch') updEmp(el.dataset.id, { ch: el.value });
   else if (f === 'emp-phone') updEmp(el.dataset.id, { phone: el.value.trim() });

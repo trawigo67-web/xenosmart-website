@@ -7,6 +7,10 @@
 //               GET  /schichtplan-api/sync?since=<seq>   alle Dokumente, die sich seit <seq> geändert haben
 //               POST /schichtplan-api/doc        { path, base, data } oder { path, base, del: true }
 // Nur Chef:     GET  /schichtplan-api/accounts   POST /schichtplan-api/accounts   POST /schichtplan-api/accounts/<id>
+// Planen:       POST /schichtplan-api/links      { wk, emps } → persönliche Rückmelde-Links pro Mitarbeiter und Woche
+// Mitarbeiter:  POST /schichtplan-api/reply/get  { token }  → eigene Schichten der Woche und bisherige Antworten
+//               POST /schichtplan-api/reply/set  { token, items: [{ k: 'Datum|Beginn|Ende', s: 'ok'|'no', note }] }
+//               Die Antworten landen gesammelt im Dokument resp/<Woche>, das die Planer-App mit abgleicht.
 //
 // Die App speichert ganze Dokumente (Einstellungen, Personal, Wochenpläne …). Jedes Dokument hat eine
 // Version (ver); geschrieben wird nur, wenn der Client die aktuelle Version kennt, sonst Konflikt (409).
@@ -37,6 +41,7 @@ const SCHEMA = [
   "CREATE INDEX IF NOT EXISTS hits_ih ON hits(ih, kind, ts)",
   "CREATE TABLE IF NOT EXISTS log (ts INTEGER NOT NULL, account_id INTEGER NOT NULL, action TEXT NOT NULL, path TEXT NOT NULL DEFAULT '')",
   "CREATE INDEX IF NOT EXISTS log_ts ON log(ts)",
+  "CREATE TABLE IF NOT EXISTS answers (wk TEXT NOT NULL, emp TEXT NOT NULL, k TEXT NOT NULL, s TEXT NOT NULL, note TEXT NOT NULL DEFAULT '', at INTEGER NOT NULL, PRIMARY KEY (wk, emp, k))",
   "INSERT OR IGNORE INTO meta (k, v) VALUES ('seq', '0')",
 ];
 
@@ -307,6 +312,98 @@ async function accounts(request, env, id) {
   return respond(request, 200, { ok: true, accounts: await list() });
 }
 
+/* ---------- Rückmelde-Links für Mitarbeiter ----------
+   Token = base64url("<Woche>|<Mitarbeiter-ID>") + "." + HMAC (Schlüssel in meta.link_key). Nichts davon ist geheim
+   außer dem Schlüssel; ohne ihn lässt sich kein gültiger Link bauen. Gültig bis vier Wochen nach Wochenbeginn. */
+function wkMonday(wk) {
+  const [y, w] = wk.split('-W').map(Number);
+  const jan4 = Date.UTC(y, 0, 4), day = new Date(jan4).getUTCDay() || 7;
+  return jan4 - (day - 1) * 864e5 + (w - 1) * 7 * 864e5;
+}
+let linkKeyCache = null;
+async function linkKey(env) {
+  if (linkKeyCache) return linkKeyCache;
+  const D = db(env);
+  let r = await D.prepare("SELECT v FROM meta WHERE k = 'link_key'").first();
+  if (!r) { await D.prepare("INSERT OR IGNORE INTO meta (k, v) VALUES ('link_key', ?)").bind(b64u(rnd(32))).run(); r = await D.prepare("SELECT v FROM meta WHERE k = 'link_key'").first(); }
+  linkKeyCache = await crypto.subtle.importKey('raw', unb64u(r.v), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  return linkKeyCache;
+}
+async function linkToken(key, wk, emp) {
+  const p = wk + '|' + emp;
+  return b64u(enc.encode(p)) + '.' + b64u(await crypto.subtle.sign('HMAC', key, enc.encode('r|' + p))).slice(0, 22);
+}
+async function linkOpen(env, token) {
+  const m = /^([A-Za-z0-9_-]{8,120})\.([A-Za-z0-9_-]{22})$/.exec(String(token || ''));
+  if (!m) return null;
+  let p = '';
+  try { p = new TextDecoder('utf-8', { fatal: true }).decode(unb64u(m[1])); } catch (e) { return null; }
+  const mm = /^(\d{4}-W\d{2})\|([^|]{1,40})$/.exec(p);
+  if (!mm) return null;
+  if (!same(await linkToken(await linkKey(env), mm[1], mm[2]), String(token))) return null;
+  if (wkMonday(mm[1]) + 28 * 864e5 < Date.now()) return { expired: true };
+  return { wk: mm[1], emp: mm[2] };
+}
+async function links(request, env) {
+  await auth(request, env, ['admin', 'edit']);
+  const b = await body(request);
+  const wk = String(b.wk || '');
+  if (!/^\d{4}-W\d{2}$/.test(wk)) fail(400, 'bad_week');
+  const emps = (Array.isArray(b.emps) ? b.emps : []).map(String).filter((x) => x && x.length <= 40 && !x.includes('|')).slice(0, 400);
+  const key = await linkKey(env), out = {};
+  for (const e of emps) out[e] = await linkToken(key, wk, e);
+  return respond(request, 200, { links: out });
+}
+async function replyOpen(request, env, b) {
+  const ih = await ipHash(request);
+  await lockCheck(env, ih, 'r:' + ih);
+  const L = await linkOpen(env, b.token);
+  if (!L) { await failHit(env, ih, 'r:' + ih); fail(404, 'link_bad'); }
+  if (L.expired) fail(410, 'link_old');
+  return L;
+}
+const skey = (s) => s.d + '|' + s.s + '|' + s.e;
+async function replyGet(request, env) {
+  const b = await body(request);
+  const L = await replyOpen(request, env, b);
+  const rows = (await db(env).prepare('SELECT path, data FROM docs WHERE path IN (?, ?, ?, ?) AND deleted = 0').bind('app/config', 'app/staff', 'weeks/' + L.wk, 'resp/' + L.wk).all()).results || [];
+  const D = {}; for (const r of rows) D[r.path] = JSON.parse(r.data);
+  const e = ((D['app/staff'] || {}).emp || {})[L.emp];
+  if (!e || e.active === false) fail(404, 'link_bad');
+  const cfg = D['app/config'] || {}, wkDoc = D['weeks/' + L.wk] || {};
+  const shifts = (wkDoc.shifts || []).filter((s) => s.emp === L.emp).map((s) => ({ k: skey(s), d: s.d, s: s.s, e: s.e, r: s.r, a: s.a || '', b: s.b || 0, n: s.n || '' }));
+  const roles = (cfg.roles || []).filter((r) => shifts.some((s) => s.r === r.id)).map((r) => ({ id: r.id, name: r.name, a: r.a }));
+  const answers = (((D['resp/' + L.wk] || {}).emps || {})[L.emp]) || {};
+  return respond(request, 200, { ok: true, wk: L.wk, biz: cfg.biz || '', emp: { name: e.name || '', lang: e.lang || 'de' }, pub: !!wkDoc.pub, shifts, roles, answers, now: Date.now() });
+}
+async function replySet(request, env) {
+  const b = await body(request);
+  const L = await replyOpen(request, env, b);
+  const D = db(env);
+  const wkRow = await D.prepare('SELECT data FROM docs WHERE path = ? AND deleted = 0').bind('weeks/' + L.wk).first();
+  const mine = new Set(((wkRow ? JSON.parse(wkRow.data) : {}).shifts || []).filter((s) => s.emp === L.emp).map(skey));
+  const oldest = new Date(Date.now() - 2 * 864e5).toISOString().slice(0, 10);   // vergangene Schichten nicht mehr ändern (großzügig wegen Zeitzone)
+  const t = Date.now(), st = [];
+  for (const it of (Array.isArray(b.items) ? b.items : []).slice(0, 40)) {
+    const k = String((it && it.k) || ''), s = it && it.s === 'ok' ? 'ok' : it && it.s === 'no' ? 'no' : '';
+    if (!s || !mine.has(k) || k.slice(0, 10) < oldest) continue;
+    const note = s === 'no' ? String(it.note || '').replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, 200) : '';
+    st.push(D.prepare('INSERT INTO answers (wk, emp, k, s, note, at) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(wk, emp, k) DO UPDATE SET s = excluded.s, note = excluded.note, at = excluded.at').bind(L.wk, L.emp, k, s, note, t));
+  }
+  if (!st.length) fail(400, 'nothing');
+  const SEQ = "(SELECT CAST(v AS INTEGER) FROM meta WHERE k = 'seq')";
+  // Gesammeltes Dokument resp/<Woche> in derselben Transaktion neu bauen, damit gleichzeitige Antworten nichts überschreiben
+  const DOC = "(SELECT json_object('wk', ?2, 'emps', json(COALESCE((SELECT json_group_object(emp, json(items)) FROM (SELECT emp, json_group_object(k, json_object('s', s, 'note', note, 'at', at)) AS items FROM answers WHERE wk = ?2 GROUP BY emp)), '{}'))))";
+  st.push(D.prepare("UPDATE meta SET v = CAST(CAST(v AS INTEGER) + 1 AS TEXT) WHERE k = 'seq'"));
+  st.push(D.prepare('INSERT INTO docs (path, data, ver, seq, updated_at, updated_by, deleted) VALUES (?1, ' + DOC + ', 1, ' + SEQ + ', ?3, 0, 0) ' +
+    'ON CONFLICT(path) DO UPDATE SET data = excluded.data, ver = docs.ver + 1, seq = excluded.seq, updated_at = excluded.updated_at, updated_by = 0, deleted = 0').bind('resp/' + L.wk, L.wk, t));
+  st.push(D.prepare("INSERT INTO log (ts, account_id, action, path) VALUES (?, 0, 'reply', ?)").bind(t, 'resp/' + L.wk + ':' + L.emp));
+  st.push(D.prepare('SELECT data FROM docs WHERE path = ?').bind('resp/' + L.wk));
+  const r = await D.batch(st);
+  const doc = JSON.parse(r[r.length - 1].results[0].data);
+  return respond(request, 200, { ok: true, answers: (doc.emps || {})[L.emp] || {} });
+}
+
 /* ---------- Verteiler ---------- */
 export async function onRequest(context) {
   const { request, env } = context;
@@ -324,6 +421,9 @@ export async function onRequest(context) {
     if (M === 'POST' && a === 'password') return await password(request, env);
     if (M === 'GET' && a === 'sync') return await sync(request, env, url);
     if (M === 'POST' && a === 'doc') return await putDoc(request, env);
+    if (M === 'POST' && a === 'links') return await links(request, env);
+    if (M === 'POST' && a === 'reply' && b === 'get') return await replyGet(request, env);
+    if (M === 'POST' && a === 'reply' && b === 'set') return await replySet(request, env);
     if (a === 'accounts' && (M === 'GET' || M === 'POST') && (!b || /^\d+$/.test(b))) return await accounts(request, env, b ? +b : 0);
     return respond(request, 404, { error: 'not_found' });
   } catch (e) {
