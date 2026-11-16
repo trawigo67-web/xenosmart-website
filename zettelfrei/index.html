@@ -72,6 +72,8 @@ section{padding:72px 0}
 .facts p{margin-top:6px;font-size:.95rem}
 .src{margin-top:14px;color:var(--muted);font-size:.8rem;line-height:1.5}
 .who{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
+.who.five{grid-template-columns:repeat(3,1fr)}
+.who.five .hl{grid-column:span 2;border-color:var(--accent);background:var(--accent-soft)}
 .prices{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:30px;max-width:860px}
 .price{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:12px}
 .price.main{border-color:var(--accent)}
@@ -96,9 +98,10 @@ html[lang="tr"] [lang-de]{display:none} html[lang="tr"] [lang-tr]{display:revert
 @media (max-width:860px){
   .hero .wrap,.steps{grid-template-columns:1fr}
   .pains,.who,.trust .grid{grid-template-columns:1fr 1fr}
+  .who.five{grid-template-columns:1fr 1fr}
   .prices{grid-template-columns:1fr}
 }
-@media (max-width:520px){ .pains,.who,.trust .grid{grid-template-columns:1fr} section{padding:52px 0} .hero{padding:36px 0 48px} }
+@media (max-width:520px){ .pains,.who,.trust .grid{grid-template-columns:1fr} .who.five{grid-template-columns:1fr} .who.five .hl{grid-column:auto} section{padding:52px 0} .hero{padding:36px 0 48px} }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
@@ -171,7 +174,8 @@ html[lang="tr"] [lang-de]{display:none} html[lang="tr"] [lang-tr]{display:revert
 <section id="alles-in-der-app" style="padding-top:0"><div class="wrap">
   <div class="kicker"><span lang-de>Neu</span><span lang-tr>Yeni</span></div>
   <h2><span lang-de>Fast alles direkt aus der App.</span><span lang-tr>Neredeyse her şey doğrudan uygulamadan.</span></h2>
-  <div class="who">
+  <div class="who five">
+    <div class="card hl"><h3><span lang-de>Sprich – wir schreiben</span><span lang-tr>Sen konuş – biz yazalım</span></h3><p><span lang-de>Einfach in eigenen Worten reinsprechen – auf Türkisch, Deutsch oder gemischt. Zettelfrei macht daraus eine saubere deutsche E-Mail, sagt dir in deiner Sprache, was drinsteht, und öffnet sie fertig in deinem E-Mail-Programm. Ideal für Eltern und Großeltern.</span><span lang-tr>Kendi sözlerinle konuşman yeter – Türkçe, Almanca ya da karışık. Zettelfrei bundan düzgün bir Almanca e-posta yazar, içinde ne yazdığını sana kendi dilinde söyler ve e-posta uygulamanda hazır açar. Anne-babalar ve büyükler için ideal.</span></p></div>
     <div class="card"><h3><span lang-de>Antwort per E-Mail</span><span lang-tr>E-postayla cevap</span></h3><p><span lang-de>Ein Tipp öffnet dein E-Mail-Programm – Empfänger, Betreff und Text sind schon drin. Oder als PDF drucken. Zettelfrei sagt dir, wann eine E-Mail reicht und wann nicht.</span><span lang-tr>Tek dokunuşla e-posta uygulaman açılır – alıcı, konu ve metin hazır. Ya da PDF olarak yazdır. Zettelfrei, e-postanın ne zaman yeterli olduğunu ve ne zaman olmadığını söyler.</span></p></div>
     <div class="card"><h3><span lang-de>Bezahlen per GiroCode</span><span lang-tr>GiroCode ile öde</span></h3><p><span lang-de>Bei Rechnungen zeigt die App einen QR-Code. Mit der Banking-App scannen – Empfänger, IBAN, Betrag und Verwendungszweck sind übernommen. Kein Abtippen.</span><span lang-tr>Faturalarda uygulama bir QR kod gösterir. Banka uygulamanla tara – alıcı, IBAN, tutar ve açıklama otomatik gelir. Elle yazmak yok.</span></p></div>
     <div class="card"><h3><span lang-de>Familien-Budget</span><span lang-tr>Aile bütçesi</span></h3><p><span lang-de>Einnahmen und feste Ausgaben eintragen. Zettelfrei zieht die offenen Rechnungen aus euren Briefen ab und zeigt, was bis Monatsende bleibt. Für Kinder ausgeblendet.</span><span lang-tr>Gelirleri ve sabit giderleri gir. Zettelfrei mektuplardaki açık ödemeleri düşer ve ay sonunda ne kalacağını gösterir. Çocuklar göremez.</span></p></div>
