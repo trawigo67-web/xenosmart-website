@@ -1,0 +1,12 @@
+# NIRVANA – Cloudflare-Pages-Projekt "nirvana-reservierung" (Projekt-Wurzel = dieser Ordner nirvana/)
+# Diese Datei ist die Quelle der Einstellungen (Bindungen); im Cloudflare-Dashboard sind sie dann nur lesbar.
+# SHIFT_DB = Team-Datenbank des Schichtplans (functions/schichtplan-api, Seite schichtplan/).
+# Das Buchungssystem (Reservierung, Bestellung, Anfragen) kommt später mit eigener Datenbank DB dazu.
+name = "nirvana-reservierung"
+pages_build_output_dir = "."
+compatibility_date = "2026-11-01"
+
+[[d1_databases]]
+binding = "SHIFT_DB"
+database_name = "nirvana-schichtplan"
+database_id = "e820bcfd-aacd-4981-98fb-09787a9eb431"

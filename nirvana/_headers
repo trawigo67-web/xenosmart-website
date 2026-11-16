@@ -1,0 +1,10 @@
+# Cloudflare Pages (Projekt „nirvana-reservierung“): Kopfzeilen für die ausgelieferten Dateien.
+# GitHub Pages (xenosmart.de) beachtet diese Datei nicht.
+/*
+  X-Content-Type-Options: nosniff
+  X-Robots-Tag: noindex, nofollow
+/schichtplan/*
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+/wrangler.toml
+  X-Robots-Tag: noindex, nofollow
