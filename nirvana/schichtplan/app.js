@@ -1455,7 +1455,7 @@ const I18N = {
   your_name: ['Dein Name', 'Adın', 'Your name'],
   f_pass: ['Passwort', 'Şifre', 'Password'],
   f_pass2: ['Passwort wiederholen', 'Şifreyi tekrarla', 'Repeat password'],
-  pass_rule: ['Mindestens 8 Zeichen. Am besten den Vorschlag nehmen oder einen kurzen Satz.', 'En az 8 karakter. En iyisi öneriyi al ya da kısa bir cümle kullan.', 'At least 8 characters. Best take the suggestion or a short sentence.'],
+  pass_rule: ['Mindestens 8 Zeichen – am besten ein kurzer Satz, den man sich gut merken kann.', 'En az 8 karakter – en iyisi kolay hatırlanan kısa bir cümle.', 'At least 8 characters – ideally a short sentence that is easy to remember.'],
   pass_short: ['Das Passwort braucht mindestens 8 Zeichen.', 'Şifre en az 8 karakter olmalı.', 'The password needs at least 8 characters.'],
   pass_mismatch: ['Die beiden Passwörter sind nicht gleich.', 'İki şifre aynı değil.', 'The two passwords don’t match.'],
   name_bad: ['Bitte einen Namen mit 2 bis 40 Zeichen eingeben.', 'Lütfen 2–40 karakterlik bir isim gir.', 'Please enter a name with 2 to 40 characters.'],
