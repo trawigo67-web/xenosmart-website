@@ -50,6 +50,11 @@ chown -R 1000:1000 "$DIR/data"
 if [ ! -f "$DIR/.env" ]; then
   cp "$DIR/.env.example" "$DIR/.env"; chmod 600 "$DIR/.env"
 fi
+# Schluessel fuer gespeicherte E-Mail-App-Passwoerter (einmalig erzeugen, danach nicht mehr aendern)
+if ! grep -qE '^MAIL_SECRET=.+' "$DIR/.env"; then
+  printf '\nMAIL_SECRET=%s\n' "$(head -c 32 /dev/urandom | base64 | tr -d '\n/+=')" >> "$DIR/.env"
+  ok "Schluessel fuer E-Mail-Postfaecher erzeugt"
+fi
 if ! grep -qE '^(ANTHROPIC|OPENAI|GEMINI)_API_KEY=.+' "$DIR/.env"; then
   echo
   echo ">>> KI-Schluessel: am einfachsten spaeter im Browser unter https://$DOMAIN/admin eintragen."
