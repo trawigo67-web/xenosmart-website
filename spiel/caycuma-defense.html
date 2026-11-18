@@ -113,11 +113,15 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
 .mapc b{font-size:18px;display:block}
 .mapc.lock{filter:grayscale(1);opacity:.55}
 .heroes{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.hc{position:relative}.hc .nb{position:absolute;top:4px;right:4px;background:#ff3b5c;color:#fff;font-size:10px;font-weight:900;border-radius:8px;padding:1px 5px;opacity:1}
+#ovNews .box{text-align:left}#ovNews h3{margin:10px 0 4px;color:#ffd34d;font-size:17px}#ovNews ul{margin:0;padding-left:20px;font-size:14px;line-height:1.45}
+.gift{background:linear-gradient(#ff7ab0,#d6337a)!important;box-shadow:0 4px 0 #7a1a44!important;color:#fff!important;animation:pulse 1.2s infinite}
+body.inmenu #hud{visibility:hidden}
 .hc{border:none;border-radius:18px;padding:10px 8px;color:#fff;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 5px 0 rgba(0,0,0,.35)}
 .hc:active{transform:translateY(3px)}
-.hc img{width:84px;height:84px}
-.hc b{font-size:20px}
-.hc span{font-size:11.5px;opacity:.92;line-height:1.25}
+.hc img{width:66px;height:66px}
+.hc b{font-size:17px}
+.hc span{font-size:10.5px;opacity:.92;line-height:1.2}
 .stars{color:#ffd34d;font-size:18px;letter-spacing:2px}
 .big-stars{font-size:46px;color:#ffd34d;letter-spacing:6px;margin:6px 0 14px;text-shadow:0 3px 0 #6b4a00}
 .setrow{display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2);border-radius:12px;padding:8px 12px;font-weight:700;gap:8px}
@@ -168,6 +172,8 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
         <div class="sub" data-t="sub"></div>
         <div class="col">
           <button class="btn gold" style="font-size:22px;padding:16px" data-act="play" data-t="play"></button>
+          <button class="btn gift" data-act="daily" id="dailyBtn" style="display:none"></button>
+          <button class="btn" data-act="news" data-t="news"></button>
           <button class="btn" data-act="how" data-t="how"></button>
           <button class="btn" data-act="settings" data-t="settings"></button>
         </div>
@@ -180,6 +186,13 @@ canvas#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
         <div id="mapList"></div>
         <div style="height:12px"></div>
         <button class="btn" data-act="toMenu" data-t="menu"></button>
+      </div></div>
+
+      <div class="ov" id="ovNews"><div class="box">
+        <h2 data-t="news" style="text-align:center"></h2>
+        <div id="newsText"></div>
+        <div style="height:12px"></div>
+        <button class="btn gold" data-act="toMenu" data-t="closeB"></button>
       </div></div>
 
       <div class="ov" id="ovUp"><div class="box">
@@ -276,7 +289,7 @@ seloD:'Hızlı ve neşeli. Parlayan yıldızlar fırlatır. Özel güç: Yıldı
 musaD:'Güçlü ve sakin. Dönen bumerang atar, demiri de kırar. Özel güç: Yer Sarsıntısı 🌋',
 seloAb:'Yıldız Yağmuru',musaAb:'Yer Sarsıntısı',muazAb:'Dron Saldırısı',muaz:'Muaz',muazD:'Akıllı ve teknik. Dronu lazer atar, görünmezleri de görür. Özel güç: Dron Saldırısı 🚁',
 farmI:'🍎 {n}/tur · 💰{v}',totemI:'💪 {n} kule güçlü',lvUp:'Seviye {n}!',
-howText:'🦎 Çaycuma\'yı ve Buko yuvasındaki yumurtaları jölelerden koru!<br>🦸 Başta <b>Musa</b> ya da <b>Selo</b>yu seç. Kahraman kendi kendine seviye atlar, konuşur ve 3. seviyede <b>özel güç</b> kazanır.<br>🛒 Kuleyi alttan <b>sürükle</b> (ya da seç ve dokun). Yola ve ağaçlara konmaz.<br>🎈 Jöleler <b>katman katman</b> patlar. Her patlatma 💰 kazandırır.<br>🍎 <b>Bahçe</b> her tur meyve (para) verir. 💪 <b>Totem</b> yakındaki kuleleri güçlendirir.<br>⬆️ İki geliştirme yolu: biri en fazla 3, diğeri en fazla 2.<br>🛡️ Demir jöle: oklar işlemez. 👻 Görünmez jöle. ♻️ Büyüyen jöle. 🎈 Zeplin ve 👑 Dev Kral.<br>⏩ Sağ alttaki yuvarlak butonla turu başlat, tur sırasında 1×/2×/3× hızlandır. ⟳ otomatik tur.<br>🏁 30 turu bitir, sonra Serbest Mod!'},
+howText:'🦎 Çaycuma\'yı ve Buko yuvasındaki yumurtaları jölelerden koru!<br>🦸 Başta 6 kahramandan birini seç: <b>Selo, Musa, Muaz, Balıkçı Reis, Çaycı Dede</b> ya da <b>Fındıkçı Teyze</b>. Kahraman kendi kendine seviye atlar, konuşur ve 3. seviyede <b>özel güç</b> kazanır.<br>🛒 Kuleyi alttan <b>sürükle</b> (ya da seç ve dokun). Yola ve ağaçlara konmaz.<br>🎈 Jöleler <b>katman katman</b> patlar. Her patlatma 💰 kazandırır.<br>🍎 <b>Bahçe</b> her tur meyve (para) verir. 💪 <b>Totem</b> yakındaki kuleleri güçlendirir.<br>⬆️ İki geliştirme yolu: biri en fazla 3, diğeri en fazla 2.<br>🛡️ Demir jöle: oklar işlemez. 👻 Görünmez jöle. ♻️ Büyüyen jöle. 🎈 Zeplin ve 👑 Dev Kral.<br>⏩ Sağ alttaki yuvarlak butonla turu başlat, tur sırasında 1×/2×/3× hızlandır. ⟳ otomatik tur.<br>🏁 30 turu bitir, sonra Serbest Mod!'},
 de:{sub:'Verteidige Çaycuma gegen die Gelees!',play:'Spielen',how:'Wie spielt man?',settings:'Einstellungen',maps:'Karte wählen',menu:'Hauptmenü',back:'Zurück',
 map0:'Fluss Filyos',map1:'Antike Stadt Tios',map2:'Verschneites Çaycuma',fact:'💡 Schon gewusst? ',diff0:'Leicht',diff1:'Mittel',diff2:'Schwer',locked:'Vorherige Karte schaffen',
 round:'Runde',start:'Start',sell:'Verkaufen',max:'MAX',lockedP:'Anderer Pfad MAX',pops:'Treffer',
@@ -292,7 +305,7 @@ seloD:'Schnell und fröhlich. Wirft leuchtende Sterne. Spezialkraft: Sternenrege
 musaD:'Stark und ruhig. Wirft einen Bumerang, knackt auch Eisen. Spezialkraft: Erdbeben 🌋',
 seloAb:'Sternenregen',musaAb:'Erdbeben',muazAb:'Drohnenangriff',muaz:'Muaz',muazD:'Schlau und technisch. Seine Drohne schießt Laser und sieht auch Unsichtbare. Spezialkraft: Drohnenangriff 🚁',
 farmI:'🍎 {n}/Runde · 💰{v}',totemI:'💪 {n} Türme gestärkt',lvUp:'Stufe {n}!',
-howText:'🦎 Beschütze Çaycuma und die Eier im Buko-Nest vor den Gelees!<br>🦸 Wähle zuerst <b>Musa</b> oder <b>Selo</b>. Der Held steigt von selbst auf, spricht und bekommt ab Stufe 3 eine <b>Spezialkraft</b>.<br>🛒 Türme von unten auf die Karte <b>ziehen</b> (oder wählen und tippen). Nicht auf Weg oder Bäume.<br>🎈 Gelees platzen <b>Schicht für Schicht</b>. Jeder Treffer bringt 💰.<br>🍎 Der <b>Garten</b> bringt jede Runde Früchte (Geld). 💪 Das <b>Totem</b> stärkt Türme in der Nähe.<br>⬆️ Zwei Upgrade-Pfade: einer bis 3, der andere bis 2.<br>🛡️ Eisen-Gelee, 👻 unsichtbar, ♻️ wachsend, 🎈 Zeppelin und 👑 Riesenkönig.<br>⏩ Runder Knopf unten rechts: Runde starten, während der Runde 1×/2×/3×. ⟳ Auto-Runden.<br>🏁 Schaffe 30 Runden, danach Freispiel!'},
+howText:'🦎 Beschütze Çaycuma und die Eier im Buko-Nest vor den Gelees!<br>🦸 Wähle zuerst einen von 6 Helden: <b>Selo, Musa, Muaz, Kapitän Reis, Tee-Opa</b> oder <b>Haselnuss-Tante</b>. Der Held steigt von selbst auf, spricht und bekommt ab Stufe 3 eine <b>Spezialkraft</b>.<br>🛒 Türme von unten auf die Karte <b>ziehen</b> (oder wählen und tippen). Nicht auf Weg oder Bäume.<br>🎈 Gelees platzen <b>Schicht für Schicht</b>. Jeder Treffer bringt 💰.<br>🍎 Der <b>Garten</b> bringt jede Runde Früchte (Geld). 💪 Das <b>Totem</b> stärkt Türme in der Nähe.<br>⬆️ Zwei Upgrade-Pfade: einer bis 3, der andere bis 2.<br>🛡️ Eisen-Gelee, 👻 unsichtbar, ♻️ wachsend, 🎈 Zeppelin und 👑 Riesenkönig.<br>⏩ Runder Knopf unten rechts: Runde starten, während der Runde 1×/2×/3×. ⟳ Auto-Runden.<br>🏁 Schaffe 30 Runden, danach Freispiel!'},
 en:{sub:'Defend Çaycuma from the jellies!',play:'Play',how:'How to play',settings:'Settings',maps:'Choose map',menu:'Main menu',back:'Back',
 map0:'Filyos River',map1:'Ancient Tios',map2:'Snowy Çaycuma',fact:'💡 Did you know? ',diff0:'Easy',diff1:'Medium',diff2:'Hard',locked:'Beat the previous map',
 round:'Round',start:'Start',sell:'Sell',max:'MAX',lockedP:'Other path MAX',pops:'Pops',
@@ -308,7 +321,7 @@ seloD:'Fast and cheerful. Throws shining stars. Special power: Star Rain ⭐',
 musaD:'Strong and calm. Throws a spinning boomerang that breaks iron. Special power: Earthquake 🌋',
 seloAb:'Star Rain',musaAb:'Earthquake',muazAb:'Drone Strike',muaz:'Muaz',muazD:'Smart and techy. His drone fires lasers and spots invisible jellies. Special power: Drone Strike 🚁',
 farmI:'🍎 {n}/round · 💰{v}',totemI:'💪 {n} towers boosted',lvUp:'Level {n}!',
-howText:'🦎 Protect Çaycuma and the eggs in the Buko nest from the jellies!<br>🦸 First pick <b>Musa</b> or <b>Selo</b>. Your hero levels up by itself, talks and gets a <b>special power</b> at level 3.<br>🛒 <b>Drag</b> towers onto the map (or pick and tap). Not on the road or trees.<br>🎈 Jellies pop <b>layer by layer</b>. Every pop earns 💰.<br>🍎 The <b>Orchard</b> gives fruit (money) every round. 💪 The <b>Totem</b> boosts towers nearby.<br>⬆️ Two upgrade paths: one up to 3, the other up to 2.<br>🛡️ Iron jelly, 👻 invisible, ♻️ growing, 🎈 zeppelin and 👑 giant king.<br>⏩ Round button bottom right: start the round, then 1×/2×/3× speed while it runs. ⟳ auto rounds.<br>🏁 Beat 30 rounds, then Freeplay!'}
+howText:'🦎 Protect Çaycuma and the eggs in the Buko nest from the jellies!<br>🦸 First pick one of 6 heroes: <b>Selo, Musa, Muaz, Captain Reis, Tea Grandpa</b> or <b>Hazelnut Auntie</b>. Your hero levels up by itself, talks and gets a <b>special power</b> at level 3.<br>🛒 <b>Drag</b> towers onto the map (or pick and tap). Not on the road or trees.<br>🎈 Jellies pop <b>layer by layer</b>. Every pop earns 💰.<br>🍎 The <b>Orchard</b> gives fruit (money) every round. 💪 The <b>Totem</b> boosts towers nearby.<br>⬆️ Two upgrade paths: one up to 3, the other up to 2.<br>🛡️ Iron jelly, 👻 invisible, ♻️ growing, 🎈 zeppelin and 👑 giant king.<br>⏩ Round button bottom right: start the round, then 1×/2×/3× speed while it runs. ⟳ auto rounds.<br>🏁 Beat 30 rounds, then Freeplay!'}
 };
 const FACTS=[
  ['Tios Antik Kenti, Çaycuma\'nın Filyos beldesindedir ve yaklaşık 2.700 yıllıktır.','Die antike Stadt Tios liegt in Filyos (Çaycuma) und ist rund 2.700 Jahre alt.','The ancient city of Tios lies in Filyos, Çaycuma, and is about 2,700 years old.'],
@@ -329,6 +342,25 @@ Object.assign(L.de,{maps:'Karte von Çaycuma',lvN:'Level',chap:'Kapitel',normal:
 Object.assign(L.en,{maps:'Map of Çaycuma',lvN:'Level',chap:'Chapter',normal:'🥚 Normal',iron:'⛓ Iron Mode',ironD:'1 egg · +1⭐',ironL:'🔒 needs 3⭐',ups:'⭐ Upgrades',upT:'Star Upgrades',upReset:'↩ Refund stars',upFree:'Stars to spend',
  cbH:'👑 CHAPTER BOSS: ',bossLv:'Boss',roundsN:'{n} rounds',manda:'Buffalo Barn',mandaS:'Buffalo',mandaI:'🐃 {n} · ❤️ {h}',ironWin:'⛓ Iron Mode beaten! +1⭐',starHint:'⭐ Spend stars on permanent upgrades!',next:'Next level',locked:'Beat the previous level',
  up_cash:'Starting Cash',up_cashD:'+50 💰 per level',up_lives:'Extra Eggs',up_livesD:'+10 🥚 (not in Iron Mode)',up_disc:'Bargain',up_discD:'Towers and upgrades −4%',up_range:'Sharp Eyes',up_rangeD:'Tower range +3%'});
+Object.assign(L.tr,{news:'🆕 Yenilikler',daily:'🎁 Günün Hediyesi',dailyGot:'🎁 +300 💰 sonraki oyuna eklendi!',bonusB:'🎁 Başlangıç bonusu +{n} 💰',
+ reis:'Balıkçı Reis',reisS:'Reis',cayS:'Çaycı',finS:'Fındıkçı',reisD:'Karadeniz\'in reisi. Zıpkını demiri deler, ağı yavaşlatır. Özel güç: Büyük Ağ 🕸️',reisAb:'Büyük Ağ',
+ cay:'Çaycı Dede',cayD:'Sıcak çay bardakları atar, yanındaki kuleleri hızlandırır. Özel güç: Çay Molası ☕',cayAb:'Çay Molası',
+ fin:'Fındıkçı Teyze',finD:'Çok hızlı fındık atar, her patlatmada ekstra para. Özel güç: Fındık Hasadı 🌰',finAb:'Fındık Hasadı',newB:'YENİ'});
+Object.assign(L.de,{news:'🆕 Neuigkeiten',daily:'🎁 Tagesgeschenk',dailyGot:'🎁 +300 💰 fürs nächste Spiel!',bonusB:'🎁 Startbonus +{n} 💰',
+ reis:'Kapitän Reis',reisS:'Reis',cayS:'Tee-Opa',finS:'Nuss-Tante',reisD:'Der Kapitän vom Schwarzen Meer. Seine Harpune durchbohrt Eisen, sein Netz bremst. Spezialkraft: Großes Netz 🕸️',reisAb:'Großes Netz',
+ cay:'Tee-Opa',cayD:'Wirft heiße Teegläser und macht Türme in der Nähe schneller. Spezialkraft: Teepause ☕',cayAb:'Teepause',
+ fin:'Haselnuss-Tante',finD:'Wirft superschnell Haselnüsse, jeder Treffer bringt extra Geld. Spezialkraft: Haselnussernte 🌰',finAb:'Haselnussernte',newB:'NEU'});
+Object.assign(L.en,{news:'🆕 What\'s new',daily:'🎁 Daily gift',dailyGot:'🎁 +300 💰 added to your next game!',bonusB:'🎁 Start bonus +{n} 💰',
+ reis:'Captain Reis',reisS:'Reis',cayS:'Tea Gramps',finS:'Nut Auntie',reisD:'The Black Sea captain. His harpoon pierces iron, his net slows. Special power: Big Net 🕸️',reisAb:'Big Net',
+ cay:'Tea Grandpa',cayD:'Throws hot tea glasses and speeds up nearby towers. Special power: Tea Break ☕',cayAb:'Tea Break',
+ fin:'Hazelnut Auntie',finD:'Throws hazelnuts super fast, every pop earns extra cash. Special power: Hazelnut Harvest 🌰',finAb:'Hazelnut Harvest',newB:'NEW'});
+const NEWS={tr:`<h3>v8 – 18 Kasım 2026</h3><ul><li>🦸 3 yeni kahraman: <b>Balıkçı Reis</b> 🔱, <b>Çaycı Dede</b> ☕, <b>Fındıkçı Teyze</b> 🌰</li><li>🎁 Her gün <b>Günün Hediyesi</b>: sonraki oyuna +300 💰</li><li>🆕 Bu Yenilikler ekranı</li><li>✨ Menülerde daha temiz görünüm</li></ul>
+<h3>v7 – 30 seviye</h3><ul><li>🗺️ Çaycuma haritası: 6 bölüm, 30 seviye</li><li>👑 6 bölüm bossu</li><li>🐃 Yeni kule: Manda Ahırı</li><li>⛓ Demir Mod ve ⭐ yıldız güçlendirmeleri</li><li>🏖️ Fındık Bahçeleri, Filyos Sahili, Çaycuma Çarşı</li></ul>`,
+de:`<h3>v8 – 18. November 2026</h3><ul><li>🦸 3 neue Helden: <b>Kapitän Reis</b> 🔱, <b>Tee-Opa</b> ☕, <b>Haselnuss-Tante</b> 🌰</li><li>🎁 Jeden Tag ein <b>Tagesgeschenk</b>: +300 💰 fürs nächste Spiel</li><li>🆕 Dieser Neuigkeiten-Bildschirm</li><li>✨ Aufgeräumtere Menüs</li></ul>
+<h3>v7 – 30 Level</h3><ul><li>🗺️ Karte von Çaycuma: 6 Kapitel, 30 Level</li><li>👑 6 Kapitel-Bosse</li><li>🐃 Neuer Turm: Büffelstall</li><li>⛓ Eisen-Modus und ⭐ Sterne-Upgrades</li><li>🏖️ Haselnussgärten, Strand von Filyos, Basar</li></ul>`,
+en:`<h3>v8 – 18 November 2026</h3><ul><li>🦸 3 new heroes: <b>Captain Reis</b> 🔱, <b>Tea Grandpa</b> ☕, <b>Hazelnut Auntie</b> 🌰</li><li>🎁 A <b>daily gift</b> every day: +300 💰 for your next game</li><li>🆕 This What's new screen</li><li>✨ Cleaner menus</li></ul>
+<h3>v7 – 30 levels</h3><ul><li>🗺️ Map of Çaycuma: 6 chapters, 30 levels</li><li>👑 6 chapter bosses</li><li>🐃 New tower: Buffalo Barn</li><li>⛓ Iron Mode and ⭐ star upgrades</li><li>🏖️ Hazelnut orchards, Filyos beach, the bazaar</li></ul>`};
+const NEWSV='v8';
 const CHN=[['Filyos Çayı','Fluss Filyos','Filyos River'],['Tios Antik Kenti','Antike Stadt Tios','Ancient Tios'],['Fındık Bahçeleri','Haselnussgärten','Hazelnut Orchards'],['Filyos Sahili','Strand von Filyos','Filyos Beach'],['Çaycuma Çarşı','Çaycuma-Basar','Çaycuma Bazaar'],['Karlı Çaycuma','Verschneites Çaycuma','Snowy Çaycuma']];
 const CBN=[['Dev Yengeç Jöle','Riesenkrabben-Gelee','Giant Crab Jelly'],['Antik Miğfer Jöle','Antiker Helm-Gelee','Ancient Helmet Jelly'],['Fındık Kral Jöle','Haselnusskönig-Gelee','Hazelnut King Jelly'],['Kaptan Ahtapot Jöle','Kapitän-Krake-Gelee','Captain Octopus Jelly'],['Gece Hayaleti Jöle','Nachtgeist-Gelee','Night Ghost Jelly'],['Buz Kral Jöle','Eiskönig-Gelee','Ice King Jelly']];
 const CBT=[['Çok hızlı! Erken durdur','Sehr schnell! Früh stoppen','Very fast! Stop it early'],['Miğfer: sadece 🛡 ağır atışlar tam vurur','Helm: nur 🛡 schwere Treffer wirken voll','Helmet: only 🛡 heavy hits do full damage'],['İçinden çok demir jöle çıkar','Darin stecken viele Eisen-Gelees','Hides lots of iron jellies'],['Yolda yavru jöle bırakır','Lässt unterwegs Baby-Gelees fallen','Drops baby jellies on the way'],['Görünmez! 👁 gören kule şart','Unsichtbar! Du brauchst 👁','Invisible! You need 👁 detection'],['Buz jöleleri bırakır','Lässt Eis-Gelees fallen','Drops ice jellies']];
@@ -354,6 +386,33 @@ const SAY={
   leak:[['Eyvah, yumurtalar!','Oh nein, die Eier!','Oh no, the eggs!']],
   win:[['Çaycuma kurtuldu! Yaşasın!','Çaycuma ist gerettet! Hurra!','Çaycuma is saved! Hooray!']],
   ready:[['Özel gücüm hazır!','Meine Spezialkraft ist bereit!','My special power is ready!']]},
+ reis:{
+  place:[['Reis geldi! Ağlar hazır.','Kapitän Reis ist da! Netze bereit.','Captain Reis is here! Nets ready.']],
+  round:[['Dalga geliyor, tutun sıkı!','Eine Welle kommt, festhalten!','A wave is coming, hold on!'],['Karadeniz\'de fırtına görmüşüm, bu ne ki!','Ich hab Stürme am Schwarzen Meer gesehen, das ist nichts!','I\'ve seen Black Sea storms, this is nothing!'],['Hamsi gibi toplarım hepsini!','Ich fang sie alle wie Sardellen!','I\'ll catch them all like anchovies!']],
+  level:[['Rüzgar arkamızda!','Rückenwind!','Wind at our backs!'],['Zıpkın keskinleşti!','Harpune geschärft!','Harpoon sharpened!']],
+  ab:[['Ağı atıyorum!','Ich werfe das Netz!','Casting the net!']],
+  boss:[['Bu balina kadar büyük!','Der ist so groß wie ein Wal!','That one\'s as big as a whale!']],
+  leak:[['Ağdan kaçan oldu!','Einer ist durchs Netz!','One slipped the net!']],
+  win:[['Liman güvende, Çaycuma güvende!','Hafen sicher, Çaycuma sicher!','Harbour safe, Çaycuma safe!']],
+  ready:[['Büyük ağ hazır!','Das große Netz ist bereit!','The big net is ready!']]},
+ cay:{
+  place:[['Çaylar benden evlatlar!','Der Tee geht auf mich, Kinder!','Tea\'s on me, kids!']],
+  round:[['Önce bir çay, sonra iş.','Erst ein Tee, dann die Arbeit.','First a tea, then work.'],['Acele etmeyin, sakin olun.','Keine Eile, ruhig bleiben.','No rush, stay calm.'],['Demlik hazır, kuleler hazır.','Kanne bereit, Türme bereit.','Teapot ready, towers ready.']],
+  level:[['Çay demlendi!','Der Tee ist fertig!','The tea is brewed!'],['Tavşan kanı çay, güç verir!','Starker Tee gibt Kraft!','Strong tea gives strength!']],
+  ab:[['Çay molası! Herkese çay!','Teepause! Tee für alle!','Tea break! Tea for everyone!']],
+  boss:[['Vay vay, koca jöle gelmiş.','Na sowas, ein Riesengelee.','My my, a giant jelly.']],
+  leak:[['Eyvah, çay soğudu!','Oje, der Tee wird kalt!','Oh dear, the tea went cold!']],
+  win:[['Aferin evlatlar, çaylar benden!','Gut gemacht, Kinder, Tee für alle!','Well done kids, tea for everyone!']],
+  ready:[['Çay molası zamanı!','Zeit für eine Teepause!','Time for a tea break!']]},
+ fin:{
+  place:[['Fındıklar torbada, hadi bakalım!','Haselnüsse im Sack, los geht\'s!','Hazelnuts in the bag, let\'s go!']],
+  round:[['Bahçeye kimse giremez!','Keiner kommt in meinen Garten!','Nobody gets into my orchard!'],['Hasat zamanı!','Erntezeit!','Harvest time!'],['Bir fındık, bir jöle!','Eine Nuss, ein Gelee!','One nut, one jelly!']],
+  level:[['Sepetim doldu!','Mein Korb ist voll!','My basket is full!'],['Daha hızlıyım!','Ich bin noch schneller!','I\'m even faster!']],
+  ab:[['Fındık hasadı!','Haselnussernte!','Hazelnut harvest!']],
+  boss:[['Aman da kocaman!','Ach du meine Güte, riesig!','Goodness, it\'s huge!']],
+  leak:[['Hay aksi, kaçtı!','Ach je, entwischt!','Oh no, it got away!']],
+  win:[['Çaycuma\'nın fındığı gibi sağlam!','Stark wie Çaycumas Haselnüsse!','Strong as Çaycuma\'s hazelnuts!']],
+  ready:[['Hasat hazır!','Die Ernte ist bereit!','The harvest is ready!']]},
  muaz:{
   place:[['Muaz hazır! Dronum havada.','Muaz ist bereit! Meine Drohne fliegt.','Muaz is ready! My drone is up.']],
   round:[['Hesapladım, kazanacağız.','Ich hab\'s berechnet, wir gewinnen.','I ran the numbers, we\'ll win.'],['Dron taramada, hepsini görüyorum.','Drohne scannt, ich sehe alle.','Drone scanning, I see them all.'],['Çaycuma\'yı teknolojiyle koruyoruz!','Wir schützen Çaycuma mit Technik!','We protect Çaycuma with technology!']],
@@ -462,12 +521,12 @@ function say(key,force){
     speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(line);
     u.lang={tr:'tr-TR',de:'de-DE',en:'en-US'}[SET.lang];
     const vs=speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith(SET.lang));if(vs.length)u.voice=vs[0];
-    u.pitch={selo:1.65,musa:1.15,muaz:1.4}[G.hero.type]||1.2;u.rate={selo:1.08,musa:.95,muaz:1.05}[G.hero.type]||1;u.volume=.85;speechSynthesis.speak(u);
+    u.pitch={selo:1.65,musa:1.15,muaz:1.4,reis:.85,cay:.75,fin:1.35}[G.hero.type]||1.2;u.rate={selo:1.08,musa:.95,muaz:1.05,reis:.95,cay:.85,fin:1.12}[G.hero.type]||1;u.volume=.85;speechSynthesis.speak(u);
   }catch(e){}}
 }
 
 /* ============ Art (AI-generated sprites) ============ */
-const IMG={},IMGN=['manda','buffalo','cb0','cb1','cb2','cb3','cb4','cb5','hztree','basket','teatable','bhouse','lamp','dolmus','umbrella','castle','lighthouse','brocks','autumn','cobble','sea','beach','dart','bomb','ice','wiz','snip','farm','totem','selo','musa','muaz','drone','t1','t2','t3','t4','t5','armor','zep','boss','camo','tree','rock','flowers','srock','pine','irock','nest','mush','columns','ruinwall','yogurt','boat','reeds','mill','house','gull','hazel','grass','sand','snow','dirt'];
+const IMG={},IMGN=['reis','cay','fin','manda','buffalo','cb0','cb1','cb2','cb3','cb4','cb5','hztree','basket','teatable','bhouse','lamp','dolmus','umbrella','castle','lighthouse','brocks','autumn','cobble','sea','beach','dart','bomb','ice','wiz','snip','farm','totem','selo','musa','muaz','drone','t1','t2','t3','t4','t5','armor','zep','boss','camo','tree','rock','flowers','srock','pine','irock','nest','mush','columns','ruinwall','yogurt','boat','reeds','mill','house','gull','hazel','grass','sand','snow','dirt'];
 let imgLeft=IMGN.length;
 for(const n of IMGN){const im=new Image();im.onload=()=>{IMG[n]=im;if(--imgLeft<=0)artReady()};im.onerror=()=>{if(--imgLeft<=0)artReady()};im.src='caycuma-defense/img/'+n+'.webp'}
 const hasI=n=>!!(IMG[n]&&IMG[n].naturalWidth);
@@ -573,12 +632,15 @@ const TD={
   B:[{c:200,n:['Hızlı Toslama','Schnelles Rammen','Quick Charge'],f:s=>{s.rate*=1.4}},
      {c:400,n:['Çamur Banyosu','Schlammbad','Mud Bath'],f:s=>{s.respawn=3.5;s.regen=1.5}},
      {c:1100,n:['Yoğurt Gücü','Joghurt-Power','Yogurt Power'],f:s=>{s.knock=.7;s.rate*=1.3;s.dmg+=1}}]},
- selo:{cost:550,hero:true},musa:{cost:550,hero:true},muaz:{cost:550,hero:true}
+ selo:{cost:550,hero:true},musa:{cost:550,hero:true},muaz:{cost:550,hero:true},reis:{cost:550,hero:true},cay:{cost:550,hero:true},fin:{cost:550,hero:true}
 };
 const TT=['dart','bomb','ice','wiz','snip','manda','farm','totem'];
 const HXP=[0,0,150,400,750,1200,1800,2600,3600,4800,6300];
 function heroStats(type,L){
   if(type==='selo')return{range:2.4+L*.05,rate:1.15+L*.09,dmg:1+(L>=6?1:0)+(L>=10?1:0),pierce:2+Math.floor(L/3),speed:13,count:L>=8?2:1,spread:.22,heavy:L>=4,detect:L>=3,splash:L>=6?.45:0,big:false,star:true};
+  if(type==='reis')return{range:2.5+L*.05,rate:.75+L*.05,dmg:1+(L>=4?1:0)+(L>=8?1:0),pierce:4+L,speed:12,count:L>=7?2:1,spread:.25,heavy:true,detect:L>=6,big:true,slow:L>=2?1.2:0};
+  if(type==='cay')return{range:2.3+L*.05,rate:.7+L*.05,dmg:1+(L>=6?1:0),pierce:5+Math.floor(L*.6),splash:.55+L*.02,speed:9,heavy:L>=5,detect:L>=4,aura:1.1+L*.012};
+  if(type==='fin')return{range:2.2+L*.05,rate:1.7+L*.13,dmg:1+(L>=9?1:0),pierce:1+Math.floor(L/4),speed:13,count:L>=5?2:1,spread:.18,heavy:L>=7,detect:L>=3,nut:true,cash:L>=6?1:.5};
   if(type==='muaz')return{range:2.6+L*.06,rate:.85+L*.08,dmg:1+(L>=4?1:0)+(L>=8?1:0),pierce:3+Math.floor(L/2),heavy:L>=6,detect:true,laser:true,bossX:L>=9?1.5:1};
   return{range:2.0+L*.05,rate:.65+L*.05,dmg:1+(L>=5?1:0)+(L>=9?1:0),pierce:5+Math.floor(L*.7),speed:7.5,count:L>=8?2:1,spread:.6,heavy:true,detect:L>=5,rang:true};
 }
@@ -667,8 +729,9 @@ function startMap(lv,heroType,iron){
   const end=posAt(P,P.total-1.3),st=posAt(P,1.0);
   const L0=iron?1:START_LIVES+10*(PROG.up.lives||0);
   G={lv,mi,ti:D.ch,iron:!!iron,R:RFOR(lv),L0,maxL:iron?1:L0+50,P,obs,deco,end,st,heroType:heroType||G&&G.heroType||'selo',hero:null,towers:[],enemies:[],projs:[],parts:[],texts:[],rings:[],bolts:[],pops:[],fruits:[],smoke:[],beams:[],gifts:[],giftT:9+Math.random()*6,
-     money:START_MONEY+50*(PROG.up.cash||0),lives:L0,round:0,inRound:false,queue:[],qT:0,speed:1,auto:false,paused:false,over:false,free:false,time:0,
+     money:START_MONEY+50*(PROG.up.cash||0)+(PROG.bonus||0),lives:L0,round:0,inRound:false,queue:[],qT:0,speed:1,auto:false,paused:false,over:false,free:false,time:0,
      sel:null,place:null,banner:null,shake:0,seen:{},autoT:-1,say:null,flash:0};
+  if(PROG.bonus){PROG.bonus=0;saveProg()}
   G.factI=C.fact;G.factT=4;G.banner={txt:lvName(lv)+(iron?' ⛓':''),life:2.4,col:'#ffe28a',small:1};
   bgDirty=true;showOv(null);renderPanel(true);updateHUD(true);
 }
@@ -734,7 +797,7 @@ function hurt(e,dmg,src){
   if(e.frozen>0&&e.brittle)dmg+=1;
   if(T.big&&src.bossX)dmg=Math.round(dmg*src.bossX);
   const dealt=Math.min(dmg,e.hp);e.hp-=dmg;e.hit=.08;e.regT=0;G.money+=dealt;
-  if(src.tw){src.tw.pops+=dealt;if(src.tw.hero)src.tw.xp+=dealt*.6}
+  if(src.tw){src.tw.pops+=dealt;if(src.tw.hero)src.tw.xp+=dealt*.6;if(src.tw.type==='fin'&&src.tw.S&&src.tw.S.cash){src.tw.cAcc=(src.tw.cAcc||0)+dealt*src.tw.S.cash;if(src.tw.cAcc>=1){const v=Math.floor(src.tw.cAcc);src.tw.cAcc-=v;G.money+=v}}}
   if(G.hero&&src.tw!==G.hero)G.hero.xp+=dealt*.06;
   if(e.hp<=0)popE(e,-e.hp,src);
   return true;
@@ -774,6 +837,7 @@ function recalc(){
     if(!tw.buff)continue;const S=tw.S;
     if(S.range<50)S.range*=rM;S.rate*=raM;if(det)S.detect=true;if(S.dmg>0)S.dmg+=dA;if(hv&&'heavy'in S)S.heavy=true;if(hv&&tw.type==='ice')S.iceArmor=true;if(S.pierce!==undefined)S.pierce+=pA;
   }
+  {const h=G.hero;if(h&&h.type==='cay')for(const tw of G.towers){if(tw===h||tw.type==='farm'||tw.type==='totem'||!tw.S.rate)continue;if(Math.hypot(tw.x-h.x,tw.y-h.y)<=h.S.range){tw.S.rate*=h.S.aura;tw.buff=1}}}
   for(const to of tots)to.boosted=G.towers.filter(x=>x.buff&&Math.hypot(to.x-x.x,to.y-x.y)<=to.S.range).length;
 }
 function canPlace(type,x,y){
@@ -825,7 +889,17 @@ function useAbility(){
   const h=G&&G.hero;if(!h||h.lvl<3||h.abCd>0||G.over)return;initAudio();
   sfx('ab');say('ab',true);h.spin=1;G.flash=.35;G.shake=.4;vib(80);
   const src={heavy:true,tw:h};
-  if(h.type==='muaz'){
+  if(h.type==='reis'){
+    h.abCd=40;const dmg=2+Math.floor(h.lvl/2),R=3.6;
+    for(const e of G.enemies.slice()){if(e.dead||Math.hypot(e.x-h.x,e.y-h.y)>R)continue;if(ET[e.type].big)e.slowT=Math.max(e.slowT,4);else{e.stun=Math.max(e.stun,3);e.slowT=Math.max(e.slowT,5)}hurt(e,dmg,src)}
+    G.rings.push({x:h.x,y:h.y,r0:.3,r1:R,life:.8,max:.8,col:'200,230,255'});G.rings.push({x:h.x,y:h.y,r0:.2,r1:R*.6,life:.6,max:.6,col:'255,255,255'});
+  }else if(h.type==='cay'){
+    h.abCd=40;G.teaT=8+h.lvl*.3;G.banner={txt:'☕ '+t('cayAb')+'!',life:1.6,col:'#ffcf8a'};
+    for(const tw of G.towers){if(tw.hero)continue;for(let i=0;i<5;i++)G.parts.push({x:tw.x+(Math.random()-.5)*.4,y:tw.y-.2,vx:(Math.random()-.5)*.6,vy:-1.4-Math.random(),life:1,max:1,col:'rgba(255,255,255,.8)',sz:.07,g:0})}
+  }else if(h.type==='fin'){
+    h.abCd=45;const v=150+h.lvl*30,dmg=2+h.lvl;G.money+=v;G.texts.push({x:h.x,y:h.y-.6,txt:'+'+v+' 🌰',life:1.6,col:'#ffd34d'});let n=0;
+    for(const e of G.enemies.slice()){if(e.dead||n>=40)continue;n++;G.projs.push({k:'starfall',nutfall:true,x:e.x-1.2,y:e.y-3,tx:e.x,ty:e.y,tgt:e,t:0,T:.45+Math.random()*.35,dmg:ET[e.type].big?dmg*3:dmg,src})}
+  }else if(h.type==='muaz'){
     h.abCd=40;const dmg=3+h.lvl,tg=G.enemies.filter(e=>!e.dead).sort((a,b)=>rbeE(b)-rbeE(a)).slice(0,14);
     tg.forEach((e,i)=>G.projs.push({k:'starfall',missile:true,x:e.x-2,y:e.y-3,tx:e.x,ty:e.y,tgt:e,t:-i*.06,T:.55+Math.random()*.25,dmg:ET[e.type].big?dmg*3:dmg,src}));
   }else if(h.type==='selo'){
@@ -864,10 +938,10 @@ function fire(tw,e){
   const S=tw.S;tw.recoil=1;tw.eng=1;if(e){tw.ax=e.x;tw.ay=e.y}
   const mz=hasI(tw.type)?muzzle(tw):{x:tw.x,y:tw.y};
   const src={heavy:S.heavy,tw,bossX:S.bossX};
-  if(tw.type==='dart'||tw.type==='selo'){
+  if(tw.type==='dart'||tw.type==='selo'||tw.type==='reis'||tw.type==='fin'){
     const f=lead(e,S.speed,tw.x,tw.y),base=Math.atan2(f.y-tw.y,f.x-tw.x);
     for(let i=0;i<S.count;i++){const a=base+(i-(S.count-1)/2)*S.spread;
-      G.projs.push({k:'dart',x:mz.x,y:mz.y,vx:Math.cos(a)*S.speed,vy:Math.sin(a)*S.speed,life:(S.range+1.2)/S.speed,pierce:S.pierce,dmg:S.dmg,src,hit:new Set(),big:S.big,star:S.star,splash:S.splash||0,ang:a,spin:0})}
+      G.projs.push({k:'dart',x:mz.x,y:mz.y,vx:Math.cos(a)*S.speed,vy:Math.sin(a)*S.speed,life:(S.range+1.2)/S.speed,pierce:S.pierce,dmg:S.dmg,src,hit:new Set(),big:S.big,star:S.star,nut:S.nut,harp:tw.type==='reis',slow:S.slow||0,splash:S.splash||0,ang:a,spin:0})}
     sfx('dart');
   }else if(tw.type==='muaz'){
     const ang=Math.atan2(e.y-mz.y,e.x-mz.x),L2=S.range+.6,ex=mz.x+Math.cos(ang)*L2,ey=mz.y+Math.sin(ang)*L2,vx=ex-mz.x,vy=ey-mz.y,l2=vx*vx+vy*vy,list=[];
@@ -879,6 +953,9 @@ function fire(tw,e){
     for(let i=0;i<S.count;i++){const a=base+(i-(S.count-1)/2)*S.spread;
       G.projs.push({k:'rang',x:mz.x,y:mz.y,vx:Math.cos(a)*S.speed,vy:Math.sin(a)*S.speed,out:S.range+.4,dist:0,back:false,pierce:S.pierce,dmg:S.dmg,src,hit:new Set(),spin:0,home:tw,curve:i%2?-1:1})}
     sfx('dart');
+  }else if(tw.type==='cay'){
+    const f=lead(e,S.speed,tw.x,tw.y);
+    G.projs.push({k:'bomb',tea:true,x:mz.x,y:mz.y,tx:f.x,ty:f.y,spd:S.speed,dmg:S.dmg,pierce:S.pierce,splash:S.splash,src,frag:0,spin:0});sfx('dart');
   }else if(tw.type==='bomb'){
     const f=lead(e,S.speed,tw.x,tw.y);
     G.projs.push({k:'bomb',x:mz.x,y:mz.y,tx:f.x,ty:f.y,spd:S.speed,dmg:S.dmg,pierce:S.pierce,splash:S.splash,src,frag:S.frag,mega:S.mega,spin:0});
@@ -986,6 +1063,7 @@ function update(dt){
   if(G.inRound&&!G.over){G.qT+=dt;while(G.queue.length&&G.queue[0].at<=G.qT)spawnQ(G.queue.shift())}
   if(!G.inRound&&G.autoT>0){G.autoT-=dt;if(G.autoT<=0)startRound()}
   if(G.flash>0)G.flash-=dt;
+  if(G.teaT>0){G.teaT-=dt;if(G.teaT<=0)G.teaT=0}
   const BL=[];for(const tw of G.towers)if(tw.units)for(const u of tw.units)if(!u.dead&&u.ready)BL.push(u);
   for(const e of G.enemies){
     if(e.dead)continue;e.hit-=dt;
@@ -1005,7 +1083,7 @@ function update(dt){
     const S=tw.S;if(tw.drop>0){tw.drop=Math.max(0,tw.drop-dt);if(tw.drop===0)for(let i=0;i<10;i++){const a=Math.random()*6.28;G.parts.push({x:tw.x,y:tw.y+.2,vx:Math.cos(a)*1.6,vy:Math.sin(a)*.7,life:.45,max:.45,col:'rgba(235,225,200,.85)',sz:.08,g:0})}}
     {const want=Math.atan2(tw.ay-tw.y,tw.ax-tw.x);let da=want-tw.wa;while(da>Math.PI)da-=2*Math.PI;while(da<-Math.PI)da+=2*Math.PI;tw.wa+=da*Math.min(1,dt*14)}
     tw.eng=Math.max(0,(tw.eng||0)-dt*1.2);if(tw.spin>0)tw.spin=Math.max(0,tw.spin-dt*1.5);
-    tw.cd-=dt;tw.recoil=Math.max(0,tw.recoil-dt*3.2);tw.pop=Math.max(0,tw.pop-dt);if(tw.flash>0)tw.flash-=dt;
+    tw.cd-=dt*(G.teaT>0&&!tw.hero?1.8:1);tw.recoil=Math.max(0,tw.recoil-dt*3.2);tw.pop=Math.max(0,tw.pop-dt);if(tw.flash>0)tw.flash-=dt;
     if(tw.hero){if(tw.abCd>0){tw.abCd-=dt;if(tw.abCd<=0&&tw.lvl>=3)say('ready')}}
     if(tw.type==='farm'){
       if(G.inRound&&tw.left>0){tw.ft-=dt;if(tw.ft<=0){tw.left--;tw.ft=tw.fint;tw.recoil=1;
@@ -1034,7 +1112,7 @@ function update(dt){
         if(e.dead||p.hit.has(e.id))continue;const rr=ET[e.type].r+pr;
         if(Math.abs(e.x-p.x)>rr||Math.abs(e.y-p.y)>rr)continue;
         if((e.x-p.x)**2+(e.y-p.y)**2>rr*rr)continue;
-        p.hit.add(e.id);hurt(e,p.dmg,p.src);p.pierce--;
+        p.hit.add(e.id);hurt(e,p.dmg,p.src);if(p.slow&&!e.dead)e.slowT=Math.max(e.slowT,p.slow);p.pierce--;
         if(p.splash){explode({x:p.x,y:p.y,splash:p.splash,pierce:5,dmg:1,src:p.src,small:true,star:true});p.splash=0}
         if(p.pierce<=0){gone=true;break}
       }
@@ -1115,7 +1193,7 @@ function easeBack(t){const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Mat
 function star(c,x,y,r1,r2,n,rot){c.beginPath();for(let i=0;i<n*2;i++){const a=i*Math.PI/n-Math.PI/2+(rot||0),r=i%2?r2:r1;c.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r)}c.closePath()}
 
 /* ---- towers (Buko lizards) ---- */
-const BODY={manda:'#b08a55',muaz:'#7fd0e0',dart:'#7dd35b',bomb:'#6fc152',ice:'#78d8a6',wiz:'#93d66b',snip:'#62b85b',selo:'#8fe05f',musa:'#4fc0a0'};
+const BODY={reis:'#5aa0d0',cay:'#c0392b',fin:'#b8742a',manda:'#b08a55',muaz:'#7fd0e0',dart:'#7dd35b',bomb:'#6fc152',ice:'#78d8a6',wiz:'#93d66b',snip:'#62b85b',selo:'#8fe05f',musa:'#4fc0a0'};
 const PADS={};
 function padSpr(r){const k=Math.round(r*4)+'|'+DPR;if(PADS[k])return PADS[k];
   const sz=r*2.9,n=Math.ceil(sz*DPR),c0=document.createElement('canvas');c0.width=c0.height=n;const c=c0.getContext('2d');c.scale(DPR,DPR);const X=sz/2,Y=sz/2,lw=Math.max(1.2,r*.07);
@@ -1132,7 +1210,7 @@ function drawPad(c,X,Y,r,a,b,buff,tm){
   if(buff){c.save();c.globalAlpha=.75+Math.sin(tm*4)*.25;c.fillStyle='#7dff8a';c.beginPath();const bx=X+r*1.05,by=Y-r*.95;c.moveTo(bx,by-r*.28);c.lineTo(bx+r*.22,by);c.lineTo(bx-r*.22,by);c.fill();c.fillRect(bx-r*.08,by,r*.16,r*.2);c.restore()}
 }
 function drawTowerSpr(c,X,Y,r,type,ang,tm,o){
-  const hero=type==='selo'||type==='musa'||type==='muaz',im=IMG[type],sz=r*(hero?4.1:3.7),tw=o.tw||{},seed=o.seed||0,rec=o.recoil||0;
+  const hero=!!(TD[type]&&TD[type].hero),im=IMG[type],sz=r*(hero?4.1:3.7),tw=o.tw||{},seed=o.seed||0,rec=o.recoil||0;
   const still=type==='farm'||type==='totem'||type==='manda';
   // smooth turning: face goes -1..1 through 0, so the figure visibly turns around
   const want=Math.cos(ang)<-.15?-1:Math.cos(ang)>.15?1:(tw.face||1);
@@ -1530,6 +1608,7 @@ function render(){
   for(const p of G.projs){
     const X=SX(p.x,p.y),Y=SY(p.x,p.y);
     if(p.k==='dart'||p.k==='frag'){
+      if(p.nut){ctx.save();ctx.translate(X,Y);ctx.rotate(p.spin=(p.spin||0)+.3);ell(ctx,0,0,S*.1,S*.09);fs(ctx,'#a0612a','#4a2a0a',1.5);ctx.fillStyle='#e8c690';ell(ctx,0,-S*.06,S*.07,S*.035);ctx.fill();ctx.restore();continue}
       if(p.star){glow(ctx,X,Y,S*.42,'rgba(255,220,100,1)',.8);ctx.save();ctx.fillStyle='#ffd34d';star(ctx,X,Y,S*.16,S*.07,5,p.spin);ctx.fill();ctx.restore();continue}
       const[dx,dy]=sdir(Math.cos(p.ang),Math.sin(p.ang)),a=Math.atan2(dy,dx),L2=S*(p.big?.5:p.k==='frag'?.16:.24);
       ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=Math.max(1.5,S*.03);ctx.beginPath();ctx.moveTo(X,Y);ctx.lineTo(X-dx*L2*2.2,Y-dy*L2*2.2);ctx.stroke();
@@ -1539,7 +1618,9 @@ function render(){
       ctx.restore()}
     else if(p.k==='rang')drawRang(ctx,X,Y,S*.22,p.spin);
     else if(p.k==='starfall'&&p.missile){if(p.t<0)continue;glow(ctx,X,Y,S*.55,'rgba(120,200,255,1)',.9);const[ux,uy]=sdir(2,3),ua=Math.atan2(uy,ux);ctx.save();ctx.translate(X,Y);ctx.rotate(ua);ctx.fillStyle='rgba(180,220,255,.5)';ctx.fillRect(-S*.7,-S*.04,S*.6,S*.08);rrect(ctx,-S*.14,-S*.07,S*.28,S*.14,S*.06);fs(ctx,'#dfe9f5','#2a5ea8',1.5);ctx.fillStyle='#ff5a3a';ctx.beginPath();ctx.moveTo(S*.14,-S*.07);ctx.lineTo(S*.24,0);ctx.lineTo(S*.14,S*.07);ctx.fill();ctx.restore()}
+    else if(p.k==='starfall'&&p.nutfall){ell(ctx,X,Y,S*.13,S*.12);fs(ctx,'#a0612a','#4a2a0a',2);ctx.fillStyle='#e8c690';ell(ctx,X,Y-S*.08,S*.09,S*.045);ctx.fill()}
     else if(p.k==='starfall'){glow(ctx,X,Y,S*.7,'rgba(255,230,140,1)',.9);ctx.save();ctx.strokeStyle='rgba(255,240,150,.5)';ctx.lineWidth=S*.08;ctx.beginPath();ctx.moveTo(X,Y);const bx=SX(p.x-.5,p.y-1.25),by=SY(p.x-.5,p.y-1.25);ctx.lineTo(bx,by);ctx.stroke();ctx.fillStyle='#fff3a0';star(ctx,X,Y,S*.22,S*.09,5,p.t*8);ctx.fill();ctx.restore()}
+    else if(p.tea){ctx.save();ctx.translate(X,Y);ctx.rotate(Math.sin(p.spin)*.6);ctx.fillStyle='rgba(255,255,255,.75)';ctx.beginPath();ctx.moveTo(-S*.08,-S*.13);ctx.quadraticCurveTo(-S*.03,0,-S*.07,S*.12);ctx.lineTo(S*.07,S*.12);ctx.quadraticCurveTo(S*.03,0,S*.08,-S*.13);ctx.closePath();ctx.fill();ctx.fillStyle='#c0391b';ctx.fillRect(-S*.055,-S*.04,S*.11,S*.14);ctx.strokeStyle='#8a6a3a';ctx.lineWidth=1;ctx.stroke();ctx.restore()}
     else if(p.fire){glow(ctx,X,Y,S*.5,'rgba(255,140,40,1)',.9);ctx.save();ell(ctx,X,Y,S*.14,S*.14);fs(ctx,'#ffcf4d','#ff5a1a',2);ctx.restore()}
     else{ell(ctx,X,Y,S*.13,S*.13);fs(ctx,'#262626','#000',1.5);ctx.fillStyle=Math.sin(p.spin*3)>0?'#ffb03a':'#fff176';star(ctx,X+Math.cos(p.spin)*S*.13,Y+Math.sin(p.spin)*S*.13,S*.07,S*.03,5);ctx.fill()}
   }
@@ -1616,7 +1697,7 @@ function drawMenuBg(){
 /* ============ UI ============ */
 const $=id=>document.getElementById(id);
 const ICON={};
-function makeIcons(){for(const ty of[...TT,'selo','musa','muaz']){if(hasI(ty)){ICON[ty]=IMG[ty].src;continue}const c=document.createElement('canvas');c.width=c.height=120;const x=c.getContext('2d');drawTower(x,62,58,ty==='farm'?30:31,ty,-Math.PI/4,0,{nopad:true});ICON[ty]=c.toDataURL()}}
+function makeIcons(){for(const ty of[...TT,'selo','musa','muaz','reis','cay','fin']){if(hasI(ty)){ICON[ty]=IMG[ty].src;continue}const c=document.createElement('canvas');c.width=c.height=120;const x=c.getContext('2d');drawTower(x,62,58,ty==='farm'?30:31,ty,-Math.PI/4,0,{nopad:true});ICON[ty]=c.toDataURL()}}
 function drawLogo(){const c=$('logoCv').getContext('2d');c.clearRect(0,0,300,240);drawTower(c,95,135,48,'musa',-Math.PI/5,0,{nopad:true});drawTower(c,205,135,48,'selo',-Math.PI*4/5,0,{nopad:true});drawJelly(c,'t3',150,60,24,0,1,0,1,{})}
 let lastHUD='';
 function updateHUD(force){
@@ -1636,13 +1717,13 @@ let lastAb='';
 function updateAb(){
   const b=$('abBtn'),h=G&&G.hero;
   if(!h||h.lvl<3||G.over){if(b.style.display!=='none')b.style.display='none';lastAb='';return}
-  const ready=h.abCd<=0,cdMax=h.type==='musa'?45:40,pct=ready?100:Math.round((1-h.abCd/cdMax)*100);
+  const ready=h.abCd<=0,cdMax=h.type==='musa'||h.type==='fin'?45:40,pct=ready?100:Math.round((1-h.abCd/cdMax)*100);
   const k=ready+'|'+pct+'|'+h.type+'|'+SET.lang;if(k===lastAb)return;lastAb=k;
   b.style.display='block';
-  const col={selo:'#f0b024',musa:'#2fb58a',muaz:'#3a8ee0'}[h.type];
+  const col={selo:'#f0b024',musa:'#2fb58a',muaz:'#3a8ee0',reis:'#2a6fb0',cay:'#c0392b',fin:'#b8742a'}[h.type];
   b.style.background=ready?`radial-gradient(circle at 35% 30%,#fff,${col})`:`conic-gradient(${col} ${pct}%, #3a4a40 ${pct}%)`;
   b.style.opacity=ready?1:.8;
-  b.innerHTML=({selo:'⭐',musa:'🌋',muaz:'🚁'}[h.type])+'<small>'+(ready?t('ready'):Math.ceil(h.abCd)+'s')+'</small>';
+  b.innerHTML=({selo:'⭐',musa:'🌋',muaz:'🚁',reis:'🕸️',cay:'☕',fin:'🌰'}[h.type])+'<small>'+(ready?t('ready'):Math.ceil(h.abCd)+'s')+'</small>';
 }
 let lastPanel='';
 function upBtn(tw,p){
@@ -1675,7 +1756,7 @@ function renderPanel(force){
   }else{
     const hero=G.heroType,hc=costOf(TD[hero].cost),hd=!!G.hero;
     h='<div class="shop">'+TT.map(ty=>{const c=costOf(TD[ty].cost);return`<button class="card ${G.money<c?'dis':''} ${G.place&&G.place.type===ty?'act':''}" data-buy="${ty}"><img src="${ICON[ty]}" alt=""><span class="cd"><b>${L.tr[ty+'S']?t(ty+'S'):t(ty)}</b><span class="cost">💰${c}</span></span></button>`}).join('')
-      +`<button class="card hero ${hd||G.money<hc?'dis':''} ${G.place&&G.place.type===hero?'act':''}" data-buy="${hero}"><img src="${ICON[hero]}" alt=""><span class="cd"><b>🦸 ${t(hero)}</b><span class="cost">${hd?'✓':'💰'+hc}</span></span></button></div>`;
+      +`<button class="card hero ${hd||G.money<hc?'dis':''} ${G.place&&G.place.type===hero?'act':''}" data-buy="${hero}"><img src="${ICON[hero]}" alt=""><span class="cd"><b>🦸 ${L.tr[hero+'S']?t(hero+'S'):t(hero)}</b><span class="cost">${hd?'✓':'💰'+hc}</span></span></button></div>`;
     if(G.place)h+=`<button class="btn xbtn red" data-x="1">✕</button>`;
   }
   if(force||h!==lastPanel){lastPanel=h;P.innerHTML=h}
@@ -1735,7 +1816,10 @@ $('autoBtn').onclick=()=>{if(!G)return;initAudio();G.auto=!G.auto;sfx('click');i
 $('pauseBtn').onclick=()=>{if(!G||G.over)return;initAudio();G.paused=true;sfx('click');showOv('ovPause')};
 document.addEventListener('keydown',ev=>{if(!G)return;if(ev.key===' '){ev.preventDefault();goPress()}if(ev.key==='Escape'){G.place=null;G.sel=null;renderPanel(true)}if(ev.key==='q')useAbility()});
 
-function showOv(id){document.querySelectorAll('.ov').forEach(o=>o.classList.toggle('on',o.id===id))}
+function showOv(id){document.querySelectorAll('.ov').forEach(o=>o.classList.toggle('on',o.id===id));document.body.classList.toggle('inmenu',!!id&&['ovMenu','ovMaps','ovHero','ovUp','ovNews','ovHow'].includes(id));if(id==='ovMenu')renderDaily()}
+function G0banner(txt){const b=$('dailyBtn');const p=document.createElement('div');p.textContent=txt;p.style.cssText='margin:6px 0;font-weight:800;color:#ffe28a';b.parentNode.insertBefore(p,b);setTimeout(()=>p.remove(),3500)}
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
+function renderDaily(){const b=$('dailyBtn');if(!b)return;const can=PROG.daily!==today();b.style.display=can?'block':'none';b.textContent=t('daily')}
 function renderMaps(){
   const li=LI[SET.lang];$('totStars').textContent='⭐ '+starTot()+' / '+NLV*4;
   let h='',nx=-1;for(let i=0;i<NLV;i++)if(!PROG.stars[i]&&(i===0||PROG.stars[i-1])){nx=i;break}
@@ -1749,7 +1833,7 @@ function renderMaps(){
 function renderBrief(){
   const i=pendingMap,li=LI[SET.lang],c=Math.floor(i/5),can=(PROG.stars[i]||0)>=3;if(!can)pendingIron=false;
   let bs=isBossLv(i)?'<small>👑 '+CBN[c][li]+'</small>':'';
-  $('brief').innerHTML=`<div class="brief"><canvas id="brCv" width="256" height="144"></canvas><div><b>${t('lvN')} ${i+1} · ${CHN[c][li]}</b><small>🌊 ${t('roundsN',{n:RFOR(i)})}${PROG.best[i]?' · 🏆 '+PROG.best[i]:''}</small>${bs}<small>${'★'.repeat(PROG.stars[i]||0)}${PROG.iron[i]?' ⛓':''}</small></div></div>
+  $('brief').innerHTML=`<div class="brief"><canvas id="brCv" width="256" height="144"></canvas><div><b>${t('lvN')} ${i+1} · ${CHN[c][li]}</b><small>🌊 ${t('roundsN',{n:RFOR(i)})}${PROG.best[i]?' · 🏆 '+PROG.best[i]:''}</small>${bs}<small>${'★'.repeat(PROG.stars[i]||0)}${PROG.iron[i]?' ⛓':''}</small>${PROG.bonus?'<small style="color:#ffe28a">'+t('bonusB',{n:PROG.bonus})+'</small>':''}</div></div>
    <div class="modes"><button class="btn ${pendingIron?'':'act'}" data-md="0">${t('normal')}</button><button class="btn ${pendingIron?'act':''} ${can?'':'lk'}" data-md="1">${t('iron')}<br><small style="font-size:11px">${can?t('ironD'):t('ironL')}</small></button></div>`;
   const cv2=$('brCv'),c2=cv2.getContext('2d'),D=LVL(i),P=buildPath(D.cp),k=256/16;
   c2.fillStyle=CHP[c].col;c2.fillRect(0,0,256,144);
@@ -1765,7 +1849,7 @@ function renderUps(){
 $('upList').addEventListener('click',ev=>{const b=ev.target.closest('[data-upk]');if(!b)return;initAudio();const k=b.dataset.upk,l=PROG.up[k]||0;if(l>=5||starFree()<l+1){sfx('no');return}PROG.up[k]=l+1;saveProg();sfx('up');renderUps()});
 $('brief').addEventListener('click',ev=>{const b=ev.target.closest('[data-md]');if(!b)return;initAudio();if(b.dataset.md==='1'&&(PROG.stars[pendingMap]||0)<3){sfx('no');return}pendingIron=b.dataset.md==='1';sfx('click');renderBrief()});
 function renderHeroes(){
-  $('heroList').innerHTML=['selo','musa','muaz'].map(h=>`<button class="hc" data-hero="${h}" style="background:${{selo:'linear-gradient(#e85a4a,#a8302a)',musa:'linear-gradient(#3fb08a,#22705a)',muaz:'linear-gradient(#4a9be8,#2a5ea8)'}[h]}"><img src="${ICON[h]}" alt=""><b>${t(h)}</b><span>${t(h+'D')}</span></button>`).join('');
+  $('heroList').innerHTML=['selo','musa','muaz','reis','cay','fin'].map(h=>`<button class="hc" data-hero="${h}" style="background:${{reis:'linear-gradient(#3a7fc0,#1f4f80)',cay:'linear-gradient(#c8553a,#7a2a1a)',fin:'linear-gradient(#c8902a,#7a5014)',selo:'linear-gradient(#e85a4a,#a8302a)',musa:'linear-gradient(#3fb08a,#22705a)',muaz:'linear-gradient(#4a9be8,#2a5ea8)'}[h]}">${['reis','cay','fin'].includes(h)?'<span class="nb">'+t('newB')+'</span>':''}<img src="${ICON[h]}" alt=""><b>${t(h)}</b><span>${t(h+'D')}</span></button>`).join('');
 }
 $('mapList').addEventListener('click',ev=>{const b=ev.target.closest('[data-map]');if(!b)return;initAudio();if(b.classList.contains('lock')){sfx('no');return}sfx('click');pendingMap=+b.dataset.map;pendingIron=false;renderBrief();renderHeroes();showOv('ovHero')});
 $('heroList').addEventListener('click',ev=>{const b=ev.target.closest('[data-hero]');if(!b)return;initAudio();sfx('click');startMap(pendingMap,b.dataset.hero,pendingIron)});
@@ -1787,6 +1871,8 @@ document.addEventListener('click',ev=>{
   const b=ev.target.closest('[data-act]');if(!b)return;initAudio();sfx('click');const a=b.dataset.act;
   if(a==='play'){renderMaps();showOv('ovMaps')}
   else if(a==='how')showOv('ovHow');
+  else if(a==='news'){$('newsText').innerHTML=NEWS[SET.lang]||NEWS.tr;showOv('ovNews')}
+  else if(a==='daily'){if(PROG.daily!==today()){PROG.daily=today();PROG.bonus=300;saveProg();sfx('take');renderDaily();G0banner(t('dailyGot'))}}
   else if(a==='closeHow')showOv('ovMenu');
   else if(a==='settings'){const on=document.querySelector('.ov.on');setFrom=on?on.id:'ovMenu';renderSet();showOv('ovSet')}
   else if(a==='closeSet')showOv(setFrom);
@@ -1814,6 +1900,7 @@ function showResult(won,s){
   $('resBtns').innerHTML=h;showOv('ovRes');
 }
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&G&&!G.over&&!G.paused){G.paused=true;showOv('ovPause')}});
+setTimeout(()=>{renderDaily();document.body.classList.add('inmenu');if(store.get('bukoJP_news','')!==NEWSV&&!G){store.set('bukoJP_news',NEWSV);$('newsText').innerHTML=NEWS[SET.lang]||NEWS.tr;showOv('ovNews')}},600);
 if(window.speechSynthesis)try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>{}}catch(e){}
 
 /* ============ Loop ============ */

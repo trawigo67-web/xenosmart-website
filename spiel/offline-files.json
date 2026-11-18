@@ -1,5 +1,5 @@
 {
- "v": "buko-v62",
+ "v": "buko-v63",
  "files": [
   "./",
   "1453/",
@@ -1137,6 +1137,9 @@
   "caycuma-defense/img/teatable.webp",
   "caycuma-defense/img/umbrella.webp",
   "caycuma-defense/img/worldmap.webp",
+  "caycuma-defense/img/cay.webp",
+  "caycuma-defense/img/fin.webp",
+  "caycuma-defense/img/reis.webp",
   "thumbs/caycuma-defense.webp",
   "thumbs/caycuma-run.webp",
   "thumbs/musa.webp",
