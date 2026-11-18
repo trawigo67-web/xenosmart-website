@@ -5,7 +5,7 @@ set -uo pipefail
 DOMAIN="zettelfrei.xenosmart.de"
 # Weitere Adressen, unter denen die App erreichbar ist (neuer Name Mailcut)
 HOSTS="zettelfrei.xenosmart.de app.mailcut.de"
-# Produktseite mailcut.de; www und mailcut.app leiten dorthin weiter (eigener Router, damit ein fehlendes Zertifikat dort die App nicht stoert)
+# Produktseite mailcut.de (www leitet dorthin); mailcut.app und www.mailcut.app leiten auf die App app.mailcut.de (eigener Router, damit ein fehlendes Zertifikat dort die App nicht stoert)
 SITE_HOSTS="mailcut.de www.mailcut.de mailcut.app www.mailcut.app"
 SITE_RULE=$(for h in $SITE_HOSTS; do printf "Host(\`%s\`) || " "$h"; done | sed 's/ || $//')
 RULE=$(for h in $HOSTS; do printf "Host(\`%s\`) || " "$h"; done | sed 's/ || $//')
