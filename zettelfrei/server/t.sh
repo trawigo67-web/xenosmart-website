@@ -3,6 +3,9 @@
 # Übernimmt Entrypoint, Zertifikat-Resolver und Netzwerk von dem Container, der ai.xenosmart.de bedient.
 set -uo pipefail
 DOMAIN="zettelfrei.xenosmart.de"
+# Weitere Adressen, unter denen die App erreichbar ist (neuer Name Mailcut)
+HOSTS="zettelfrei.xenosmart.de app.mailcut.de"
+RULE=$(for h in $HOSTS; do printf "Host(\`%s\`) || " "$h"; done | sed 's/ || $//')
 DIR="/opt/zettelfrei"
 PKG="https://xenosmart.de/zettelfrei/server/zettelfrei-server.tar.gz"
 ok(){ printf "\033[1;32m[OK]\033[0m %s\n" "$*"; }
@@ -87,7 +90,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=$NET
-      - traefik.http.routers.zettelfrei.rule=Host(\`$DOMAIN\`)
+      - traefik.http.routers.zettelfrei.rule=$RULE
       - traefik.http.routers.zettelfrei.entrypoints=$EP
       - traefik.http.routers.zettelfrei.tls=true
 $TLS_LINE
@@ -114,5 +117,5 @@ for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
   C=$(curl -s -o /dev/null -w '%{http_code}' --max-time 8 "https://$DOMAIN/api/health" || true)
   [ "$C" = "200" ] && break; sleep 5
 done
-if [ "$C" = "200" ]; then ok "ONLINE: https://$DOMAIN"; else bad "HTTPS noch nicht erreichbar (Code $C). Ausgabe an Claude schicken."; fi
+if [ "$C" = "200" ]; then ok "ONLINE: https://$DOMAIN"; for h in $HOSTS; do [ "$h" = "$DOMAIN" ] && continue; for i in 1 2 3 4 5 6 7 8 9 10 11 12; do C2=$(curl -s -o /dev/null -w '%{http_code}' --max-time 8 "https://$h/api/health" || true); [ "$C2" = "200" ] && break; sleep 5; done; [ "$C2" = "200" ] && ok "ONLINE: https://$h" || bad "https://$h noch nicht erreichbar (Code $C2)"; done; else bad "HTTPS noch nicht erreichbar (Code $C). Ausgabe an Claude schicken."; fi
 echo "===== ENDE ====="
