@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# Zettelfrei – Installation hinter dem vorhandenen Traefik (Docker) auf dem IONOS-Server.
+# Mailcut (früher Zettelfrei) – Installation hinter dem vorhandenen Traefik (Docker) auf dem IONOS-Server.
 # Übernimmt Entrypoint, Zertifikat-Resolver und Netzwerk von dem Container, der ai.xenosmart.de bedient.
 set -uo pipefail
 DOMAIN="zettelfrei.xenosmart.de"
 # Weitere Adressen, unter denen die App erreichbar ist (neuer Name Mailcut)
 HOSTS="zettelfrei.xenosmart.de app.mailcut.de"
+# Produktseite mailcut.de; www und mailcut.app leiten dorthin weiter (eigener Router, damit ein fehlendes Zertifikat dort die App nicht stoert)
+SITE_HOSTS="mailcut.de www.mailcut.de mailcut.app www.mailcut.app"
+SITE_RULE=$(for h in $SITE_HOSTS; do printf "Host(\`%s\`) || " "$h"; done | sed 's/ || $//')
 RULE=$(for h in $HOSTS; do printf "Host(\`%s\`) || " "$h"; done | sed 's/ || $//')
 DIR="/opt/zettelfrei"
 PKG="https://xenosmart.de/zettelfrei/server/zettelfrei-server.tar.gz"
@@ -12,7 +15,7 @@ ok(){ printf "\033[1;32m[OK]\033[0m %s\n" "$*"; }
 info(){ printf "\033[1;34m[..]\033[0m %s\n" "$*"; }
 bad(){ printf "\033[1;31m[!!]\033[0m %s\n" "$*"; }
 clear
-echo "===== ZETTELFREI INSTALLATION ====="
+echo "===== MAILCUT INSTALLATION ====="
 
 # 1) Traefik-Einstellungen ermitteln
 TR=$(docker ps --format '{{.Names}}' | grep -i traefik | head -1)
@@ -76,6 +79,7 @@ fi
 
 # 4) Compose-Datei für Traefik
 TLS_LINE=""; [ "$RES" != "-" ] && TLS_LINE="      - traefik.http.routers.zettelfrei.tls.certresolver=$RES"
+TLS_LINE2=""; [ "$RES" != "-" ] && TLS_LINE2="      - traefik.http.routers.mailcutsite.tls.certresolver=$RES"
 cat > "$DIR/docker-compose.yml" <<EOF
 services:
   zettelfrei:
@@ -94,6 +98,12 @@ services:
       - traefik.http.routers.zettelfrei.entrypoints=$EP
       - traefik.http.routers.zettelfrei.tls=true
 $TLS_LINE
+      - traefik.http.routers.zettelfrei.service=zettelfrei
+      - traefik.http.routers.mailcutsite.rule=$SITE_RULE
+      - traefik.http.routers.mailcutsite.entrypoints=$EP
+      - traefik.http.routers.mailcutsite.tls=true
+$TLS_LINE2
+      - traefik.http.routers.mailcutsite.service=zettelfrei
       - traefik.http.services.zettelfrei.loadbalancer.server.port=8090
     logging:
       driver: json-file
@@ -118,4 +128,5 @@ for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
   [ "$C" = "200" ] && break; sleep 5
 done
 if [ "$C" = "200" ]; then ok "ONLINE: https://$DOMAIN"; for h in $HOSTS; do [ "$h" = "$DOMAIN" ] && continue; for i in 1 2 3 4 5 6 7 8 9 10 11 12; do C2=$(curl -s -o /dev/null -w '%{http_code}' --max-time 8 "https://$h/api/health" || true); [ "$C2" = "200" ] && break; sleep 5; done; [ "$C2" = "200" ] && ok "ONLINE: https://$h" || bad "https://$h noch nicht erreichbar (Code $C2)"; done; else bad "HTTPS noch nicht erreichbar (Code $C). Ausgabe an Claude schicken."; fi
+for h in $SITE_HOSTS; do C3=""; for i in 1 2 3 4 5 6 7 8 9 10 11 12; do C3=$(curl -s -o /dev/null -w '%{http_code}' --max-time 8 "https://$h/" || true); case "$C3" in 200|301) break;; esac; sleep 5; done; case "$C3" in 200|301) ok "ONLINE: https://$h ($C3)";; *) bad "https://$h noch nicht erreichbar (Code $C3) - DNS pruefen";; esac; done
 echo "===== ENDE ====="
