@@ -78,7 +78,7 @@ body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--tex
 .prow .pv small{font-size:11px;color:var(--muted);letter-spacing:0}
 .prow.gend{border-bottom:1.5px solid #1d1d1f}
 .prow:last-child{border-bottom:1px solid var(--cop3)}
-.pfoot{text-align:center;font-size:13px;line-height:1.5;margin:14px auto 0;max-width:260px}
+.pfoot{text-align:center;font-size:12.5px;line-height:1.55;margin:4px auto 0;max-width:310px}
 .orn{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0}
 .orn i{display:block;height:1px;width:60px;background:var(--cop3)}
 .orn b{display:block;width:9px;height:9px;background:var(--cop);transform:rotate(45deg)}
@@ -129,7 +129,13 @@ input:focus,select:focus{outline:none;border-color:var(--cop)}
 .shop{margin-top:18px}
 .shop h3{letter-spacing:2px}
 .shop .tag{color:var(--muted);font-size:12px;letter-spacing:.5px;margin:-4px 0 10px}
-.shop .srow{font-size:14px;margin:6px 0}
+.shop .srow{font-size:14px;margin:7px 0;display:flex;align-items:center;gap:10px}
+.shop .si{flex:none;width:17px;height:17px;fill:none;stroke:var(--cop);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.prow .pv .dd{display:block;font-size:10.5px;letter-spacing:.3px;margin-top:1px;font-weight:500;line-height:1.2}
+.prow .pv .dd.up{color:#2e8a5c}.prow .pv .dd.dn{color:#b4473a}
+:is(html[data-tema=siyah],html[data-tema=noel],html[data-tema=yilbasi],html[data-tema=sevgililer],html[data-tema=ramazan]) .prow .pv .dd.up{color:#6fc99a}
+:is(html[data-tema=siyah],html[data-tema=noel],html[data-tema=yilbasi],html[data-tema=sevgililer],html[data-tema=ramazan]) .prow .pv .dd.dn{color:#ec8b7d}
+.ddnote{text-align:center;font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:.3px}
 .shop .srow a{color:var(--cop2);text-decoration:none;font-weight:600}
 
 /* ZEN × MARKA tema */
@@ -174,7 +180,7 @@ img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px au
     <button data-tab="zekat" data-t="tZekat"></button>
   </div>
 
-  <section id="prices"><div class="plist" id="list"></div><div class="orn"><i></i><b></b><i></i></div><div class="pfoot" data-t="pFoot"></div><div class="orn"><i></i><b></b><i></i></div></section>
+  <section id="prices"><div class="plist" id="list"></div><div class="ddnote hide" id="ddnote" data-t="ddNote"></div><div class="orn"><i></i><b></b><i></i></div><div class="pfoot" data-t="pFoot"></div><div class="orn"><i></i><b></b><i></i></div></section>
 
   <section id="bilezik" class="hide">
     <div class="card">
@@ -224,12 +230,12 @@ img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px au
   </a>
 
   <div class="card shop">
-    <h3 lang="de">Marka Trauringe &amp; Diamanten</h3>
+    <h3 lang="de">Marka Istanbul</h3>
     <div class="tag" data-t="shopTag"></div>
-    <div class="srow">📍 <a href="https://maps.google.com/?q=Keupstra%C3%9Fe+52-54,+51063+K%C3%B6ln" target="_blank" rel="noopener">Keupstraße 52-54, 51063 Köln</a></div>
-    <div class="srow">🕙 <span data-t="hours"></span></div>
-    <div class="srow">☎️ <a href="tel:+4922180039255">0221 80039255</a></div>
-    <div class="srow">📨 <span data-t="orderVia"></span></div>
+    <div class="srow"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.1-6.5-11.2A6.5 6.5 0 0 1 18.5 9.8C18.5 14.9 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.3"/></svg><a href="https://maps.google.com/?q=Keupstra%C3%9Fe+52-54,+51063+K%C3%B6ln" target="_blank" rel="noopener">Keupstraße 52-54, 51063 Köln</a></div>
+    <div class="srow"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span data-t="hours"></span></div>
+    <div class="srow"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.5 4-2 1.3a10.5 10.5 0 0 0 5.5 5.5l1.3-2 4 1.5v2.6a2 2 0 0 1-2.2 2A15.5 15.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></svg><a href="tel:+4922180039255">0221 80039255</a></div>
+    <div class="srow"><svg class="si" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10h-8l-4.5 3.5v-3.5H4.5z"/><path d="M8.5 9.5h7M8.5 12h4.5"/></svg><span data-t="orderVia"></span></div>
     <div class="cta">
       <a class="wa hide" id="waLink" href="#" target="_blank" rel="noopener">WhatsApp</a>
       <a class="tel" id="telLink" href="tel:+4922180039255" data-t="call"></a>
@@ -241,8 +247,7 @@ img.zlock{display:block;width:min(86%,360px)!important;height:auto;margin:8px au
   </div>
 
   <div class="foot">
-    <div data-t="disclaimer"></div>
-    <div style="margin-top:8px"><a href="impressum.html" data-t="imprint"></a></div>
+    <div><a href="impressum.html" data-t="imprint"></a></div>
   </div>
 
 
@@ -265,7 +270,7 @@ const T = {
   buTitle:"Bu paraya ne alabilirim?",buAmount:"Bütçe (€)",pieces:"adet",rest:"kalan",
   sTitle:"Altınımı kaça satarım?",sType:"Ne satıyorsunuz?",sGet:"Tahmini ödeme",sNote:"Kesin fiyat dükkânda tartı ve ayar kontrolünden sonra belirlenir.",
   disclaimer:"Fiyatlar bilgi amaçlıdır, altın piyasasına göre anlık değişir. Kesin fiyat için dükkânımıza gelin veya bizi arayın.",
-  call:"Ara",pFoot:"Altın fiyatları güncel kura göre değişmektedir.",zGremse:"2,5'lik / Gremse (adet)",zR5:"5'li (adet)",tZekat:"Zekât",zTitle:"Zekât hesapla",zIntro:"Elinizdeki altını ve birikiminizi girin, zekâtınızı güncel has altın fiyatıyla hesaplayalım.",zCeyrek:"Çeyrek – Ziynet/Reşat (adet)",zYarim:"Yarım – Ziynet/Reşat (adet)",zTam:"Tam – Ziynet/Reşat (adet)",zAta:"Ata Lira (adet)",zResat:"Reşat (adet)",zGram24:"Gram altın 24 ayar (g)",zG22:"22 ayar bilezik/takı (g)",zG18:"18 ayar takı (g)",zG14:"14 ayar takı (g)",zCash:"Nakit / birikim (€)",zDue:"Vermeniz gereken zekât",zNone:"Zekât düşmüyor",zHas:"Has altın",zTotal:"Toplam değer",zNisab:"Nisap",zRate:"%2,5 (1/40)",zNote:"Nisap: 80,18 g altın (Diyanet). Zekât, nisaba ulaşan ve üzerinden bir kameri yıl geçen varlık için verilir. Bu hesap bilgi amaçlıdır; dini konularda bir din görevlisine danışınız.",shopTag:"Kuyumcu & saat · Altın takı • Alyans • Hediye",orderVia:"Sipariş ve sorular için WhatsApp / DM",vitrinT:"Takılarımıza göz atın",vitrinS:"Pırlanta, alyans, bilezik ve altın takı · marka22.shop",dm:"Mesaj gönder",imprint:"Künye / Gizlilik",hours:"Pzt–Cmt 10:00–19:00",
+  call:"Ara",pFoot:"Fiyatlar altın kuruna göre anlık değişir. Kesin fiyat için dükkânımıza uğrayın veya bizi arayın.",ddNote:"▲▼ dünkü fiyata göre değişim",zGremse:"2,5'lik / Gremse (adet)",zR5:"5'li (adet)",tZekat:"Zekât",zTitle:"Zekât hesapla",zIntro:"Elinizdeki altını ve birikiminizi girin, zekâtınızı güncel has altın fiyatıyla hesaplayalım.",zCeyrek:"Çeyrek – Ziynet/Reşat (adet)",zYarim:"Yarım – Ziynet/Reşat (adet)",zTam:"Tam – Ziynet/Reşat (adet)",zAta:"Ata Lira (adet)",zResat:"Reşat (adet)",zGram24:"Gram altın 24 ayar (g)",zG22:"22 ayar bilezik/takı (g)",zG18:"18 ayar takı (g)",zG14:"14 ayar takı (g)",zCash:"Nakit / birikim (€)",zDue:"Vermeniz gereken zekât",zNone:"Zekât düşmüyor",zHas:"Has altın",zTotal:"Toplam değer",zNisab:"Nisap",zRate:"%2,5 (1/40)",zNote:"Nisap: 80,18 g altın (Diyanet). Zekât, nisaba ulaşan ve üzerinden bir kameri yıl geçen varlık için verilir. Bu hesap bilgi amaçlıdır; dini konularda bir din görevlisine danışınız.",shopTag:"Kuyumcu & saat · Altın takı • Alyans • Hediye",orderVia:"Sipariş ve sorular için WhatsApp / DM",vitrinT:"Takılarımıza göz atın",vitrinS:"Pırlanta, alyans, bilezik ve altın takı · marka22.shop",dm:"Mesaj gönder",imprint:"Künye / Gizlilik",hours:"Pzt–Cmt 10:00–19:00",
   installIos:"<b>Uygulama olarak ekle:</b> Paylaş <span style='font-size:15px'>⎋</span> → „Ana Ekrana Ekle“",installAnd:"<b>Çeyrekmatik'i telefonuna ekle</b> – tek dokunuşla aç.",installBtn:"Ekle",
   admTitle:"Yönetici (önizleme)",admWarn:"Buradaki değişiklikler yalnızca bu ekranda önizlemedir. Kalıcı olması için ‘Ayarları kopyala’ ile Timur’a gönderin.",
   manualSpot:"Manuel has gram fiyatı (€) – boş = canlı fiyat",product:"Ürün",mSell:"Satış +%",mBuy:"Alış −%",labor:"İşçilik €",
@@ -278,7 +283,7 @@ const T = {
   buTitle:"Was bekomme ich für mein Budget?",buAmount:"Budget (€)",pieces:"Stk.",rest:"Rest",
   sTitle:"Was bekomme ich für mein Gold?",sType:"Was möchten Sie verkaufen?",sGet:"Geschätzte Auszahlung",sNote:"Der genaue Preis wird im Geschäft nach Wiegen und Prüfung festgelegt.",
   disclaimer:"Alle Preise sind unverbindlich und ändern sich mit dem Goldkurs. Für ein verbindliches Angebot besuchen Sie uns oder rufen Sie an.",
-  call:"Anrufen",pFoot:"Die Goldpreise ändern sich mit dem aktuellen Kurs.",zGremse:"2,5er / Gremse (Stück)",zR5:"5er (Stück)",tZekat:"Zakat",zTitle:"Zakat berechnen",zIntro:"Geben Sie Ihr Gold und Ihr Erspartes ein – wir berechnen Ihre Zakat mit dem aktuellen Feingoldpreis.",zCeyrek:"Çeyrek (Stück)",zYarim:"Yarım (Stück)",zTam:"Tam (Stück)",zAta:"Ata Lira (Stück)",zResat:"Reşat (Stück)",zGram24:"Goldbarren 24K (g)",zG22:"22K Armreif/Schmuck (g)",zG18:"18K Schmuck (g)",zG14:"14K Schmuck (g)",zCash:"Bargeld / Ersparnisse (€)",zDue:"Ihre Zakat",zNone:"Keine Zakat fällig",zHas:"Feingold",zTotal:"Gesamtwert",zNisab:"Nisab",zRate:"2,5 % (1/40)",zNote:"Nisab: 80,18 g Gold (Diyanet). Zakat ist fällig, wenn das Vermögen den Nisab erreicht und ein Mondjahr lang besessen wurde. Diese Berechnung dient nur zur Orientierung; wenden Sie sich bei religiösen Fragen an einen Imam.",shopTag:"Schmuck- & Uhrengeschäft · Goldschmuck • Trauringe • Geschenke",orderVia:"Bestellung & Anfragen per WhatsApp / DM",vitrinT:"Unseren Schmuck ansehen",vitrinS:"Diamanten, Trauringe, Armreifen und Goldschmuck · marka22.shop",dm:"Nachricht senden",imprint:"Impressum / Datenschutz",hours:"Mo–Sa 10:00–19:00",
+  call:"Anrufen",pFoot:"Die Preise ändern sich mit dem Goldkurs und sind unverbindlich. Für ein verbindliches Angebot besuchen Sie uns oder rufen Sie an.",ddNote:"▲▼ Veränderung zum Vortag",zGremse:"2,5er / Gremse (Stück)",zR5:"5er (Stück)",tZekat:"Zakat",zTitle:"Zakat berechnen",zIntro:"Geben Sie Ihr Gold und Ihr Erspartes ein – wir berechnen Ihre Zakat mit dem aktuellen Feingoldpreis.",zCeyrek:"Çeyrek (Stück)",zYarim:"Yarım (Stück)",zTam:"Tam (Stück)",zAta:"Ata Lira (Stück)",zResat:"Reşat (Stück)",zGram24:"Goldbarren 24K (g)",zG22:"22K Armreif/Schmuck (g)",zG18:"18K Schmuck (g)",zG14:"14K Schmuck (g)",zCash:"Bargeld / Ersparnisse (€)",zDue:"Ihre Zakat",zNone:"Keine Zakat fällig",zHas:"Feingold",zTotal:"Gesamtwert",zNisab:"Nisab",zRate:"2,5 % (1/40)",zNote:"Nisab: 80,18 g Gold (Diyanet). Zakat ist fällig, wenn das Vermögen den Nisab erreicht und ein Mondjahr lang besessen wurde. Diese Berechnung dient nur zur Orientierung; wenden Sie sich bei religiösen Fragen an einen Imam.",shopTag:"Schmuck- & Uhrengeschäft · Goldschmuck • Trauringe • Geschenke",orderVia:"Bestellung & Anfragen per WhatsApp / DM",vitrinT:"Unseren Schmuck ansehen",vitrinS:"Diamanten, Trauringe, Armreifen und Goldschmuck · marka22.shop",dm:"Nachricht senden",imprint:"Impressum / Datenschutz",hours:"Mo–Sa 10:00–19:00",
   installIos:"<b>Als App hinzufügen:</b> Teilen <span style='font-size:15px'>⎋</span> → „Zum Home-Bildschirm“",installAnd:"<b>Çeyrekmatik aufs Handy</b> – mit einem Tipp öffnen.",installBtn:"Installieren",
   admTitle:"Admin (Vorschau)",admWarn:"Änderungen hier sind nur eine Vorschau auf diesem Bildschirm.",
   manualSpot:"Manueller Feingoldpreis pro Gramm (€) – leer = Live-Kurs",product:"Produkt",mSell:"VK +%",mBuy:"AK −%",labor:"Arbeit €",
@@ -291,7 +296,7 @@ const T = {
   buTitle:"What can I get for my budget?",buAmount:"Budget (€)",pieces:"pcs",rest:"left",
   sTitle:"What do I get for my gold?",sType:"What are you selling?",sGet:"Estimated payout",sNote:"The exact price is set in the shop after weighing and testing.",
   disclaimer:"All prices are for information only and change with the gold price. For a binding offer, visit us or give us a call.",
-  call:"Call",pFoot:"Gold prices change with the current rate.",zGremse:"2.5 / Gremse (pcs)",zR5:"5-piece (pcs)",tZekat:"Zakat",zTitle:"Calculate zakat",zIntro:"Enter your gold and savings – we calculate your zakat with the current fine gold price.",zCeyrek:"Çeyrek (pcs)",zYarim:"Yarım (pcs)",zTam:"Tam (pcs)",zAta:"Ata Lira (pcs)",zResat:"Reşat (pcs)",zGram24:"Gold bar 24K (g)",zG22:"22K bangle/jewellery (g)",zG18:"18K jewellery (g)",zG14:"14K jewellery (g)",zCash:"Cash / savings (€)",zDue:"Your zakat",zNone:"No zakat due",zHas:"Fine gold",zTotal:"Total value",zNisab:"Nisab",zRate:"2.5% (1/40)",zNote:"Nisab: 80.18 g of gold (Diyanet). Zakat is due on wealth that reaches the nisab and has been held for one lunar year. This calculation is for guidance only; please consult an imam on religious questions.",shopTag:"Jewellery & watches · Gold jewellery • Wedding rings • Gifts",orderVia:"Orders & enquiries via WhatsApp / DM",vitrinT:"Browse our jewellery",vitrinS:"Diamonds, wedding rings, bangles and gold jewellery · marka22.shop",dm:"Send message",imprint:"Imprint / Privacy",hours:"Mon–Sat 10:00–19:00",
+  call:"Call",pFoot:"Prices change with the gold rate and are for information only. For a binding quote, visit us or give us a call.",ddNote:"▲▼ change since yesterday",zGremse:"2.5 / Gremse (pcs)",zR5:"5-piece (pcs)",tZekat:"Zakat",zTitle:"Calculate zakat",zIntro:"Enter your gold and savings – we calculate your zakat with the current fine gold price.",zCeyrek:"Çeyrek (pcs)",zYarim:"Yarım (pcs)",zTam:"Tam (pcs)",zAta:"Ata Lira (pcs)",zResat:"Reşat (pcs)",zGram24:"Gold bar 24K (g)",zG22:"22K bangle/jewellery (g)",zG18:"18K jewellery (g)",zG14:"14K jewellery (g)",zCash:"Cash / savings (€)",zDue:"Your zakat",zNone:"No zakat due",zHas:"Fine gold",zTotal:"Total value",zNisab:"Nisab",zRate:"2.5% (1/40)",zNote:"Nisab: 80.18 g of gold (Diyanet). Zakat is due on wealth that reaches the nisab and has been held for one lunar year. This calculation is for guidance only; please consult an imam on religious questions.",shopTag:"Jewellery & watches · Gold jewellery • Wedding rings • Gifts",orderVia:"Orders & enquiries via WhatsApp / DM",vitrinT:"Browse our jewellery",vitrinS:"Diamonds, wedding rings, bangles and gold jewellery · marka22.shop",dm:"Send message",imprint:"Imprint / Privacy",hours:"Mon–Sat 10:00–19:00",
   installIos:"<b>Add as app:</b> Share <span style='font-size:15px'>⎋</span> → “Add to Home Screen”",installAnd:"<b>Add Çeyrekmatik to your phone</b> – open it with one tap.",installBtn:"Install",
   admTitle:"Admin (preview)",admWarn:"Changes here are only a preview on this screen.",
   manualSpot:"Manual fine gold price per gram (€) – empty = live price",product:"Product",mSell:"Sell +%",mBuy:"Buy −%",labor:"Labour €",
@@ -354,16 +359,16 @@ async function fetchSpot(){
   renderAll();
 }
 
-function priceOf(p){
+function priceOf(p, s=spotG){
   // Alle Preise werden ABGERUNDET (Math.floor) – auf ganze Euro
   // baz/kat: Preis = abgerundeter Preis des Basis-Artikels (z. B. Çeyrek) × Faktor (Yarım = 2, Tam = 4, Gremse = 10 …)
-  if (p.baz){ const b = cfg.products.find(x=>x.id===p.baz); if (b && !b.baz) return { sell: priceOf(b).sell * (+p.kat||0) }; }
-  const raw = p.satisMilyem ? p.gram*(p.satisMilyem/1000)*spotG : p.gram*p.purity*spotG*(1+p.satis/100) + (+p.iscilik||0);
+  if (p.baz){ const b = cfg.products.find(x=>x.id===p.baz); if (b && !b.baz) return { sell: priceOf(b, s).sell * (+p.kat||0) }; }
+  const raw = p.satisMilyem ? p.gram*(p.satisMilyem/1000)*s : p.gram*p.purity*s*(1+p.satis/100) + (+p.iscilik||0);
   return { sell: Math.floor(raw) };
 }
-function braceletPrice(b, g){
+function braceletPrice(b, g, s=spotG){
   // Grammpreis abgerundet, dann × Gramm
-  const perG = b.satisMilyem ? (b.satisMilyem/1000)*spotG : b.purity*spotG*(1+b.satis/100) + (+b.iscilik||0);
+  const perG = b.satisMilyem ? (b.satisMilyem/1000)*s : b.purity*s*(1+b.satis/100) + (+b.iscilik||0);
   return { sell: Math.floor(perG) * g };
 }
 
@@ -393,7 +398,7 @@ let _gid=0;
 // Hazır ürün görselleri: [dosya, genişlik px] – altınlar büyüklüğüne göre ölçeklenir; yönetici fotoğrafı (foto) önceliklidir
 const URUN = {ceyrek:["ziynet",30],yarim:["ziynet",36],tam:["ziynet",42],gremse:["ziynet",50],
   rceyrek:["resat",30],ryarim:["resat",36],rtam:["resat",42],r25:["resat",48],r5:["resat",54],
-  burma:["burma",70],ajda:["ajda",70]};
+  burma:["burma",70],ajda:["ajda-set",72]};
 function pic(o, kind){
   if (o.foto){
     if (o.fotoTip==="kesik"){ // freigestellt: Größe nach Gewicht wie bei den Zeichnungen
@@ -430,12 +435,30 @@ function pic(o, kind){
   return `<svg class="pic" viewBox="0 0 46 46" width="${box}" height="${box}" aria-hidden="true">${grad}<circle cx="${c}" cy="${c+.8}" r="${r}" fill="#000" opacity=".12"/><circle cx="${c}" cy="${c}" r="${r}" fill="url(#${id})" stroke="#8f6b1e" stroke-width=".8"/><circle cx="${c}" cy="${c}" r="${r*.92}" fill="none" stroke="#fff3c4" stroke-width=".6" opacity=".8"/>${dots}${inner}</svg>`;
 }
 function renderList(){
-  const rows = [...cfg.products.map(p=>({n:nm(p), v:priceOf(p).sell, g:p.grup||1, img:pic(p,"p")})),
-                ...cfg.bracelets.map(b=>({n:nm(b), v:braceletPrice(b,1).sell, g:b.grup||3, per:true, img:pic(b,"b")}))];
+  const yG = (src==="live" || src==="daily") ? dunkuG() : null;
+  const rows = [...cfg.products.map(p=>({n:nm(p), v:priceOf(p).sell, y:yG?priceOf(p,yG).sell:null, g:p.grup||1, img:pic(p,"p")})),
+                ...cfg.bracelets.map(b=>({n:nm(b), v:braceletPrice(b,1).sell, y:yG?braceletPrice(b,1,yG).sell:null, g:b.grup||3, per:true, img:pic(b,"b")}))];
+  let anyD = false;
   $("list").innerHTML = rows.map((r,i)=>{
     const end = rows[i+1] && rows[i+1].g !== r.g;
-    return `<div class="prow${end?" gend":""}" data-n="${r.n}" data-v="${euro0(r.v)}${r.per?" / g":""}"><div class="pn"><span>${r.n}</span></div>${r.img}<div class="pv">${euro0(r.v)}${r.per?` <small>/g</small>`:""}</div></div>`;
+    const d = r.y==null ? 0 : r.v - r.y;
+    const dd = d ? `<span class="dd ${d>0?"up":"dn"}">${d>0?"▲":"▼"} ${euro0(Math.abs(d))}</span>` : "";
+    if (d) anyD = true;
+    return `<div class="prow${end?" gend":""}" data-n="${r.n}" data-v="${euro0(r.v)}${r.per?" / g":""}"><div class="pn"><span>${r.n}</span></div>${r.img}<div class="pv">${euro0(r.v)}${r.per?` <small>/g</small>`:""}${dd}</div></div>`;
   }).join("");
+  $("ddnote").classList.toggle("hide", !anyD);
+}
+/* Dünkü has altın (gecmis.json: günde bir değer, günün son fiyatı) */
+let gecmis = null, gecmisGun = "";
+const bugunISO = () => { const d = new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); };
+async function loadGecmis(){
+  const g = bugunISO(); if (gecmis && gecmisGun===g) return;
+  try{ const j = await getJSON("gecmis.json?v="+g); if (Array.isArray(j)){ gecmis = j; gecmisGun = g; } }catch(e){}
+}
+function dunkuG(){
+  if (!gecmis) return null; const g = bugunISO();
+  const e = gecmis.filter(x=>x && x.t < g && x.g > 0).pop();
+  return e ? +e.g : null;
 }
 function renderBilezik(){
   const sel = $("bKarat"), cur = sel.value;
@@ -512,8 +535,9 @@ document.querySelectorAll(".zi").forEach(i=>i.addEventListener("input",renderZek
   lang = ls.get("mi_lang") || ({de:"de",en:"en"}[(navigator.language||"tr").slice(0,2)] || "tr"); if(!T[lang]) lang="tr";
   renderTexts();
   await loadConfig();
+  await loadGecmis();
   await fetchSpot();
-  setInterval(fetchSpot, 60000);
+  setInterval(async()=>{ await loadGecmis(); fetchSpot(); }, 60000);
   document.addEventListener("visibilitychange", ()=>{ if (!document.hidden) fetchSpot(); });
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 })();
