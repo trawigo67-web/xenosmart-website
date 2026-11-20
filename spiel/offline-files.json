@@ -1,5 +1,5 @@
 {
- "v": "buko-v63",
+ "v": "buko-v64",
  "files": [
   "./",
   "1453/",
@@ -1149,6 +1149,19 @@
   "thumbs/dis-firlat.webp",
   "thumbs/neon-blok.webp",
   "thumbs/neon-batak.webp",
-  "thumbs/tavla.webp"
+  "thumbs/tavla.webp",
+  "imtihan.html",
+  "imtihan/img/dunya.webp",
+  "imtihan/img/mahser.webp",
+  "imtihan/img/sirat.webp",
+  "imtihan/fonts/alegreya-latin-800-normal.woff2",
+  "imtihan/fonts/alegreya-latin-ext-800-normal.woff2",
+  "imtihan/fonts/amiri-ayet.woff2",
+  "imtihan/fonts/nunito-latin-400-normal.woff2",
+  "imtihan/fonts/nunito-latin-700-normal.woff2",
+  "imtihan/fonts/nunito-latin-800-normal.woff2",
+  "imtihan/fonts/nunito-latin-ext-400-normal.woff2",
+  "imtihan/fonts/nunito-latin-ext-700-normal.woff2",
+  "imtihan/fonts/nunito-latin-ext-800-normal.woff2"
  ]
 }

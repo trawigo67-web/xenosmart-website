@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<script src="buko-nozoom.js"></script>
+<title>İmtihan – Ne hazırladın?</title>
+<meta name="description" content="İmtihan: Kur'an ve sahih hadislere dayanan bir ömür ve ahiret oyunu. Ne hazırladın?">
+<meta name="theme-color" content="#14112a">
+<meta property="og:title" content="İmtihan – Ne hazırladın?">
+<meta property="og:description" content="Bir ömür, bir kum saati ve ahiret. Kur'an ve sahih hadislere dayanan bir oyun · TR / DE / EN">
+<meta property="og:image" content="https://xenosmart.de/spiel/imtihan/og.jpg">
+<meta property="og:url" content="https://xenosmart.de/spiel/imtihan.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314112a'/%3E%3Cpath d='M20 12h24M20 52h24M22 13c0 12 10 15 10 19s-10 7-10 19M42 13c0 12-10 15-10 19s10 7 10 19' fill='none' stroke='%23e8c47c' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+/* VOICE occasion, hushed: a contemplative life game for families, ages 10 and up
+   IDEA an hourglass and a book of deeds: the sand falls, two ledgers fill, one is left behind
+   PICTURE Higgsfield paintings (city, gathering, bridge) full-bleed behind each act; the card is the play
+   COLOUR night indigo #14112a, hourglass sand #e8c47c, warm light #fff6e3, kept light #bfe0ff, loss #e58a78
+   TYPE Alegreya 800 for titles and verses, Nunito for play text, Amiri for Arabic
+   LAYOUT one phone-shaped stage (max 480px) centred; HUD on top, card in the middle, choices in the thumb zone */
+@font-face{font-family:Alegreya;font-style:normal;font-weight:800;font-display:swap;src:url(imtihan/fonts/alegreya-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:Alegreya;font-style:normal;font-weight:800;font-display:swap;src:url(imtihan/fonts/alegreya-latin-ext-800-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Nunito;font-style:normal;font-weight:400;font-display:swap;src:url(imtihan/fonts/nunito-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:Nunito;font-style:normal;font-weight:400;font-display:swap;src:url(imtihan/fonts/nunito-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Nunito;font-style:normal;font-weight:700;font-display:swap;src:url(imtihan/fonts/nunito-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:Nunito;font-style:normal;font-weight:700;font-display:swap;src:url(imtihan/fonts/nunito-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Nunito;font-style:normal;font-weight:800;font-display:swap;src:url(imtihan/fonts/nunito-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:Nunito;font-style:normal;font-weight:800;font-display:swap;src:url(imtihan/fonts/nunito-latin-ext-800-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:Amiri;font-style:normal;font-weight:400;font-display:swap;src:url(imtihan/fonts/amiri-ayet.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFC}
+:root{color-scheme:dark;--night:#14112a;--deep:#0d0b1c;--sand:#e8c47c;--sand2:#c9963f;--light:#fff6e3;--ink:#f6efe2;--muted:#c3b9d3;--kept:#bfe0ff;--loss:#e58a78;--glass:rgba(20,17,42,.78);--line:rgba(232,196,124,.28)}
+:root[data-theme=light]{color-scheme:dark}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%;margin:0;background:var(--deep);color:var(--ink);overflow:hidden}
+html,body{touch-action:pan-x pan-y}
+body{font:16px/1.5 Nunito,system-ui,sans-serif;-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+.app{position:relative;height:100%;max-width:480px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;background:var(--night)}
+.bg{position:absolute;inset:0;background-size:cover;background-position:center top;transition:opacity .9s ease}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,11,28,.62) 0%,rgba(13,11,28,.18) 30%,rgba(13,11,28,.55) 58%,rgba(13,11,28,.94) 100%);transition:background .9s ease}
+.app.dark .shade{background:rgba(9,8,20,.9)}
+.app.black .bg{opacity:0}
+.app.black .shade{background:#05040b}
+.hud,.stage,.ctl{position:relative;z-index:2}
+.hud{display:grid;grid-template-columns:auto auto 1fr auto;gap:6px 10px;align-items:center;padding:max(12px,env(safe-area-inset-top)) 16px 6px}
+.hud.off{display:none}
+.hud.abar,.hud.start{display:flex;align-items:center;gap:10px}
+.hud.abar b{font:800 17px/1.1 Alegreya,serif;color:var(--light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.steps{display:flex;gap:5px;margin-left:auto;flex-shrink:0}
+.steps i{width:8px;height:8px;border-radius:50%;background:rgba(255,246,227,.22)}
+.steps i.done{background:var(--sand2)}
+.steps i.now{background:var(--sand);box-shadow:0 0 0 3px rgba(232,196,124,.25)}
+.home{display:grid;place-items:center;width:44px;height:44px;flex-shrink:0;padding:0;border-radius:12px;border:1px solid rgba(255,246,227,.25);background:rgba(13,11,28,.5);color:var(--light);cursor:pointer}
+.home svg{width:20px;height:20px}
+.bukolink{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:99px;background:rgba(13,11,28,.55);border:1px solid rgba(255,246,227,.25);color:var(--light);font:700 14px Nunito,sans-serif;text-decoration:none}
+.hg{width:26px;height:40px}
+.who b{display:block;font:800 17px/1.1 Alegreya,serif;color:var(--light)}
+.who span{font-size:13px;color:var(--muted)}
+.sus{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;font:800 14px Nunito;background:linear-gradient(180deg,#f6dd9f,#d6a548);color:#2c1d03;box-shadow:0 1px 0 rgba(255,255,255,.5) inset}
+.pill svg{width:14px;height:14px}
+.pill.lbl{background:none;color:var(--sand);box-shadow:none;padding-left:0;font-weight:700}
+.tovbe{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:6px 14px;border-radius:99px;border:1px solid rgba(191,224,255,.45);background:rgba(191,224,255,.1);color:var(--kept);font:800 15px Nunito;cursor:pointer}
+.tovbe svg{width:18px;height:18px}
+.tovbe.glow{animation:glow 1.8s ease-in-out infinite;background:rgba(191,224,255,.2)}
+@keyframes glow{50%{box-shadow:0 0 0 6px rgba(191,224,255,.18),0 0 22px rgba(191,224,255,.5)}}
+.stage{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:8px 16px;display:flex;flex-direction:column;gap:12px;scrollbar-width:none}
+.stage::-webkit-scrollbar{display:none}
+.stage>:first-child{margin-top:auto}
+.stage.top>:first-child{margin-top:0}
+.stage.sur>:last-child{margin-bottom:auto}
+.ctl{display:grid;gap:10px;padding:10px 16px max(16px,env(safe-area-inset-bottom))}
+.ctl.row{grid-template-columns:repeat(auto-fit,minmax(0,1fr))}
+.card{background:var(--glass);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:20px;padding:18px 18px 16px;animation:rise .45s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.kick{margin:0 0 4px;font-size:13px;font-weight:700;color:var(--sand)}
+h1,h2{font-family:Alegreya,Georgia,serif;font-weight:800;line-height:1.05;letter-spacing:-.01em;margin:0;color:var(--light);text-wrap:balance}
+h1{font-size:clamp(46px,14vw,64px);color:var(--sand);text-shadow:0 2px 18px rgba(0,0,0,.5)}
+h2{font-size:27px;margin-bottom:8px}
+h3{font:800 18px/1.2 Alegreya,serif;margin:14px 0 6px;color:var(--sand)}
+p{margin:0 0 10px}
+.card p:last-child{margin-bottom:0}
+.src{font-size:13px;color:var(--muted);margin-top:6px}
+.src::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--sand);margin-right:7px;vertical-align:middle}
+.note{border-left:3px solid var(--kept);padding:6px 0 6px 12px;color:var(--kept);font-weight:700}
+.note.loss{border-color:var(--loss);color:var(--loss)}
+.btn{display:block;width:100%;min-height:52px;padding:12px 16px;border-radius:14px;border:1px solid rgba(255,246,227,.28);background:rgba(20,17,42,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--ink);font:700 16px/1.3 Nunito,sans-serif;text-align:left;cursor:pointer}
+.btn:active{transform:scale(.985)}
+.btn.primary{background:linear-gradient(180deg,#f6dd9f,#d3a14a);color:#2a1c04;border:0;text-align:center;font-weight:800}
+.btn.ghost{text-align:center;background:rgba(255,246,227,.06)}
+.btn.small{min-height:44px;padding:8px 10px;text-align:center;font-size:15px}
+.btn.on{border-color:var(--sand);color:var(--sand)}
+button:focus-visible{outline:3px solid var(--kept);outline-offset:2px}
+.hero{padding-top:6vh}
+.slogan{font:800 20px/1.2 Alegreya,serif;color:var(--light);margin:6px 0 0}
+.verse{background:rgba(13,11,28,.6);border:1px solid var(--line);border-radius:18px;padding:14px 16px}
+.ar{font:400 21px/1.9 Amiri,serif;color:var(--light);text-align:right;margin:0 0 6px}
+.lead{font-size:16px;color:var(--ink)}
+.toast{position:absolute;left:16px;right:16px;bottom:calc(var(--ctlh,170px) + 8px);z-index:5;background:#1f1a3d;border:1px solid rgba(191,224,255,.5);color:var(--kept);border-radius:14px;padding:12px 14px;font-weight:700;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none}
+.toast.show{opacity:1;transform:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.chip{padding:4px 10px;border-radius:99px;background:rgba(232,196,124,.16);color:var(--sand);font-weight:700;font-size:14px}
+.gone .chip{text-decoration:line-through;opacity:.55}
+.bars{display:grid;gap:8px;margin:8px 0 12px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;font-size:14px}
+.bar i{grid-column:1/-1;height:8px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden}
+.bar i b{display:block;height:100%;border-radius:9px;background:var(--kept);transition:width 1s ease}
+.bar.c i b{background:var(--loss)}
+.badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
+.badge{padding:8px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.14);font-size:14px;font-weight:700;color:var(--muted);background:rgba(13,11,28,.5)}
+.badge.got{color:#2a1c04;background:linear-gradient(180deg,#fff3cf,#e8c47c);border-color:transparent;box-shadow:0 0 18px rgba(232,196,124,.45)}
+.heat{height:12px;border-radius:9px;background:rgba(255,255,255,.12);overflow:hidden;margin:6px 0}
+.heat b{display:block;height:100%;background:linear-gradient(90deg,#f6dd9f,#e58a78);border-radius:9px;transition:width 1.2s ease}
+.log{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.log li{padding:10px 12px;border-radius:12px;background:rgba(13,11,28,.55);border:1px solid rgba(255,255,255,.1);font-size:15px}
+.log li span{display:block;font-size:13px;color:var(--muted)}
+.tag{display:inline-block;margin:4px 4px 0 0;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:800;background:rgba(191,224,255,.16);color:var(--kept)}
+.tag.bad,.tag.kh,.tag.riya,.tag.wasted{background:rgba(229,138,120,.16);color:var(--loss)}
+.tag.rep{background:rgba(255,255,255,.12);color:var(--muted)}
+.scale{width:100%;height:auto;display:block;margin:4px 0 8px}
+.line{opacity:0;animation:fade .8s ease forwards}
+@keyframes fade{to{opacity:1}}
+.sur p{font:800 22px/1.3 Alegreya,serif;color:var(--light);text-align:center}
+.sur .src{text-align:center;font:700 13px/1.4 Nunito,sans-serif;color:var(--muted)}
+.fx{position:absolute;inset:0;z-index:1;pointer-events:none}
+.app.sirat .bg{background-size:auto 128%;background-position:center bottom;background-color:#0b1020}
+.runner{position:absolute;left:50%;top:60%;width:22px;height:22px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,#fffaf0 0 35%,#ffd98a 60%,rgba(255,217,138,0) 72%);transition:top .55s cubic-bezier(.3,.7,.3,1),transform .55s ease}
+.runner.init{transition:none}
+.runner::after{content:"";position:absolute;left:50%;top:50%;width:var(--halo,120px);height:var(--halo,120px);margin:calc(var(--halo,120px)/-2) 0 0 calc(var(--halo,120px)/-2);border-radius:50%;background:radial-gradient(circle,rgba(255,226,160,.42),rgba(255,226,160,0) 70%)}
+.pillar{position:absolute;top:36%;padding:6px 10px;border-radius:10px;font-weight:800;font-size:13px;background:rgba(13,11,28,.7);border:1px solid rgba(255,255,255,.2);color:var(--muted)}
+.pillar.l{left:12px}
+.pillar.r{right:12px}
+.pillar.got{color:#2a1c04;background:linear-gradient(180deg,#fff3cf,#e8c47c);border-color:transparent}
+.card h2.q{font-size:23px;line-height:1.15}
+.door{width:132px;height:184px;margin:6px auto 14px;border-radius:66px 66px 10px 10px;background:radial-gradient(ellipse at 50% 60%,#fffef6 0%,#fff1c9 38%,rgba(255,225,150,.5) 62%,rgba(255,225,150,0) 78%);box-shadow:0 0 60px 18px rgba(255,230,170,.35);animation:breathe 4s ease-in-out infinite}
+@keyframes breathe{50%{box-shadow:0 0 80px 26px rgba(255,230,170,.5)}}
+.qa{display:grid;gap:8px;margin:6px 0 12px}
+.qa div{padding:10px 12px;border-radius:12px;background:rgba(13,11,28,.55);border:1px solid rgba(255,255,255,.1)}
+.qa b{display:block;font:800 16px/1.25 Alegreya,serif;color:var(--light)}
+.qa span{font-size:14px;color:var(--muted)}
+.end{font:800 22px/1.25 Alegreya,serif;color:var(--sand);text-align:center;margin:14px 0 6px}
+.langs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pick{margin:0;text-align:center;font-weight:700;color:var(--light)}
+.pick span{display:block;font-weight:400;font-size:14px;color:var(--muted)}
+.reflist{font-size:14px;color:var(--muted)}
+.reflist b{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.line{opacity:1}}
+</style>
+</head>
+<body>
+<div id="app" class="app">
+  <div id="bg" class="bg"></div>
+  <div class="shade"></div>
+  <div id="fx" class="fx" aria-hidden="true"></div>
+  <header id="hud" class="hud off"></header>
+  <main id="stage" class="stage" aria-live="polite"></main>
+  <footer id="ctl" class="ctl"></footer>
+  <div id="toast" class="toast" role="status"></div>
+</div>
+<script>
+{
+const IMG={dunya:'imtihan/img/dunya.webp',mahser:'imtihan/img/mahser.webp',sirat:'imtihan/img/sirat.webp'};
+const SURA={17:['İsrâ','al-Isra'],18:['Kehf','al-Kahf'],29:['Ankebût','al-Ankabut'],31:['Lokmân','Luqman'],36:['Yâsîn','Ya-Sin'],39:['Zümer','az-Zumar'],57:['Hadîd','al-Hadid'],69:['Hâkka','al-Haqqa'],102:['Tekâsür','at-Takathur']};
+const BOOK={B:{tr:'Buhârî',de:'Bukhari',en:'Bukhari'},M:{tr:'Müslim',de:'Muslim',en:'Muslim'},T:{tr:'Tirmizî',de:'Tirmidhi',en:'Tirmidhi'},AD:{tr:'Ebû Dâvûd',de:'Abu Dawud',en:'Abu Dawud'},AM:{tr:"Edebü'l-Müfred",de:'al-Adab al-Mufrad',en:'al-Adab al-Mufrad'},Q:{tr:"Kur'an",de:'Koran',en:"Qur'an"}};
+const UI={
+tr:{slogan:"Ne hazırladın?",lead:"Sana bir ömür emanet edildi. Her seçim zamanını harcar. Parlayan şeyler ölümde geride kalır; görünmeyen iyilikler seninle gelir.",verse:"Mal ve oğullar dünya hayatının süsüdür. Kalıcı salih ameller ise Rabbinin katında sevapça da ümitçe de daha hayırlıdır.",who:"Kim olarak yaşayacaksın?",f:"Kadın · Emetullah",m:"Erkek · Abdullah",names:"İkisi de “Allah'ın kulu” demektir.",age:"Yaş",tovbe:"Tövbe",tovbeDone:"Tövbe ettin. Güneş batıdan doğana kadar tövbe kabul edilir (Müslim 2703).",tovbeKh:"Kul hakkı ise tövbeyle değil, helalleşmeyle silinir (Buhârî 2449).",tovbeClean:"Defterinde bekleyen günah yok. İstiğfar yine de güzeldir.",next:"Devam",open:"Tövbe kapısı açık.",shareQ:"Bu iyiliği paylaşayım mı?",shareYes:"Paylaş, herkes görsün",shareNo:"Gizli kalsın",shareDone:"+200 beğeni. Herkes “ne iyi insan” dedi; istediğin söylendi. Defterine “insanlar için” diye yazıldı.",secretDone:"Kimse görmedi. Defterine Allah için yazıldı.",gold:"altın",likes:"beğeni",items:"eşya",sus:"Süs",dTitle:"Ömür bitti",dAge:"{n} yaşında. Kimse nerede öleceğini bilmez.",dSus:"Süs geride kaldı:",dFollow:"Seni üç şey takip etti: ailen, malın ve amelin. İkisi geri döndü; amelin seninle kaldı.",dForward:"İleriye gönderdiğin sadaka seninle geldi: {n}.",dPending:"Ertelenen tövbe: defterde {n} günah kaldı.",toKabir:"Kabre",kTitle:"Kabir",kQ:"“Bu zat hakkında ne derdin?”",kA1:"Mümin: “O, Allah'ın kulu ve elçisidir.”",kA2:"Münafık ya da şüphe içinde olan: “Bilmiyorum; insanlar bir şey diyordu, ben de onu dedim.”",kLife:"Hayatın hangisine yakındı?",kHak:"Hakkı seçtiğin anlar",kCrowd:"Kalabalığa uyduğun anlar",kCont:"Amel defterin hâlâ yazılıyor:",kCar:"Sadaka-i câriye",kIlim:"Faydalı ilim",kEvlat:"Dua eden evlat",s1:"Sur'a üflendi. Allah'ın diledikleri hariç, göklerde ve yerde olanların hepsi öldü.",s2:"Sonra bir daha üflendi; bir de bakarsın, hepsi ayağa kalkmış bakıyorlar.",s3:"“Bizi yattığımız yerden kim kaldırdı?”",toMahser:"Mahşere",mTitle:"Mahşer",m1:"Herkes yalınayak ve eşit. Marka yok, makam yok, takipçi yok.",mHeat:"Güneş bir mil yakın. Herkes ameli ölçüsünde terliyor. Sen:",mShade:"Allah'ın gölgesinden başka gölgenin olmadığı gün gölgelenen yedi kişi:",toDefter:"Kitabını oku",fTitle:"Amel defteri",fVerse:"“Kitabını oku. Bugün hesap görücü olarak sana nefsin yeter.”",toMizan:"Mizana",zTitle:"Mizan",zGood:"İyilikler",zBad:"Kötülükler",zRule:"Allah bir iyiliği on katından yedi yüz katına, hatta daha fazlasına kadar yazar; bir kötülüğü ise bir tane yazar.",zRiya:"Gösteriş için yapılan iyilik: {n}. Karşılığı dünyada alındı.",zKh:"Kul hakkı: {n}. Hak sahipleri geldi, iyiliklerinden aldılar.",zMuflis:"İyiliklerin bitince onların günahları sana yüklendi. Hadiste buna “müflis” denir.",zCont:"Devam eden amellerin eklendi: +{n}",zDhikr:"“Sübhânallahi ve bihamdihî, sübhânallahi'l-azîm”: dile hafif, mizanda ağır.",zMercy:"“Rahmetim gazabımı geçti.”",toSirat:"Sırata",rTitle:"Sırat",r1:"Emanet ve akrabalık sıratın iki yanında duruyor. Seni amellerin taşıyacak.",rSpeed:"Hızın: {s}",rLight:"Nurun önünde koşuyor.",rTap:"İlerle",pEmanet:"Emanet",pRahim:"Akrabalık",hGood:"“Alın, kitabımı okuyun!”",hGoodTxt:"Allah salih kulları için hiçbir gözün görmediği, hiçbir kulağın duymadığı, hiçbir insanın aklına gelmeyen şeyler hazırladı. Bu yüzden kapının ardını çizmiyoruz.",hBad:"“Keşke kitabım bana verilmeseydi… Malım bana hiçbir fayda sağlamadı.”",hBadTxt:"Ama bu bir oyun. Allah rahmeti yüz parça yarattı, yalnızca birini yeryüzüne indirdi.",q4:"Dört soru",q1:"Ömrünü nerede tükettin?",q2:"İlminle ne yaptın?",q3:"Malını nereden kazanıp nereye harcadın?",q4b:"Bedenini nerede yıprattın?",a1:"{n} yıl yaşadın · boşa giden saatler: {w}",a2:"Kehf'in ilk on ayeti: {k} · Öğrettiğin ilim: {i}",a3:"Şüpheli kazanç: {h} · süs için alınan eşya: {s} · ileriye gönderilen sadaka: {f}",a4:"İyilik için yorulduğun anlar: {g}",missed:"Kaçırdığın iyilik fırsatları: {n} · Gösterişe giden: {r}",yes:"var",no:"yok",disc:"Bu bir oyundur. Hükmü yalnız Allah verir.",end1:"Bu bir oyundu. Asıl hayat ahirettir.",end2:"Gerçek ömürde ikinci tur yok. Ama sen hâlâ hayattasın; tövbe kapısı açık.",again:"Yeniden oyna",sources:"Kaynaklar",srcNote:"Oyundaki her dinî bilgi Kur'an'a veya sahih hadise dayanır. Ayet ve hadisler kısaltılarak sade bir dille aktarıldı; tam metin için kaynağa bakın. Hadis numaraları sunnah.com'da aranabilir; Müslim'de Fuâd Abdülbâkî numarası kullanılır.",quran:"Kur'an",hadith:"Hadis",back:"Geri",home:"Ana menü",homeAgain:"Ana menüye dönmek için tekrar dokun.",ahiret:"Ahiret",steps:["Ölüm","Kabir","Sur","Mahşer","Defter","Mizan","Sırat","Son"],rSallim:"Peygamberimiz (s.a.s.) sıratın üzerinde durmuş, “Rabbim, selamet ver, selamet ver” diye dua ediyor.",rStop:"Amellerin seni taşımakta zorlanıyor. Oyun burada durur; sonucu yalnız Allah bilir.",rGood:"Bu oyunda terazin iyilik tarafına ağır bastı.",rBad:"Bu oyunda terazin kötülük tarafına ağır bastı.",hGoodIntro:"Kur'an, kitabı sağından verilenin sevincini böyle anlatır.",hBadIntro:"Kur'an, kitabı solundan verilenin pişmanlığını böyle anlatır.",sloganWhy:"“Kıyamet ne zaman?” diye soran birine Peygamberimiz (s.a.s.) “Ona ne hazırladın?” diye sordu.",dForward0:"İleriye hiç sadaka göndermedin.",ph:["Çocukluk","Gençlik","Yetişkinlik","Yaşlılık"]},
+de:{slogan:"Was hast du vorbereitet?",lead:"Dir wurde ein Leben anvertraut. Jede Entscheidung kostet Zeit. Was glänzt, bleibt beim Tod zurück; das Gute, das niemand sieht, geht mit dir.",verse:"Besitz und Söhne sind der Schmuck des diesseitigen Lebens. Die bleibenden guten Werke aber sind bei deinem Herrn besser an Lohn und besser an Hoffnung.",who:"Als wer lebst du?",f:"Frau · Emetullah",m:"Mann · Abdullah",names:"Beide Namen bedeuten „Diener(in) Allahs“.",age:"Alter",tovbe:"Reue",tovbeDone:"Du hast bereut. Bis die Sonne im Westen aufgeht, wird Reue angenommen (Muslim 2703).",tovbeKh:"Unrecht an Menschen aber löscht nur deren Vergebung (Bukhari 2449).",tovbeClean:"Keine offene Sünde im Buch. Um Vergebung bitten ist trotzdem schön.",next:"Weiter",open:"Die Tür der Reue ist offen.",shareQ:"Soll ich diese gute Tat teilen?",shareYes:"Teilen, alle sollen es sehen",shareNo:"Geheim halten",shareDone:"+200 Likes. Alle sagten „was für ein guter Mensch“; was du wolltest, wurde gesagt. In dein Buch kam es als „für die Leute“.",secretDone:"Niemand hat es gesehen. Es wurde für Allah aufgeschrieben.",gold:"Gold",likes:"Likes",items:"Dinge",sus:"Schmuck",dTitle:"Das Leben ist zu Ende",dAge:"Mit {n} Jahren. Niemand weiß, in welchem Land er sterben wird.",dSus:"Der Schmuck blieb zurück:",dFollow:"Drei folgten dir: deine Familie, dein Besitz und deine Taten. Zwei kehrten um; deine Taten blieben bei dir.",dForward:"Deine vorausgeschickten Spenden gingen mit dir: {n}.",dPending:"Aufgeschobene Reue: offene Sünden im Buch: {n}.",toKabir:"Zum Grab",kTitle:"Das Grab",kQ:"„Was hast du über diesen Mann gesagt?“",kA1:"Der Gläubige: „Er ist Allahs Diener und Gesandter.“",kA2:"Der Heuchler oder Zweifler: „Ich weiß nicht; die Leute sagten etwas, also sagte ich es auch.“",kLife:"Welcher Antwort war dein Leben näher?",kHak:"Momente für das Richtige",kCrowd:"Momente mit der Menge",kCont:"Dein Buch wird weitergeschrieben:",kCar:"Fortlaufende Spende",kIlim:"Nützliches Wissen",kEvlat:"Betendes Kind",s1:"Ins Horn wurde geblasen. Wer in den Himmeln und auf der Erde war, starb, außer wen Allah wollte.",s2:"Dann wurde ein zweites Mal geblasen, und siehe, sie stehen auf und schauen.",s3:"„Wer hat uns von unserer Ruhestätte auferweckt?“",toMahser:"Zur Versammlung",mTitle:"Die Versammlung",m1:"Alle barfuß und gleich. Keine Marken, keine Ämter, keine Follower.",mHeat:"Die Sonne ist eine Meile nah. Jeder schwitzt nach seinen Taten. Du:",mShade:"Sieben, denen Allah Schatten gibt an dem Tag, an dem es nur Seinen Schatten gibt:",toDefter:"Lies dein Buch",fTitle:"Buch der Taten",fVerse:"„Lies dein Buch. Heute genügst du dir selbst als Abrechner.“",toMizan:"Zur Waage",zTitle:"Die Waage",zGood:"Gutes",zBad:"Schlechtes",zRule:"Allah schreibt eine gute Tat zehn- bis siebenhundertfach und noch mehr, eine schlechte Tat nur einmal.",zRiya:"Zur Schau gestellte gute Taten: {n}. Ihr Lohn wurde schon im Diesseits genommen.",zKh:"Unrecht an Menschen: {n}. Die Betroffenen kamen und nahmen von deinem Guten.",zMuflis:"Als dein Gutes aufgebraucht war, wurden dir ihre Sünden aufgeladen. Der Hadith nennt das „bankrott“.",zCont:"Deine fortlaufenden Taten kamen hinzu: +{n}",zDhikr:"„Subhanallahi wa bihamdihi, subhanallahil-azim“: leicht auf der Zunge, schwer auf der Waage.",zMercy:"„Meine Barmherzigkeit übertrifft Meinen Zorn.“",toSirat:"Zur Brücke",rTitle:"Die Brücke",r1:"Vertrauen und Verwandtschaft stehen zu beiden Seiten der Brücke. Deine Taten tragen dich.",rSpeed:"Dein Tempo: {s}",rLight:"Dein Licht läuft vor dir her.",rTap:"Weiter",pEmanet:"Vertrauen",pRahim:"Verwandtschaft",hGood:"„Hier, lest mein Buch!“",hGoodTxt:"Allah hat für Seine rechtschaffenen Diener bereitet, was kein Auge sah, kein Ohr hörte und kein Mensch sich vorstellte. Darum zeichnen wir nicht, was hinter der Tür ist.",hBad:"„Wäre mir doch mein Buch nicht gegeben worden … Mein Besitz hat mir nichts genützt.“",hBadTxt:"Aber das ist ein Spiel. Allah schuf die Barmherzigkeit in hundert Teilen und sandte nur einen auf die Erde.",q4:"Vier Fragen",q1:"Wofür hast du dein Leben verbraucht?",q2:"Was hast du mit deinem Wissen getan?",q3:"Woher kam dein Besitz, wofür gabst du ihn aus?",q4b:"Wofür hast du deinen Körper abgenutzt?",a1:"{n} Jahre gelebt · verlorene Stunden: {w}",a2:"Erste zehn Verse von al-Kahf: {k} · Weitergegebenes Wissen: {i}",a3:"Zweifelhafter Gewinn: {h} · Dinge für den Schmuck: {s} · vorausgeschickte Spenden: {f}",a4:"Momente, in denen du dich für das Gute abgemüht hast: {g}",missed:"Verpasste Gelegenheiten zum Guten: {n} · Zur Schau gestellt: {r}",yes:"ja",no:"nein",disc:"Dies ist ein Spiel. Das Urteil liegt allein bei Allah.",end1:"Das war ein Spiel. Das wahre Leben ist das Jenseits.",end2:"Im echten Leben gibt es keine zweite Runde. Aber du lebst noch; die Tür der Reue ist offen.",again:"Nochmal spielen",sources:"Quellen",srcNote:"Jede religiöse Aussage im Spiel stützt sich auf den Koran oder einen authentischen Hadith. Verse und Hadithe sind gekürzt und in einfachen Worten wiedergegeben; den vollen Wortlaut findest du in der Quelle. Die Nummern lassen sich auf sunnah.com suchen; bei Muslim gilt die Zählung von Fuad Abdulbaqi.",quran:"Koran",hadith:"Hadith",back:"Zurück",home:"Hauptmenü",homeAgain:"Für das Hauptmenü noch einmal tippen.",ahiret:"Jenseits",steps:["Tod","Grab","Horn","Versammlung","Buch","Waage","Brücke","Ende"],rSallim:"Unser Prophet (s.) steht auf der Brücke und bittet: „Mein Herr, rette, rette!“",rStop:"Deine Taten tragen dich nur mühsam. Hier hält das Spiel an; das Ergebnis kennt allein Allah.",rGood:"In diesem Spiel neigte sich deine Waage zum Guten.",rBad:"In diesem Spiel neigte sich deine Waage zum Schlechten.",hGoodIntro:"So beschreibt der Koran die Freude dessen, dem sein Buch in die Rechte gegeben wird.",hBadIntro:"So beschreibt der Koran die Reue dessen, dem sein Buch in die Linke gegeben wird.",sloganWhy:"Als jemand fragte, wann die Stunde kommt, fragte unser Prophet (s.) zurück: „Was hast du für sie vorbereitet?“",dForward0:"Du hast keine Spende vorausgeschickt.",ph:["Kindheit","Jugend","Erwachsen","Alter"]},
+en:{slogan:"What have you prepared?",lead:"A lifetime has been entrusted to you. Every choice spends time. What glitters stays behind at death; the unseen good goes with you.",verse:"Wealth and children are the adornment of worldly life, but the lasting good deeds are better with your Lord in reward and better in hope.",who:"Who will you live as?",f:"Woman · Emetullah",m:"Man · Abdullah",names:"Both names mean “servant of Allah”.",age:"Age",tovbe:"Repent",tovbeDone:"You repented. Repentance is accepted until the sun rises from the west (Muslim 2703).",tovbeKh:"But wrongs done to people are erased only by settling with them (Bukhari 2449).",tovbeClean:"No sins are pending in your book. Asking forgiveness is still beautiful.",next:"Continue",open:"The door of repentance is open.",shareQ:"Share this good deed?",shareYes:"Share it so everyone sees",shareNo:"Keep it secret",shareDone:"+200 likes. Everyone said “what a good person”; what you wanted was said. Your book records it as “for the people”.",secretDone:"No one saw it. It was written down for Allah.",gold:"gold",likes:"likes",items:"things",sus:"Adornment",dTitle:"The life has ended",dAge:"At {n}. No one knows in what land they will die.",dSus:"The adornment stayed behind:",dFollow:"Three followed you: your family, your wealth and your deeds. Two turned back; your deeds stayed with you.",dForward:"The charity you sent ahead came with you: {n}.",dPending:"Delayed repentance: sins left in the book: {n}.",toKabir:"To the grave",kTitle:"The grave",kQ:"“What did you say about this man?”",kA1:"The believer: “He is Allah's servant and messenger.”",kA2:"The hypocrite or the doubter: “I don't know; people were saying something, so I said it too.”",kLife:"Which answer was your life closer to?",kHak:"Moments you chose what is right",kCrowd:"Moments you followed the crowd",kCont:"Your book is still being written:",kCar:"Ongoing charity",kIlim:"Beneficial knowledge",kEvlat:"A child who prays",s1:"The Trumpet was blown. All in the heavens and on earth died, except whom Allah willed.",s2:"Then it was blown again, and behold, they are standing, looking on.",s3:"“Who has raised us from our sleeping place?”",toMahser:"To the Gathering",mTitle:"The Gathering",m1:"Everyone barefoot and equal. No brands, no titles, no followers.",mHeat:"The sun is a mile away. Each sweats according to their deeds. You:",mShade:"Seven whom Allah shades on the day there is no shade but His:",toDefter:"Read your book",fTitle:"Book of deeds",fVerse:"“Read your book. Today you suffice as your own reckoner.”",toMizan:"To the Scale",zTitle:"The Scale",zGood:"Good",zBad:"Bad",zRule:"Allah records a good deed ten to seven hundred times over and more, and a bad deed only once.",zRiya:"Good deeds done for show: {n}. Their reward was taken in the world.",zKh:"Wrongs done to people: {n}. Those wronged came and took from your good deeds.",zMuflis:"When your good ran out, their sins were loaded onto you. The hadith calls this “bankrupt”.",zCont:"Your continuing deeds were added: +{n}",zDhikr:"“Subhanallahi wa bihamdihi, subhanallahil-azim”: light on the tongue, heavy on the scale.",zMercy:"“My mercy prevails over My wrath.”",toSirat:"To the Bridge",rTitle:"The Bridge",r1:"Trust and kinship stand on both sides of the Bridge. Your deeds will carry you.",rSpeed:"Your pace: {s}",rLight:"Your light runs ahead of you.",rTap:"Go on",pEmanet:"Trust",pRahim:"Kinship",hGood:"“Here, read my book!”",hGoodTxt:"Allah has prepared for His righteous servants what no eye has seen, no ear has heard and no heart has imagined. So we do not draw what lies beyond the door.",hBad:"“I wish I had not been given my book… My wealth has not availed me.”",hBadTxt:"But this is a game. Allah created mercy in a hundred parts and sent down only one.",q4:"Four questions",q1:"How did you spend your life?",q2:"What did you do with your knowledge?",q3:"Where did you earn your wealth, and on what did you spend it?",q4b:"How did you wear out your body?",a1:"{n} years lived · hours wasted: {w}",a2:"First ten verses of al-Kahf: {k} · Knowledge passed on: {i}",a3:"Doubtful earnings: {h} · things bought for show: {s} · charity sent ahead: {f}",a4:"Moments you wore yourself out for good: {g}",missed:"Missed chances to do good: {n} · Done for show: {r}",yes:"yes",no:"no",disc:"This is a game. Judgement belongs to Allah alone.",end1:"That was a game. The true life is the Hereafter.",end2:"Real life has no second round. But you are still alive; the door of repentance is open.",again:"Play again",sources:"Sources",srcNote:"Every religious statement in the game rests on the Qur'an or an authentic hadith. Verses and hadiths are shortened and put in simple words; see the source for the full text. Numbers can be searched on sunnah.com; Muslim uses Fuad Abdul Baqi's numbering.",quran:"Qur'an",hadith:"Hadith",back:"Back",home:"Main menu",homeAgain:"Tap again to go to the main menu.",ahiret:"Hereafter",steps:["Death","Grave","Trumpet","Gathering","Book","Scale","Bridge","End"],rSallim:"Our Prophet (peace be upon him) stands on the Bridge, praying: “My Lord, grant safety, grant safety.”",rStop:"Your deeds struggle to carry you. The game stops here; only Allah knows the outcome.",rGood:"In this game your scale tipped toward good.",rBad:"In this game your scale tipped toward bad.",hGoodIntro:"This is how the Qur'an describes the joy of the one given their book in the right hand.",hBadIntro:"This is how the Qur'an describes the regret of the one given their book in the left hand.",sloganWhy:"When someone asked when the Hour would come, our Prophet (peace be upon him) asked back: “What have you prepared for it?”",dForward0:"You sent no charity ahead.",ph:["Childhood","Youth","Adulthood","Old age"]}
+};
+const ITEM={phone:{tr:'yeni telefon',de:'neues Handy',en:'new phone'},toys:{tr:'pahalı oyuncaklar',de:'teure Spielsachen',en:'expensive toys'},house:{tr:'büyük ev',de:'großes Haus',en:'big house'}};
+const BADGE={tr:["Adil yönetici","İbadetle büyüyen genç","Kalbi mescide (namaza) bağlı","Allah için seven iki kişi","“Allah'tan korkarım” diyen","Gizli sadaka veren","Tenhada ağlayan"],de:["Gerechter Leiter","Jugend in Anbetung","Herz am Gebet","Liebe um Allahs willen","„Ich fürchte Allah“","Geheime Spende","Tränen in der Stille"],en:["Just leader","Youth raised in worship","Heart attached to prayer","Love for Allah's sake","“I fear Allah”","Secret charity","Tears in solitude"]};
+const SWEAT={tr:["topuklarına kadar","dizlerine kadar","beline kadar","ağzına kadar"],de:["bis zu den Knöcheln","bis zu den Knien","bis zur Hüfte","bis zum Mund"],en:["up to the ankles","up to the knees","up to the waist","up to the mouth"]};
+const SPEED={tr:["şimşek gibi","rüzgâr gibi","kuş gibi","koşar adım","emekleyerek"],de:["wie ein Blitz","wie der Wind","wie ein Vogel","im Laufschritt","kriechend"],en:["like lightning","like the wind","like a bird","at a run","crawling"]};
+const TAG={good:{tr:'iyilik',de:'Gutes',en:'good'},bad:{tr:'günah',de:'Sünde',en:'sin'},rep:{tr:'tövbe edildi',de:'bereut',en:'repented'},kh:{tr:'kul hakkı',de:'Unrecht an Menschen',en:'wrong to people'},khok:{tr:'helalleşildi',de:'vergeben',en:'settled'},riya:{tr:'insanlar için',de:'für die Leute',en:'for the people'},secret:{tr:'gizli',de:'geheim',en:'secret'},niyet:{tr:'niyet',de:'Absicht',en:'intention'},avoid:{tr:'Allah için vazgeçti',de:'um Allahs willen gelassen',en:'left for Allah'},wasted:{tr:'boş vakit',de:'verlorene Zeit',en:'wasted time'}};
+const C=(id,ph,age,fx,src,tr,de,en)=>({id,ph,age,fx,src,tr,de,en});
+const CARDS=[
+C('namaz1',0,8,[{good:1,youth:1,hak:1},{niyet:1},{crowd:1}],['B 660','B 6491',''],
+ {h:"Ezan ve oyun",p:"Arkadaşlarınla sokakta oyundasın. Ezan okunuyor.",c:["Oyunu bırak, namaza git","Bu el bitince kılarım","Arkadaşlar kılmıyor, ben de kılmam"],r:["Gençliğini ibadetle geçirenler, Allah'ın gölgelendireceği yedi kişiden biridir.","Niyet ettin, o da yazıldı. Ama “sonra” çoğu zaman gelmez.","Kalabalık rahat gösterir; ama yol senin yolun."]},
+ {h:"Gebetsruf und Spiel",p:"Du spielst mit Freunden auf der Straße. Der Gebetsruf ertönt.",c:["Spiel lassen, zum Gebet gehen","Nach dieser Runde bete ich","Die anderen beten nicht, ich auch nicht"],r:["Wer seine Jugend in Anbetung verbringt, gehört zu den Sieben, denen Allah Schatten gibt.","Die Absicht wurde aufgeschrieben. Aber „später“ kommt oft nicht.","Die Menge macht es bequem; aber der Weg ist deiner."]},
+ {h:"The call and the game",p:"You are playing in the street with friends. The call to prayer begins.",c:["Leave the game and go to pray","I'll pray after this round","My friends don't pray, so I won't"],r:["Those who grow up in worship are among the seven whom Allah will shade.","Your intention was written down. But “later” often never comes.","The crowd makes it easy; but the path is yours."]}),
+C('kedi',0,10,[{good:1,ahlak:1},{bad:1}],['B 2363','B 3318'],
+ {h:"Susamış kedi",p:"Kapının önünde susuzluktan bitkin bir kedi var.",c:["Bir kap su koy","Taşla kovala"],r:["Susamış bir hayvana su veren adamı Allah bağışladı. Hadiste anlatılan bir köpektir.","Hadiste, bir kediyi hapsedip aç bırakan kadının bu yüzden azaba uğradığı anlatılır."]},
+ {h:"Eine durstige Katze",p:"Vor deiner Tür liegt eine Katze, erschöpft vor Durst.",c:["Eine Schale Wasser hinstellen","Mit Steinen verjagen"],r:["Allah vergab einem Mann, der einem durstigen Tier Wasser gab. Im Hadith ist es ein Hund.","Der Hadith erzählt von einer Frau, die eine Katze einsperrte und hungern ließ und dafür bestraft wurde."]},
+ {h:"A thirsty cat",p:"A cat lies at your door, exhausted with thirst.",c:["Put out a bowl of water","Chase it off with stones"],r:["Allah forgave a man who gave water to a thirsty animal. In the hadith it is a dog.","The hadith tells of a woman who locked up a cat and let it starve, and was punished for it."]}),
+C('alay',0,12,[{good:1,ahlak:1,hak:1},{crowd:1},{kh:'alay',crowd:1,bad:1}],['T 2002','','M 2581'],
+ {h:"Sınıfta alay",p:"Sınıfta herkes yeni gelen çocukla alay ediyor.",c:["Yanına otur, onu savun","Sessizce izle","Sen de gül"],r:["Mizanda güzel ahlaktan daha ağır bir şey yoktur.","Susmak kolaydı. Bir dahaki sefere?","Kırılan bir kalp kayda geçti: kul hakkı."]},
+ {h:"Spott in der Klasse",p:"Die ganze Klasse macht sich über den neuen Schüler lustig.",c:["Neben ihn setzen, ihn verteidigen","Still zuschauen","Mitlachen"],r:["Nichts wiegt auf der Waage schwerer als guter Charakter.","Schweigen war leicht. Und beim nächsten Mal?","Ein verletztes Herz wurde notiert: Unrecht an einem Menschen."]},
+ {h:"Mocking in class",p:"The whole class is mocking the new kid.",c:["Sit next to him and defend him","Watch quietly","Laugh along"],r:["Nothing is heavier on the scale than good character.","Staying quiet was easy. And next time?","A broken heart was recorded: a wrong done to a person."]}),
+C('kehf',0,14,[{good:1,kehf:1,youth:1},{wasted:2}],['M 809|Q 18:7','B 6412'],
+ {h:"Kehf'in ilk on ayeti",p:"Annen sana Kehf suresinin ilk on ayetini ve anlamını öğretmek istiyor.",c:["Otur, öğren","Sonra, şimdi oyun var"],r:["Kehf'in ilk on ayetini ezberleyen Deccal'den korunur. 7. ayet: Yeryüzündekiler insanları sınamak için bir süstür.","Boş vakit de bir nimettir; insanların çoğu onda aldanır."]},
+ {h:"Die ersten zehn Verse",p:"Deine Mutter möchte dir die ersten zehn Verse der Sure al-Kahf und ihre Bedeutung beibringen.",c:["Hinsetzen und lernen","Später, jetzt wird gespielt"],r:["Wer die ersten zehn Verse von al-Kahf auswendig lernt, ist vor dem Dadschal geschützt. Vers 7: Was auf der Erde ist, ist ein Schmuck, um die Menschen zu prüfen.","Freie Zeit ist auch ein Segen; die meisten Menschen lassen sich darin täuschen."]},
+ {h:"The first ten verses",p:"Your mother wants to teach you the first ten verses of Surah al-Kahf and their meaning.",c:["Sit down and learn","Later, it's playtime"],r:["Whoever memorises the first ten verses of al-Kahf is protected from the Dajjal. Verse 7: what is on earth is an adornment to test people.","Free time is a blessing too; most people are deceived in it."]}),
+C('scroll',1,16,[{hak:1},{wasted:3,likes:120}],['T 2417','B 6412'],
+ {h:"Sadece beş dakika",p:"Gece yarısı, telefon elinde. “Sadece beş dakika” diyorsun.",c:["Telefonu bırak, uyu","Kaydırmaya devam et"],r:["Kıyamet günü ömrünü nerede tükettiğin sorulacak.","Üç saat geçti. Beğeni geldi, ömür gitti."]},
+ {h:"Nur fünf Minuten",p:"Mitternacht, das Handy in der Hand. „Nur fünf Minuten“, sagst du.",c:["Handy weglegen, schlafen","Weiter scrollen"],r:["Am Tag des Gerichts wirst du gefragt, wofür du dein Leben verbraucht hast.","Drei Stunden sind vergangen. Die Likes kamen, das Leben ging."]},
+ {h:"Just five minutes",p:"Midnight, phone in hand. “Just five minutes,” you say.",c:["Put the phone down and sleep","Keep scrolling"],r:["On the Day of Judgement you will be asked how you spent your life.","Three hours passed. The likes came, the life went."]}),
+C('maas',1,18,[{good:1,sadaka:1,share:1,charity:1,money:10},{items:'phone',likes:40}],['M 2958','M 2959'],
+ {h:"İlk maaş",p:"İlk maaşını aldın. Mahallede zor durumda bir aile var.",c:["Bir kısmını o aileye ver","Hepsiyle yeni telefon al"],r:["Malından sana kalan, verip ileriye gönderdiğindir.","Yeni telefon parlıyor. Ama malından sana kalan, yiyip tükettiğin, giyip eskittiğin ve verdiğindir; gerisini bırakıp gideceksin."]},
+ {h:"Das erste Gehalt",p:"Du hast dein erstes Gehalt bekommen. In der Nachbarschaft lebt eine Familie in Not.",c:["Einen Teil dieser Familie geben","Alles für ein neues Handy"],r:["Von deinem Besitz bleibt dir, was du gegeben und vorausgeschickt hast.","Das neue Handy glänzt. Doch dir gehört nur, was du gegessen, abgetragen und gegeben hast; den Rest lässt du zurück."]},
+ {h:"First salary",p:"You've received your first salary. A family in the neighbourhood is struggling.",c:["Give part of it to that family","Spend it all on a new phone"],r:["What remains yours of your wealth is what you gave and sent ahead.","The new phone shines. But yours is only what you ate, wore out and gave; the rest you leave behind."]}),
+C('gibet',1,20,[{good:1,ahlak:1,hak:1},{kh:'gossip',bad:1,crowd:1,likes:30}],['T 2002','M 2581'],
+ {h:"Dedikodu",p:"Arkadaş grubunda biri, orada olmayan bir arkadaşınızın sırrını anlatıyor.",c:["Konuyu değiştir, gıybete katılma","Sen de bildiğini anlat"],r:["Dilini tuttun. Bu da güzel ahlaktır.","Arkadaşının hakkı sende kaldı: kul hakkı. Hadiste, iyilikleri hak sahiplerine dağıtılan “müflis” anlatılır."]},
+ {h:"Klatsch",p:"In deiner Clique erzählt jemand das Geheimnis eines Freundes, der nicht da ist.",c:["Thema wechseln, nicht mitlästern","Erzählen, was du auch weißt"],r:["Du hast deine Zunge gehütet. Auch das ist guter Charakter.","Das Recht deines Freundes liegt nun bei dir. Der Hadith beschreibt den „Bankrotten“, dessen gute Taten an die Geschädigten verteilt werden."]},
+ {h:"Gossip",p:"In your group, someone reveals the secret of a friend who isn't there.",c:["Change the subject, don't join in","Tell what you know too"],r:["You held your tongue. That too is good character.","Your friend's right now rests with you. The hadith describes the “bankrupt” whose good deeds are handed to those he wronged."]}),
+C('kolaypara',1,22,[{avoid:1,hak:1,emanet:1},{money:60,haram:1,bad:1}],['B 7501','T 2417'],
+ {h:"Kolay para",p:"Biri “kimse bilmez” diyerek şüpheli bir işten büyük para teklif ediyor.",c:["Reddet","Kabul et"],r:["Kötülüğe niyet edip Allah için vazgeçene bir iyilik yazılır.","Cüzdanın doldu. Ama malını nereden kazandığın sorulacak."]},
+ {h:"Schnelles Geld",p:"Jemand bietet dir mit „Niemand wird es erfahren“ viel Geld für ein zwielichtiges Geschäft an.",c:["Ablehnen","Annehmen"],r:["Wer eine schlechte Tat um Allahs willen unterlässt, dem wird eine gute Tat geschrieben.","Die Brieftasche ist voll. Aber du wirst gefragt, woher dein Besitz kam."]},
+ {h:"Easy money",p:"Someone offers you big money for a shady job: “No one will know.”",c:["Refuse","Accept"],r:["Whoever leaves a bad deed for Allah's sake has a good deed written for them.","Your wallet is full. But you will be asked where your wealth came from."]}),
+C('dost',1,24,[{good:1,shade:4,ahlak:1},{}],['B 660',''],
+ {h:"Allah için dostluk",p:"Camide tanıştığın bir arkadaşın çok sıkıntılı ve seninle konuşmak istiyor.",c:["Saatlerce dinle, yanında ol","“Meşgulüm” de"],r:["Allah için birbirini seven iki kişi, Allah'ın gölgelendireceği yedi kişidendir.","Meşgul olduğun şeyler de bir gün geride kalacak."]},
+ {h:"Freundschaft um Allahs willen",p:"{Ein Freund|Eine Freundin} aus der Moschee steckt in großen Sorgen und möchte mit dir reden.",c:["Stundenlang zuhören, für {ihn|sie} da sein","„Ich habe keine Zeit“ sagen"],r:["Zwei, die einander um Allahs willen lieben, gehören zu den Sieben, denen Allah Schatten gibt.","Auch das, was dich so beschäftigt, bleibt eines Tages zurück."]},
+ {h:"Friendship for Allah",p:"A friend you met at the mosque is in deep trouble and wants to talk to you.",c:["Listen for hours, stay with {him|her}","Say “I'm busy”"],r:["Two who love each other for Allah's sake are among the seven whom Allah will shade.","What keeps you busy will also stay behind one day."]}),
+C('davet',1,26,[{avoid:1,shade:5,hak:1},{bad:1}],['B 660','Q 17:13-14'],
+ {h:"Gizli davet",p:"Makam ve güzellik sahibi biri seni gizlice harama davet ediyor.",c:["“Ben Allah'tan korkarım” de","“Kimse görmez” de"],r:["Bu cümle, Allah'ın gölgelendireceği yedi kişiden birinin cümlesidir.","Kimse görmese de defter yazar."]},
+ {h:"Eine heimliche Einladung",p:"Eine Person mit Rang und Schönheit lädt dich heimlich zu etwas Verbotenem ein.",c:["„Ich fürchte Allah“ sagen","„Niemand sieht es“ sagen"],r:["Das ist der Satz eines der Sieben, denen Allah Schatten gibt.","Auch wenn niemand es sieht: das Buch schreibt mit."]},
+ {h:"A secret invitation",p:"A person of rank and beauty secretly invites you to something forbidden.",c:["Say “I fear Allah”","Say “No one will see”"],r:["These are the words of one of the seven whom Allah will shade.","Even if no one sees, the book keeps writing."]}),
+C('akraba',1,28,[{good:1,rahim:1,ahlak:1},{rahim:-1}],['M 195','M 195'],
+ {h:"Küs akraba",p:"Yıllardır küs olduğun bir akraban hastanede yatıyor.",c:["Git, barış","“Önce o arasın”"],r:["Akrabalık bağı, sıratın bir yanında duracak.","Akrabalık bağı sıratın bir yanında duracak; sen onu kopardın."]},
+ {h:"Zerstrittene Verwandte",p:"Ein Verwandter, mit dem du seit Jahren zerstritten bist, liegt im Krankenhaus.",c:["Hingehen, sich versöhnen","„Er soll sich zuerst melden“"],r:["Die Verwandtschaft wird an einer Seite der Brücke stehen.","Die Verwandtschaft wird an einer Seite der Brücke stehen; du hast das Band zerrissen."]},
+ {h:"Estranged relative",p:"A relative you haven't spoken to in years is in hospital.",c:["Go and make peace","“He should call first”"],r:["Kinship will stand on one side of the Bridge.","Kinship will stand on one side of the Bridge; you cut the tie."]}),
+C('aile',2,31,[{good:1,evlat:1,ilim:1,rahim:1},{items:'toys'}],['M 1631',''],
+ {h:"Çocukların",p:"Bir ailen var. Çocukların seni örnek alıyor.",c:["Onlara namazı, dürüstlüğü, merhameti öğret","En pahalı oyuncakları al, gerisi okulun işi"],r:["Sana dua eden salih bir evlat, ölümünden sonra da defterine yazılır.","Oyuncaklar eskir; öğrettiğin şeyler kalır."]},
+ {h:"Deine Kinder",p:"Du hast eine Familie. Deine Kinder nehmen sich ein Beispiel an dir.",c:["Gebet, Ehrlichkeit und Barmherzigkeit lehren","Die teuersten Spielsachen kaufen, der Rest ist Sache der Schule"],r:["Ein rechtschaffenes Kind, das für dich betet, wird auch nach deinem Tod in dein Buch geschrieben.","Spielsachen gehen kaputt; was du lehrst, bleibt."]},
+ {h:"Your children",p:"You have a family. Your children follow your example.",c:["Teach them prayer, honesty and mercy","Buy the most expensive toys; the rest is the school's job"],r:["A righteous child who prays for you is written in your book even after your death.","Toys wear out; what you teach remains."]}),
+C('ev',2,35,[{items:'house',wasted:4,likes:80},{good:1,cariye:1,sadaka:1,share:1,charity:1}],['Q 102:1-2','M 1631|B 2363'],
+ {h:"Daha büyük ev",p:"Daha büyük bir ev için yıllarca fazla mesai yapabilirsin. Ya da ihtiyacın kadarıyla yetinip bir köye çeşme yaptırabilirsin.",c:["Büyük ev için çalış","Çeşmeyi yaptır"],r:["Ev büyüdü, mesai saatleri de. Çoğaltma yarışı insanı kabre kadar oyalar.","Çeşmeden su içen her canlı için sevap yazılmaya devam eder: sadaka-i câriye."]},
+ {h:"Ein größeres Haus",p:"Für ein größeres Haus könntest du jahrelang Überstunden machen. Oder du bleibst bei dem, was du brauchst, und lässt in einem Dorf einen Brunnen bauen.",c:["Für das große Haus arbeiten","Den Brunnen bauen lassen"],r:["Das Haus wurde größer, die Arbeitszeit auch. Das Streben nach mehr lenkt ab bis ins Grab.","Für jedes Lebewesen, das daraus trinkt, wird weiter Lohn geschrieben: eine fortlaufende Spende."]},
+ {h:"A bigger house",p:"You could work overtime for years to afford a bigger house. Or settle for what you need and build a water fountain for a village.",c:["Work for the big house","Build the fountain"],r:["The house grew, and so did the working hours. The race for more distracts until the grave.","Reward keeps being written for every creature that drinks from it: an ongoing charity."]}),
+C('mudur',2,39,[{good:1,shade:1,emanet:1,hak:1},{kh:'unfair',bad:1,emanet:-1}],['B 660','B 59'],
+ {h:"Müdür oldun",p:"İş yerinde müdür oldun. Akrabanın oğlu da başvurdu, ama başka bir aday daha uygun.",c:["Adil ol, uygun olanı al","Akrabanı işe al"],r:["Adil yönetici, Allah'ın gölgelendireceği yedi kişinin ilkidir.","İş ehline verilmeyince emanet zayi olur."]},
+ {h:"Du bist Chef geworden",p:"Du leitest jetzt die Abteilung. Der Sohn eines Verwandten hat sich beworben, doch jemand anderes ist besser geeignet.",c:["Gerecht sein, den Geeigneten nehmen","Den Verwandten einstellen"],r:["Der gerechte Leiter ist der erste der Sieben, denen Allah Schatten gibt.","Wird eine Aufgabe Ungeeigneten gegeben, geht das anvertraute Gut verloren."]},
+ {h:"You became the boss",p:"You now run the department. A relative's son applied, but another candidate is better suited.",c:["Be fair, hire the right person","Hire your relative"],r:["The just leader is the first of the seven whom Allah will shade.","When a task is given to those unfit for it, the trust is lost."]}),
+C('ezan2',2,43,[{good:1,shade:3,hak:1},{bad:1,crowd:1}],['B 660',''],
+ {h:"Toplantı",p:"Önemli bir toplantıdasın. Namaz vakti çıkmak üzere.",c:["İzin iste, namazını kıl","Toplantı daha önemli"],r:["Kalbi mescide (namaza) bağlı olan, Allah'ın gölgelendireceği yedi kişidendir.","Toplantı bitti. Vakit de çıktı."]},
+ {h:"Die Besprechung",p:"Du bist in einer wichtigen Besprechung. Die Gebetszeit läuft gleich ab.",c:["Um eine Pause bitten und beten","Die Besprechung ist wichtiger"],r:["Wessen Herz an der Moschee (am Gebet) hängt, gehört zu den Sieben, denen Allah Schatten gibt.","Die Besprechung ist vorbei. Die Gebetszeit auch."]},
+ {h:"The meeting",p:"You're in an important meeting. The prayer time is about to end.",c:["Excuse yourself and pray","The meeting is more important"],r:["The one whose heart is attached to the mosque (to prayer) is among the seven whom Allah will shade.","The meeting is over. So is the prayer time."]}),
+C('helal',2,47,[{khClear:1,good:1,ahlak:1},{}],['B 2449','M 2581'],
+ {h:"Kırdığın kalpler",p:"Yıllar içinde kalbini kırdığın, hakkını yediğin insanlar aklına geliyor.",c:["Hepsini bul, helalleş","Geçmiş geçmişte kaldı"],r:["Dinarın dirhemin olmadığı gün gelmeden helalleştin.","Kul hakkı tövbeyle silinmez; o gün iyiliklerle ödenir."]},
+ {h:"Verletzte Herzen",p:"Dir kommen die Menschen in den Sinn, deren Herz du verletzt oder deren Recht du genommen hast.",c:["Alle aufsuchen und um Vergebung bitten","Vergangen ist vergangen"],r:["Du hast es geregelt, bevor der Tag kommt, an dem es weder Dinar noch Dirham gibt.","Unrecht an Menschen löscht keine Reue; an jenem Tag wird mit guten Taten bezahlt."]},
+ {h:"Hearts you broke",p:"You remember the people whose hearts you broke or whose rights you took.",c:["Find them all and settle","The past is the past"],r:["You settled it before the Day when there is no dinar or dirham.","Wrongs to people are not erased by repentance; on that Day they are paid with good deeds."]}),
+C('gece',2,51,[{dhikr:1,shade:7},{wasted:2}],['B 660|B 7563',''],
+ {h:"Gece yalnızken",p:"Herkes uyuyor. Yalnızsın.",c:["Allah'ı an, gözyaşın aksın","Bir bölüm daha izle"],r:["Tenhada Allah'ı anıp ağlayan, gölgelenecek yedi kişidendir. “Sübhânallahi ve bihamdihî” dile hafif, mizanda ağırdır.","Gece bitti, dizi bitmedi."]},
+ {h:"Nachts allein",p:"Alle schlafen. Du bist allein.",c:["Allahs gedenken, Tränen fließen lassen","Noch eine Folge schauen"],r:["Wer in der Stille Allahs gedenkt und weint, gehört zu den Sieben im Schatten. „Subhanallahi wa bihamdihi“ ist leicht auf der Zunge und schwer auf der Waage.","Die Nacht ist vorbei, die Serie nicht."]},
+ {h:"Alone at night",p:"Everyone is asleep. You are alone.",c:["Remember Allah, let your tears flow","Watch one more episode"],r:["Whoever remembers Allah in solitude and weeps is among the seven in His shade. “Subhanallahi wa bihamdihi” is light on the tongue, heavy on the scale.","The night ended; the series didn't."]}),
+C('komsu',2,55,[{good:1,ahlak:1,share:1},{niyet:1}],['M 2626','B 6491'],
+ {h:"Hasta komşu",p:"Yaşlı komşun hasta. Kimse ziyaretine gitmiyor.",c:["Ziyaret et, yemek götür","Yarın giderim"],r:["Hiçbir iyiliği küçük görme.","Niyetin yazıldı. Ama yarın herkese gelmez."]},
+ {h:"Der kranke Nachbar",p:"Dein alter Nachbar ist krank. Niemand besucht ihn.",c:["Besuchen, Essen mitbringen","Ich gehe morgen"],r:["Halte keine gute Tat für gering.","Deine Absicht wurde geschrieben. Aber nicht jeder erlebt das Morgen."]},
+ {h:"The sick neighbour",p:"Your elderly neighbour is ill. No one visits him.",c:["Visit him, bring food","I'll go tomorrow"],r:["Do not belittle any good deed.","Your intention was written. But not everyone reaches tomorrow."]}),
+C('daha',2,59,[{good:1,sadaka:1,charity:1,secret:1},{money:80,wasted:3}],['B 660','Q 102:1-2'],
+ {h:"Daha fazla",p:"Hesabında para birikti. Telefonun bildirimlerle dolu: “Daha fazla kazan!”",c:["“Yeter” de, bir kısmını gizlice ver","Hepsini “daha fazla” için yatır"],r:["Sağ elin verdi, sol elin bilmedi.","Çoğaltma yarışı sizi oyaladı, ta kabirlere varıncaya kadar."]},
+ {h:"Noch mehr",p:"Auf deinem Konto hat sich Geld angesammelt. Dein Handy ist voller Meldungen: „Verdiene noch mehr!“",c:["„Genug“ sagen, einen Teil heimlich spenden","Alles für „noch mehr“ anlegen"],r:["Deine Rechte gab, und deine Linke wusste es nicht.","Das Streben nach mehr hat euch abgelenkt, bis ihr die Gräber besucht."]},
+ {h:"More",p:"Money has piled up in your account. Your phone is full of alerts: “Earn more!”",c:["Say “enough”, give part of it in secret","Put it all into “more”"],r:["Your right hand gave and your left hand did not know.","The race for more distracted you until you reached the graves."]}),
+C('torun',3,64,[{good:1,ilim:1,rahim:1},{}],['M 1631','B 6514'],
+ {h:"Torunlar",p:"Torunların başına toplandı. Onlara ne anlatacaksın?",c:["Bildiğin hayırlı şeyleri öğret","Eski zenginliğini anlat"],r:["Faydalanılan ilim, ölümden sonra da yazılmaya devam eder.","Hikâye güzeldi. Ama mal ölümde geri döner."]},
+ {h:"Die Enkel",p:"Deine Enkel sitzen um dich herum. Was erzählst du ihnen?",c:["Das Gute lehren, das du weißt","Von deinem früheren Reichtum erzählen"],r:["Nützliches Wissen wird auch nach dem Tod weitergeschrieben.","Die Geschichte war schön. Doch der Besitz kehrt beim Tod um."]},
+ {h:"Grandchildren",p:"Your grandchildren gather around you. What will you tell them?",c:["Teach them the good you know","Talk about your past wealth"],r:["Beneficial knowledge keeps being written after death.","The story was nice. But wealth turns back at death."]}),
+C('fidan',3,72,[{good:1,cariye:1},{}],['AM 479|B 2320',''],
+ {h:"Bir fidan",p:"Bahçende boş bir yer var, elinde bir fidan. “Bu yaştan sonra ağaç mı dikilir?” diye düşünüyorsun.",c:["Yine de dik","Boş ver"],r:["Peygamberimiz (s.a.s.): “Kıyamet kopacak olsa ve birinizin elinde bir fidan bulunsa, onu dikebiliyorsa diksin.” Ondan yiyen her kuş, insan ve hayvan sana sadaka olur.","Fırsat geçti."]},
+ {h:"Ein Setzling",p:"In deinem Garten ist ein freier Platz, in deiner Hand ein Setzling. „Pflanzt man in diesem Alter noch Bäume?“, denkst du.",c:["Trotzdem pflanzen","Lass es"],r:["Unser Prophet (s.) sagte: „Wenn die Stunde anbricht und einer von euch hat einen Setzling in der Hand, soll er ihn pflanzen, wenn er kann.“ Isst ein Vogel, Mensch oder Tier davon, ist es eine Spende für dich.","Die Gelegenheit ist vorbei."]},
+ {h:"A sapling",p:"There's an empty spot in your garden and a sapling in your hand. “Who plants trees at this age?” you think.",c:["Plant it anyway","Never mind"],r:["Our Prophet (peace be upon him) said: “If the Hour comes while one of you holds a sapling, let him plant it if he can.” Whatever bird, person or animal eats from it is charity for you.","The chance has passed."]})
+];
+const SCREEN_SRC=['Q 18:46','Q 31:34','B 6514','M 2958','T 3537','B 1374','M 905','M 1631','Q 39:68','Q 36:52','B 6527','M 2864','B 660','Q 17:13-14','B 6491','M 1905','M 2581','B 2449','B 7563','B 7404','M 195','Q 57:12','Q 69:19','B 3244','Q 69:25-28','M 2752','T 2417','Q 29:64','B 3688','M 2703','B 1'];
+const $=s=>document.querySelector(s);
+const app=$('#app'),bg=$('#bg'),fxEl=$('#fx'),hud=$('#hud'),stage=$('#stage'),ctl=$('#ctl'),toastEl=$('#toast');
+let curImg='';
+let S=null,toastT=0;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const t=(k,v)=>{let s=(UI[S.lang]&&UI[S.lang][k]!==undefined)?UI[S.lang][k]:UI.tr[k];if(v)for(const x in v)s=String(s).split('{'+x+'}').join(v[x]);return s};
+const qName=n=>{const s=SURA[n.split(':')[0]];return (s?s[S.lang==='tr'?0:1]:BOOK.Q[S.lang])+' '+n.replace('-','–')};
+const ref=code=>!code?'':code.split('|').map(c=>{const p=c.trim().split(' ');return p[0]==='Q'?qName(p[1]):(BOOK[p[0]]?BOOK[p[0]][S.lang]:p[0])+' '+p[1].replace('-','–')}).join(' · ');
+const srcLine=code=>code?`<p class="src">${ref(code)}</p>`:'';
+const L=x=>x[S.lang]||x.tr;
+const G=s=>String(s).replace(/\{([^|{}]*)\|([^{}]*)\}/g,(m,a,b)=>S.g==='f'?b:a);
+const LC=c=>{const o=L(c);return {h:G(o.h),p:G(o.p),c:o.c.map(G),r:o.r.map(G)}};
+const POS=fx=>!!(fx&&(fx.good||fx.avoid||fx.dhikr||fx.khClear||fx.hak));
+const rollDeath=()=>Math.random()<0.2?23+Math.floor(Math.random()*28):57+Math.floor(Math.random()*30);
+const fresh=lang=>({lang,scr:'start',g:'',i:0,age:8,death:rollDeath(),money:0,items:[],likes:0,good:0,niyet:0,avoid:0,bad:0,rep:0,dhikr:0,ahlak:0,wasted:0,crowd:0,hak:0,kh:[],sadaka:0,secret:0,riya:0,shade:[0,0,0,0,0,0,0],youth:0,cariye:0,ilim:0,evlat:0,haram:0,emanet:0,rahim:0,kehf:0,missed:0,log:[],k:-1,note:'',mz:null,sp:0,tier:5});
+const savedLang=()=>{try{const l=localStorage.getItem('imtihan-lang');return UI[l]?l:'tr'}catch(e){return 'tr'}};
+const saveLang=()=>{try{localStorage.setItem('imtihan-lang',S.lang)}catch(e){}};
+const ICON={
+coin:'<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#fff3cf" stroke="#8a5a12" stroke-width="1.5"/><circle cx="8" cy="8" r="3.6" fill="none" stroke="#8a5a12" stroke-width="1.3"/></svg>',
+house:'<svg viewBox="0 0 16 16"><path d="M2 8 8 2.5 14 8v6H2z" fill="#fff3cf" stroke="#8a5a12" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.5 14V10h3v4" fill="none" stroke="#8a5a12" stroke-width="1.3"/></svg>',
+heart:'<svg viewBox="0 0 16 16"><path d="M8 14S1.5 10 1.5 5.6C1.5 3.6 3 2 5 2c1.3 0 2.4.7 3 1.8C8.6 2.7 9.7 2 11 2c2 0 3.5 1.6 3.5 3.6C14.5 10 8 14 8 14z" fill="#fff3cf" stroke="#8a5a12" stroke-width="1.4"/></svg>',
+lamp:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 1.5v2.5M6.5 6h7l1 9.5h-9z"/><path d="M4.5 18.5h11"/><circle cx="10" cy="11" r="2.1" fill="currentColor" stroke="none"/></svg>',
+home:'<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><path d="M3 9.5 10 3.5l7 6V17H3z"/><path d="M8 17v-4.5h4V17"/></svg>'};
+function hourglass(){const r=Math.max(0,Math.min(1,1-(S.age-8)/80)),top=4+14*(1-r),bh=14*(1-r);return `<svg class="hg" viewBox="0 0 26 40" aria-hidden="true"><path d="M3 2h20M3 38h20" stroke="#e8c47c" stroke-width="2.4" stroke-linecap="round"/><path d="M5 3c0 9 7 12 7 17s-7 8-7 17M21 3c0 9-7 12-7 17s7 8 7 17" fill="none" stroke="#fff6e3" stroke-opacity=".7" stroke-width="1.6"/><clipPath id="hgc"><path d="M5 3c0 9 7 12 7 17h2c0-5 7-8 7-17zM12 20c0 5-7 8-7 17h16c0-9-7-12-7-17z"/></clipPath><g clip-path="url(#hgc)"><rect x="0" y="${top}" width="26" height="${20-top}" fill="#e8c47c"/><rect x="0" y="${37-bh}" width="26" height="${bh}" fill="#e8c47c"/></g><rect x="12.4" y="18" width="1.2" height="${r>0?19:0}" fill="#e8c47c" opacity=".8"/></svg>`}
+const STEPS=['death','kabir','sur','mahser','defter','mizan','sirat','final'];
+function showHud(mode){
+ const homeB=`<button class="home" data-act="home" aria-label="${t('home')}">${ICON.home}</button>`;
+ if(!mode){const on=/(^|\.)xenosmart\.de$/.test(location.hostname);hud.className=on?'hud start':'hud off';hud.innerHTML=on?'<a class="bukolink" href="./">← Buko Games</a>':'';return}
+ if(mode==='ahiret'){const k=Math.max(0,STEPS.indexOf(S.scr==='sources'?'final':S.scr));hud.className='hud abar';
+  hud.innerHTML=`${homeB}<b>${t('ahiret')} · ${UI[S.lang].steps[k]}</b><span class="steps" aria-hidden="true">${STEPS.map((x,i)=>`<i class="${i<k?'done':i===k?'now':''}"></i>`).join('')}</span>`;return}
+ const name=S.g==='f'?'Emetullah':'Abdullah',ph=UI[S.lang].ph[CARDS[Math.min(S.i,CARDS.length-1)].ph];
+ hud.className='hud';
+ hud.innerHTML=`${homeB}${hourglass()}<div class="who"><b>${name}</b><span>${ph} · ${t('age')} ${S.age}</span></div><button class="tovbe ${S.bad>0?'glow':''}" data-act="tovbe" aria-label="${t('tovbe')}">${ICON.lamp}${t('tovbe')}</button><div class="sus" aria-label="${t('sus')}"><span class="pill lbl">${t('sus')}</span><span class="pill">${ICON.coin}${S.money} ${t('gold')}</span><span class="pill">${ICON.house}${S.items.length} ${t('items')}</span><span class="pill">${ICON.heart}${S.likes} ${t('likes')}</span></div>`}
+function setScene(img,mode){bg.style.backgroundImage=img?`url(${IMG[img]})`:'none';if(img!==curImg||img!=='sirat'){fxEl.innerHTML='';curImg=img}app.classList.toggle('sirat',img==='sirat');app.classList.toggle('dark',mode==='dark');app.classList.toggle('black',mode==='black')}
+function setCtl(html,row){ctl.className='ctl'+(row?' row':'');ctl.innerHTML=html;requestAnimationFrame(()=>app.style.setProperty('--ctlh',ctl.offsetHeight+'px'))}
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.remove('show'),3400)}
+const B=(label,act,arg,cls)=>`<button class="btn ${cls||''}" data-act="${act}"${arg!==undefined?` data-arg="${arg}"`:''}>${label}</button>`;
+function apply(c,k){const fx=c.fx[k]||{},tags=[];
+ if(c.ph===1||c.ph===2)S.money+=10;
+ const add=(key,f)=>{if(fx[key])S[f||key]+=fx[key]};
+ ['good','niyet','avoid','bad','dhikr','ahlak','money','likes','wasted','crowd','hak','sadaka','youth','cariye','ilim','evlat','haram','emanet','rahim','kehf'].forEach(x=>add(x));
+ if(fx.items)S.items.push(fx.items);
+ if(fx.kh)S.kh.push(fx.kh);
+ if(fx.khClear){S.kh=[];S.log.forEach(e=>{if(e.tags.includes('kh'))e.tags.push('khok')})}
+ if(fx.shade)S.shade[fx.shade-1]=1;
+ if(fx.secret){S.secret++;S.shade[5]=1;tags.push('secret')}
+ if(!POS(fx)&&c.fx.some(POS))S.missed++;
+ if(fx.good)tags.push('good');if(fx.bad)tags.push('bad');if(fx.kh)tags.push('kh');if(fx.niyet)tags.push('niyet');if(fx.avoid)tags.push('avoid');if(fx.wasted)tags.push('wasted');
+ S.log.push({id:c.id,k,tags});
+ if(S.youth>=2)S.shade[1]=1}
+const SCR={};
+SCR.start=()=>{showHud(false);setScene('dunya');stage.className='stage';
+ stage.innerHTML=`<div class="hero card" style="background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;padding:0"><h1>İMTİHAN</h1><p class="slogan">${t('slogan')}</p></div><div class="verse card"><p class="ar" dir="rtl" lang="ar">الْمَالُ وَالْبَنُونَ زِينَةُ الْحَيَاةِ الدُّنْيَا ۖ وَالْبَاقِيَاتُ الصَّالِحَاتُ خَيْرٌ عِنْدَ رَبِّكَ ثَوَابًا وَخَيْرٌ أَمَلًا</p><p>${t('verse')}</p>${srcLine('Q 18:46')}</div><p class="lead">${t('lead')}</p>`;
+ setCtl(`<div class="langs">${['tr','de','en'].map(l=>B(l.toUpperCase(),'lang',l,'small'+(S.lang===l?' on':''))).join('')}</div><p class="pick">${t('who')}<span>${t('names')}</span></p><div class="duo">${B(t('f'),'begin','f','primary')}${B(t('m'),'begin','m','primary')}</div>`)};
+SCR.life=()=>{while(S.i<CARDS.length&&CARDS[S.i].id==='helal'&&S.kh.length===0)S.i++;
+ const c=CARDS[S.i];
+ if(!c||c.age>=S.death){S.age=Math.max(S.death,S.age);S.scr='death';return render()}
+ S.age=c.age;showHud('life');setScene('dunya');stage.className='stage';const x=LC(c);
+ stage.innerHTML=`<article class="card"><p class="kick">${UI[S.lang].ph[c.ph]} · ${t('age')} ${c.age}</p><h2>${x.h}</h2><p>${x.p}</p></article>`;
+ setCtl(x.c.map((o,k)=>B(o,'choose',k)).join(''))};
+SCR.share=()=>{const c=CARDS[S.i],x=LC(c);showHud('life');setScene('dunya');stage.className='stage';
+ stage.innerHTML=`<article class="card"><h2>${x.h}</h2><p class="note">${x.r[S.k]}</p>${srcLine(c.src[S.k])}<p style="margin-top:12px;font-weight:800">${t('shareQ')}</p></article>`;
+ setCtl(B(t('shareYes'),'share',1,'ghost')+B(t('shareNo'),'share',0,'primary'),true)};
+SCR.result=()=>{const c=CARDS[S.i],x=LC(c),bad=!POS(c.fx[S.k]),sh=S.note==='shareDone';showHud('life');setScene('dunya');stage.className='stage';
+ stage.innerHTML=`<article class="card"><h2>${x.h}</h2><p class="note ${bad?'loss':''}">${x.r[S.k]}</p>${srcLine(c.src[S.k])}${S.note?`<p class="note ${sh?'loss':''}" style="margin-top:10px">${t(S.note)}</p>${sh?srcLine('B 1|M 1905'):''}`:''}${S.bad>0?`<p class="src">${t('open')}</p>`:''}</article>`;
+ setCtl(B(t('next'),'next',undefined,'primary'))};
+SCR.death=()=>{showHud('ahiret');setScene('dunya','dark');stage.className='stage top';
+ const sus=[`${S.money} ${t('gold')}`,`${S.likes} ${t('likes')}`].concat(S.items.map(i=>L(ITEM[i])));
+ stage.innerHTML=`<article class="card"><h2>${t('dTitle')}</h2><p>${t('dAge',{n:S.age})}</p>${srcLine('Q 31:34')}<p style="margin-top:12px">${t('dSus')}</p><div class="chips gone">${sus.map(s=>`<span class="chip">${esc(s)}</span>`).join('')}</div><p>${t('dFollow')}</p>${srcLine('B 6514')}<p class="note ${S.sadaka?'':'loss'}" style="margin-top:12px">${S.sadaka?t('dForward',{n:S.sadaka}):t('dForward0')}</p>${srcLine('M 2958')}${S.bad>0?`<p class="note loss" style="margin-top:12px">${t('dPending',{n:S.bad})}</p>${srcLine('T 3537')}`:''}</article>`;
+ setCtl(B(t('toKabir'),'go','kabir','primary'))};
+SCR.kabir=()=>{showHud('ahiret');setScene(null,'black');stage.className='stage top';
+ const tot=Math.max(1,S.hak+S.crowd),pc=n=>Math.round(100*n/tot);
+ stage.innerHTML=`<article class="card"><h2>${t('kTitle')}</h2><p style="font-weight:800">${t('kQ')}</p><p>${t('kA1')}</p><p>${t('kA2')}</p>${srcLine('B 1374|M 905')}<h3>${t('kLife')}</h3><div class="bars"><div class="bar"><span>${t('kHak')}</span><b>${S.hak}</b><i><b style="width:${pc(S.hak)}%"></b></i></div><div class="bar c"><span>${t('kCrowd')}</span><b>${S.crowd}</b><i><b style="width:${pc(S.crowd)}%"></b></i></div></div><h3>${t('kCont')}</h3><div class="chips"><span class="chip">${t('kCar')}: ${S.cariye}</span><span class="chip">${t('kIlim')}: ${S.ilim}</span><span class="chip">${t('kEvlat')}: ${S.evlat}</span></div>${srcLine('M 1631')}</article>`;
+ setCtl(B(t('next'),'go','sur','primary'))};
+SCR.sur=()=>{showHud('ahiret');setScene(null,'black');stage.className='stage sur';
+ stage.innerHTML=`<p class="line">${t('s1')}</p><p class="line" style="animation-delay:2s">${t('s2')}</p><p class="src line" style="animation-delay:2.4s">${ref('Q 39:68')}</p><p class="line" style="animation-delay:4s">${t('s3')}</p><p class="src line" style="animation-delay:4.3s">${ref('Q 36:52')}</p>`;
+ setCtl(`<div class="line" style="animation-delay:4.8s">${B(t('toMahser'),'go','mahser','primary')}</div>`)};
+function points(){const base=S.good*10+S.niyet+S.avoid+S.dhikr*10+S.ahlak*5;return base}
+SCR.mahser=()=>{showHud('ahiret');setScene('mahser');stage.className='stage';
+ const n=S.shade.reduce((a,b)=>a+b,0),heat=Math.max(8,Math.min(100,100-12*n-Math.min(30,points()/8))),lv=heat>=75?3:heat>=50?2:heat>=28?1:0;
+ stage.innerHTML=`<article class="card"><h2>${t('mTitle')}</h2><p>${t('m1')}</p>${srcLine('B 6527')}<p style="margin-top:10px">${t('mHeat')} <b>${L(SWEAT)[lv]}</b></p><div class="heat"><b style="width:${heat}%"></b></div>${srcLine('M 2864')}<p style="margin-top:10px">${t('mShade')}</p><div class="badges">${L(BADGE).map((b,i)=>`<div class="badge ${S.shade[i]?'got':''}">${b}</div>`).join('')}</div>${srcLine('B 660')}</article>`;
+ setCtl(B(t('toDefter'),'go','defter','primary'))};
+SCR.defter=()=>{showHud('ahiret');setScene(null,'dark');stage.className='stage top';
+ const rows=S.log.map(e=>{const c=CARDS.find(x=>x.id===e.id),x=LC(c);return `<li>${x.h}<span>${esc(x.c[e.k])}</span>${e.tags.map(g=>`<em class="tag ${g}">${L(TAG[g])}</em>`).join('')}</li>`}).join('');
+ stage.innerHTML=`<article class="card"><h2>${t('fTitle')}</h2><p>${t('fVerse')}</p>${srcLine('Q 17:13-14')}</article><ul class="log">${rows}</ul>`;
+ setCtl(B(t('toMizan'),'go','mizan','primary'))};
+function weigh(){const base=points();let g=base,b=S.bad,muflis=false;S.kh.forEach(()=>{if(g>=10)g-=10;else{b+=5;muflis=true}});const cont=(S.cariye+S.ilim+S.evlat)*30;g+=cont;return {base,g,b,muflis,cont,kh:S.kh.length}}
+function drawScale(svg,g,b){let th=0;const target=Math.max(-18,Math.min(18,(b-g)/Math.max(1,g+b)*30)),cx=160,cy=58,R=112;
+ const draw=a=>{const r=a*Math.PI/180,lx=cx-R*Math.cos(r),ly=cy-R*Math.sin(r),rx=cx+R*Math.cos(r),ry=cy+R*Math.sin(r),pan=(x,y,v,l,col)=>`<path d="M${x} ${y}L${x-38} ${y+52}M${x} ${y}L${x+38} ${y+52}" stroke="#fff6e3" stroke-opacity=".5"/><path d="M${x-44} ${y+52}h88a44 18 0 0 1-88 0z" fill="${col}"/><text x="${x}" y="${y+92}" text-anchor="middle" font-size="15" font-weight="800" fill="#fff6e3">${l}</text><text x="${x}" y="${y+48}" text-anchor="middle" font-size="18" font-weight="800" fill="#fff6e3">${v}</text>`;
+  svg.innerHTML=`<rect x="156" y="58" width="8" height="150" rx="3" fill="#e8c47c"/><path d="M120 214h80" stroke="#e8c47c" stroke-width="6" stroke-linecap="round"/><path d="M${lx} ${ly}L${rx} ${ry}" stroke="#e8c47c" stroke-width="6" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="8" fill="#fff6e3"/>${pan(lx,ly,g,t('zGood'),'#bfe0ff')}${pan(rx,ry,b,t('zBad'),'#e58a78')}`};
+ const t0=performance.now(),step=now=>{const p=Math.min(1,(now-t0)/1400);th=target*(1-Math.pow(1-p,3));draw(th);if(p<1)requestAnimationFrame(step)};draw(0);
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches)draw(target);else requestAnimationFrame(step)}
+SCR.mizan=()=>{showHud('ahiret');setScene('mahser','dark');stage.className='stage top';S.mz=weigh();const m=S.mz;
+ stage.innerHTML=`<article class="card"><h2>${t('zTitle')}</h2><svg class="scale" id="scale" viewBox="0 0 320 240" role="img" aria-label="${t('zTitle')}"></svg><p>${t('zRule')}</p>${srcLine('B 6491')}${S.riya?`<p class="note loss" style="margin-top:10px">${t('zRiya',{n:S.riya})}</p>${srcLine('M 1905')}`:''}${m.kh?`<p class="note loss" style="margin-top:10px">${t('zKh',{n:m.kh})}${m.muflis?' '+t('zMuflis'):''}</p>${srcLine('M 2581')}`:''}${m.cont?`<p class="note" style="margin-top:10px">${t('zCont',{n:m.cont})}</p>${srcLine('M 1631')}`:''}${S.dhikr?`<p class="note" style="margin-top:10px">${t('zDhikr')}</p>${srcLine('B 7563')}`:''}<p style="margin-top:10px;font-weight:800">${t('zMercy')}</p>${srcLine('B 7404')}</article>`;
+ drawScale($('#scale'),m.g,m.b);setCtl(B(t('toSirat'),'go','sirat','primary'))};
+const TIERS=[[1.1,34,190],[0.8,25,160],[0.55,17,135],[0.3,12,110],[-1e9,7,62]];
+SCR.sirat=()=>{showHud('ahiret');setScene('sirat');stage.className='stage';const m=S.mz||weigh(),good=m.g>m.b,ra=(m.g-m.b)/(10*Math.max(1,S.log.length));
+ S.tier=good?TIERS.findIndex(x=>ra>=x[0]):TIERS.length-1;const tr=TIERS[S.tier],p=Math.min(100,S.sp),stop=!good&&S.sp>=60;
+ if(!fxEl.querySelector('.runner'))fxEl.innerHTML=`<span class="pillar l ${S.emanet>0?'got':''}">${t('pEmanet')}</span><span class="pillar r ${S.rahim>0?'got':''}">${t('pRahim')}</span><span class="runner init"></span>`;
+ fxEl.querySelector('.runner').style.setProperty('--halo',tr[2]+'px');
+ stage.innerHTML=`<article class="card"><h2>${t('rTitle')}</h2><p>${t('r1')} ${t('rSallim')}</p>${srcLine('M 195')}<p style="margin-top:8px"><b>${t('rSpeed',{s:L(SPEED)[S.tier]})}</b>${good?' · '+t('rLight'):''}</p>${good?srcLine('Q 57:12'):''}${stop?`<p class="note loss" style="margin-top:10px">${t('rStop')}</p>`:''}</article>`;
+ setCtl(stop?B(t('next'),'go','final','primary'):B(t('rTap'),'step',undefined,'primary'));requestAnimationFrame(placeFx)};
+function placeFx(){const r=fxEl.querySelector('.runner');if(!r)return;const A=app.getBoundingClientRect(),H=A.height,card=stage.querySelector('.card'),cb=card?card.getBoundingClientRect().top-A.top:H*.6;
+ const hz=H*.168,y0=Math.max(hz+80,Math.min(cb-30,H*.8)),y1=hz+16,p=Math.min(100,S.sp)/100,y=y0+(y1-y0)*p;
+ r.style.top=y+'px';r.style.transform=`translate(-50%,-50%) scale(${1-.5*p})`;
+ fxEl.querySelectorAll('.pillar').forEach(e=>{e.style.top=Math.max(hz+30,Math.min(cb-70,H*.34))+'px'});
+ if(r.classList.contains('init'))requestAnimationFrame(()=>r.classList.remove('init'))}
+SCR.final=()=>{showHud('ahiret');const m=S.mz||weigh(),good=m.g>m.b;setScene(null,'dark');stage.className='stage top';
+ stage.innerHTML=`<article class="card" style="text-align:center">${good?`<div class="door" aria-hidden="true"></div><p class="kick">${t('rGood')}</p><h2 class="q">${t('hGood')}</h2><p>${t('hGoodIntro')}</p>${srcLine('Q 69:19')}<p style="margin-top:10px">${t('hGoodTxt')}</p>${srcLine('B 3244')}`:`<p class="kick">${t('rBad')}</p><h2 class="q">${t('hBad')}</h2><p>${t('hBadIntro')}</p>${srcLine('Q 69:25-28')}<p style="margin-top:10px">${t('hBadTxt')}</p>${srcLine('M 2752')}`}</article><article class="card"><h2>${t('q4')}</h2>${srcLine('T 2417')}<div class="qa"><div><b>${t('q1')}</b><span>${t('a1',{n:S.age,w:S.wasted})}</span></div><div><b>${t('q2')}</b><span>${t('a2',{k:S.kehf?t('yes'):t('no'),i:S.ilim})}</span></div><div><b>${t('q3')}</b><span>${t('a3',{h:S.haram,s:S.items.length,f:S.sadaka})}</span></div><div><b>${t('q4b')}</b><span>${t('a4',{g:S.good})}</span></div></div>${S.missed||S.riya?`<p class="note loss">${t('missed',{n:S.missed,r:S.riya})}</p>`:''}<p class="src">${t('disc')}</p><p class="end">${t('end1')}</p>${srcLine('Q 29:64')}<p style="text-align:center;margin-top:8px">${t('end2')}</p><p class="end" style="font-size:22px;margin-top:16px">${t('slogan')}</p><p style="text-align:center;color:var(--muted);font-size:14px;margin:0">${t('sloganWhy')}</p>${srcLine('B 3688')}</article>`;
+ setCtl(B(t('again'),'again',undefined,'primary')+B(t('sources'),'go','sources','ghost'),true)};
+function allRefs(){const set=new Set(SCREEN_SRC),g={};CARDS.forEach(c=>c.src.forEach(x=>x&&x.split('|').forEach(y=>set.add(y.trim()))));
+ set.forEach(x=>{const [b,n]=x.split(' ');(g[b]=g[b]||[]).push(n)});const key=n=>n.split(/[:-]/).map(Number);
+ Object.values(g).forEach(a=>a.sort((p,q)=>{const A=key(p),Z=key(q);return A[0]-Z[0]||(A[1]||0)-(Z[1]||0)}));return g}
+SCR.sources=()=>{showHud('ahiret');setScene(null,'dark');stage.className='stage top';const g=allRefs();
+ const row=k=>g[k]?`<p class="reflist"><b>${k==='Q'?t('quran'):BOOK[k][S.lang]}:</b> ${g[k].map(n=>k==='Q'?qName(n):n).join(' · ')}</p>`:'';
+ stage.innerHTML=`<article class="card"><h2>${t('sources')}</h2><p>${t('srcNote')}</p>${['Q','B','M','T','AM'].map(row).join('')}<p class="src">${t('disc')}</p></article>`;
+ setCtl(B(t('back'),'go','final','primary'))};
+const ACT={
+ lang:l=>{S.lang=l;saveLang();render()},
+ begin:g=>{S=Object.assign(fresh(S.lang),{g,scr:'life'});render()},
+ choose:k=>{k=+k;const c=CARDS[S.i];apply(c,k);S.k=k;S.note='';S.scr=(c.fx[k]||{}).share?'share':'result';render()},
+ share:y=>{const c=CARDS[S.i],fx=c.fx[S.k]||{},e=S.log[S.log.length-1];if(+y){['good','ahlak','sadaka','cariye'].forEach(q=>{S[q]-=fx[q]||0});S.riya+=1;S.likes+=200;e.tags=e.tags.filter(g=>g!=='good').concat('riya');S.note='shareDone'}else{if(fx.charity){S.secret++;S.shade[5]=1;e.tags.push('secret')}S.note='secretDone'}S.scr='result';render()},
+ next:()=>{S.i++;S.k=-1;S.note='';S.scr='life';render()},
+ tovbe:()=>{if(S.bad>0){S.rep+=S.bad;S.bad=0;S.log.forEach(e=>{if(e.tags.includes('bad')&&!e.tags.includes('rep'))e.tags.push('rep')});toast(t('tovbeDone')+(S.kh.length?' '+t('tovbeKh'):''))}else toast(t('tovbeClean')+(S.kh.length?' '+t('tovbeKh'):''));showHud('life')},
+ go:s=>{S.scr=s;render();stage.scrollTop=0},
+ home:()=>{const n=Date.now();if(n-(S.homeT||0)<3500){S=fresh(S.lang);render();toastEl.classList.remove('show')}else{S.homeT=n;toast(t('homeAgain'))}},
+ step:()=>{const m=S.mz||weigh();S.sp+=TIERS[S.tier][1];if(m.g<=m.b&&S.sp>=60){S.sp=60;render();return}if(S.sp>=100){S.sp=100;render();setTimeout(()=>{if(S.scr==='sirat'){S.scr='final';render();stage.scrollTop=0}},650)}else render()},
+ again:()=>{S=fresh(S.lang);render()}};
+function render(){document.documentElement.lang=S.lang;(SCR[S.scr]||SCR.start)()}
+app.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const f=ACT[b.dataset.act];if(f)f(b.dataset.arg)});
+document.addEventListener('gesturestart',e=>e.preventDefault());
+document.addEventListener('dblclick',e=>e.preventDefault(),{passive:false});
+window.addEventListener('resize',()=>{app.style.setProperty('--ctlh',ctl.offsetHeight+'px');if(S&&S.scr==='sirat')placeFx()});
+const start=data=>{S=(data&&data.scr)?Object.assign(fresh(data.lang||'tr'),data):fresh(savedLang());render()};
+window.claude?.hot?.snapshot?.(()=>S);
+window.claude?.hot?.ready?window.claude.hot.ready(start):start(window.claude?.hot?.data??{});
+if('serviceWorker' in navigator&&location.protocol==='https:'&&/\/spiel\//.test(location.pathname))navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(()=>{});
+}
+</script>
+</body>
+</html>
