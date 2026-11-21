@@ -1,14 +1,23 @@
-// Bakım modu (Timur'un isteği, 21.11.2026): müşteri sayfası "Şu anda çalışıyoruz" gösterir.
-// Çalışan sayfaları (admin, siparis, shiftplan), API'ler, Künye ve dosyalar normal çalışmaya devam eder.
+// Bakım modu (Timur'un isteği, 21.11.2026: "hepsini kapat, hepsi çalışmada olsun"):
+// Tüm sayfalar (müşteri fiyat listesi, admin, siparis, shiftplan ...) "Şu anda çalışıyoruz" gösterir.
+// Açık kalanlar: bakım sayfası, Künye/Impressum (yasal), görseller/yazı tipleri gibi dosyalar.
+// API'ler (/api/, /shiftplan-api/) dokunulmadı; sayfalar kapalı olduğu için kullanılmıyorlar, veriler korunuyor.
 // Siteyi yeniden açmak için: BAKIM = false yapıp main'e gönder.
 const BAKIM = true;
-const KAPALI = new Set(["/", "/index", "/index.html"]);
+const ACIK = new Set(["/bakim", "/bakim.html", "/impressum", "/impressum.html"]);
+
+function sayfaMi(path) {
+  if (path.startsWith("/api/") || path.startsWith("/shiftplan-api/")) return false;
+  if (ACIK.has(path)) return false;
+  const son = path.split("/").pop();
+  return son === "" || son.endsWith(".html") || !son.includes(".");
+}
 
 export async function onRequest(ctx) {
   const { request, next, env } = ctx;
   if (!BAKIM) return next();
   const url = new URL(request.url);
-  if (!KAPALI.has(url.pathname) || (request.method !== "GET" && request.method !== "HEAD")) return next();
+  if (!sayfaMi(url.pathname) || (request.method !== "GET" && request.method !== "HEAD")) return next();
   try {
     const page = await env.ASSETS.fetch(new URL("/bakim", url));
     if (!page.ok) return next();
