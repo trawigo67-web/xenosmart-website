@@ -1,0 +1,5 @@
+# xenosmart.de (GitHub Pages): der Ordner markaistanbul wird hier NICHT veröffentlicht.
+# Er bleibt im Repo, weil marka22.de (Cloudflare Pages, Projekt marka22-site) ihn als Quelle nutzt.
+# Timurs Wunsch, 21.11.2026: alte Adresse xenosmart.de/markaistanbul abschalten.
+exclude:
+  - markaistanbul
