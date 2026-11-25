@@ -65,7 +65,7 @@ if ! grep -qE '^(ANTHROPIC|OPENAI|GEMINI)_API_KEY=.+' "$DIR/.env"; then
   echo
   echo ">>> KI-Schluessel: am einfachsten spaeter im Browser unter https://$DOMAIN/admin eintragen."
   echo ">>> Hier einfach Enter druecken (oder Claude sk-ant-..., OpenAI sk-..., Gemini AIza... einfuegen)."
-  read -r -s -p "Schluessel: " KEY </dev/tty; echo
+  KEY=""; if [ -z "${MAILCUT_AUTO:-}" ]; then read -r -s -p "Schluessel: " KEY </dev/tty || true; echo; fi
   case "$KEY" in
     sk-ant-*) grep -q '^ANTHROPIC_API_KEY=' "$DIR/.env" || echo "ANTHROPIC_API_KEY=" >> "$DIR/.env"
              sed -i "s|^AI_PROVIDER=.*|AI_PROVIDER=anthropic|; s|^ANTHROPIC_API_KEY=.*|ANTHROPIC_API_KEY=${KEY}|" "$DIR/.env"; ok "Claude-Schluessel gespeichert" ;;
