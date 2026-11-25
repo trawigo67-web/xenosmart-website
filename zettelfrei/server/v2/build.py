@@ -1,5 +1,6 @@
 import sys
-a=open('app-src.html',encoding='utf-8').read(); shim=open('shim.html',encoding='utf-8').read()
+import os
+a=open(os.environ.get('APP','app-src.html'),encoding='utf-8').read(); shim=open(os.environ.get('SHIM','shim.html'),encoding='utf-8').read()
 HEAD='''<meta name="theme-color" content="#1d4ed8">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">

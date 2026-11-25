@@ -66,6 +66,8 @@ label.f{font-size:.95rem;gap:6px;min-width:0}
 .toast{font-size:1.05rem;padding:12px 18px;top:calc(env(safe-area-inset-top) + 14px);bottom:auto;box-shadow:0 8px 24px rgba(0,0,0,.25)}
 @media (prefers-reduced-motion:no-preference){.sheet .panel{animation:none}.sheet .panel.in{animation:up .22s ease-out}}
 .acc[data-acc="pay"] .acc-b>.card>h3:first-child{display:none}
+.acc[data-acc="pay"] .kv{grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr) auto}
+.acc[data-acc="pay"] .kv>span{overflow-wrap:anywhere}
 /* Blatt (Brief-Detail) */
 .sheet .panel{overscroll-behavior:contain;max-height:calc(100% - env(safe-area-inset-top) - 14px)}
 .sheet .head{padding:18px 16px 12px;align-items:flex-start}
@@ -164,7 +166,7 @@ rep("const CATS = {", TXT + "const CATS = {")
 rep("S.w = wFresh();", "S.w = wFresh(); S.acc = {}; S.mdelAsk = \"\";")
 rep("  down:'<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 4v11M7 10l5 5 5-5M5 20h14\"/></svg>'\n};",
     "  down:'<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 4v11M7 10l5 5 5-5M5 20h14\"/></svg>',\n"
-    "  chev:'<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9 5l7 7-7 7\"/></svg>',\n"
+    "  chev:'<svg class=\"chv\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9 5l7 7-7 7\"/></svg>',\n"
     "  pen:'<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 20h4L19 9l-4-4L4 16z\"/><path d=\"M13.5 6.5l4 4\"/></svg>',\n"
     "  euro:'<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M15.5 8.6a4.4 4.4 0 1 0 0 6.8M7 11h6M7 13.5h5\"/></svg>',\n"
     "  help:'<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.5 9.5a2.6 2.6 0 1 1 3.6 2.4c-.7.4-1.1.9-1.1 1.7\"/><path d=\"M12 17h.01\"/></svg>',\n"
@@ -334,7 +336,7 @@ SHEET = r'''  const taskDone=(l.tasks||[]).filter(x=>x.done).length, taskAll=(l.
   const sum=S.lang==="tr"&&l.summaryTr?l.summaryTr:l.summary;
   const hero = l.dueDate ? `<div class="hero ${isOpen?(dc==="late"?"late":dc==="soon"?"soon":""):"done"}">
       <span class="hero-k">${esc(L(DUEKINDS[l.dueKind]||DUEKINDS.sonstiges))}${l.amount?" · "+esc(euro(l.amount)):""}</span>
-      <b class="hero-d">${esc(!isOpen?de(l.dueDate):(dc==="late"&&S.lang!=="tr"?t("overdue")+" "+dueLabel(l.dueDate):cap1(dueLabel(l.dueDate))))}</b>
+      <b class="hero-d">${esc(!isOpen?de(l.dueDate):(dc==="late"&&S.lang==="de"?t("overdue")+" "+dueLabel(l.dueDate):cap1(dueLabel(l.dueDate))))}</b>
       <span>${esc(t("due"))}: <span class="due">${esc(de(l.dueDate))}</span>${l.dueConfirmed?" ✓":""}</span>
       ${l.dueConfirmed?"":`<span class="small">${esc(t("unconfirmed"))}</span>`}${l.dueSource?`<span class="small">„${esc(l.dueSource)}“</span>`:""}
     </div>` : "";
@@ -406,7 +408,7 @@ function closeLetter(){ if(!S.openId) return; S.openId=null; let back=false; try
 window.addEventListener("popstate", ()=>{ const h=(location.hash||"").slice(1); if(h.startsWith("b-")) return; const v=document.getElementById("viewer"); if(v) v.remove(); if(S.openId){ S.openId=null; renderSheet(); } });''')
 
 # ---------------------------------------------------------------- Klick-Logik
-rep('''  if(ds.mdel){ queued("m"+ds.mdel,''', '''  if(ds.accgo){ S.acc[ds.accgo]=true; renderSheet(); const dd=document.querySelector('#layer [data-acc="'+ds.accgo+'"]'); if(dd){ dd.open=true; setTimeout(()=>{ try{ dd.scrollIntoView({behavior:"smooth",block:"start"}); }catch(e){} },40); } if(ds.accgo==="ai"&&S.sample&&$("#aiOut")&&!$("#aiOut").textContent.trim()) explain(S.lang==="tr"?"tr":"de"); return; }
+rep('''  if(ds.mdel){ queued("m"+ds.mdel,''', '''  if(ds.accgo){ S.acc[ds.accgo]=true; renderSheet(); const dd=document.querySelector('#layer [data-acc="'+ds.accgo+'"]'); if(dd){ dd.open=true; setTimeout(()=>{ try{ dd.scrollIntoView({behavior:"smooth",block:"start"}); }catch(e){} },40); } if(ds.accgo==="ai"&&S.sample&&$("#aiOut")&&!$("#aiOut").textContent.trim()) explain(S.lang); return; }
   if(ds.mdelask){ S.mdelAsk=ds.mdelask; render(); return; }
   if(ds.mdelno!=null){ S.mdelAsk=""; render(); return; }
   if(ds.mdel){ S.mdelAsk=""; queued("m"+ds.mdel,''')

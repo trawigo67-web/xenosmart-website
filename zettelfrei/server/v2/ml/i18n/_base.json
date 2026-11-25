@@ -1,0 +1,32 @@
+{
+ "de": {
+  "famOf": "Familie {name}",
+  "days30": "30 Tage",
+  "exampleNote": "Das ist ein Beispielbrief zum Ausprobieren. Du kannst ihn löschen.",
+  "logSentVia": "Antwort gesendet per {via}",
+  "logAdded": "Brief erfasst",
+  "logStatus": "Status: {s}",
+  "logDraftSaved": "Antwortentwurf gespeichert",
+  "aiTitle": "KI",
+  "langTitle": "Sprache wählen",
+  "langHint": "Die App, die Erklärungen und die KI-Hilfe gibt es in deiner Sprache. E-Mails und Antworten an Ämter schreibt Mailcut immer auf Deutsch.",
+  "sumTranslate": "In meiner Sprache anzeigen",
+  "sumTranslating": "Übersetze …",
+  "trNote": "Diese Übersetzung wurde mit KI erstellt. Fehler gefunden? Schreib uns unter Familie → Feedback."
+ },
+ "tr": {
+  "famOf": "{name} ailesi",
+  "days30": "30 gün",
+  "exampleNote": "Bu örnek mektup. Silebilirsin.",
+  "logSentVia": "Cevap gönderildi: {via}",
+  "logAdded": "Mektup eklendi",
+  "logStatus": "Durum: {s}",
+  "logDraftSaved": "Cevap taslağı kaydedildi",
+  "aiTitle": "KI",
+  "langTitle": "Dil seç",
+  "langHint": "Uygulama, açıklamalar ve yapay zekâ yardımı senin dilinde. Resmî dairelere e-postaları ve cevapları Mailcut her zaman Almanca yazar.",
+  "sumTranslate": "Türkçe göster",
+  "sumTranslating": "Çevriliyor …",
+  "trNote": "Bu çeviri yapay zekâ ile yapıldı. Hata mı buldun? Aile → Geri bildirim bölümünden bize yaz."
+ }
+}
