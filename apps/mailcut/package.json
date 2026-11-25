@@ -1,0 +1,24 @@
+{
+  "name": "mailcut-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mailcut - iPhone/Android-Huelle um app.mailcut.de (Capacitor)",
+  "scripts": {
+    "sync": "cap sync"
+  },
+  "dependencies": {
+    "@capacitor-mlkit/document-scanner": "^8.0.0",
+    "@capacitor/android": "^8.6.3",
+    "@capacitor/core": "^8.6.3",
+    "@capacitor/haptics": "^8.0.0",
+    "@capacitor/ios": "^8.6.3",
+    "@capacitor/local-notifications": "^8.0.0",
+    "@capacitor/splash-screen": "^8.0.0",
+    "@capacitor/status-bar": "^8.0.0",
+    "mailcut-scanner": "file:plugins/mailcut-scanner"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.6.3"
+  }
+}

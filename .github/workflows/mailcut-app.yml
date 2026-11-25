@@ -1,0 +1,76 @@
+name: Mailcut App (iPhone + Android Testbau)
+
+# Baut die App-Huelle aus apps/mailcut bei jeder Aenderung:
+# - iPhone: Simulator-Build ohne Signatur (zeigt, dass das Xcode-Projekt fehlerfrei baut)
+# - Android: Debug-APK zum Ausprobieren (als Artefakt herunterladbar)
+# Signieren und Hochladen in den App Store kommt dazu, sobald das Apple-Konto steht.
+on:
+  push:
+    paths:
+      - "apps/mailcut/**"
+      - ".github/workflows/mailcut-app.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: apps/mailcut
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --no-audit --no-fund
+      - run: npx cap sync ios
+      - name: Xcode-Version
+        run: xcodebuild -version
+      - name: iPhone-Build (Simulator, ohne Signatur)
+        run: |
+          set -o pipefail
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -n 60
+      - name: iPhone-Build (Geraet, ohne Signatur)
+        run: |
+          set -o pipefail
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath build-device CODE_SIGNING_ALLOWED=NO build | tail -n 40
+      - name: Simulator-App packen
+        run: cd build/Build/Products/Release-iphonesimulator && zip -qry ../../../../Mailcut-Simulator.zip App.app
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mailcut-ios-simulator
+          path: apps/mailcut/Mailcut-Simulator.zip
+          retention-days: 14
+
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: apps/mailcut
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci --no-audit --no-fund
+      - run: npx cap sync android
+      - name: Android-Debug-APK
+        run: cd android && chmod +x gradlew && ./gradlew --no-daemon assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mailcut-android-debug
+          path: apps/mailcut/android/app/build/outputs/apk/debug/*.apk
+          retention-days: 14

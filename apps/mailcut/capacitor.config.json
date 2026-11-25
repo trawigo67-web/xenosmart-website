@@ -1,0 +1,23 @@
+{
+  "appId": "de.mailcut.app",
+  "appName": "Mailcut",
+  "webDir": "www",
+  "server": {
+    "url": "https://app.mailcut.de/?native=1",
+    "cleartext": false,
+    "errorPath": "offline.html",
+    "allowNavigation": ["app.mailcut.de", "mailcut.de", "zettelfrei.xenosmart.de"]
+  },
+  "ios": {
+    "contentInset": "never",
+    "scheme": "Mailcut",
+    "limitsNavigationsToAppBoundDomains": true
+  },
+  "android": {
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SplashScreen": { "launchShowDuration": 600, "backgroundColor": "#1d4ed8", "showSpinner": false },
+    "LocalNotifications": { "smallIcon": "ic_stat_mailcut", "iconColor": "#1d4ed8" }
+  }
+}

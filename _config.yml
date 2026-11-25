@@ -3,3 +3,5 @@
 # Timurs Wunsch, 21.11.2026: alte Adresse xenosmart.de/markaistanbul abschalten.
 exclude:
   - markaistanbul
+  # App-Huelle (Capacitor) fuer iPhone/Android, nicht Teil der Webseite
+  - apps

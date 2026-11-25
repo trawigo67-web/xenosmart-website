@@ -1,0 +1,11 @@
+{
+  "name": "mailcut-scanner",
+  "version": "1.0.0",
+  "description": "Mailcut: Dokumenten-Scanner des iPhones (VisionKit) als Capacitor-Plugin",
+  "main": "dist/index.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "files": ["dist", "ios", "Package.swift"],
+  "capacitor": { "ios": { "src": "ios" } },
+  "peerDependencies": { "@capacitor/core": ">=8.0.0" }
+}
