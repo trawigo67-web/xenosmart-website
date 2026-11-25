@@ -49,7 +49,17 @@ ok "Traefik: $TR | Vorlage: ${REF:-keine} | Entrypoint: $EP | Zertifikat: $RES |
 
 # 2) Programm holen
 mkdir -p "$DIR/data"
-curl -fsSL "$PKG" -o /tmp/zettelfrei.tar.gz && tar -xzf /tmp/zettelfrei.tar.gz -C "$DIR" && ok "Programm geladen nach $DIR" || { bad "Download fehlgeschlagen"; exit 1; }
+if [ -n "${MAILCUT_AUTO:-}" ]; then
+  # Automatisches Update: Paket direkt von GitHub, nur wenn die Pruefsumme aus deploy.txt passt
+  RAW="https://raw.githubusercontent.com/trawigo67-web/xenosmart-website/main/zettelfrei/server"
+  WANT=$(curl -fsS --max-time 20 "$RAW/deploy.txt?t=$(date +%s)" | grep -o 'sha256=[0-9a-f]*' | cut -d= -f2)
+  curl -fsSL --max-time 120 "$RAW/zettelfrei-server.tar.gz?t=$(date +%s)" -o /tmp/zettelfrei.tar.gz || { bad "Download fehlgeschlagen"; exit 1; }
+  GOT=$(sha256sum /tmp/zettelfrei.tar.gz | cut -d' ' -f1)
+  if [ -n "$WANT" ] && [ "$GOT" != "$WANT" ]; then bad "Paket noch nicht aktuell (Pruefsumme) - neuer Versuch beim naechsten Mal"; exit 1; fi
+  tar -xzf /tmp/zettelfrei.tar.gz -C "$DIR" && ok "Programm geladen nach $DIR (Pruefsumme ${GOT:0:12})" || { bad "Entpacken fehlgeschlagen"; exit 1; }
+else
+  curl -fsSL "$PKG" -o /tmp/zettelfrei.tar.gz && tar -xzf /tmp/zettelfrei.tar.gz -C "$DIR" && ok "Programm geladen nach $DIR" || { bad "Download fehlgeschlagen"; exit 1; }
+fi
 chown -R 1000:1000 "$DIR/data"
 
 # 3) Einstellungen
