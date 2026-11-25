@@ -139,4 +139,24 @@ for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
 done
 if [ "$C" = "200" ]; then ok "ONLINE: https://$DOMAIN"; for h in $HOSTS; do [ "$h" = "$DOMAIN" ] && continue; for i in 1 2 3 4 5 6 7 8 9 10 11 12; do C2=$(curl -s -o /dev/null -w '%{http_code}' --max-time 8 "https://$h/api/health" || true); [ "$C2" = "200" ] && break; sleep 5; done; [ "$C2" = "200" ] && ok "ONLINE: https://$h" || bad "https://$h noch nicht erreichbar (Code $C2)"; done; else bad "HTTPS noch nicht erreichbar (Code $C). Ausgabe an Claude schicken."; fi
 for h in $SITE_HOSTS; do C3=""; for i in 1 2 3 4 5 6 7 8 9 10 11 12; do C3=$(curl -s -o /dev/null -w '%{http_code}' --max-time 8 "https://$h/" || true); case "$C3" in 200|301) break;; esac; sleep 5; done; case "$C3" in 200|301) ok "ONLINE: https://$h ($C3)";; *) bad "https://$h noch nicht erreichbar (Code $C3) - DNS pruefen";; esac; done
+# 7) Einmaliges Zuruecksetzen des Admin-Passworts (pw-reset.txt: ID Hash admins).
+#    Ziel sind die Konten aus ADMIN_EMAILS im Container; keine E-Mail-Adresse im Repo.
+RAWPW="https://raw.githubusercontent.com/trawigo67-web/xenosmart-website/main/zettelfrei/server/pw-reset.txt"
+PWL=$(curl -fsS --max-time 20 "$RAWPW?t=$(date +%s)" 2>/dev/null | head -n1 || true)
+if [ -n "$PWL" ]; then
+  RID=$(echo "$PWL" | cut -d' ' -f1); PWH=$(echo "$PWL" | cut -d' ' -f2)
+  if [ -n "$RID" ] && [ -n "$PWH" ] && [ ! -f "$DIR/data/.pwreset-$RID" ]; then
+    N=$(docker exec -i zettelfrei python3 - "$PWH" <<'PYEOF'
+import os, sqlite3, sys
+h = sys.argv[1]
+mails = [m.strip().lower() for m in os.environ.get("ADMIN_EMAILS", "").split(",") if m.strip()]
+c = sqlite3.connect("/data/zettelfrei.db")
+n = sum(c.execute("UPDATE users SET pw_hash=? WHERE lower(email)=?", (h, m)).rowcount for m in mails)
+c.commit(); print(n)
+PYEOF
+)
+    touch "$DIR/data/.pwreset-$RID"
+    if [ "${N:-0}" -gt 0 ] 2>/dev/null; then ok "Admin-Passwort neu gesetzt ($N Konto)"; else bad "Passwort-Reset: kein Admin-Konto gefunden"; fi
+  fi
+fi
 echo "===== ENDE ====="
