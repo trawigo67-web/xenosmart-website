@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EkipZeit Demo</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#c2410c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23c2410c'/%3E%3Ccircle cx='32' cy='33' r='17' fill='none' stroke='white' stroke-width='5'/%3E%3Cpath d='M32 23v11l7 5' fill='none' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+/* VOICE   work tool: an app mock-up that should feel shipped
+   IDEA    the site office: a punch clock in the worker's pocket, a magnet board on the boss's wall
+   PICTURE the phone time clock beside a live magnet board where each worker sits under his site
+   COLOUR  white ground, signal-orange band, status green / yellow / red, coloured magnets
+   TYPE    Barlow Semi Condensed for figures and titles, Barlow for text
+   LAYOUT  laptop: phone left (sticky), panel right; below 980px a switch shows one at a time */
+@font-face{font-family:'Barlow';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/barlow-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Barlow';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/barlow-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Barlow';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/barlow-latin-ext-500-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Barlow';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/barlow-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Barlow';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/barlow-latin-ext-600-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Barlow';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/barlow-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Barlow';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/barlow-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Barlow';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/barlow-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Barlow Semi Condensed';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/barlow-semi-condensed-latin-ext-600-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Barlow Semi Condensed';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/barlow-semi-condensed-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Barlow Semi Condensed';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/barlow-semi-condensed-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Barlow Semi Condensed';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/barlow-semi-condensed-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+:root{color-scheme:light;--bg:#fff;--surf:#fff;--soft:#f3f1ec;--ink:#16181b;--mut:#5b6168;--line:#e3e0da;--or:#c2410c;--orInk:#fff;--band:#c2410c;--bandInk:#fff;--go:#22803a;--goSoft:#e5f3e8;--brk:#e8a400;--brkSoft:#fff3d1;--bad:#c92a2a;--badSoft:#fdeaea;--off:#868e96;--board:#fbfaf7;--grid:#eeebe5;--sh:0 1px 2px rgba(20,20,20,.1),0 3px 8px rgba(20,20,20,.08)}
+:root[data-theme=dark]{color-scheme:dark;--bg:#121416;--surf:#1a1d20;--soft:#25292d;--ink:#f1f2f3;--mut:#a3aab2;--line:#31363b;--or:#ff7a2e;--orInk:#1c0c03;--band:#6b2607;--bandInk:#ffe3d3;--go:#51cf66;--goSoft:#17301f;--brk:#fcc419;--brkSoft:#3a3112;--bad:#ff6b6b;--badSoft:#3b1d1d;--off:#7d868f;--board:#16191c;--grid:#22272b;--sh:0 1px 2px rgba(0,0,0,.45),0 3px 8px rgba(0,0,0,.35)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#121416;--surf:#1a1d20;--soft:#25292d;--ink:#f1f2f3;--mut:#a3aab2;--line:#31363b;--or:#ff7a2e;--orInk:#1c0c03;--band:#6b2607;--bandInk:#ffe3d3;--go:#51cf66;--goSoft:#17301f;--brk:#fcc419;--brkSoft:#3a3112;--bad:#ff6b6b;--badSoft:#3b1d1d;--off:#7d868f;--board:#16191c;--grid:#22272b;--sh:0 1px 2px rgba(0,0,0,.45),0 3px 8px rgba(0,0,0,.35)}}
+*{box-sizing:border-box;min-width:0}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Barlow,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;overflow-x:clip}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+.num{font-family:"Barlow Semi Condensed",Barlow,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.mut{color:var(--mut)}
+.ic{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ic.f{fill:currentColor;stroke:none}
+.top{background:var(--band);color:var(--bandInk);padding:16px max(4vw,16px)}
+.top-in{max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px}
+.brand{margin-right:auto}
+.brand h1{margin:0;display:flex;align-items:center;gap:12px;font:700 clamp(30px,4vw,38px)/1.05 "Barlow Semi Condensed",Barlow,sans-serif;letter-spacing:-.01em}
+.brand h1 span{font:600 14px/1 Barlow,sans-serif;border:1.5px solid currentColor;border-radius:999px;padding:5px 10px}
+.brand p{margin:4px 0 0;font-size:15px;max-width:70ch}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1.5px solid currentColor;border-radius:999px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:0 14px;min-height:44px;font-weight:600}
+.seg.b button[aria-pressed=true]{background:var(--bandInk);color:var(--band)}
+.ghost{display:inline-flex;align-items:center;border:1.5px solid currentColor;background:transparent;border-radius:999px;padding:0 16px;min-height:44px;font-weight:600}
+.try{background:var(--soft);border-bottom:1px solid var(--line);padding:10px max(4vw,16px)}
+.try p{max-width:1320px;margin:0 auto;font-size:15px}
+.switch{display:none;max-width:1320px;margin:14px auto 0;padding:0 max(4vw,16px)}
+.switch .seg{display:flex;width:100%;border-color:var(--line)}
+.switch button{flex:1;min-height:46px}
+.switch button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.app{max-width:1320px;margin:0 auto;padding:20px max(4vw,16px) 28px;display:grid;grid-template-columns:400px minmax(0,1fr);gap:28px;align-items:start}
+#phoneCol{position:sticky;top:12px}
+.phone{width:390px;max-width:100%;margin:0 auto;border-radius:46px;padding:11px;background:#0e1012;box-shadow:0 0 0 2px #2b2f34,0 22px 44px rgba(0,0,0,.2)}
+.screen{position:relative;border-radius:36px;overflow:hidden;background:var(--surf);height:780px;height:clamp(600px,calc(100svh - 40px),790px);display:flex;flex-direction:column}
+.sbar{height:36px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 24px 0 32px;font:600 15px/1 Barlow,sans-serif}
+.sbar svg{width:62px;height:13px;fill:currentColor}
+.pscroll{flex:1;overflow-y:auto;padding:8px 18px 22px;display:flex;flex-direction:column;gap:14px}
+@media (max-width:979px){.app{grid-template-columns:minmax(0,1fr)}.switch{display:block}#phoneCol{position:static}body[data-view=panel] #phoneCol,body[data-view=worker] #panelCol{display:none}}
+@media (max-width:519px){.phone{width:auto;border-radius:0;padding:0;background:none;box-shadow:none}.screen{height:auto;min-height:72vh;min-height:72svh;border-radius:18px;border:1px solid var(--line);overflow:visible}.sbar{display:none}.pscroll{overflow:visible;padding-top:16px}}
+.p-logo{font:700 20px/1 "Barlow Semi Condensed",sans-serif;color:var(--or);padding-top:4px}
+.p-title{margin:0;font:700 30px/1.08 "Barlow Semi Condensed",sans-serif;letter-spacing:-.01em}
+.p-sub{margin:-8px 0 0;color:var(--mut)}
+.wgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.wbtn{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px solid var(--line);border-radius:16px;background:var(--surf);min-height:66px;text-align:left}
+.wbtn b{display:block;font-weight:600;line-height:1.15}
+.wbtn small{display:block;color:var(--mut);font-size:13px;line-height:1.2}
+.wbtn .dot{position:absolute;top:9px;right:9px}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 15px/1 Barlow,sans-serif;flex:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.2),inset 0 2px 0 rgba(255,255,255,.28)}
+.av.s{width:34px;height:34px;font-size:13px}
+.av.l{width:72px;height:72px;font-size:26px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--off);flex:none}
+.d-work{background:var(--go)}
+.d-break{background:var(--brk)}
+.d-done{background:var(--ink)}
+.p-head{display:flex;align-items:center;gap:10px;padding-top:4px}
+.p-head b{display:block;line-height:1.15}
+.p-head small{display:block;color:var(--mut);font-size:13px}
+.icb{margin-left:auto;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:var(--surf)}
+.lnk{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;border:0;background:none;padding:0;min-height:44px;font-weight:600;color:var(--or)}
+.lnk .ic{width:18px;height:18px}
+.center{text-align:center}
+.pin-who{display:flex;flex-direction:column;align-items:center;gap:6px}
+.pin-who b{font-size:20px}
+.pdots{display:flex;gap:16px;justify-content:center}
+.pdots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--ink)}
+.pdots i.on{background:var(--ink)}
+.pdots.err{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.keys{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:auto}
+.keys button{height:62px;border-radius:18px;border:0;background:var(--soft);font:600 28px/1 "Barlow Semi Condensed",sans-serif;display:grid;place-items:center}
+.keys button:active{background:var(--line)}
+.hint{margin:0;font-size:14px;color:var(--mut)}
+.hint.bad{color:var(--bad);font-weight:600}
+.greet{margin:0;font:700 30px/1.08 "Barlow Semi Condensed",sans-serif}
+.lbl{margin:0;font-weight:600}
+.slist{display:flex;flex-direction:column;gap:8px}
+.site{display:flex;align-items:center;gap:12px;padding:8px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--surf);min-height:54px;text-align:left;width:100%}
+.site b{display:block;line-height:1.15}
+.site small{display:block;color:var(--mut);font-size:13px}
+.site .rad{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none;margin-left:auto}
+.site .ic{margin-left:auto;color:var(--mut)}
+.site[aria-checked=true]{border-color:var(--or)}
+.site[aria-checked=true] .rad{border:7px solid var(--or)}
+.note{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--mut);margin:0}
+.note .ic{width:18px;height:18px;margin-top:2px}
+.simrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px;color:var(--mut)}
+.seg.s{border-color:var(--line);color:var(--ink)}
+.seg.s button{min-height:40px;padding:0 12px;font-size:14px}
+.seg.s button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.big{width:100%;min-height:76px;border:0;border-radius:22px;font:700 26px/1 "Barlow Semi Condensed",sans-serif;display:flex;align-items:center;justify-content:center;gap:12px}
+.big .ic{width:28px;height:28px}
+.b-or{background:var(--or);color:var(--orInk)}
+.b-brk{background:var(--brk);color:#1d1500}
+.b-go{background:var(--go);color:#fff}
+.b-ink{background:var(--ink);color:var(--bg)}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.row2 .big{font-size:22px;min-height:70px}
+.stpill{align-self:center;display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 14px;font-weight:700;background:var(--soft)}
+.timer{margin:0;text-align:center;font:700 clamp(54px,16vw,68px)/1 "Barlow Semi Condensed",sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.tlab{margin:-6px 0 0;text-align:center;color:var(--mut);font-size:14px}
+.wsite{margin:0;text-align:center;font-weight:600}
+.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;font-size:15px;margin:0;padding:12px 14px;border-radius:14px;background:var(--soft)}
+.facts dt{color:var(--mut)}
+.facts dd{margin:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ok{color:var(--go)}
+.warn{color:var(--bad)}
+.sx{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.sx .ic{width:16px;height:16px}
+.banner{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:14px;font-size:15px;color:var(--ink)}
+.banner.ok{background:var(--goSoft)}
+.banner.ok .ic{color:var(--go)}
+.banner.warn{background:var(--badSoft)}
+.banner.warn .ic{color:var(--bad)}
+.wkline{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--line);padding-top:6px;margin-top:auto}
+.kpi{background:var(--soft);border-radius:14px;padding:10px 14px}
+.kpi small{display:block;color:var(--mut)}
+.kpi b{font-size:30px;font-weight:700;line-height:1.1}
+.hlist{list-style:none;margin:0;padding:0}
+.hlist li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.hlist small{color:var(--mut);font-size:13px}
+.hlist b{font-size:20px}
+.locing{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-weight:600;min-height:300px}
+.locing .ic{width:56px;height:56px;color:var(--or);animation:pl .9s ease-in-out infinite alternate}
+@keyframes pl{to{opacity:.35;transform:translateY(-5px)}}
+.psheet{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;z-index:5}
+.psheet .in{background:var(--surf);width:100%;border-radius:24px 24px 0 0;padding:20px 18px 22px;display:flex;flex-direction:column;gap:12px;max-height:85%;overflow:auto}
+.psheet h3{margin:0;font:700 24px/1.1 "Barlow Semi Condensed",sans-serif}
+@media (max-width:519px){.psheet{position:fixed;z-index:40}}
+#panelCol{background:var(--surf);border:1px solid var(--line);border-radius:22px}
+.ph{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:18px 22px 4px}
+.ph h2{margin:0;font:700 30px/1.05 "Barlow Semi Condensed",sans-serif;letter-spacing:-.01em}
+.ph p{margin:0;color:var(--mut);font-size:15px}
+.tabs{display:flex;gap:2px;overflow-x:auto;padding:6px 12px 0;border-bottom:1px solid var(--line);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:0 12px;min-height:46px;font-weight:600;color:var(--mut);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--or)}
+.cnt{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--bad);color:#fff;font-size:13px;font-weight:700}
+.tb{padding:18px 22px 26px}
+.tb h3{margin:0 0 4px;font:700 28px/1.1 "Barlow Semi Condensed",sans-serif;text-wrap:balance}
+.tb .lead{margin:0 0 16px;color:var(--mut)}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;background-color:var(--board);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:16px;padding:14px}
+.col{display:flex;flex-direction:column;gap:8px}
+.tape{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;font-weight:600;line-height:1.2;background:var(--ink);color:var(--bg)}
+.tape small{display:block;font-weight:500;opacity:.85;font-size:13px}
+.tape .num{font-size:22px}
+.tp-break{background:var(--brk);color:#1d1500}
+.tp-none{background:var(--off);color:#fff}
+.tp-done{background:var(--soft);color:var(--ink)}
+.mag{display:flex;align-items:center;gap:9px;padding:5px 12px 5px 5px;border-radius:999px;background:var(--surf);box-shadow:var(--sh)}
+.mag b{display:block;font-weight:600;line-height:1.1}
+.mag small{display:flex;align-items:center;gap:6px;color:var(--mut);font-size:13px;line-height:1.25;flex-wrap:wrap}
+.mag .t{margin-left:auto;font:600 18px/1 "Barlow Semi Condensed",sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pop{animation:pop .7s cubic-bezier(.2,.8,.3,1.25)}
+@keyframes pop{0%{transform:translateY(-22px) scale(1.07);box-shadow:0 16px 24px rgba(0,0,0,.25)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.pop,.locing .ic,.pdots.err{animation:none}}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-weight:600;color:var(--mut);font-size:13px;white-space:nowrap}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.who{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.wk td:first-child,.wk th:first-child{position:sticky;left:0;background:var(--surf);z-index:1}
+.wk td{padding:5px 4px}
+.cell{border:0;background:none;border-radius:8px;padding:6px 8px;min-width:54px;min-height:40px;font:600 18px/1 "Barlow Semi Condensed",sans-serif;font-variant-numeric:tabular-nums;color:var(--ink);text-align:right}
+.cell:hover{background:var(--soft)}
+.c-ot{background:var(--brkSoft)}
+.c-bad{background:var(--badSoft);color:var(--bad)}
+.c-open{background:repeating-linear-gradient(-45deg,var(--badSoft) 0 6px,transparent 6px 12px);color:var(--bad)}
+.c-today{box-shadow:inset 0 0 0 2px var(--go)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:12px 0 0;font-size:14px;color:var(--mut)}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px}
+.toggle{margin-bottom:14px}
+.bars{display:flex;flex-direction:column;gap:14px}
+.bar{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,2fr) 92px;gap:6px 14px;align-items:center}
+.bar b{display:block;line-height:1.15}
+.bar small{color:var(--mut);font-size:13px}
+.track{height:28px;background:var(--soft);border-radius:6px;overflow:hidden}
+.fill{height:100%;background:var(--or);border-radius:6px}
+.bar .num{font-size:20px;font-weight:600;white-space:nowrap;text-align:right}
+.faces{display:flex;margin-top:4px}
+.faces .av{width:24px;height:24px;font-size:10px;margin-right:-5px;border:2px solid var(--surf);box-shadow:none}
+@media (max-width:600px){.bar{grid-template-columns:minmax(0,1fr) auto}.bar .track{grid-column:1/-1;grid-row:2}}
+.alist{display:flex;flex-direction:column;gap:10px}
+.al{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px}
+.al>.ic{color:var(--bad);margin-top:2px}
+.al p{margin:0}
+.al .acts{grid-column:2;display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--surf);font-weight:600;text-decoration:none;color:var(--ink)}
+.btn .ic{width:19px;height:19px}
+.btn.pri{background:var(--or);border-color:var(--or);color:var(--orInk)}
+.btn[hidden]{display:none}
+.log{list-style:none;margin:0;padding:0;font-size:15px}
+.log li{padding:8px 0;border-bottom:1px solid var(--line)}
+.log small{color:var(--mut);display:block}
+.sec{margin-top:28px}
+.sec h4,.tb h4{margin:0 0 10px;font:700 20px/1.2 "Barlow Semi Condensed",sans-serif}
+.tb h4.sub{margin:18px 0 8px;font:600 16px/1.2 Barlow,sans-serif;color:var(--mut)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;align-items:end}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:600}
+.fld input,.fld select,.fld textarea{font-size:16px;font-weight:400;min-height:44px;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--surf)}
+.fld textarea{min-height:90px;resize:vertical}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:14px}
+.paper{background:#fff;color:#141414;border:1px solid #ddd;border-radius:6px;padding:clamp(16px,3vw,30px);box-shadow:var(--sh)}
+.paper h5{margin:0;font:700 24px/1.1 Barlow,sans-serif}
+.paper .meta{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 16px;margin:12px 0 14px;font-size:15px}
+.paper .meta dt{color:#666}
+.paper .meta dd{margin:0;font-weight:600}
+.paper table{font-size:14px}
+.paper th{color:#555;background:#f3f1ec}
+.paper td,.paper th{border-bottom:1px solid #e6e3dd;padding:6px 8px;white-space:nowrap}
+.paper tfoot td{font-weight:700;border-top:2px solid #141414;border-bottom:0}
+.paper .foot{margin:12px 0 0;font-size:13px;color:#666}
+.dtag{float:right;margin-left:12px;font-size:12px;font-weight:700;color:#c2410c;border:1.5px solid #c2410c;border-radius:6px;padding:2px 8px}
+.fbl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+.fbl label,.radios label{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 12px;border:1.5px solid var(--line);border-radius:12px;font-size:15px}
+.fbl input,.radios input{width:20px;height:20px;accent-color:var(--or);flex:none;margin:0}
+.radios{display:flex;flex-wrap:wrap;gap:8px}
+.preview{white-space:pre-wrap;background:var(--soft);border-radius:12px;padding:12px 14px;font:15px/1.5 Barlow,system-ui,sans-serif;margin:0;overflow-wrap:anywhere}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal.on{display:flex}
+.msheet{background:var(--surf);color:var(--ink);border-radius:20px;width:100%;max-width:460px;max-height:90vh;max-height:90svh;overflow:auto;padding:20px 20px 22px;display:flex;flex-direction:column;gap:12px}
+.msheet h3{margin:0;font:700 24px/1.1 "Barlow Semi Condensed",sans-serif}
+.msheet p{margin:0}
+.entry{padding:10px 12px;border-radius:12px;background:var(--soft);line-height:1.55}
+.entry .btn{margin-top:8px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;background:var(--ink);color:var(--bg);padding:10px 12px 10px 16px;border-radius:14px;box-shadow:0 10px 24px rgba(0,0,0,.25);z-index:60;width:max-content;max-width:min(94vw,560px);font-size:15px}
+.toast[hidden]{display:none}
+.toast button{border:0;border-radius:10px;min-height:40px;padding:0 12px;background:var(--or);color:var(--orInk);font-weight:700;flex:none}
+footer{max-width:1320px;margin:0 auto;padding:0 max(4vw,16px) 28px;font-size:14px;color:var(--mut)}
+footer p{margin:0}
+@media (max-width:600px){.wk .nm{display:none}.wk td,.wk th{padding:5px 2px}.wk .cell{min-width:44px;padding:6px 4px;font-size:16px}.top{padding-block:12px}table{font-size:14px}th,td{padding:7px 5px}.tb{padding:16px 14px 22px}.ph{padding:16px 14px 4px}.tb h3{font-size:26px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px;border-bottom:1px solid var(--line)}.stack td{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;padding:3px 0;text-align:right}.stack td::before{content:attr(data-l);color:var(--mut);font-size:13px;text-align:left}}
+</style>
+</head>
+<body data-view="worker">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.8-6.5-11a6.5 6.5 0 0 1 13 0c0 5.2-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l4.5 4.5L19.5 7"/></symbol>
+<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4"/><path d="M12 17.2v.3"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="2"/></symbol>
+<symbol id="i-coffee" viewBox="0 0 24 24"><path d="M4 10h12v4a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3.5v3M12 3.5v3"/></symbol>
+<symbol id="i-swap" viewBox="0 0 24 24"><path d="M5 8h13l-3.5-3.5"/><path d="M19 16H6l3.5 3.5"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M9.5 16l-4-4 4-4"/><path d="M5.5 12H15"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+<symbol id="i-next" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+<symbol id="i-del" viewBox="0 0 24 24"><path d="M9 6h11v12H9l-6-6z"/><path d="M12.5 9.5l5 5M17.5 9.5l-5 5"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9 14l3 3 3-3"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 20l1.4-4.2A8 8 0 1 1 8.6 19z"/></symbol>
+</svg>
+
+<header class="top"><div class="top-in">
+<div class="brand"><h1>EkipZeit <span data-t="demo">Demo</span></h1><p data-t="sub">Şantiye ekipleri için saat takibi. İsimler, şantiyeler ve saatler örnektir.</p></div>
+<div class="tools"><span class="seg b" role="group" aria-label="Dil / Sprache"><button data-act="lang" data-v="tr" aria-pressed="true">TR</button><button data-act="lang" data-v="de" aria-pressed="false">DE</button></span><button class="ghost" data-act="reset" data-t="reset">Sıfırla</button></div>
+</div></header>
+<div class="try"><p data-t="try">Dene: Telefonda Murat’a dokun, PIN 1234, şantiyeyi seç ve İşe başla’ya bas.</p></div>
+<div class="switch"><span class="seg" role="group"><button data-act="view" data-v="worker" aria-pressed="true" data-t="vW">İşçi telefonu</button><button data-act="view" data-v="panel" aria-pressed="false" data-t="vP">Yönetici paneli</button></span></div>
+
+<main class="app">
+<section id="phoneCol" aria-label="İşçi telefonu"><div class="phone"><div class="screen">
+<div class="sbar"><span class="num" data-clock>10:42</span><svg viewBox="0 0 62 13" aria-hidden="true"><rect x="0" y="8" width="3" height="5" rx="1"/><rect x="4.5" y="5.5" width="3" height="7.5" rx="1"/><rect x="9" y="3" width="3" height="10" rx="1"/><rect x="13.5" y="0.5" width="3" height="12.5" rx="1"/><path d="M23 5a10 10 0 0 1 13 0l-1.6 1.7a7.6 7.6 0 0 0-9.8 0zM26.4 8.3a5.4 5.4 0 0 1 6.2 0L29.5 12z"/><rect x="41" y="1" width="18" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.3"/><rect x="43" y="3" width="12" height="7" rx="1.5"/><rect x="60" y="4.5" width="1.6" height="4" rx=".8"/></svg></div>
+<div class="pscroll" id="ps"></div>
+</div></div></section>
+<section id="panelCol" aria-label="Yönetici paneli"></section>
+</main>
+<footer><p data-t="foot">Demo sürümü.</p></footer>
+<div class="modal" id="modal" data-act="mClose" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+{
+const VER=4,KEY='ekipzeit-demo';
+const MIN=6e4,HOUR=36e5;
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rng=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let x=Math.imul(a^a>>>15,1|a);x=x+Math.imul(x^x>>>7,61|x)^x;return((x^x>>>14)>>>0)/4294967296};
+const dayStart=v=>{const d=new Date(v);d.setHours(0,0,0,0);return +d};
+const at=(day,m)=>{const d=new Date(day);d.setHours(0,m,0,0);return +d};
+const addDays=(day,n)=>{const d=new Date(day);d.setDate(d.getDate()+n);return dayStart(d)};
+const mondayOf=day=>addDays(day,-((new Date(day).getDay()+6)%7));
+const monthStart=(day,k)=>{const d=new Date(day);d.setDate(1);d.setMonth(d.getMonth()+(k||0));return dayStart(d)};
+const p2=n=>String(n).padStart(2,'0');
+const hm=v=>{const d=new Date(v);return p2(d.getHours())+':'+p2(d.getMinutes())};
+const ddmm=v=>{const d=new Date(v);return p2(d.getDate())+'.'+p2(d.getMonth()+1)+'.'};
+const ddmmyy=v=>ddmm(v)+new Date(v).getFullYear();
+const hmd=ms=>{const m=Math.round(ms/MIN);return Math.floor(m/60)+':'+p2(m%60)};
+const clock=ms=>{const s=Math.max(0,Math.floor(ms/1000));return p2(Math.floor(s/3600))+':'+p2(Math.floor(s/60)%60)+':'+p2(s%60)};
+const LOC={tr:'tr-TR',de:'de-DE'};
+const fdt=(v,L,o)=>new Intl.DateTimeFormat(LOC[L]||'tr-TR',o).format(new Date(v));
+const wdS=(v,L)=>fdt(v,L,{weekday:'short'}).replace('.','');
+const ld=(ms,L)=>{const m=Math.round(ms/MIN),h=Math.floor(m/60),r=m%60;return L==='de'?(h?h+' Std. '+r+' Min.':r+' Min.'):(h?h+' sa '+r+' dk':r+' dk')};
+const hdec=(ms,L)=>(ms/HOUR).toLocaleString(LOC[L],{maximumFractionDigits:1})+(L==='de'?' Std.':' sa');
+const dec=x=>x.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2});
+const dist=(d,L)=>d<1000?d+' m':(d/1000).toLocaleString(LOC[L],{maximumFractionDigits:1})+' km';
+const mn=L=>L==='de'?'Min.':'dk';
+const slug=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ı/g,'i').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+
+/* demo clock: real time during working hours, otherwise a believable 10:42 that keeps running */
+const REAL0=Date.now(),RDAY=dayStart(REAL0);
+const makeOff=()=>{const d=new Date(REAL0),h=d.getHours()+d.getMinutes()/60,sun=d.getDay()===0;if(!sun&&h>=8&&h<=16.5)return 0;return at(sun?addDays(RDAY,-1):RDAY,642)-REAL0};
+let OFF=0;
+const now=()=>Date.now()+OFF;
+const today=()=>dayStart(now());
+
+const PAL=['#c2410c','#1971c2','#2b8a3e','#862e9c','#c2255c','#5f3dc4','#0b7285','#e67700','#495057','#a61e4d'];
+const W0=[['w1','Ahmet Yılmaz','Fayans ustası','Fliesenleger','tr','s1'],['w2','Mehmet Kaya','Alçıpan kalfası','Trockenbauer','tr','s2'],['w3','Ali Demir','Boyacı','Maler','tr','s4'],['w4','Hasan Çelik','Tesisatçı','Installateur','tr','s2'],['w5','Murat Şahin','Yardımcı','Helfer','tr','s1'],['w6','Kemal Arslan','Çatı ustası','Dachdecker','tr','s3'],['w7','Piotr Nowak','Alçıpan ustası','Trockenbauer','de','s4']];
+const S0=[['s1','Banyo tadilatı','Badsanierung','Wandsbek'],['s2','Komple tadilat','Komplettsanierung','Barmbek'],['s3','Çatı işleri','Dacharbeiten','Bergedorf'],['s4','Alçıpan ve boya','Trockenbau & Maler','Rahlstedt'],['s5','Depo','Lager','Tonndorf']];
+const FEAT=[['clock',{tr:'Başla / Mola / Bitir tuşları',de:'Beginn / Pause / Ende'},1],['site',{tr:'Şantiye seçimi',de:'Baustellen-Auswahl'},1],['loc',{tr:'Giriş ve çıkışta konum kontrolü',de:'Standort-Check bei Beginn und Ende'},1],['board',{tr:'Canlı pano: kim nerede',de:'Live-Tafel: wer ist wo'},1],['hours',{tr:'Haftalık ve aylık saat tablosu',de:'Wochen- und Monatsstunden'},1],['sites',{tr:'Şantiye başına saat',de:'Stunden je Baustelle'},1],['fix',{tr:'Unutulan çıkışı düzeltme',de:'Vergessene Abmeldung korrigieren'},1],['rep',{tr:'Almanca rapor (PDF / Excel)',de:'Bericht auf Deutsch (PDF / Excel)'},1],['leave',{tr:'İzin, hastalık ve tatil takvimi',de:'Urlaub, Krankheit, Kalender'},0],['plan',{tr:'Haftalık iş planı',de:'Wochenplan: wer wann wo'},0],['photo',{tr:'Fotoğraflı iş günlüğü',de:'Bautagebuch mit Fotos'},0],['remind',{tr:'Çıkışı unutunca hatırlatma',de:'Erinnerung bei vergessener Abmeldung'},0],['cost',{tr:'Saat ücretiyle işçilik maliyeti',de:'Lohnkosten je Baustelle'},0],['tools',{tr:'Makine ve araç takibi',de:'Maschinen und Fahrzeuge'},0]];
+const LG=[['tr','Türkçe','Türkisch'],['de','Almanca','Deutsch'],['pl','Lehçe','Polnisch'],['ro','Rumence','Rumänisch'],['bg','Bulgarca','Bulgarisch'],['ar','Arapça','Arabisch'],['en','İngilizce','Englisch']];
+
+const T={
+tr:{demo:'Demo',sub:'Şantiye ekipleri için saat takibi. İsimler, şantiyeler ve saatler örnektir.',
+try:'Dene: Telefonda <b>Murat</b>’a dokun, PIN <b>1234</b>, şantiyeyi seç ve <b>İşe başla</b>’ya bas. Yönetici panosunda hemen görünür.',
+reset:'Sıfırla',vW:'İşçi telefonu',vP:'Yönetici paneli',foot:'Demo sürümü. Bütün isimler, şantiyeler ve saatler örnektir. Hazırlayan: Bukalemun Studios.',
+who:'Kim çalışıyor?',tapName:'Adına dokun.',pinT:'PIN kodunu gir',pinHint:'Demo PIN: 1234',pinBad:'PIN yanlış, tekrar dene.',back:'Geri',del:'Sil',
+gm:'Günaydın',gd:'İyi günler',ge:'İyi akşamlar',which:'Bugün hangi şantiyedesin?',start:'İşe başla',again:'Tekrar başla',
+locNote:'Konumun sadece işe başlarken ve bitirirken bir kez alınır. Gün boyu takip yok.',locing:'Konum alınıyor…',onSite:'Şantiyedesin',away:'Şantiyeden uzaktasın',awayNote:'Kayıt yine de alındı, yöneticiye bildirildi.',
+working:'Çalışıyorsun',onBreak:'Moladasın',startedAt:'Giriş',brk:'Mola',endBrk:'Molayı bitir',sw:'Şantiye değiştir',swQ:'Hangi şantiyeye geçiyorsun?',finish:'İşi bitir',finQ:'İşi bitirmek istiyor musun?',finYes:'Evet, bitir',cancel:'Vazgeç',
+today:'Bugün',done:'Bugünkü işin kaydedildi. Eline sağlık!',myH:'Saatlerim',week:'Bu hafta',month:'Bu ay',logout:'Çıkış yap',sim:'Demo konumu',simOn:'Şantiyede',simAway:'Uzakta',brTot:'mola',worked:'çalışma',todayWork:'Bugünkü çalışma süren',noEntries:'Bu hafta henüz kayıt yok.',
+panel:'Yönetici paneli',hi:'Merhaba Mustafa abi',tLive:'Canlı',tHours:'Saatler',tSites:'Şantiyeler',tAlerts:'Uyarılar',tRep:'Rapor',tTeam:'Ekip',tFb:'Görüşün',
+liveT:'{w} kişi çalışıyor, {b} molada, {n} henüz gelmedi',teamToday:'Ekip bugün toplam',locOnly:'Konum sadece giriş ve çıkışta alınır.',colBreak:'Molada',colNone:'Henüz gelmedi',colDone:'İşi bitirdi',inAt:'Giriş {t}',
+hPerson:'Kişi',hStatus:'Durum',hSite:'Şantiye',hIn:'Giriş',hToday:'Bugün',hLoc:'Konum',st_work:'Çalışıyor',st_break:'Molada',st_none:'Gelmedi',st_done:'Bitirdi',
+hoursT:'{p} ekip toplam {h} çalıştı',thisW:'Bu hafta',prevW:'Geçen hafta',wkTot:'Hafta',legOt:'8 saatin üstü',legBad:'10 saatin üstü ya da eksik mola',legOpen:'Çıkış yapılmamış',tapCell:'Ayrıntı için bir güne dokun.',open:'açık',running:'devam ediyor',
+locIn:'Giriş konumu',locOut:'Çıkış konumu',manual:'elle girildi',fixed:'Düzeltildi',net:'Net çalışma',brShort:'Mola en az {r} dk olmalı',close:'Kapat',detail:'Ayrıntı',
+sitesT:'En çok saat: {s}',sitesNone:'Bu dönemde kayıt yok',sitesLead:'Her şantiyeye giden işçilik saati. Fatura ve maliyet için.',people:'{n} kişi',people1:'{n} kişi',addSite:'Şantiye ekle',siteName:'Şantiye adı',area:'Semt',add:'Ekle',needName:'Bir isim yaz.',siteAdded:'{n} eklendi.',
+alertsT:'{n} konu bakmanı bekliyor',allOk:'Her şey yolunda',alertsLead:'Unutulan çıkışlar, şantiye dışından girişler ve eksik molalar burada toplanır.',aOpen:'{d} günü çıkış yapılmamış.',aAway:'{d} günü {t} girişinde şantiyeden {k} uzaktaydı.',aBreak:'{d} günü {h} çalıştı, mola {m} dk. En az {r} dk olmalı (ArbZG § 4).',
+fix:'Düzelt',seen:'Tamam',fixT:'Çıkış saatini gir',endT:'Çıkış saati',reason:'Sebep',r0:'Çıkış yapmayı unuttu',r1:'Telefonun şarjı bitti',r2:'Başka bir sebep',save:'Kaydet',fixBad:'Çıkış saati girişten ve moladan sonra olmalı.',fixedToast:'Düzeltme kaydedildi.',
+logT:'Değişiklik kaydı',logFix:'{d} çıkışı {t} olarak girildi ({r})',logEmpty:'Henüz değişiklik yok.',by:'Yönetici',
+repT:'Almanca saat raporu',repNote:'Muhasebe, Steuerberater ve Zoll kontrolü için hazır. Kayıtlar en az 2 yıl saklanır (§ 17 MiLoG).',repW:'İşçi',repP:'Dönem',pW:'Bu hafta',pM:'Bu ay',pL:'Geçen ay',
+pdf:'PDF indir',csv:'Excel (CSV) indir',copy:'Tabloyu kopyala',copied:'Kopyalandı. Excel’e yapıştırabilirsin.',copyNo:'Kopyalama burada açılmadı.',saved:'Dosya hazır.',dlNo:'İndirme burada açılmadı, tabloyu kopyalayabilirsin.',dlWait:'Biraz bekle, sonra tekrar dene.',making:'Hazırlanıyor…',
+teamT:'{n} işçi, {s} şantiye',teamLead:'Her işçi kendi PIN’i ile kendi telefonundan girer. Telefonun dili kişiye göre ayarlanır.',addW:'İşçi ekle',wName:'Ad Soyad',wRole:'Görev',wLang:'Telefon dili',wPin:'PIN (4 rakam)',addedW:'{n} eklendi. Telefondan hemen giriş yapabilir.',pinBad4:'PIN 4 rakam olmalı.',nameReq:'Ad soyad yaz.',langTr:'Türkçe',langDe:'Almanca',
+fbT:'Beğendiklerini işaretle, Timur’a gönder',fbLead:'İşaretlediklerin aşağıdaki mesaja yazılır. WhatsApp’tan Timur’a göndermen yeter.',fbNow:'İlk sürümde olsun',fbLater:'Sonra eklenebilir',fbWorkers:'Kaç işçi var?',fbSites:'Aynı anda kaç şantiye?',fbLoc:'Konum kaydı',fbLocA:'Sadece giriş ve çıkışta',fbLocB:'Hiç olmasın',fbLangs:'Hangi diller lazım?',fbNote:'Notun',fbPrev:'Gidecek mesaj',fbSend:'WhatsApp ile gönder',fbCopy:'Metni kopyala',
+toastIn:'{n} işe başladı · {s}',toastOut:'{n} işi bitirdi · {h}',toastBr:'{n} molaya çıktı',toastBrEnd:'{n} moladan döndü',toastSw:'{n} şantiye değiştirdi · {s}',seeP:'Panoda gör',resetDone:'Demo baştan başladı.'},
+de:{demo:'Demo',sub:'Zeiterfassung für Baustellen-Teams. Namen, Baustellen und Zeiten sind Beispiele.',
+try:'Ausprobieren: Am Handy <b>Murat</b> antippen, PIN <b>1234</b>, Baustelle wählen und <b>Arbeit beginnen</b> drücken. Es erscheint sofort auf der Tafel.',
+reset:'Zurücksetzen',vW:'Handy Mitarbeiter',vP:'Chef-Ansicht',foot:'Demoversion. Alle Namen, Baustellen und Zeiten sind Beispiele. Erstellt von Bukalemun Studios.',
+who:'Wer arbeitet?',tapName:'Tippe auf deinen Namen.',pinT:'PIN eingeben',pinHint:'Demo-PIN: 1234',pinBad:'Falsche PIN, bitte nochmal.',back:'Zurück',del:'Löschen',
+gm:'Guten Morgen',gd:'Guten Tag',ge:'Guten Abend',which:'Auf welcher Baustelle bist du heute?',start:'Arbeit beginnen',again:'Neu beginnen',
+locNote:'Dein Standort wird nur bei Beginn und Ende einmal erfasst. Kein Tracking über den Tag.',locing:'Standort wird erfasst…',onSite:'Du bist auf der Baustelle',away:'Du bist nicht auf der Baustelle',awayNote:'Trotzdem gespeichert, der Chef wird informiert.',
+working:'Du arbeitest',onBreak:'Du machst Pause',startedAt:'Beginn',brk:'Pause',endBrk:'Pause beenden',sw:'Baustelle wechseln',swQ:'Zu welcher Baustelle wechselst du?',finish:'Feierabend',finQ:'Arbeit jetzt beenden?',finYes:'Ja, beenden',cancel:'Abbrechen',
+today:'Heute',done:'Dein Arbeitstag ist gespeichert. Danke!',myH:'Meine Stunden',week:'Diese Woche',month:'Dieser Monat',logout:'Abmelden',sim:'Demo-Standort',simOn:'Baustelle',simAway:'Woanders',brTot:'Pause',worked:'Arbeit',todayWork:'Deine Arbeitszeit heute',noEntries:'Diese Woche noch keine Einträge.',
+panel:'Chef-Ansicht',hi:'Hallo Mustafa abi',tLive:'Live',tHours:'Stunden',tSites:'Baustellen',tAlerts:'Hinweise',tRep:'Bericht',tTeam:'Team',tFb:'Feedback',
+liveT:'{w} bei der Arbeit, {b} in Pause, {n} noch nicht da',teamToday:'Team heute gesamt',locOnly:'Standort nur bei Beginn und Ende.',colBreak:'In Pause',colNone:'Noch nicht da',colDone:'Feierabend',inAt:'Beginn {t}',
+hPerson:'Person',hStatus:'Status',hSite:'Baustelle',hIn:'Beginn',hToday:'Heute',hLoc:'Standort',st_work:'Arbeitet',st_break:'Pause',st_none:'Nicht da',st_done:'Fertig',
+hoursT:'{p} hat das Team {h} gearbeitet',thisW:'Diese Woche',prevW:'Letzte Woche',wkTot:'Woche',legOt:'über 8 Stunden',legBad:'über 10 Stunden oder Pause zu kurz',legOpen:'keine Abmeldung',tapCell:'Für Details auf einen Tag tippen.',open:'offen',running:'läuft',
+locIn:'Standort Beginn',locOut:'Standort Ende',manual:'manuell eingetragen',fixed:'Korrigiert',net:'Arbeitszeit netto',brShort:'Pause mindestens {r} Min.',close:'Schließen',detail:'Details',
+sitesT:'Die meisten Stunden: {s}',sitesNone:'Keine Einträge in diesem Zeitraum',sitesLead:'Arbeitsstunden je Baustelle, für Rechnung und Kalkulation.',people:'{n} Personen',people1:'{n} Person',addSite:'Baustelle hinzufügen',siteName:'Name der Baustelle',area:'Stadtteil',add:'Hinzufügen',needName:'Bitte einen Namen eingeben.',siteAdded:'{n} hinzugefügt.',
+alertsT:'Offene Hinweise: {n}',allOk:'Alles in Ordnung',alertsLead:'Vergessene Abmeldungen, Beginn außerhalb der Baustelle und zu kurze Pausen landen hier.',aOpen:'{d}: keine Abmeldung erfasst.',aAway:'{d}, Beginn {t}: {k} von der Baustelle entfernt.',aBreak:'{d}: {h} gearbeitet, nur {m} Min. Pause. Nötig sind {r} Min. (§ 4 ArbZG).',
+fix:'Korrigieren',seen:'Erledigt',fixT:'Ende eintragen',endT:'Uhrzeit Ende',reason:'Grund',r0:'Abmelden vergessen',r1:'Handy-Akku leer',r2:'Anderer Grund',save:'Speichern',fixBad:'Das Ende muss nach Beginn und Pause liegen.',fixedToast:'Korrektur gespeichert.',
+logT:'Änderungsprotokoll',logFix:'Ende am {d} auf {t} gesetzt ({r})',logEmpty:'Noch keine Änderungen.',by:'Chef',
+repT:'Stundenbericht auf Deutsch',repNote:'Fertig für Buchhaltung, Steuerberater und Zollprüfung. Aufbewahrung mindestens 2 Jahre (§ 17 MiLoG).',repW:'Mitarbeiter',repP:'Zeitraum',pW:'Diese Woche',pM:'Dieser Monat',pL:'Letzter Monat',
+pdf:'PDF herunterladen',csv:'Excel (CSV) herunterladen',copy:'Tabelle kopieren',copied:'Kopiert. Du kannst es in Excel einfügen.',copyNo:'Kopieren ist hier nicht möglich.',saved:'Datei ist fertig.',dlNo:'Download ist hier nicht möglich, bitte Tabelle kopieren.',dlWait:'Kurz warten und nochmal versuchen.',making:'Wird erstellt…',
+teamT:'{n} Mitarbeiter, {s} Baustellen',teamLead:'Jeder meldet sich mit eigener PIN am eigenen Handy an. Die Handysprache gilt pro Person.',addW:'Mitarbeiter hinzufügen',wName:'Vor- und Nachname',wRole:'Tätigkeit',wLang:'Handysprache',wPin:'PIN (4 Ziffern)',addedW:'{n} hinzugefügt und kann sich sofort anmelden.',pinBad4:'Die PIN braucht 4 Ziffern.',nameReq:'Bitte Namen eingeben.',langTr:'Türkisch',langDe:'Deutsch',
+fbT:'Ankreuzen, was dir gefällt, und an Timur schicken',fbLead:'Deine Auswahl steht unten in der Nachricht. Einfach per WhatsApp an Timur schicken.',fbNow:'In der ersten Version',fbLater:'Kann später kommen',fbWorkers:'Wie viele Mitarbeiter?',fbSites:'Wie viele Baustellen gleichzeitig?',fbLoc:'Standort',fbLocA:'Nur bei Beginn und Ende',fbLocB:'Gar nicht',fbLangs:'Welche Sprachen?',fbNote:'Deine Notiz',fbPrev:'Nachricht',fbSend:'Per WhatsApp senden',fbCopy:'Text kopieren',
+toastIn:'{n} hat begonnen · {s}',toastOut:'{n} hat Feierabend · {h}',toastBr:'{n} macht Pause',toastBrEnd:'{n} ist zurück aus der Pause',toastSw:'{n} hat die Baustelle gewechselt · {s}',seeP:'Zur Tafel',resetDone:'Demo neu gestartet.'}};
+
+let S=null,DL=null;
+const canNative=()=>!(window.claude&&typeof window.claude.use==='function');
+const Wk=id=>S.W.find(w=>w.id===id);
+const Sk=id=>S.S.find(s=>s.id===id);
+const sN=(id,L)=>{const s=Sk(id);return s?(s.name[L]||s.name.tr):'?'};
+const rN=(w,L)=>w.role[L]||w.role.tr;
+const first=n=>String(n).trim().split(/\s+/)[0];
+const ini=n=>String(n).trim().split(/\s+/).slice(0,2).map(x=>x.charAt(0)).join('').toLocaleUpperCase('tr-TR');
+const t=(k,v,L)=>{const D=T[L||S.lang]||T.tr;let s=D[k]!=null?D[k]:(T.tr[k]!=null?T.tr[k]:k);if(v)for(const x in v)s=s.split('{'+x+'}').join(v[x]);return s};
+const ic=(n,c)=>'<svg class="ic'+(c?' '+c:'')+'" aria-hidden="true"><use href="#i-'+n+'"/></svg>';
+const av=(w,c)=>'<span class="av'+(c?' '+c:'')+'" style="background:'+w.col+'">'+esc(ini(w.name))+'</span>';
+
+/* time maths */
+const brMs=(e,v)=>{const T1=v==null?now():v,end=e.b==null?T1:e.b;let s=0;for(const b of e.br)s+=Math.max(0,Math.min(b[1]==null?end:b[1],end)-b[0]);return s};
+const dur=(e,v)=>{const T1=v==null?now():v;if(e.b==null&&e.a<dayStart(T1))return 0;const end=e.b==null?T1:e.b;return Math.max(0,end-e.a-brMs(e,T1))};
+const todays=id=>{const t0=today();return S.E.filter(e=>e.w===id&&e.a>=t0).sort((a,b)=>a.a-b.a)};
+const status=id=>{const es=todays(id),cur=es.find(e=>e.b==null);if(cur){const ob=cur.br.find(b=>b[1]==null);return {s:ob?'break':'work',e:cur,es,ob}}return {s:es.length?'done':'none',es}};
+const worked=id=>todays(id).reduce((s,e)=>s+dur(e),0);
+const brToday=id=>todays(id).reduce((s,e)=>s+brMs(e),0);
+const sumRange=(id,a,b)=>S.E.reduce((s,e)=>e.w===id&&e.a>=a&&e.a<b?s+dur(e):s,0);
+const lastSite=id=>{let best=null;for(const e of S.E)if(e.w===id&&(!best||e.a>best.a))best=e;return best?best.s:null};
+function dayInfo(id,d){const es=S.E.filter(e=>e.w===id&&dayStart(e.a)===d).sort((a,b)=>a.a-b.a);if(!es.length)return null;const t0=today(),net=es.reduce((s,e)=>s+dur(e),0),br=es.reduce((s,e)=>s+brMs(e),0),open=es.some(e=>e.b==null&&d<t0),req=net>9*HOUR?45*MIN:net>6*HOUR?30*MIN:0,brBad=d<t0&&!open&&br<req;return {es,net,br,open,req,brBad,ot:net>8*HOUR,bad:net>10*HOUR||brBad}}
+function alerts(){const out=[],t0=today(),from=addDays(t0,-21);
+for(const e of S.E){if(e.a<from)continue;const d=dayStart(e.a),w=Wk(e.w);if(!w)continue;if(e.b==null&&d<t0)out.push({k:'o'+e.id,type:'open',e,w,d});if(e.la&&e.la.d>500&&S.ok.indexOf('a'+e.id)<0)out.push({k:'a'+e.id,type:'away',e,w,d})}
+for(const w of S.W)for(let d=from;d<t0;d=addDays(d,1)){const i=dayInfo(w.id,d);if(i&&i.brBad&&S.ok.indexOf('b'+w.id+d)<0)out.push({k:'b'+w.id+d,type:'br',w,d,i})}
+return out.sort((a,b)=>b.d-a.d)}
+
+/* sample month: same data for every viewer, built around today */
+function seed(){
+const R=rng(20261127),N=now(),T0=dayStart(N),ri=k=>Math.floor(R()*k);
+const W=W0.map((r,i)=>({id:r[0],name:r[1],role:{tr:r[2],de:r[3]},lang:r[4],home:r[5],pin:'1234',col:PAL[i]}));
+const Ss=S0.map(r=>({id:r[0],name:{tr:r[1],de:r[2]},area:r[3]}));
+const E=[],log=[];let n=0;
+const mk=(w,s,a,b,br,la,lb)=>{const e={id:'e'+(++n),w,s,a,b,br,la,lb};E.push(e);return e};
+const days=[];for(let d=monthStart(T0,-1);d<T0;d=addDays(d,1))if(new Date(d).getDay()!==0)days.push(d);
+for(const d of days){const sat=new Date(d).getDay()===6;for(const w of W){if(sat?R()<.72:R()<.04)continue;const st=at(d,405+5*ri(8));const net=sat?240+15*ri(8):(R()<.15?510+5*ri(7):450+5*ri(7));const bm=net>540?45:net>360?30:0;const b0=at(d,690+5*ri(7));const site=R()<.1?Ss[ri(4)].id:w.home;mk(w.id,site,st,st+(net+bm)*MIN,bm?[[b0,b0+bm*MIN]]:[],{d:20+ri(190)},{d:20+ri(190)})}}
+const wd=days.filter(d=>new Date(d).getDay()!==6),L=wd.length;
+const get=(w,d)=>E.find(e=>e.w===w&&dayStart(e.a)===d)||mk(w,W.find(x=>x.id===w).home,at(d,420),at(d,930),[[at(d,720),at(d,750)]],{d:70},{d:90});
+if(L>0){const e=get('w2',wd[L-1]);e.b=null;e.lb=null}
+if(L>1){const d=wd[L-2],e=get('w4',d);e.a=at(d,390);e.br=[[at(d,720),at(d,750)]];e.b=at(d,990)}
+if(L>2){const e=get('w5',wd[L-3]);e.la={d:1850}}
+if(L>6){const d=wd[L-7],e=get('w3',d);e.b=at(d,960);e.lb=null;e.fx={r:1};log.push({t:at(addDays(d,1),490),e:e.id,w:'w3',d,end:e.b,r:1})}
+const lunch=N>at(T0,760);
+for(const [w,s,m,dd] of [['w1','s1',418,85],['w2','s2',425,60],['w3','s4',432,2400],['w4','s2',410,140],['w6','s3',420,45],['w7','s4',415,110]])mk(w,s,at(T0,m),null,lunch&&w!=='w4'?[[at(T0,720),at(T0,750)]]:[],{d:dd},null);
+const hz=E.find(e=>e.w==='w4'&&e.b==null&&e.a>=T0);if(hz)hz.br.push([N-12*MIN,null]);
+return {v:VER,rday:RDAY,off:OFF,lang:'tr',W,S:Ss,E,log,ok:[],
+ph:{w:null,step:'login',pin:'',err:0,site:null,sim:'on',sheet:null,busy:0,res:null},
+ui:{view:'worker',tab:'live',wk:0,sp:'week',modal:null,rw:'w1',rp:'month',lastW:null,lastT:0},
+fb:{on:Object.fromEntries(FEAT.map(f=>[f[0],!!f[2]])),workers:'',sites:'',loc:'a',langs:{tr:1,de:1},note:''}}}
+
+/* ---------- worker phone ---------- */
+function phoneHTML(){const P=S.ph;if(!P.w)return loginV();const w=Wk(P.w);if(!w){P.w=null;return loginV()}const L=w.lang;
+if(P.step==='pin')return pinV(w,L);
+if(P.step==='hours')return headV(w,L)+hoursV(w,L);
+if(P.busy)return headV(w,L)+'<div class="locing">'+ic('pin')+'<span>'+t('locing',0,L)+'</span></div>';
+const st=status(w.id);return headV(w,L)+(st.s==='work'||st.s==='break'?workV(w,st,L):homeV(w,st,L))+sheetV(w,st,L)}
+function loginV(){const L=S.lang;return '<div class="p-logo">EkipZeit</div><h2 class="p-title">'+t('who',0,L)+'</h2><p class="p-sub">'+t('tapName',0,L)+'</p><div class="wgrid">'+S.W.map(w=>{const s=status(w.id).s;return '<button class="wbtn" data-act="pick" data-id="'+w.id+'">'+av(w)+'<span><b>'+esc(first(w.name))+'</b><small>'+esc(rN(w,L))+'</small></span><i class="dot d-'+s+'" title="'+t('st_'+s,0,L)+'"></i></button>'}).join('')+'</div><p class="note">'+ic('lock')+'<span>'+t('locNote',0,L)+'</span></p>'}
+function pinV(w,L){const P=S.ph;return '<button class="lnk" data-act="logout">'+ic('back')+t('back',0,L)+'</button><div class="pin-who">'+av(w,'l')+'<b>'+esc(w.name)+'</b><span class="mut">'+t('pinT',0,L)+'</span></div><div class="pdots'+(P.err?' err':'')+'">'+[0,1,2,3].map(i=>'<i class="'+(i<P.pin.length?'on':'')+'"></i>').join('')+'</div><p class="hint center'+(P.err?' bad':'')+'">'+(P.err?t('pinBad',0,L):t('pinHint',0,L))+'</p><div class="keys">'+[1,2,3,4,5,6,7,8,9].map(k=>'<button data-act="key" data-k="'+k+'">'+k+'</button>').join('')+'<span></span><button data-act="key" data-k="0">0</button><button data-act="key" data-k="x" aria-label="'+t('del',0,L)+'">'+ic('del')+'</button></div>'}
+function headV(w,L){return '<div class="p-head">'+av(w,'s')+'<div><b>'+esc(w.name)+'</b><small>'+esc(rN(w,L))+'</small></div><button class="icb" data-act="logout" aria-label="'+t('logout',0,L)+'" title="'+t('logout',0,L)+'">'+ic('out')+'</button></div>'}
+function weekLine(w,L){const T0=today(),wk=sumRange(w.id,mondayOf(T0),addDays(T0,1));return '<div class="wkline"><span class="mut">'+t('week',0,L)+': <b class="num" style="color:var(--ink)">'+ld(wk,L)+'</b></span><button class="lnk" data-act="hours">'+t('myH',0,L)+ic('next')+'</button></div>'}
+function locSpan(l,L,short){if(!l)return '';return l.d>500?'<span class="warn sx">'+ic('warn')+dist(l.d,L)+'</span>':'<span class="ok sx">'+ic('check')+(short?'':dist(l.d,L))+'</span>'}
+function homeV(w,st,L){const P=S.ph,N=now(),h=new Date(N).getHours(),g=h<11?t('gm',0,L):h<17?t('gd',0,L):t('ge',0,L),sel=P.site||lastSite(w.id)||w.home;
+const top=st.s==='done'?'<div class="banner ok">'+ic('check')+'<span><b>'+t('done',0,L)+'</b><br>'+t('today',0,L)+': '+ld(worked(w.id),L)+'</span></div>':'';
+return top+'<div><h2 class="greet">'+g+', '+esc(first(w.name))+'</h2><p class="mut" style="margin:2px 0 0">'+fdt(N,L,{weekday:'long',day:'numeric',month:'long'})+'</p></div><p class="lbl">'+t('which',0,L)+'</p><div class="slist" role="radiogroup">'+S.S.map(s=>'<button class="site" role="radio" aria-checked="'+(s.id===sel)+'" data-act="site" data-id="'+s.id+'"><span><b>'+esc(s.name[L]||s.name.tr)+'</b><small>'+esc(s.area)+'</small></span><i class="rad"></i></button>').join('')+'</div><button class="big b-or" data-act="start">'+ic('play','f')+(st.s==='done'?t('again',0,L):t('start',0,L))+'</button><p class="note">'+ic('lock')+'<span>'+t('locNote',0,L)+'</span></p><div class="simrow"><span>'+t('sim',0,L)+'</span><span class="seg s"><button data-act="sim" data-v="on" aria-pressed="'+(P.sim==='on')+'">'+t('simOn',0,L)+'</button><button data-act="sim" data-v="away" aria-pressed="'+(P.sim==='away')+'">'+t('simAway',0,L)+'</button></span></div>'+weekLine(w,L)}
+function workV(w,st,L){const P=S.ph,e=st.e,brk=st.s==='break',res=P.res;let ban='';
+if(res&&res.e===e.id)ban=res.ok?'<div class="banner ok">'+ic('check')+'<span><b>'+t('onSite',0,L)+'</b> · '+dist(res.d,L)+'</span></div>':'<div class="banner warn">'+ic('warn')+'<span><b>'+t('away',0,L)+'</b> · '+dist(res.d,L)+'<br>'+t('awayNote',0,L)+'</span></div>';
+return ban+'<span class="stpill"><i class="dot d-'+st.s+'"></i>'+(brk?t('onBreak',0,L):t('working',0,L))+'</span><p class="wsite">'+esc(sN(e.s,L))+' · '+esc((Sk(e.s)||{}).area||'')+'</p><p class="timer" data-pt="'+w.id+'">'+clock(worked(w.id))+'</p><p class="tlab">'+t('todayWork',0,L)+(brk?' · '+t('brk',0,L)+' <b class="num" data-pb="'+w.id+'">'+clock(now()-st.ob[0])+'</b>':'')+'</p><dl class="facts"><dt>'+t('startedAt',0,L)+'</dt><dd><span class="num">'+hm(e.a)+'</span>'+locSpan(e.la,L)+'</dd><dt>'+t('brk',0,L)+'</dt><dd data-pbt="'+w.id+'">'+ld(brToday(w.id),L)+'</dd></dl>'+
+(brk?'<button class="big b-go" data-act="brEnd">'+ic('play','f')+t('endBrk',0,L)+'</button>':'<div class="row2"><button class="big b-brk" data-act="br">'+ic('coffee')+t('brk',0,L)+'</button><button class="big b-ink" data-act="finOpen">'+ic('stop','f')+t('finish',0,L)+'</button></div><button class="btn" data-act="swOpen">'+ic('swap')+t('sw',0,L)+'</button>')+weekLine(w,L)}
+function sheetV(w,st,L){const P=S.ph;let inner='';
+if(P.sheet==='fin')inner='<h3>'+t('finQ',0,L)+'</h3><p style="margin:0">'+t('today',0,L)+': <b>'+ld(worked(w.id),L)+'</b> '+t('worked',0,L)+', '+ld(brToday(w.id),L)+' '+t('brTot',0,L)+'</p><button class="big b-ink" data-act="fin">'+ic('stop','f')+t('finYes',0,L)+'</button><button class="btn" data-act="shClose">'+t('cancel',0,L)+'</button>';
+else if(P.sheet==='sw'&&st.e)inner='<h3>'+t('swQ',0,L)+'</h3><div class="slist">'+S.S.filter(s=>s.id!==st.e.s).map(s=>'<button class="site" data-act="sw" data-id="'+s.id+'"><span><b>'+esc(s.name[L]||s.name.tr)+'</b><small>'+esc(s.area)+'</small></span>'+ic('next')+'</button>').join('')+'</div><button class="btn" data-act="shClose">'+t('cancel',0,L)+'</button>';
+else return '';
+return '<div class="psheet" data-act="shClose"><div class="in">'+inner+'</div></div>'}
+function hoursV(w,L){const T0=today(),m=mondayOf(T0);let rows='';
+for(let d=m;d<=T0;d=addDays(d,1)){const i=dayInfo(w.id,d);if(!i)continue;const sites=[...new Set(i.es.map(e=>sN(e.s,L)))].join(', ');rows+='<li><span class="mut">'+wdS(d,L)+' '+ddmm(d)+'</span><span>'+i.es.map(e=>hm(e.a)+'–'+(e.b?hm(e.b):(dayStart(e.a)===T0?'…':'?'))).join(', ')+'<br><small>'+esc(sites)+' · '+t('brk',0,L)+' '+Math.round(i.br/MIN)+' '+mn(L)+'</small></span><b class="num">'+(i.open?'?':hmd(i.net))+'</b></li>'}
+return '<button class="lnk" data-act="home">'+ic('back')+t('back',0,L)+'</button><h2 class="p-title">'+t('myH',0,L)+'</h2><div class="row2"><div class="kpi"><small>'+t('week',0,L)+'</small><b class="num">'+hmd(sumRange(w.id,m,addDays(T0,1)))+'</b></div><div class="kpi"><small>'+t('month',0,L)+'</small><b class="num">'+hmd(sumRange(w.id,monthStart(T0),addDays(T0,1)))+'</b></div></div><ul class="hlist">'+(rows||'<li><span class="mut">'+t('noEntries',0,L)+'</span></li>')+'</ul>'}
+
+/* ---------- manager panel ---------- */
+function panelHTML(){const L=S.lang,u=S.ui,al=alerts(),N=now();const tabs=[['live','tLive'],['hours','tHours'],['sites','tSites'],['alerts','tAlerts'],['rep','tRep'],['team','tTeam'],['fb','tFb']];
+const V={live:liveV,hours:hoursP,sites:sitesV,alerts:alertsV,rep:repV,team:teamV,fb:fbV};if(!V[u.tab])u.tab='live';
+return '<div class="ph"><h2>'+t('panel')+'</h2><p>'+t('hi')+' · '+fdt(N,L,{weekday:'long',day:'numeric',month:'long'})+', <span class="num" data-clock>'+hm(N)+'</span></p></div><nav class="tabs" role="tablist">'+tabs.map(([k,n])=>'<button role="tab" aria-selected="'+(u.tab===k)+'" data-act="tab" data-t2="'+k+'">'+t(n)+(k==='alerts'&&al.length?' <span class="cnt">'+al.length+'</span>':'')+'</button>').join('')+'</nav><div class="tb">'+V[u.tab](L,al)+'</div>'}
+function liveV(L){const u=S.ui,all=S.W.map(w=>Object.assign({w},status(w.id))),c={work:0,break:0,none:0,done:0};all.forEach(x=>c[x.s]++);
+const cols=[];for(const s of S.S){const m=all.filter(x=>x.s==='work'&&x.e.s===s.id);if(m.length)cols.push({k:'site',title:esc(s.name[L]||s.name.tr),sub:esc(s.area),m})}
+if(c.break)cols.push({k:'break',title:t('colBreak'),m:all.filter(x=>x.s==='break')});
+if(c.none)cols.push({k:'none',title:t('colNone'),m:all.filter(x=>x.s==='none')});
+if(c.done)cols.push({k:'done',title:t('colDone'),m:all.filter(x=>x.s==='done')});
+const team=S.W.reduce((s,w)=>s+worked(w.id),0);
+const mag=x=>{const w=x.w,pop=u.lastW===w.id&&Date.now()-u.lastT<1600?' pop':'';let sub='',tv='';
+if(x.s==='work'){sub=t('inAt',{t:hm(x.es[0].a)})+' '+locSpan(x.e.la,L,true);tv='<span class="t" data-wt="'+w.id+'">'+hmd(worked(w.id))+'</span>'}
+else if(x.s==='break'){sub=esc((Sk(x.e.s)||{}).area||'');tv='<span class="t" data-wb="'+w.id+'">'+Math.floor((now()-x.ob[0])/MIN)+' '+mn(L)+'</span>'}
+else if(x.s==='done'){sub=hm(x.es[0].a)+'–'+hm(x.es[x.es.length-1].b);tv='<span class="t">'+hmd(worked(w.id))+'</span>'}
+else sub=esc(rN(w,L));
+return '<div class="mag'+pop+'">'+av(w,'s')+'<div><b>'+esc(first(w.name))+'</b><small>'+sub+'</small></div>'+tv+'</div>'};
+const rows=all.map(x=>{const w=x.w,has=x.es.length,last=has?x.es[x.es.length-1]:null,live=x.s==='work'||x.s==='break';return '<tr><td data-l="'+t('hPerson')+'"><span class="who">'+av(w,'s')+esc(w.name)+'</span></td><td data-l="'+t('hStatus')+'"><span class="sx"><i class="dot d-'+x.s+'"></i>'+t('st_'+x.s)+'</span></td><td data-l="'+t('hSite')+'">'+(last?esc(sN(last.s,L)):'—')+'</td><td class="n" data-l="'+t('hIn')+'">'+(has?hm(x.es[0].a):'—')+'</td><td class="n num" data-l="'+t('hToday')+'"'+(live?' data-wt="'+w.id+'"':'')+'>'+(has?hmd(worked(w.id)):'—')+'</td><td data-l="'+t('hLoc')+'">'+(has?locSpan(x.es[0].la,L):'—')+'</td></tr>'}).join('');
+return '<h3>'+t('liveT',{w:c.work,b:c.break,n:c.none})+'</h3><p class="lead">'+t('teamToday')+' <b class="num" style="color:var(--ink)" data-team>'+ld(team,L)+'</b>. '+t('locOnly')+'</p><div class="board">'+cols.map(col=>'<div class="col"><div class="tape tp-'+col.k+'"><span>'+col.title+(col.sub?'<small>'+col.sub+'</small>':'')+'</span><span class="num">'+col.m.length+'</span></div>'+col.m.map(mag).join('')+'</div>').join('')+'</div><div class="sec"><h4>'+t('today')+'</h4><table class="stack"><thead><tr><th>'+t('hPerson')+'</th><th>'+t('hStatus')+'</th><th>'+t('hSite')+'</th><th class="n">'+t('hIn')+'</th><th class="n">'+t('hToday')+'</th><th>'+t('hLoc')+'</th></tr></thead><tbody>'+rows+'</tbody></table></div>'}
+function hoursP(L){const u=S.ui,T0=today(),m=addDays(mondayOf(T0),7*u.wk),days=[0,1,2,3,4,5].map(i=>addDays(m,i)),ms=monthStart(T0);let team=0;
+const body=S.W.map(w=>{let wk=0;const cells=days.map(d=>{if(d>T0)return '<td class="n"></td>';const i=dayInfo(w.id,d);if(!i)return '<td class="n mut">–</td>';wk+=i.net;const cls=i.open?'c-open':i.bad?'c-bad':i.ot?'c-ot':'';return '<td class="n"><button class="cell '+cls+(d===T0?' c-today':'')+'" data-act="cell" data-w="'+w.id+'" data-d="'+d+'" aria-label="'+esc(w.name)+' '+ddmm(d)+'">'+(i.open?t('open'):hmd(i.net))+'</button></td>'}).join('');team+=wk;return '<tr><td><span class="who">'+av(w,'s')+'<span class="nm">'+esc(first(w.name))+'</span></span></td>'+cells+'<td class="n num"><b>'+hmd(wk)+'</b></td><td class="n num">'+hmd(sumRange(w.id,ms,addDays(T0,1)))+'</td></tr>'}).join('');
+return '<h3>'+t('hoursT',{p:u.wk?t('prevW'):t('thisW'),h:ld(team,L)})+'</h3><p class="lead">'+t('tapCell')+'</p><div class="seg s toggle"><button data-act="wk" data-v="0" aria-pressed="'+(u.wk===0)+'">'+t('thisW')+'</button><button data-act="wk" data-v="-1" aria-pressed="'+(u.wk===-1)+'">'+t('prevW')+'</button></div><div class="scroll"><table class="wk"><thead><tr><th>'+t('hPerson')+'</th>'+days.map(d=>'<th class="n">'+wdS(d,L)+' '+new Date(d).getDate()+'</th>').join('')+'<th class="n">'+t('wkTot')+'</th><th class="n">'+fdt(T0,L,{month:'long'})+'</th></tr></thead><tbody>'+body+'</tbody></table></div><p class="legend"><span><i style="background:var(--brkSoft)"></i>'+t('legOt')+'</span><span><i style="background:var(--badSoft)"></i>'+t('legBad')+'</span><span><i style="background:repeating-linear-gradient(-45deg,var(--bad) 0 2px,transparent 2px 5px)"></i>'+t('legOpen')+'</span></p>'}
+function sitesV(L){const u=S.ui,T0=today(),a=u.sp==='month'?monthStart(T0):mondayOf(T0),b=addDays(T0,1);
+const rows=S.S.map(s=>{const es=S.E.filter(e=>e.s===s.id&&e.a>=a&&e.a<b),h=es.reduce((x,e)=>x+dur(e),0),ws=[...new Set(es.map(e=>e.w))].map(Wk).filter(Boolean);return {s,h,ws}}).sort((x,y)=>y.h-x.h),max=Math.max(1,...rows.map(r=>r.h)),top=rows[0];
+return '<h3>'+(top&&top.h?t('sitesT',{s:esc(top.s.name[L]||top.s.name.tr)+', '+esc(top.s.area)}):t('sitesNone'))+'</h3><p class="lead">'+t('sitesLead')+'</p><div class="seg s toggle"><button data-act="sp" data-v="week" aria-pressed="'+(u.sp==='week')+'">'+t('thisW')+'</button><button data-act="sp" data-v="month" aria-pressed="'+(u.sp==='month')+'">'+t('month')+'</button></div><div class="bars">'+rows.map(r=>'<div class="bar"><div><b>'+esc(r.s.name[L]||r.s.name.tr)+'</b><small>'+esc(r.s.area)+' · '+t(r.ws.length===1?'people1':'people',{n:r.ws.length})+'</small><div class="faces">'+r.ws.map(w=>av(w)).join('')+'</div></div><div class="track"><div class="fill" style="width:'+(r.h/max*100).toFixed(1)+'%"></div></div><span class="num">'+hdec(r.h,L)+'</span></div>').join('')+'</div><div class="sec"><h4>'+t('addSite')+'</h4><div class="form"><label class="fld">'+t('siteName')+'<input id="ns-n" maxlength="40" autocomplete="off"></label><label class="fld">'+t('area')+'<input id="ns-a" maxlength="30" autocomplete="off"></label><button class="btn pri" data-act="addSite">'+ic('plus')+t('add')+'</button></div><p class="hint" id="ns-err"></p></div>'}
+const dLbl=(d,L)=>wdS(d,L)+' '+ddmm(d);
+function alertsV(L,al){const items=al.map(a=>{let txt='',acts='';
+if(a.type==='open'){txt=t('aOpen',{d:dLbl(a.d,L)});acts='<button class="btn pri" data-act="fixOpen" data-id="'+a.e.id+'">'+t('fix')+'</button>'}
+else if(a.type==='away'){txt=t('aAway',{d:dLbl(a.d,L),t:hm(a.e.a),k:dist(a.e.la.d,L)});acts='<button class="btn" data-act="seen" data-k="'+a.k+'">'+t('seen')+'</button>'}
+else{txt=t('aBreak',{d:dLbl(a.d,L),h:ld(a.i.net,L),m:Math.round(a.i.br/MIN),r:Math.round(a.i.req/MIN)});acts='<button class="btn" data-act="cell" data-w="'+a.w.id+'" data-d="'+a.d+'">'+t('detail')+'</button><button class="btn" data-act="seen" data-k="'+a.k+'">'+t('seen')+'</button>'}
+return '<div class="al">'+ic('warn')+'<div><p><b>'+esc(a.w.name)+'</b></p><p>'+txt+'</p></div><div class="acts">'+acts+'</div></div>'}).join('');
+const logs=S.log.map(g=>{const w=Wk(g.w);return '<li>'+esc(w?w.name:'?')+': '+t('logFix',{d:ddmm(g.d),t:hm(g.end),r:t('r'+g.r)})+'<small>'+ddmm(g.t)+' '+hm(g.t)+' · '+t('by')+'</small></li>'}).join('');
+return '<h3>'+(al.length?t('alertsT',{n:al.length}):t('allOk'))+'</h3><p class="lead">'+t('alertsLead')+'</p><div class="alist">'+items+'</div><div class="sec"><h4>'+t('logT')+'</h4><ul class="log">'+(logs||'<li class="mut">'+t('logEmpty')+'</li>')+'</ul></div>'}
+function report(id,p){const w=Wk(id),T0=today();let a,b;if(p==='week'){a=mondayOf(T0);b=addDays(a,7)}else if(p==='last'){a=monthStart(T0,-1);b=monthStart(T0)}else{a=monthStart(T0);b=monthStart(T0,1)}
+const endShown=Math.min(addDays(b,-1),T0),es=S.E.filter(e=>e.w===id&&e.a>=a&&e.a<b).sort((x,y)=>x.a-y.a);let tot=0;
+const rows=es.map(e=>{const d=dur(e),open=e.b==null&&dayStart(e.a)<T0,pm=Math.round(brMs(e)/MIN);tot+=d;return {date:wdS(e.a,'de')+' '+ddmmyy(e.a),site:sN(e.s,'de'),start:hm(e.a),end:e.b?hm(e.b):(open?'offen':'läuft'),pmin:pm,pause:pm+' Min.',hours:open?'–':dec(d/HOUR),hnum:open?'':dec(d/HOUR)}});
+return {name:w.name,role:rN(w,'de'),period:ddmmyy(a)+' – '+ddmmyy(endShown),rows,total:dec(tot/HOUR)+' Std.',tnum:dec(tot/HOUR)}}
+function repV(L){const u=S.ui;if(!Wk(u.rw))u.rw=S.W[0].id;const r=report(u.rw,u.rp);
+return '<h3>'+t('repT')+'</h3><p class="lead">'+t('repNote')+'</p><div class="ctrls"><label class="fld">'+t('repW')+'<select id="r-w">'+S.W.map(w=>'<option value="'+w.id+'"'+(w.id===u.rw?' selected':'')+'>'+esc(w.name)+'</option>').join('')+'</select></label><label class="fld">'+t('repP')+'<select id="r-p">'+[['week','pW'],['month','pM'],['last','pL']].map(([v,k])=>'<option value="'+v+'"'+(v===u.rp?' selected':'')+'>'+t(k)+'</option>').join('')+'</select></label></div>'+
+'<div class="paper"><span class="dtag">DEMO · Beispieldaten</span><h5>Arbeitszeitnachweis</h5><p style="margin:2px 0 0;color:#555;font-size:14px">Aufzeichnung nach § 17 MiLoG</p><dl class="meta"><dt>Mitarbeiter</dt><dd>'+esc(r.name)+'</dd><dt>Tätigkeit</dt><dd>'+esc(r.role)+'</dd><dt>Zeitraum</dt><dd>'+r.period+'</dd></dl><div class="scroll"><table><thead><tr><th>Datum</th><th>Baustelle</th><th class="n">Beginn</th><th class="n">Ende</th><th class="n">Pause</th><th class="n">Std.</th></tr></thead><tbody>'+(r.rows.map(x=>'<tr><td>'+x.date+'</td><td>'+esc(x.site)+'</td><td class="n">'+x.start+'</td><td class="n">'+x.end+'</td><td class="n">'+x.pause+'</td><td class="n">'+x.hours+'</td></tr>').join('')||'<tr><td colspan="6">Keine Einträge</td></tr>')+'</tbody><tfoot><tr><td colspan="5">Summe</td><td class="n">'+r.total+'</td></tr></tfoot></table></div><p class="foot">Erstellt am '+ddmmyy(now())+' · Aufbewahrung mindestens 2 Jahre</p></div>'+
+'<div class="ctrls" style="margin-top:14px"><button class="btn pri" data-act="pdf"'+(DL||canNative()?'':' hidden')+'>'+ic('file')+t('pdf')+'</button><button class="btn" data-act="csv"'+(DL||canNative()?'':' hidden')+'>'+ic('file')+t('csv')+'</button><button class="btn" data-act="copy">'+ic('copy')+t('copy')+'</button></div><p class="hint" id="r-msg"></p>'}
+function teamV(L){return '<h3>'+t('teamT',{n:S.W.length,s:S.S.length})+'</h3><p class="lead">'+t('teamLead')+'</p><table class="stack"><thead><tr><th>'+t('hPerson')+'</th><th>'+t('wRole')+'</th><th>'+t('wLang')+'</th><th>PIN</th><th>'+t('hStatus')+'</th></tr></thead><tbody>'+S.W.map(w=>{const s=status(w.id).s;return '<tr><td data-l="'+t('hPerson')+'"><span class="who">'+av(w,'s')+esc(w.name)+'</span></td><td data-l="'+t('wRole')+'">'+esc(rN(w,L))+'</td><td data-l="'+t('wLang')+'">'+(w.lang==='de'?t('langDe'):t('langTr'))+'</td><td data-l="PIN">••••</td><td data-l="'+t('hStatus')+'"><span class="sx"><i class="dot d-'+s+'"></i>'+t('st_'+s)+'</span></td></tr>'}).join('')+'</tbody></table><div class="sec"><h4>'+t('addW')+'</h4><div class="form"><label class="fld">'+t('wName')+'<input id="nw-n" maxlength="40" autocomplete="off"></label><label class="fld">'+t('wRole')+'<input id="nw-r" maxlength="30" autocomplete="off"></label><label class="fld">'+t('wLang')+'<select id="nw-l"><option value="tr">'+t('langTr')+'</option><option value="de">'+t('langDe')+'</option></select></label><label class="fld">'+t('wPin')+'<input id="nw-p" inputmode="numeric" maxlength="4" autocomplete="off" value="1234"></label><button class="btn pri" data-act="addW">'+ic('plus')+t('add')+'</button></div><p class="hint" id="nw-err"></p></div>'}
+function fbV(L){const f=S.fb,item=x=>'<li><label><input type="checkbox" data-fb="on" data-k="'+x[0]+'"'+(f.on[x[0]]?' checked':'')+'>'+esc(x[1][L])+'</label></li>';
+return '<h3>'+t('fbT')+'</h3><p class="lead">'+t('fbLead')+'</p><h4 class="sub">'+t('fbNow')+'</h4><ul class="fbl">'+FEAT.filter(x=>x[2]).map(item).join('')+'</ul><h4 class="sub">'+t('fbLater')+'</h4><ul class="fbl">'+FEAT.filter(x=>!x[2]).map(item).join('')+'</ul>'+
+'<div class="form" style="margin-top:18px"><label class="fld">'+t('fbWorkers')+'<input id="fb-w" data-fb="workers" inputmode="numeric" maxlength="4" value="'+esc(f.workers)+'"></label><label class="fld">'+t('fbSites')+'<input id="fb-s" data-fb="sites" inputmode="numeric" maxlength="3" value="'+esc(f.sites)+'"></label></div>'+
+'<h4 class="sub">'+t('fbLoc')+'</h4><div class="radios"><label><input type="radio" name="fbloc" data-fb="loc" value="a"'+(f.loc==='a'?' checked':'')+'>'+t('fbLocA')+'</label><label><input type="radio" name="fbloc" data-fb="loc" value="b"'+(f.loc==='b'?' checked':'')+'>'+t('fbLocB')+'</label></div>'+
+'<h4 class="sub">'+t('fbLangs')+'</h4><div class="radios">'+LG.map(x=>'<label><input type="checkbox" data-fb="lang" data-k="'+x[0]+'"'+(f.langs[x[0]]?' checked':'')+'>'+(L==='de'?x[2]:x[1])+'</label>').join('')+'</div>'+
+'<label class="fld" style="margin-top:18px">'+t('fbNote')+'<textarea id="fb-n" data-fb="note" maxlength="600">'+esc(f.note)+'</textarea></label><h4 class="sub">'+t('fbPrev')+'</h4><pre class="preview" id="fb-prev"></pre><div class="ctrls" style="margin-top:12px"><a class="btn pri" id="fb-wa" href="https://wa.me/" target="_blank" rel="noopener">'+ic('chat')+t('fbSend')+'</a><button class="btn" data-act="fbCopy">'+ic('copy')+t('fbCopy')+'</button></div><p class="hint" id="fb-msg"></p>'}
+function fbText(){const L=S.lang,f=S.fb,de=L==='de',yes=FEAT.filter(x=>f.on[x[0]]).map(x=>x[1][L]),no=FEAT.filter(x=>x[2]&&!f.on[x[0]]).map(x=>x[1][L]),ln=LG.filter(x=>f.langs[x[0]]).map(x=>de?x[2]:x[1]),out=[de?'EkipZeit Demo – mein Feedback':'EkipZeit demo – görüşlerim',''];
+out.push((de?'Gewünscht: ':'İstediklerim: ')+(yes.join(', ')||'–'));if(no.length)out.push((de?'Nicht nötig: ':'Gerek yok: ')+no.join(', '));
+if(f.workers.trim())out.push((de?'Mitarbeiter: ':'İşçi sayısı: ')+f.workers.trim());if(f.sites.trim())out.push((de?'Baustellen gleichzeitig: ':'Aynı anda şantiye: ')+f.sites.trim());
+out.push((de?'Standort: ':'Konum: ')+(f.loc==='a'?t('fbLocA'):t('fbLocB')));if(ln.length)out.push((de?'Sprachen: ':'Diller: ')+ln.join(', '));if(f.note.trim())out.push((de?'Notiz: ':'Not: ')+f.note.trim());return out.join('\n')}
+function fbSync(){const p=$('#fb-prev'),a=$('#fb-wa');if(!p||!a)return;const tx=fbText();p.textContent=tx;a.href='https://wa.me/?text='+encodeURIComponent(tx)}
+
+/* ---------- modals ---------- */
+function locTxt(l,e,L){if(!l)return e&&e.fx?t('manual'):'—';return locSpan(l,L)}
+function cellModal(m){const w=Wk(m.w),d=+m.d,i=dayInfo(m.w,d),L=S.lang,T0=today();if(!w||!i)return '';
+return '<div class="msheet"><h3>'+esc(w.name)+'</h3><p class="mut">'+fdt(d,L,{weekday:'long',day:'numeric',month:'long'})+'</p>'+i.es.map(e=>'<div class="entry"><b>'+esc(sN(e.s,L))+'</b> · '+esc((Sk(e.s)||{}).area||'')+'<br><span class="num">'+hm(e.a)+' – '+(e.b?hm(e.b):(dayStart(e.a)===T0?t('running'):t('open')))+'</span> · '+t('brk')+' '+Math.round(brMs(e)/MIN)+' '+mn(L)+'<br>'+t('locIn')+': '+locTxt(e.la,e,L)+(e.b?' · '+t('locOut')+': '+locTxt(e.lb,e,L):'')+(e.fx?'<br><small class="mut">'+t('fixed')+': '+t('r'+e.fx.r)+'</small>':'')+(e.b==null&&dayStart(e.a)<T0?'<br><button class="btn pri" data-act="fixOpen" data-id="'+e.id+'">'+t('fix')+'</button>':'')+'</div>').join('')+
+'<p>'+t('net')+': <b>'+(i.open?'?':ld(i.net,L))+'</b>'+(i.brBad?' · <span class="warn">'+t('brShort',{r:Math.round(i.req/MIN)})+'</span>':'')+'</p><button class="btn" data-act="mClose">'+t('close')+'</button></div>'}
+function fixModal(m){const e=S.E.find(x=>x.id===m.id);if(!e)return '';const w=Wk(e.w),L=S.lang,def=hm(Math.min(at(dayStart(e.a),990),e.a+9*HOUR));
+return '<div class="msheet"><h3>'+t('fixT')+'</h3><p>'+esc(w.name)+' · '+fdt(e.a,L,{weekday:'long',day:'numeric',month:'long'})+'<br>'+t('startedAt')+' '+hm(e.a)+'</p><label class="fld">'+t('endT')+'<input type="time" id="fx-end" value="'+def+'" step="300"></label><label class="fld">'+t('reason')+'<select id="fx-r">'+[0,1,2].map(i=>'<option value="'+i+'">'+t('r'+i)+'</option>').join('')+'</select></label><p class="hint bad" id="fx-err"></p><div class="row2"><button class="btn" data-act="mClose">'+t('cancel')+'</button><button class="btn pri" data-act="fixSave" data-id="'+e.id+'">'+t('save')+'</button></div></div>'}
+
+/* ---------- German PDF: page drawn on a canvas, wrapped in a minimal PDF ---------- */
+function drawPage(r,rows,pi,pn){const W=1240,H=1754,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d'),F='Barlow, Arial, Helvetica, sans-serif';
+g.fillStyle='#fff';g.fillRect(0,0,W,H);g.textBaseline='alphabetic';
+const txt=(s,x,y,font,col,al)=>{g.font=font;g.fillStyle=col||'#141414';g.textAlign=al||'left';g.fillText(s,x,y)};
+const clip=(s,w)=>{if(g.measureText(s).width<=w)return s;while(s.length>1&&g.measureText(s+'…').width>w)s=s.slice(0,-1);return s+'…'};
+txt('DEMO · Beispieldaten',1140,110,'700 22px '+F,'#c2410c','right');
+txt('Arbeitszeitnachweis',100,140,'700 54px '+F);txt('Aufzeichnung nach § 17 Mindestlohngesetz (MiLoG)',100,186,'400 26px '+F,'#555');
+let y=262;[['Mitarbeiter',r.name],['Tätigkeit',r.role],['Zeitraum',r.period]].forEach(([k,v])=>{txt(k,100,y,'400 25px '+F,'#666');txt(v,330,y,'600 27px '+F);y+=42});
+y+=24;const cols=[['Datum',100,'left'],['Baustelle',330,'left'],['Beginn',760,'right'],['Ende',880,'right'],['Pause',1010,'right'],['Std.',1140,'right']];
+g.fillStyle='#f1efe9';g.fillRect(90,y,1060,54);cols.forEach(([h,x,al])=>txt(h,x,y+36,'600 24px '+F,'#333',al));y+=54;
+rows.forEach((x,i)=>{if(i%2){g.fillStyle='#faf9f6';g.fillRect(90,y,1060,46)}g.font='400 24px '+F;const site=clip(x.site,380);[x.date,site,x.start,x.end,x.pause,x.hours].forEach((v,j)=>txt(String(v),cols[j][1],y+32,'400 24px '+F,'#141414',cols[j][2]));y+=46});
+g.strokeStyle='#141414';g.lineWidth=2;g.beginPath();g.moveTo(90,y+4);g.lineTo(1150,y+4);g.stroke();
+if(pi===pn-1){y+=48;txt('Summe',100,y,'700 27px '+F);txt(r.total,1140,y,'700 27px '+F,'#141414','right');y+=130;g.strokeStyle='#999';g.lineWidth=1.5;g.beginPath();g.moveTo(100,y);g.lineTo(520,y);g.moveTo(700,y);g.lineTo(1140,y);g.stroke();txt('Datum, Unterschrift Mitarbeiter',100,y+34,'400 22px '+F,'#555');txt('Datum, Unterschrift Arbeitgeber',700,y+34,'400 22px '+F,'#555')}
+txt('Erstellt am '+ddmmyy(now())+' mit EkipZeit (Demo) · Aufbewahrung mindestens 2 Jahre',100,H-80,'400 20px '+F,'#777');txt('Seite '+(pi+1)+' von '+pn,1140,H-80,'400 20px '+F,'#777','right');
+const b64=c.toDataURL('image/jpeg',.9).split(',')[1],bin=atob(b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return {jpg:u,w:W,h:H}}
+function buildPdf(imgs){const enc=new TextEncoder(),parts=[],off=[];let len=0;const put=x=>{const u=typeof x==='string'?enc.encode(x):x;parts.push(u);len+=u.length};
+put('%PDF-1.4\n%âãÏÓ\n');const n=imgs.length,total=2+3*n;
+off[1]=len;put('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+off[2]=len;put('2 0 obj\n<< /Type /Pages /Kids ['+imgs.map((_,i)=>(3+3*i)+' 0 R').join(' ')+'] /Count '+n+' >>\nendobj\n');
+imgs.forEach((im,i)=>{const p=3+3*i,x=p+1,c=p+2,cs='q 595.28 0 0 841.89 0 0 cm /Im'+i+' Do Q';
+off[p]=len;put(p+' 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im'+i+' '+x+' 0 R >> >> /Contents '+c+' 0 R >>\nendobj\n');
+off[x]=len;put(x+' 0 obj\n<< /Type /XObject /Subtype /Image /Width '+im.w+' /Height '+im.h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+im.jpg.length+' >>\nstream\n');put(im.jpg);put('\nendstream\nendobj\n');
+off[c]=len;put(c+' 0 obj\n<< /Length '+cs.length+' >>\nstream\n'+cs+'\nendstream\nendobj\n')});
+const xr=len;let xs='xref\n0 '+(total+1)+'\n0000000000 65535 f \n';for(let i=1;i<=total;i++)xs+=String(off[i]).padStart(10,'0')+' 00000 n \n';
+put(xs+'trailer\n<< /Size '+(total+1)+' /Root 1 0 R >>\nstartxref\n'+xr+'\n%%EOF\n');const out=new Uint8Array(len);let o=0;for(const u of parts){out.set(u,o);o+=u.length}return out}
+async function makePdf(r){try{await document.fonts.load('600 26px Barlow')}catch(e){}const per=26,pages=[];for(let i=0;i<Math.max(1,r.rows.length);i+=per)pages.push(r.rows.slice(i,i+per));return buildPdf(pages.map((rows,i)=>drawPage(r,rows,i,pages.length)))}
+function csvText(r,sep,bom){const q=v=>{v=String(v);return /[;\t"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v},out=[['Arbeitszeitnachweis',r.name,r.period].map(q).join(sep),['Datum','Baustelle','Beginn','Ende','Pause (Min.)','Arbeitszeit (Std.)'].join(sep)];r.rows.forEach(x=>out.push([x.date,x.site,x.start,x.end,x.pmin,x.hnum].map(q).join(sep)));out.push(['Summe','','','','',r.tnum].join(sep));return (bom?'﻿':'')+out.join('\r\n')}
+async function saveFile(name,data){if(DL){await DL.save({filename:name,data});return}const blob=new Blob([data],{type:/\.pdf$/.test(name)?'application/pdf':'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000)}
+const dlErr=err=>{const c=err&&err.code;return c==='declined'?'':c==='rate_limited'?t('dlWait'):t('dlNo')};
+async function copyText(txt,el){let ok=false;try{await navigator.clipboard.writeText(txt);ok=true}catch(e){const ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{ok=document.execCommand('copy')}catch(_){}ta.remove()}if(el)el.textContent=ok?t('copied'):t('copyNo')}
+
+/* ---------- actions ---------- */
+let toastT=0;
+function toast(msg,btn){const el=$('#toast');el.textContent='';const s=document.createElement('span');s.textContent=msg;el.appendChild(s);if(btn){const b=document.createElement('button');b.textContent=btn[0];b.dataset.act=btn[1];b.dataset.v=btn[2]||'';el.appendChild(b)}el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{el.hidden=true},4500)}
+const narrow=()=>window.matchMedia('(max-width:979px)').matches;
+const seeBtn=()=>narrow()&&S.ui.view==='worker'?[t('seeP'),'view','panel']:null;
+const cur=()=>Wk(S.ph.w);
+const simD=()=>S.ph.sim==='away'?1200+Math.floor(Math.random()*3300):20+Math.floor(Math.random()*180);
+const bump=id=>{S.ui.lastW=id;S.ui.lastT=Date.now()};
+const newId=()=>'e'+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36);
+function busy(fn){S.ph.busy=1;renderPhone();setTimeout(()=>{S.ph.busy=0;fn();renderAll();save()},1000)}
+const ACT={
+view(b){S.ui.view=b.dataset.v;renderAll();$('#toast').hidden=true;window.scrollTo(0,0)},
+lang(b){S.lang=b.dataset.v==='de'?'de':'tr';renderAll()},
+reset(){OFF=makeOff();S=seed();S.off=OFF;renderAll();toast(t('resetDone'))},
+pick(b){Object.assign(S.ph,{w:b.dataset.id,step:'pin',pin:'',err:0,sheet:null,res:null,site:null});renderPhone()},
+key(b){const P=S.ph,k=b.dataset.k;if(k==='x'){P.pin=P.pin.slice(0,-1);P.err=0}else if(P.pin.length<4){P.pin+=k;P.err=0}if(P.pin.length===4){const w=cur();if(w&&P.pin===w.pin){P.step='home';P.pin=''}else{P.err=1;P.pin=''}}renderPhone()},
+logout(){Object.assign(S.ph,{w:null,step:'login',pin:'',err:0,sheet:null,res:null,busy:0});renderPhone()},
+site(b){S.ph.site=b.dataset.id;renderPhone()},
+sim(b){S.ph.sim=b.dataset.v==='away'?'away':'on';renderPhone()},
+home(){S.ph.step='home';renderPhone()},
+hours(){S.ph.step='hours';renderPhone()},
+start(){const P=S.ph,w=cur();if(!w||P.busy)return;const s0=status(w.id).s;if(s0==='work'||s0==='break')return;const s=P.site||lastSite(w.id)||w.home;busy(()=>{const d=simD(),e={id:newId(),w:w.id,s,a:now(),b:null,br:[],la:{d},lb:null};S.E.push(e);P.res={e:e.id,ok:d<=500,d};P.site=null;bump(w.id);toast(t('toastIn',{n:w.name,s:sN(s,S.lang)}),seeBtn())})},
+br(){const w=cur(),st=w&&status(w.id);if(!st||st.s!=='work')return;st.e.br.push([now(),null]);S.ph.res=null;bump(w.id);toast(t('toastBr',{n:w.name}),seeBtn());renderAll()},
+brEnd(){const w=cur(),st=w&&status(w.id);if(!st||st.s!=='break')return;st.ob[1]=now();bump(w.id);toast(t('toastBrEnd',{n:w.name}),seeBtn());renderAll()},
+finOpen(){S.ph.sheet='fin';renderPhone()},
+swOpen(){S.ph.sheet='sw';renderPhone()},
+shClose(b,ev){if(b.classList.contains('psheet')&&ev.target!==b)return;S.ph.sheet=null;renderPhone()},
+fin(){const P=S.ph,w=cur(),st=w&&status(w.id);if(!st||!st.e)return;P.sheet=null;busy(()=>{const T1=now();if(st.ob)st.ob[1]=T1;st.e.b=T1;st.e.lb={d:simD()};P.res=null;bump(w.id);toast(t('toastOut',{n:w.name,h:ld(worked(w.id),S.lang)}),seeBtn())})},
+sw(b){const P=S.ph,w=cur(),st=w&&status(w.id),s=b.dataset.id;if(!st||!st.e)return;P.sheet=null;busy(()=>{const T1=now();if(st.ob)st.ob[1]=T1;st.e.b=T1;st.e.lb={d:simD()};const d=simD(),e={id:newId(),w:w.id,s,a:T1,b:null,br:[],la:{d},lb:null};S.E.push(e);P.res={e:e.id,ok:d<=500,d};bump(w.id);toast(t('toastSw',{n:w.name,s:sN(s,S.lang)}),seeBtn())})},
+tab(b){S.ui.tab=b.dataset.t2;renderPanel();const sel=$('.tabs [aria-selected=true]');if(sel&&sel.scrollIntoView)sel.scrollIntoView({block:'nearest',inline:'nearest'})},
+wk(b){S.ui.wk=+b.dataset.v;renderPanel()},
+sp(b){S.ui.sp=b.dataset.v==='month'?'month':'week';renderPanel()},
+cell(b){S.ui.modal={type:'cell',w:b.dataset.w,d:+b.dataset.d};renderModal()},
+fixOpen(b){S.ui.modal={type:'fix',id:b.dataset.id};renderModal()},
+fixSave(b){const e=S.E.find(x=>x.id===b.dataset.id),er=$('#fx-err');if(!e)return;const m=/^(\d{1,2}):(\d{2})/.exec(($('#fx-end')||{}).value||'');if(!m){er.textContent=t('fixBad');return}const end=at(dayStart(e.a),(+m[1])*60+(+m[2])),lastBr=e.br.reduce((x,y)=>Math.max(x,y[1]==null?y[0]:y[1]),e.a);if(end<=lastBr){er.textContent=t('fixBad');return}const r=+(($('#fx-r')||{}).value||0);e.br.forEach(x=>{if(x[1]==null)x[1]=Math.min(end,x[0]+30*MIN)});e.b=end;e.lb=null;e.fx={r};S.log.unshift({t:now(),e:e.id,w:e.w,d:dayStart(e.a),end,r});S.ui.modal=null;renderModal();renderPanel();toast(t('fixedToast'))},
+mClose(b,ev){if(b.classList.contains('modal')&&ev.target!==b)return;S.ui.modal=null;renderModal()},
+seen(b){S.ok.push(b.dataset.k);renderPanel()},
+addSite(){const n=($('#ns-n').value||'').trim(),a=($('#ns-a').value||'').trim();if(!n){$('#ns-err').textContent=t('needName');return}S.S.push({id:'s'+Date.now().toString(36),name:{tr:n,de:n},area:a||'—'});renderAll();toast(t('siteAdded',{n}))},
+addW(){const n=($('#nw-n').value||'').trim(),r=($('#nw-r').value||'').trim(),l=$('#nw-l').value==='de'?'de':'tr',p=($('#nw-p').value||'').trim(),er=$('#nw-err');if(n.length<2){er.textContent=t('nameReq');return}if(!/^\d{4}$/.test(p)){er.textContent=t('pinBad4');return}S.W.push({id:'w'+Date.now().toString(36),name:n,role:{tr:r||'İşçi',de:r||'Mitarbeiter'},lang:l,home:S.S[0].id,pin:p,col:PAL[S.W.length%PAL.length]});renderAll();toast(t('addedW',{n}))},
+async pdf(){const msg=$('#r-msg');if(!DL&&!canNative())return;msg.textContent=t('making');try{const r=report(S.ui.rw,S.ui.rp),bytes=await makePdf(r);await saveFile('Arbeitszeitnachweis_'+slug(r.name)+'.pdf',bytes);msg.textContent=t('saved')}catch(err){msg.textContent=dlErr(err)}},
+async csv(){const msg=$('#r-msg');if(!DL&&!canNative())return;try{const r=report(S.ui.rw,S.ui.rp);await saveFile('Arbeitszeitnachweis_'+slug(r.name)+'.csv',csvText(r,';',true));msg.textContent=t('saved')}catch(err){msg.textContent=dlErr(err)}},
+copy(){copyText(csvText(report(S.ui.rw,S.ui.rp),'\t',false),$('#r-msg'))},
+fbCopy(){copyText(fbText(),$('#fb-msg'))}};
+
+/* ---------- render ---------- */
+let lastKey='';
+function renderTop(){$$('[data-t]').forEach(el=>{el.innerHTML=t(el.dataset.t)});$$('[data-act=lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===S.lang)));$$('[data-act=view]').forEach(b=>{if(b.closest('.switch'))b.setAttribute('aria-pressed',String(b.dataset.v===S.ui.view))});document.body.dataset.view=S.ui.view;document.documentElement.lang=S.lang;$('#phoneCol').setAttribute('aria-label',t('vW'));$('#panelCol').setAttribute('aria-label',t('vP'))}
+function renderPhone(){const el=$('#ps');el.innerHTML=phoneHTML();const P=S.ph,k=(P.w||'')+P.step+(P.w&&Wk(P.w)?status(P.w).s:'')+P.busy;if(k!==lastKey){el.scrollTop=0;lastKey=k}}
+function renderPanel(){$('#panelCol').innerHTML=panelHTML();if(S.ui.tab==='fb')fbSync()}
+function renderModal(){const m=S.ui.modal,el=$('#modal');if(!m){el.classList.remove('on');el.innerHTML='';return}const h=m.type==='fix'?fixModal(m):cellModal(m);if(!h){S.ui.modal=null;el.classList.remove('on');el.innerHTML='';return}el.innerHTML=h;el.classList.add('on');const f=el.querySelector('input,select,.btn');if(f)f.focus()}
+function renderAll(){renderTop();renderPhone();renderPanel();renderModal()}
+function tick(){if(!S)return;const N=now();
+$$('[data-pt]').forEach(el=>{el.textContent=clock(worked(el.dataset.pt))});
+$$('[data-pb]').forEach(el=>{const st=status(el.dataset.pb);if(st.ob)el.textContent=clock(N-st.ob[0])});
+$$('[data-pbt]').forEach(el=>{const w=Wk(el.dataset.pbt);if(w)el.textContent=ld(brToday(w.id),w.lang)});
+$$('[data-wt]').forEach(el=>{el.textContent=hmd(worked(el.dataset.wt))});
+$$('[data-wb]').forEach(el=>{const st=status(el.dataset.wb);if(st.ob)el.textContent=Math.floor((N-st.ob[0])/MIN)+' '+mn(S.lang)});
+$$('[data-clock]').forEach(el=>{el.textContent=hm(N)});
+const tm=$('[data-team]');if(tm)tm.textContent=ld(S.W.reduce((s,w)=>s+worked(w.id),0),S.lang)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');return s&&s.v===VER?s:null}catch(e){return null}}
+function readHash(){const h=(location.hash||'').slice(1);if(h==='panel')S.ui.view='panel';else if(h==='isci')S.ui.view='worker'}
+
+document.addEventListener('click',ev=>{const b=ev.target.closest('[data-act]');if(!b||!S)return;const f=ACT[b.dataset.act];if(!f)return;f(b,ev);save()});
+document.addEventListener('input',ev=>{const el=ev.target;if(el.dataset&&el.dataset.fb){fbRead(el);fbSync();save()}});
+document.addEventListener('change',ev=>{const el=ev.target;if(el.dataset&&el.dataset.fb){fbRead(el);fbSync();save();return}if(el.id==='r-w'){S.ui.rw=el.value;renderPanel();save()}else if(el.id==='r-p'){S.ui.rp=el.value;renderPanel();save()}});
+document.addEventListener('keydown',ev=>{if(ev.key!=='Escape'||!S)return;if(S.ui.modal){S.ui.modal=null;renderModal()}else if(S.ph.sheet){S.ph.sheet=null;renderPhone()}});
+window.addEventListener('hashchange',()=>{if(!S)return;readHash();renderAll()});
+function fbRead(el){const f=S.fb,k=el.dataset.fb;if(k==='on')f.on[el.dataset.k]=el.checked;else if(k==='lang')f.langs[el.dataset.k]=el.checked?1:0;else if(k==='loc')f.loc=el.value==='b'?'b':'a';else if(k==='workers'||k==='sites'||k==='note')f[k]=String(el.value)}
+
+function boot(hot){const st=hot&&hot.v===VER?hot:load();
+if(st&&st.rday===RDAY&&Array.isArray(st.E)){OFF=st.off||0;S=st;S.ui.modal=null;S.ph.busy=0}else{OFF=makeOff();S=seed();S.off=OFF}
+readHash();renderAll();save();setInterval(tick,1000);
+try{if(window.claude&&typeof window.claude.use==='function')window.claude.use('downloads').then(x=>{DL=x||null;if(DL&&S.ui.tab==='rep')renderPanel()}).catch(()=>{})}catch(e){}
+try{if(window.claude&&window.claude.hot&&window.claude.hot.snapshot)window.claude.hot.snapshot(()=>S)}catch(e){}}
+const startFn=d=>boot(d&&typeof d==='object'&&Object.keys(d).length?d:null);
+try{const h=window.claude&&window.claude.hot;if(h&&h.ready)h.ready(startFn);else startFn(h&&h.data)}catch(e){startFn(null)}
+}
+</script>
+</body>
+</html>
