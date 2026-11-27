@@ -292,6 +292,7 @@ export function dueFor(up, meta, now) {
   return out;
 }
 export async function tick(env, now) {
+  await ensure(env);
   const last = await getKV(env, 'tick');
   if (last && last.t && Date.now() - last.t < 45000 && env.TEST !== '1') return { ok: true, skipped: true };
   await setKV(env, 'tick', { t: Date.now(), clean: (last && last.clean) || 0 });
