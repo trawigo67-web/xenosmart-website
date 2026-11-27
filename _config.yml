@@ -5,3 +5,5 @@ exclude:
   - markaistanbul
   # App-Huelle (Capacitor) fuer iPhone/Android, nicht Teil der Webseite
   - apps
+  # Günlük (xenosmart.de/mustafa): die Schnittstelle läuft bei Cloudflare Pages (Projekt xenosmart-gunluk), nicht auf der Webseite
+  - mustafa/server

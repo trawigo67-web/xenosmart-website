@@ -1,0 +1,12 @@
+# Günlük (xenosmart.de/mustafa) – Cloudflare-Pages-Projekt "xenosmart-gunluk" (Projekt-Wurzel = dieser Ordner mustafa/server/)
+# Hier läuft nur die Schnittstelle (functions/api): Sicherung der Einträge und Erinnerungen aufs Handy.
+# Die App selbst liegt eine Ebene höher (mustafa/) und wird über GitHub Pages unter xenosmart.de/mustafa/ ausgeliefert.
+# Diese Datei ist die Quelle der Einstellungen (Bindungen); im Cloudflare-Dashboard sind sie dann nur lesbar.
+name = "xenosmart-gunluk"
+pages_build_output_dir = "."
+compatibility_date = "2026-11-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "xenosmart-gunluk"
+database_id = "5be6de29-716f-4bf4-8592-e854fd01e358"
