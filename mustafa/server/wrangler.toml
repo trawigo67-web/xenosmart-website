@@ -1,12 +1,21 @@
-# Günlük (xenosmart.de/mustafa) – Cloudflare-Pages-Projekt "xenosmart-gunluk" (Projekt-Wurzel = dieser Ordner mustafa/server/)
-# Hier läuft nur die Schnittstelle (functions/api): Sicherung der Einträge und Erinnerungen aufs Handy.
+# Günlük (xenosmart.de/mustafa) – Cloudflare Worker "xenosmart-gunluk" (Projekt-Wurzel = dieser Ordner mustafa/server/)
+# Hier läuft nur die Schnittstelle: Sicherung der Einträge und Erinnerungen aufs Handy.
 # Die App selbst liegt eine Ebene höher (mustafa/) und wird über GitHub Pages unter xenosmart.de/mustafa/ ausgeliefert.
-# Diese Datei ist die Quelle der Einstellungen (Bindungen); im Cloudflare-Dashboard sind sie dann nur lesbar.
+# Cloudflare baut den Worker bei Änderungen in diesem Ordner selbst neu (Git-Verbindung, Befehl: npx wrangler deploy).
 name = "xenosmart-gunluk"
-pages_build_output_dir = "."
+main = "src/worker.js"
 compatibility_date = "2026-11-01"
+workers_dev = true
+preview_urls = false
+
+# Alle 5 Minuten nachsehen, welche Erinnerungen fällig sind
+[triggers]
+crons = ["*/5 * * * *"]
 
 [[d1_databases]]
 binding = "DB"
 database_name = "xenosmart-gunluk"
 database_id = "5be6de29-716f-4bf4-8592-e854fd01e358"
+
+[observability]
+enabled = true

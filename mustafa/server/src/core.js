@@ -1,14 +1,14 @@
-// Günlük (xenosmart.de/mustafa) – Schnittstelle (Cloudflare Pages Functions + D1)
+// Günlük (xenosmart.de/mustafa) – Schnittstelle (Cloudflare Worker "xenosmart-gunluk" + D1)
 // Aufgaben: 1. Sicherung/Abgleich der Einträge je Gerät-Schlüssel, 2. Erinnerungen aufs Handy (Web Push).
 //   POST   /api/sync        Einträge abgleichen (nur Geändertes hin und zurück)
 //   GET    /api/vapid       öffentlicher Schlüssel für die Mitteilungen
 //   POST   /api/push        Gerät für Mitteilungen anmelden      DELETE /api/push   abmelden
 //   POST   /api/push/test   Probe-Mitteilung an die eigenen Geräte
 //   DELETE /api/account     alles zu diesem Schlüssel löschen
-//   GET    /api/tick        fällige Erinnerungen verschicken (ruft GitHub Actions alle paar Minuten auf)
+//   GET    /api/tick        fällige Erinnerungen verschicken (läuft sonst von selbst alle 5 Minuten, siehe wrangler.toml)
 // Anmeldung: "Authorization: Bearer <Schlüssel>" – der Schlüssel entsteht in der App und bleibt auf dem Handy.
 
-const ORIGINS = [/^https:\/\/(www\.)?xenosmart\.de$/, /^https:\/\/([a-z0-9-]+\.)?xenosmart-gunluk[a-z0-9-]*\.pages\.dev$/, /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/];
+const ORIGINS = [/^https:\/\/(www\.)?xenosmart\.de$/, /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/];
 const PUSH_HOSTS = /(^|\.)(fcm\.googleapis\.com|push\.services\.mozilla\.com|web\.push\.apple\.com|notify\.windows\.com)$/;
 const SCHEMA = [
   'CREATE TABLE IF NOT EXISTS kv (k TEXT PRIMARY KEY, v TEXT NOT NULL)',
@@ -290,7 +290,7 @@ export function dueFor(up, meta, now) {
   }
   return out;
 }
-async function tick(env, now) {
+export async function tick(env, now) {
   const last = await getKV(env, 'tick');
   if (last && last.t && Date.now() - last.t < 45000 && env.TEST !== '1') return { ok: true, skipped: true };
   await setKV(env, 'tick', { t: Date.now(), clean: (last && last.clean) || 0 });
@@ -374,7 +374,7 @@ async function route(request, env) {
   return J({ error: 'notfound' }, 404);
 }
 
-export async function onRequest({ request, env }) {
+export async function handle(request, env) {
   const origin = request.headers.get('origin') || '';
   const allowed = origin && ORIGINS.some((re) => re.test(origin)) ? origin : '';
   if (origin && !allowed) return new Response(JSON.stringify({ error: 'origin' }), { status: 403, headers: { 'content-type': 'application/json; charset=utf-8' } });
