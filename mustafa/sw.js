@@ -1,6 +1,6 @@
 // Günlük – hält die App auch ohne Netz bereit und zeigt die Erinnerungen an
-const V = 'gunluk-v1';
-const SHELL = ['./', 'app.css?v=1', 'config.js?v=1', 'app.js?v=1', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/apple-touch-icon.png',
+const V = 'gunluk-v2';
+const SHELL = ['./', 'app.css?v=2', 'config.js?v=2', 'app.js?v=2', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/apple-touch-icon.png',
   'fonts/anton-latin.woff2', 'fonts/anton-latin-ext.woff2', 'fonts/instrument-sans-latin.woff2', 'fonts/instrument-sans-latin-ext.woff2'];
 
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(V).then((c) => c.addAll(SHELL)).catch(() => {})); self.skipWaiting(); });

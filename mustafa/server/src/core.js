@@ -129,6 +129,7 @@ async function sync(env, acct, b, now) {
     if (tz && meta.tz !== tz) { meta.tz = tz; metaChanged = true; }
     if (changed) for (const id in items) { const it = items[id]; if (it.x && now - it.u > 200 * DAY) delete items[id]; }   // alte Lösch-Merker aufräumen
     const outRev = changed ? next : rev;
+    if (!row && !changed && !metaIn && !b.create) return { rev: 0, items: [], meta: { mu: 0, lang: 'tr', name: '', evening: 0, eveningAt: '18:00' }, now, reset: since > 0 };   // wer nichts eingetragen hat, bekommt keinen Platz in der Datenbank
     if (changed || metaChanged || !row) {
       const docS = JSON.stringify({ items });
       if (docS.length > MAX_DOC) return { error: 'full', status: 413 };
@@ -353,7 +354,7 @@ async function route(request, env) {
     const ep = typeof b.endpoint === 'string' ? b.endpoint.slice(0, 700) : '', p = clean(b.p256dh, 120), a = clean(b.auth, 40);
     if (!pushHostOk(env, ep)) return J({ error: 'endpoint' }, 400);
     try { if (unb64u(p).length !== 65 || unb64u(a).length !== 16) throw 0; } catch (e) { return J({ error: 'keys' }, 400); }
-    if (!(await db.first(env, 'SELECT id FROM acct WHERE id = ?', acct))) await sync(env, acct, {}, Date.now());
+    if (!(await db.first(env, 'SELECT id FROM acct WHERE id = ?', acct))) await sync(env, acct, { create: true, tz: b.tz }, Date.now());
     await db.run(env, 'INSERT INTO push (endpoint, acct, p256dh, auth, lang, created_at) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(endpoint) DO UPDATE SET acct = excluded.acct, p256dh = excluded.p256dh, auth = excluded.auth, lang = excluded.lang, fails = 0',
       ep, acct, p, a, b.lang === 'de' ? 'de' : 'tr', Date.now());
     return J({ ok: true });

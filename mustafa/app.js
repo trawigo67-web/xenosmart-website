@@ -597,7 +597,7 @@
     if (Notification.permission === 'denied') return Promise.resolve('denied');
     return swReady().then(function (reg) { return reg.pushManager.getSubscription(); }).then(function (sub) { return sub && Notification.permission === 'granted' ? 'on' : 'off'; }).catch(function () { return 'off'; });
   }
-  function sendSub(sub) { var j = sub.toJSON(); return api('POST', '/push', { endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth, lang: DOC.meta.lang }); }
+  function sendSub(sub) { var j = sub.toJSON(); return api('POST', '/push', { endpoint: j.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth, lang: DOC.meta.lang, tz: tz() }); }
   function refreshPush(resend) {
     return pushState().then(function (s) {
       var was = S.push; S.push = s;
